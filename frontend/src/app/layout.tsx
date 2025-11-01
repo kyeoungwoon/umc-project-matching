@@ -27,7 +27,7 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="ko">
-      <body className={clsx('scrollbar-page flex min-h-screen flex-col', pretendard.variable)}>
+      <body className={clsx('flex min-h-screen flex-col', pretendard.variable)}>
         <SpeedInsights />
         {children}
       </body>
