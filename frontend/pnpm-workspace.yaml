@@ -7,3 +7,4 @@ onlyBuiltDependencies:
   - '@vercel/speed-insights'
   - core-js-pure
   - esbuild
+  - lefthook
