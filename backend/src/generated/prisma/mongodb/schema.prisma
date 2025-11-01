@@ -1,0 +1,168 @@
+// prisma generate --schema=prisma/mongodb/schema.prisma
+// prisma db push --schema=prisma/mongodb/schema.prisma
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../../src/generated/prisma/mongodb"
+  binaryTargets = ["native", "darwin", "darwin-arm64", "linux-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x", "windows", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL_MONGODB")
+}
+
+// --- Enums (데이터 일관성을 위한 열거형) ---
+
+enum UserPartEnum {
+  PLAN // 플
+  DESIGN // 디
+  WEB // 웹
+  ANDROID // 안드
+  IOS // iOS
+  SPRINGBOOT // 스프링
+  NODEJS // 노드
+  ADMIN // 운영진
+}
+
+enum UserStatusEnum {
+  ACTIVE
+  DROPPED
+  MATCHED
+  PENDING
+}
+
+enum QuestionTypeEnum {
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  SUBJECTIVE
+}
+
+enum ApplicationStatusEnum {
+  DRAFT
+  SUBMITTED
+  CONFIRMED
+  REJECTED
+}
+
+enum UserRoleEnum {
+  USER
+  ADMIN
+}
+
+// --- Composite Types (다른 모델에 포함되는 임베디드 문서) ---
+
+// Project 모델 내부에 포함될 지원서 질문 양식
+type FormQuestion {
+  id          String           @default(cuid())
+  title       String
+  description String?
+  type        QuestionTypeEnum
+  options     String[] // 객관식 선택지
+  isRequired  Boolean          @default(true) @map("is_required")
+}
+
+// Application 모델 내부에 포함될 답변
+type Answer {
+  questionId String @map("question_id")
+  value      Json
+}
+
+// --- Collections (MongoDB의 실제 컬렉션이 될 모델) ---
+
+model Challenger {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  nickname  String
+  school    String
+  studentId String
+  password  String
+  part      UserPartEnum
+  role      UserRoleEnum @default(USER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+  applications  Application[]   @relation("ApplicantToApplications")
+  ProjectMember ProjectMember[]
+
+  @@unique([school, studentId]) // 학교 + 학번 복합 고유 키
+  @@map("challengers") // 실제 MongoDB 컬렉션 이름
+}
+
+// N차 매칭
+model Round {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String // 예: "1차 매칭"
+  startDatetime DateTime
+  endDatetime   DateTime
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Application Application[]
+
+  @@map("rounds")
+}
+
+model Project {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  link        String // Notion 등 상세 기획 링크
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 임베디드 문서 ---
+  formQuestions FormQuestion[] @map("form_questions")
+
+  // --- 관계 (반대편) ---
+  // 이 프로젝트에 달린 지원서 (1-N)
+  applications  Application[]   @relation("ProjectToApplications")
+  ProjectMember ProjectMember[] @relation("ProjectToMembers")
+
+  @@index([title])
+  @@map("projects")
+}
+
+model ProjectMember {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  projectId String @map("project_id") @db.ObjectId
+  userId    String @map("user_id") @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+  project Project    @relation(name: "ProjectToMembers", fields: [projectId], references: [id])
+  user    Challenger @relation(fields: [userId], references: [id])
+
+  @@unique([projectId, userId])
+  @@map("project_members")
+}
+
+model Application {
+  id      String                @id @default(auto()) @map("_id") @db.ObjectId
+  status  ApplicationStatusEnum @default(DRAFT)
+  roundId String                @map("round_id") @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+  // 1. 지원자 (N-1)
+  applicantId String     @db.ObjectId
+  applicant   Challenger @relation("ApplicantToApplications", fields: [applicantId], references: [id])
+  // 2. 지원 프로젝트 (N-1)
+  projectId   String     @db.ObjectId
+  project     Project    @relation("ProjectToApplications", fields: [projectId], references: [id])
+
+  round   Round    @relation(fields: [roundId], references: [id])
+  // --- 임베디드 문서 ---
+  answers Answer[]
+
+  // 하나의 프로젝트에는 차수별로 한 번만 지원 가능함
+  @@unique([applicantId, projectId, roundId])
+  @@map("applications")
+}
