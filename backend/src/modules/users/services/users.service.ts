@@ -1,6 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
+import { $Enums } from '@generated/prisma/mongodb';
+import UserPartEnum = $Enums.UserPartEnum;
 
 @Injectable()
 export class UsersService {
@@ -17,6 +23,24 @@ export class UsersService {
     if (!user) throw new NotFoundException('사용자가 존재하지 않습니다.');
 
     return user;
+  }
+
+  async isPlanChallenger(userId: string): Promise<boolean> {
+    const user = await this.getUserByUserId(userId);
+    return user.part === UserPartEnum.PLAN;
+  }
+
+  async throwIfNotPlanChallenger(userId: string) {
+    const isPlanChallenger = await this.isPlanChallenger(userId);
+    if (!isPlanChallenger)
+      throw new ForbiddenException(
+        'Plan 챌린저만 프로젝트를 생성할 수 있습니다.',
+      );
+  }
+
+  async isAdminChallenger(userId: string): Promise<boolean> {
+    const user = await this.getUserByUserId(userId);
+    return user.part === UserPartEnum.ADMIN;
   }
 
   // 학교와 학번으로 사용자 정보를 가져옵니다.
