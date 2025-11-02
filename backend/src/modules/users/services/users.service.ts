@@ -7,7 +7,7 @@ export class UsersService {
   constructor(private readonly prisma: MongoDBPrismaService) {}
 
   // userId를 받아서 해당하는 사용자 정보를 DB에서 가져옵니다.
-  async getUserInfo(userId: string) {
+  async getUserByUserId(userId: string) {
     const user = await this.prisma.challenger.findUnique({
       where: {
         id: userId,
