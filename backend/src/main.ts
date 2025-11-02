@@ -26,11 +26,15 @@ async function bootstrap() {
 
   // DocumentBuilder를 이용해 Swagger 문서 기본 정보 구성
   const config = new DocumentBuilder()
-    .setTitle('UMC Project Matching API')
-    .setDescription('UMC 9th Leo 지부의 프로젝트 팀 매칭을 위한 프로젝트 입니다.')
+    .setTitle('UPMS API Docs')
+    .setDescription(
+      'UMC Project Matching System, UPMS 입니다.\n' +
+        '만든이 : 중앙대학교 하늘/박경운, 보니/정보운\n' +
+        '도운이 : 중앙대학교 벨라/황지원',
+    )
     .setVersion('0.1.0')
     .addBearerAuth()
-    .addServer('http://localhost:7777', 'Local server')
+    .addServer('http://localhost:9999', 'Local server')
     .addServer('https://umc-team-matching.kyeoungwoon.kr', 'Dev')
     .setLicense('MIT', 'https://opensource.org/license/mit/')
     .build();

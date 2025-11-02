@@ -36,7 +36,9 @@ export class UsersV1Controller {
 
   @Post('me')
   me() {
-    return true;
+    const userId = this.requestContextService.getOrThrowUserId();
+
+    return this.usersService.getUserInfo(userId);
   }
 
   @Post('projects')

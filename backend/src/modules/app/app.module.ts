@@ -26,11 +26,8 @@ import { FrontendUrlConfig } from '@modules/auth/config/frontend-url.config';
 import { GoogleOAuthConfig } from '@modules/auth/config/google-oauth-config';
 import { JwtConfig } from '@modules/auth/config/jwt.config';
 import { KakaoOAuthConfig } from '@modules/auth/config/kakao-oauth-config';
-import { RefreshJwtConfig } from '@modules/auth/config/refresh-jwt.config';
 import { RegisterJwtConfig } from '@modules/auth/config/register-jwt.config';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
-import { AwsModule } from '@modules/aws/aws.module';
-import { AwsConfig } from '@modules/aws/configs/aws.config';
 import { MessageModule } from '@modules/message/message.module';
 import { PrismaModule } from '@modules/prisma/prisma.module';
 import { TestModule } from '@modules/test/test.module';
@@ -43,11 +40,9 @@ import { UsersModule } from '@modules/users/users.module';
       isGlobal: true,
       envFilePath: ['.env.local', `.env.${process.env.NODE_ENV}`, '.env'],
       load: [
-        AwsConfig,
         GoogleOAuthConfig,
         KakaoOAuthConfig,
         JwtConfig,
-        RefreshJwtConfig,
         RegisterJwtConfig,
         FrontendUrlConfig,
       ],
@@ -61,7 +56,6 @@ import { UsersModule } from '@modules/users/users.module';
     AuthModule,
     UsersModule,
     PrismaModule,
-    AwsModule,
     TestModule,
     MessageModule,
   ],

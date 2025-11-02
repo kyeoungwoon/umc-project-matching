@@ -1,41 +1,39 @@
-import { ApiProperty, PartialType, PickType } from '@nestjs/swagger';
+import { ApiProperty, OmitType, PartialType, PickType } from '@nestjs/swagger';
 
 import { Transform, Type } from 'class-transformer';
 import {
   IsDate,
+  IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsUrl,
 } from 'class-validator';
 
 import { IsBigInt } from '@common/decorators/is-bigint.decorator';
 import { TransformToBigint } from '@common/decorators/transform.decorator';
+import { UserPartEnum } from '@generated/prisma/mongodb';
 
 export class User {
   // User Table에 포함된 정보
 
-  @TransformToBigint()
-  @IsBigInt()
   @ApiProperty({
     description: '사용자 ID',
-    type: 'string',
-    format: 'bigint',
-    example: '1',
   })
-  id!: bigint;
+  @IsString()
+  @IsNotEmpty()
+  id!: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: '사용자 이름',
+    description: '이름',
   })
   name!: string;
 
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: '사용자 닉네임',
+    description: '닉네임',
   })
   nickname!: string;
 
@@ -46,6 +44,35 @@ export class User {
     example: '나는 말하는 감자입니다.',
   })
   introduction?: string; // 한 줄 소개
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: '학교명',
+  })
+  school!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: '학번',
+  })
+  studentId!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @ApiProperty({
+    description: '비밀번호',
+  })
+  password!: string;
+
+  @IsEnum(UserPartEnum)
+  @IsNotEmpty()
+  @ApiProperty({
+    description: '챌린저 파트',
+    enum: UserPartEnum,
+  })
+  part!: UserPartEnum;
 
   @IsOptional()
   @Type(() => Date)
@@ -61,3 +88,9 @@ export class User {
   })
   updatedAt!: Date;
 }
+
+export class CreateUserRequestDto extends OmitType(User, [
+  'id',
+  'createdAt',
+  'updatedAt',
+]) {}

@@ -22,17 +22,18 @@ export class JwtStrategy extends PassportStrategy(Strategy, JWT_STRATEGY) {
     configService: ConfigService,
     private authService: TokenAuthService,
   ) {
-    const jwtConfig = configService.getOrThrow<ConfigType<typeof JwtConfig>>(JWT_CONFIG);
+    const jwtConfig =
+      configService.getOrThrow<ConfigType<typeof JwtConfig>>(JWT_CONFIG);
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: jwtConfig.secret,
+      secretOrKey: jwtConfig.secret ?? '',
       ignoreExpiration: false,
     });
   }
 
   validate(payload: AccessTokenJwtPayload) {
-    const userId = BigInt(payload.userId);
+    const userId = payload.userId;
     // console.log('Validated user ID:', userId);
 
     return this.authService.validateJwtUser(userId);

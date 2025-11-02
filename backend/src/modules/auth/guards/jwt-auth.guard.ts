@@ -1,6 +1,15 @@
-import { ExecutionContext, Inject, Injectable, LoggerService } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Inject,
+  Injectable,
+  LoggerService,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { JsonWebTokenError, NotBeforeError, TokenExpiredError } from '@nestjs/jwt';
+import {
+  JsonWebTokenError,
+  NotBeforeError,
+  TokenExpiredError,
+} from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
 
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
@@ -19,13 +28,16 @@ import { AccessTokenJwtPayload } from '@modules/auth/types/jwt.types';
 export class JwtAuthGuard extends AuthGuard(JWT_STRATEGY) {
   constructor(
     private readonly reflector: Reflector,
-    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
     private readonly requestContextService: RequestContextService,
   ) {
     super();
   }
 
-  canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
       context.getClass(),
@@ -80,7 +92,7 @@ export class JwtAuthGuard extends AuthGuard(JWT_STRATEGY) {
     const payload: AccessTokenJwtPayload = user;
 
     // 검증을 통과했다면, RequestContext에 userId를 설정
-    this.requestContextService.setUserId(BigInt(payload.userId));
+    this.requestContextService.setUserId(payload.userId);
 
     // 모든 검증을 통과하면 user 객체를 반환
     return user;

@@ -1,13 +1,25 @@
-import { Controller, Get, Query, Req, UseGuards, VERSION_NEUTRAL } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Req,
+  UseGuards,
+  VERSION_NEUTRAL,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ApiBearerAuth, ApiCookieAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCookieAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { Request } from 'express';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';
 import { ResponseMessage } from '@common/decorators/response/response-message.decorator';
 
-import { REFRESH_JWT_CONFIG } from '@modules/auth/config/refresh-jwt.config';
 import { Public } from '@modules/auth/decorators/public.decorator';
 import { TokenAuthService } from '@modules/auth/services/token.auth.service';
 
@@ -39,11 +51,6 @@ export class AuthTestController {
     };
   }
 
-  @Get('refresh-jwt')
-  getRefresh() {
-    return this.configService.getOrThrow(REFRESH_JWT_CONFIG);
-  }
-
   @ApiOperation({
     summary: '테스트 토큰 생성 API',
     description: 'Query String으로 userId를 첨부하세요.',
@@ -57,7 +64,7 @@ export class AuthTestController {
   @Public()
   @Get('token')
   async getTestToken(@Query('userId') userId: string) {
-    return this.authService.generateTokens(BigInt(userId));
+    return this.authService.generateTokens(userId);
   }
 
   @Get('cookie')
