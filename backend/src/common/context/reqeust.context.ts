@@ -5,7 +5,7 @@
  */
 export class RequestContext {
   private readonly traceId: string;
-  private userId: bigint | null = null;
+  private userId: string | null = null;
 
   constructor(traceId: string) {
     this.traceId = traceId;
@@ -15,11 +15,11 @@ export class RequestContext {
     return this.traceId;
   }
 
-  public setUserId(userId: bigint) {
+  public setUserId(userId: string) {
     this.userId = userId;
   }
 
-  public getUserId(): bigint | null {
+  public getUserId(): string | null {
     return this.userId;
   }
 }

@@ -35,14 +35,14 @@ export class RequestContextService {
     return contextUserId;
   }
 
-  getUserId(): bigint | null {
+  getUserId(): string | null {
     return this.getContext().getUserId();
   }
 
   /**
    * 현재 요청 컨텍스트에 userId를 설정합니다.
    */
-  setUserId(userId: bigint): void {
+  setUserId(userId: string): void {
     this.getContext().setUserId(userId);
   }
 
