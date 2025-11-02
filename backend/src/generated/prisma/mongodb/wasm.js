@@ -141,6 +141,30 @@ exports.Prisma.ProjectScalarFieldEnum = {
   title: 'title',
   description: 'description',
   link: 'link',
+  planId: 'planId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FormScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  title: 'title',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  availableRounds: 'availableRounds'
+};
+
+exports.Prisma.FormQuestionScalarFieldEnum = {
+  id: 'id',
+  formId: 'formId',
+  questionNo: 'questionNo',
+  title: 'title',
+  description: 'description',
+  type: 'type',
+  options: 'options',
+  isRequired: 'isRequired',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -155,12 +179,12 @@ exports.Prisma.ProjectMemberScalarFieldEnum = {
 
 exports.Prisma.ApplicationScalarFieldEnum = {
   id: 'id',
+  applicantId: 'applicantId',
+  projectId: 'projectId',
   status: 'status',
   roundId: 'roundId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  applicantId: 'applicantId',
-  projectId: 'projectId'
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.SchoolScalarFieldEnum = {
@@ -195,6 +219,12 @@ exports.UserRoleEnum = exports.$Enums.UserRoleEnum = {
   ADMIN: 'ADMIN'
 };
 
+exports.QuestionTypeEnum = exports.$Enums.QuestionTypeEnum = {
+  SINGLE_CHOICE: 'SINGLE_CHOICE',
+  MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
+  SUBJECTIVE: 'SUBJECTIVE'
+};
+
 exports.ApplicationStatusEnum = exports.$Enums.ApplicationStatusEnum = {
   DRAFT: 'DRAFT',
   SUBMITTED: 'SUBMITTED',
@@ -202,16 +232,12 @@ exports.ApplicationStatusEnum = exports.$Enums.ApplicationStatusEnum = {
   REJECTED: 'REJECTED'
 };
 
-exports.QuestionTypeEnum = exports.$Enums.QuestionTypeEnum = {
-  SINGLE_CHOICE: 'SINGLE_CHOICE',
-  MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
-  SUBJECTIVE: 'SUBJECTIVE'
-};
-
 exports.Prisma.ModelName = {
   Challenger: 'Challenger',
   Round: 'Round',
   Project: 'Project',
+  Form: 'Form',
+  FormQuestion: 'FormQuestion',
   ProjectMember: 'ProjectMember',
   Application: 'Application',
   School: 'School'
