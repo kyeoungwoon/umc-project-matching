@@ -75,7 +75,7 @@ model Challenger {
   name         String
   nickname     String
   introduction String?
-  school       String
+  school       String // School 모델의 handle 참조
   studentId    String
   password     String
   part         UserPartEnum
@@ -85,8 +85,9 @@ model Challenger {
   updatedAt DateTime @updatedAt
 
   // --- 관계 ---
-  applications  Application[]   @relation("ApplicantToApplications")
-  ProjectMember ProjectMember[]
+  applications     Application[]   @relation("ApplicantToApplications")
+  ProjectMember    ProjectMember[]
+  challengerSchool School          @relation(fields: [school], references: [handle])
 
   @@unique([school, studentId]) // 학교 + 학번 복합 고유 키
   @@map("challengers") // 실제 MongoDB 컬렉션 이름
@@ -166,4 +167,20 @@ model Application {
   // 하나의 프로젝트에는 차수별로 한 번만 지원 가능함
   @@unique([applicantId, projectId, roundId])
   @@map("applications")
+}
+
+model School {
+  handle String @id @map("_id") // 기본 키로 사용, 유니크함 보장됨
+  name   String // 학교명
+
+  // --- 메타 데이터 ---
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+  Challenger Challenger[]
+
+  @@index([name])
+  @@unique([handle, name])
+  @@map("schools")
 }

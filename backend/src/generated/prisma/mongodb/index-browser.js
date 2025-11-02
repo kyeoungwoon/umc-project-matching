@@ -163,6 +163,13 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   projectId: 'projectId'
 };
 
+exports.Prisma.SchoolScalarFieldEnum = {
+  handle: 'handle',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -206,7 +213,8 @@ exports.Prisma.ModelName = {
   Round: 'Round',
   Project: 'Project',
   ProjectMember: 'ProjectMember',
-  Application: 'Application'
+  Application: 'Application',
+  School: 'School'
 };
 
 /**

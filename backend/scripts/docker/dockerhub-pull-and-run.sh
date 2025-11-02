@@ -1,7 +1,7 @@
-DOCKER_USER_NAME="ribuddy"
-DOCKER_IMAGE_NAME="ribuddy-api"
+DOCKER_USER_NAME="kyeoungwoon"
+DOCKER_IMAGE_NAME="upms-server"
 
-DOCKER_CONTAINER_NAME="ribuddy-api"
+DOCKER_CONTAINER_NAME="upms-server"
 DOCKER_ENV_FILE_PATH="/home/ubuntu/.env"
 
 echo "=============================="
