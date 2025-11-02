@@ -30,7 +30,7 @@ export class TokenAuthService {
    * @param userId
    */
   async validateJwtUser(userId: string) {
-    const user = await this.userService.getUserInfo(userId);
+    const user = await this.userService.getUserByUserId(userId);
 
     return {
       userId: user.id,

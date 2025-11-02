@@ -35,13 +35,17 @@ export const parseCustomExceptionToErrorDetails = (
  * HttpException의 정보를 파싱합니다.
  * @param exception
  */
-export const parseHttpExceptionToErrorDetails = (exception: HttpException): ExceptionDetails => {
+export const parseHttpExceptionToErrorDetails = (
+  exception: HttpException,
+): ExceptionDetails => {
   const errorResponse = exception.getResponse();
   const httpStatusCode = exception.getStatus();
 
   // ErrorCode와 Message는 고정
   // 디버깅 시에는 data에 있는 errorResponse를 확인해서, 왜 우리가 의도하지 않은 HttpException이 발생했는지 확인
-  const { code: errorCode, message: errorMessage } = CommonErrorCode.UNKNOWN_HTTP_EXCEPTION;
+  // TODO: custom error로 전부 변환 전에는 default로 변경
+  const { code: errorCode, message: errorMessage } =
+    CommonErrorCode.DEFAULT_HTTP_EXCEPTION;
 
   // console.log(errorResponse, 'errorResponse');
 
@@ -59,7 +63,9 @@ export const parseHttpExceptionToErrorDetails = (exception: HttpException): Exce
  * Request의 정보를 파싱합니다.
  * @param ctx
  */
-export const parseContextToRequestInfo = (ctx: HttpArgumentsHost): ExceptionRequestInfo => {
+export const parseContextToRequestInfo = (
+  ctx: HttpArgumentsHost,
+): ExceptionRequestInfo => {
   const request = ctx.getRequest<Request>();
 
   return {

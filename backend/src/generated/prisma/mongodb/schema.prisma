@@ -50,24 +50,6 @@ enum UserRoleEnum {
   ADMIN
 }
 
-// --- Composite Types (다른 모델에 포함되는 임베디드 문서) ---
-
-// Project 모델 내부에 포함될 지원서 질문 양식
-type FormQuestion {
-  id          String           @default(cuid())
-  title       String
-  description String?
-  type        QuestionTypeEnum
-  options     String[] // 객관식 선택지
-  isRequired  Boolean          @default(true) @map("is_required")
-}
-
-// Application 모델 내부에 포함될 답변
-type Answer {
-  questionId String @map("question_id")
-  value      Json
-}
-
 // --- Collections (MongoDB의 실제 컬렉션이 될 모델) ---
 
 model Challenger {
@@ -75,7 +57,7 @@ model Challenger {
   name         String
   nickname     String
   introduction String?
-  school       String
+  school       String // School 모델의 handle 참조
   studentId    String
   password     String
   part         UserPartEnum
@@ -85,8 +67,10 @@ model Challenger {
   updatedAt DateTime @updatedAt
 
   // --- 관계 ---
-  applications  Application[]   @relation("ApplicantToApplications")
-  ProjectMember ProjectMember[]
+  applications     Application[]   @relation("ApplicantToApplications")
+  projects         Project[]
+  ProjectMember    ProjectMember[]
+  challengerSchool School          @relation(fields: [school], references: [handle])
 
   @@unique([school, studentId]) // 학교 + 학번 복합 고유 키
   @@map("challengers") // 실제 MongoDB 컬렉션 이름
@@ -111,20 +95,58 @@ model Project {
   title       String
   description String
   link        String // Notion 등 상세 기획 링크
+  planId      String @map("plan_id") @db.ObjectId // ProjectPlan 모델 참조
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // --- 임베디드 문서 ---
-  formQuestions FormQuestion[] @map("form_questions")
-
   // --- 관계 (반대편) ---
   // 이 프로젝트에 달린 지원서 (1-N)
   applications  Application[]   @relation("ProjectToApplications")
-  ProjectMember ProjectMember[] @relation("ProjectToMembers")
+  projectMember ProjectMember[] @relation("ProjectToMembers")
+  projectForms  Form[]
+  plan          Challenger      @relation(fields: [planId], references: [id])
 
   @@index([title])
   @@map("projects")
+}
+
+model Form {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  projectId String @map("project_id") @db.ObjectId
+
+  title       String
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 이 양식을 사용할 수 있는 차수 ID 목록
+  availableRounds String[] @map("available_rounds")
+
+  // --- 관계 ---
+  project   Project        @relation(fields: [projectId], references: [id])
+  questions FormQuestion[]
+
+  @@map("forms")
+}
+
+// Project 모델 내부에 포함될 지원서 질문 양식
+model FormQuestion {
+  id          String           @id @default(auto()) @map("_id") @db.ObjectId
+  formId      String           @map("form_id") @db.ObjectId
+  questionNo  Int              @map("question_no") // 질문 순서
+  title       String
+  description String?
+  type        QuestionTypeEnum
+  options     String[] // 객관식 선택지
+  isRequired  Boolean          @default(true) @map("is_required")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+  form Form @relation(fields: [formId], references: [id])
 }
 
 model ProjectMember {
@@ -143,27 +165,55 @@ model ProjectMember {
   @@map("project_members")
 }
 
+// Application 모델 내부에 포함될 답변
+type Answer {
+  questionId String   @map("question_id")
+  value      String[] // 객관식, 주관식 모두 String 배열로 저장
+}
+
 model Application {
-  id      String                @id @default(auto()) @map("_id") @db.ObjectId
-  status  ApplicationStatusEnum @default(DRAFT)
-  roundId String                @map("round_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  applicantId String                @db.ObjectId
+  projectId   String                @db.ObjectId
+  status      ApplicationStatusEnum @default(DRAFT)
+  roundId     String                @map("round_id") @db.ObjectId
+
+  answers Answer[] // 질문에 대한 응답들 모음
+
+  // 질문이 변경될 경우 기존 데이터는 유실되는거로
+  // 객관식 : 선택지 보기가 변경되었을 경우 임시저장된 값은 무의미해짐
+  // 질문 type가 변경될 경우 : 기존 답변 무의미해짐 -> 질문 type는 변경할 수 없도록 함
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   // --- 관계 ---
-  // 1. 지원자 (N-1)
-  applicantId String     @db.ObjectId
-  applicant   Challenger @relation("ApplicantToApplications", fields: [applicantId], references: [id])
-  // 2. 지원 프로젝트 (N-1)
-  projectId   String     @db.ObjectId
-  project     Project    @relation("ProjectToApplications", fields: [projectId], references: [id])
 
-  round   Round    @relation(fields: [roundId], references: [id])
-  // --- 임베디드 문서 ---
-  answers Answer[]
+  // 1. 지원자 (N-1)
+  applicant Challenger @relation("ApplicantToApplications", fields: [applicantId], references: [id])
+  // 2. 지원 프로젝트 (N-1)
+  project   Project    @relation("ProjectToApplications", fields: [projectId], references: [id])
+  round     Round      @relation(fields: [roundId], references: [id])
 
   // 하나의 프로젝트에는 차수별로 한 번만 지원 가능함
+  // 여러 개의 프로젝트에 지원서를 저장해도 ㄱㅊ긴 함
   @@unique([applicantId, projectId, roundId])
   @@map("applications")
+}
+
+model School {
+  handle String @id @map("_id") // 기본 키로 사용, 유니크함 보장됨
+  name   String // 학교명
+
+  // --- 메타 데이터 ---
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+  Challenger Challenger[]
+
+  @@unique([handle, name])
+  @@index([name])
+  @@map("schools")
 }

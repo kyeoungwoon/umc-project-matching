@@ -1,19 +1,5 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOkResponse,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
+import { Controller, Get } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';
 
@@ -34,40 +20,12 @@ export class UsersV1Controller {
     private readonly requestContextService: RequestContextService,
   ) {}
 
-  @Post('me')
-  me() {
+  @Get('me')
+  async getLoggedInUserInfo() {
     const userId = this.requestContextService.getOrThrowUserId();
 
-    return this.usersService.getUserInfo(userId);
-  }
+    const userData = await this.usersService.getUserByUserId(userId);
 
-  @Post('projects')
-  createProject() {
-    return true;
-  }
-
-  @Patch('projects/:projectId')
-  updateProject() {
-    return true;
-  }
-
-  @Post('projects/:projectId/forms')
-  createProjectApplicationForm() {
-    return true;
-  }
-
-  @Delete('projects/:projectId/forms')
-  deleteProjectApplicationForm() {
-    return true;
-  }
-
-  @Get('projects/:projectId/forms')
-  getProjectApplicationForm() {
-    return true;
-  }
-
-  @Post('projects/:projectId/forms/:formId')
-  changeApplicationStatus() {
-    return true;
+    return { ...userData, password: '비밀번호는 비밀이지롱' };
   }
 }

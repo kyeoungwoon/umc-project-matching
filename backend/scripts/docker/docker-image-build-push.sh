@@ -1,16 +1,16 @@
 #!/bin/bash
 
-DOCKER_USER_NAME="ribuddy"
-DOCKER_IMAGE_NAME="ribuddy-api"
+DOCKER_USER_NAME="kyeoungwoon"
+DOCKER_IMAGE_NAME="upms-server"
 
-DOCKERFILE_PATH="scripts/docker/dockerfile"
+DOCKERFILE_PATH="backend/scripts/docker/dockerfile"
 
-SCRIPT_ENV_PATH="scripts/ec2-dev/manual/.env"
+SCRIPT_ENV_PATH="backend/scripts/docker/.env"
 
 echo "=============================="
 echo "🔐 환경변수 설정 시작"
 echo "=============================="
-if [ -f .env ]; then
+if [ -f $SCRIPT_ENV_PATH ]; then
   # shellcheck disable=SC2046
   export $(grep -v '^#' $SCRIPT_ENV_PATH | xargs)
   echo "✅ .env 파일에서 환경변수 불러오기 완료"
@@ -45,7 +45,7 @@ echo "🔨 멀티 아키텍처 Docker 이미지 빌드 및 푸시 시작"
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
   -t "$DOCKER_USER_NAME/$DOCKER_IMAGE_NAME:latest" \
-  -f "$DOCKERFILE_PATH" . \
+  -f "$DOCKERFILE_PATH" ./backend \
   --push
 
 echo "✅ Docker 이미지 빌드 및 푸시 완료"
