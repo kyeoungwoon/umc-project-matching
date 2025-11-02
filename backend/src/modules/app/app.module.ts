@@ -28,7 +28,6 @@ import { JwtConfig } from '@modules/auth/config/jwt.config';
 import { KakaoOAuthConfig } from '@modules/auth/config/kakao-oauth-config';
 import { RegisterJwtConfig } from '@modules/auth/config/register-jwt.config';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
-import { MessageModule } from '@modules/message/message.module';
 import { PrismaModule } from '@modules/prisma/prisma.module';
 import { TestModule } from '@modules/test/test.module';
 import { UsersModule } from '@modules/users/users.module';
@@ -57,7 +56,6 @@ import { UsersModule } from '@modules/users/users.module';
     UsersModule,
     PrismaModule,
     TestModule,
-    MessageModule,
   ],
   controllers: [],
   providers: [

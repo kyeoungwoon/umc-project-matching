@@ -28,34 +28,7 @@ import { ErrorType, ErrorTypeDto } from '@modules/test/dto/error.dto';
 @ApiTags(API_TAGS.TEST)
 @ApiBearerAuth()
 export class ErrorTestController {
-  constructor(
-    @Inject(ALS) private readonly als: AlsInstance,
-    private readonly requestContextService: RequestContextService,
-  ) {}
-
-  @Get('hello')
-  @CustomResponse(CommonSuccessCode.COMMON_SUCCESS)
-  @ApiOperation({
-    summary: 'Health-Check API',
-    description: `서버 상태 확인 및 ApiBaseResponse를 확인하기 위한 API 입니다.
-    \nHello World!를 return 합니다.`,
-  })
-  getHello(): string {
-    return 'Hello World!';
-  }
-
-  @Get('als')
-  getRequestContext() {
-    return this.requestContextService.getContext();
-
-    // const userId = requestContext.getUserId();
-    // const traceId = requestContext.getTraceId();
-    //
-    // return {
-    //   userId: userId ? userId.toString() : '로그인되지 않은 사용자입니다.',
-    //   traceId: traceId ? traceId : 'Request ID가 설정되지 않았습니다.',
-    // };
-  }
+  constructor() {}
 
   @Get('exception')
   @ApiOperation({
