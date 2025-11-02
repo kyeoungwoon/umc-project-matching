@@ -1552,6 +1552,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     nickname: string | null
+    introduction: string | null
     school: string | null
     studentId: string | null
     password: string | null
@@ -1565,6 +1566,7 @@ export namespace Prisma {
     id: string | null
     name: string | null
     nickname: string | null
+    introduction: string | null
     school: string | null
     studentId: string | null
     password: string | null
@@ -1578,6 +1580,7 @@ export namespace Prisma {
     id: number
     name: number
     nickname: number
+    introduction: number
     school: number
     studentId: number
     password: number
@@ -1593,6 +1596,7 @@ export namespace Prisma {
     id?: true
     name?: true
     nickname?: true
+    introduction?: true
     school?: true
     studentId?: true
     password?: true
@@ -1606,6 +1610,7 @@ export namespace Prisma {
     id?: true
     name?: true
     nickname?: true
+    introduction?: true
     school?: true
     studentId?: true
     password?: true
@@ -1619,6 +1624,7 @@ export namespace Prisma {
     id?: true
     name?: true
     nickname?: true
+    introduction?: true
     school?: true
     studentId?: true
     password?: true
@@ -1705,6 +1711,7 @@ export namespace Prisma {
     id: string
     name: string
     nickname: string
+    introduction: string | null
     school: string
     studentId: string
     password: string
@@ -1735,6 +1742,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     nickname?: boolean
+    introduction?: boolean
     school?: boolean
     studentId?: boolean
     password?: boolean
@@ -1753,6 +1761,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     nickname?: boolean
+    introduction?: boolean
     school?: boolean
     studentId?: boolean
     password?: boolean
@@ -1762,7 +1771,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ChallengerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "nickname" | "school" | "studentId" | "password" | "part" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["challenger"]>
+  export type ChallengerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "nickname" | "introduction" | "school" | "studentId" | "password" | "part" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["challenger"]>
   export type ChallengerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | Challenger$applicationsArgs<ExtArgs>
     ProjectMember?: boolean | Challenger$ProjectMemberArgs<ExtArgs>
@@ -1779,6 +1788,7 @@ export namespace Prisma {
       id: string
       name: string
       nickname: string
+      introduction: string | null
       school: string
       studentId: string
       password: string
@@ -2183,6 +2193,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Challenger", 'String'>
     readonly name: FieldRef<"Challenger", 'String'>
     readonly nickname: FieldRef<"Challenger", 'String'>
+    readonly introduction: FieldRef<"Challenger", 'String'>
     readonly school: FieldRef<"Challenger", 'String'>
     readonly studentId: FieldRef<"Challenger", 'String'>
     readonly password: FieldRef<"Challenger", 'String'>
@@ -6692,6 +6703,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     nickname: 'nickname',
+    introduction: 'introduction',
     school: 'school',
     studentId: 'studentId',
     password: 'password',
@@ -6895,6 +6907,7 @@ export namespace Prisma {
     id?: StringFilter<"Challenger"> | string
     name?: StringFilter<"Challenger"> | string
     nickname?: StringFilter<"Challenger"> | string
+    introduction?: StringNullableFilter<"Challenger"> | string | null
     school?: StringFilter<"Challenger"> | string
     studentId?: StringFilter<"Challenger"> | string
     password?: StringFilter<"Challenger"> | string
@@ -6910,6 +6923,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     nickname?: SortOrder
+    introduction?: SortOrder
     school?: SortOrder
     studentId?: SortOrder
     password?: SortOrder
@@ -6929,6 +6943,7 @@ export namespace Prisma {
     NOT?: ChallengerWhereInput | ChallengerWhereInput[]
     name?: StringFilter<"Challenger"> | string
     nickname?: StringFilter<"Challenger"> | string
+    introduction?: StringNullableFilter<"Challenger"> | string | null
     school?: StringFilter<"Challenger"> | string
     studentId?: StringFilter<"Challenger"> | string
     password?: StringFilter<"Challenger"> | string
@@ -6944,6 +6959,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     nickname?: SortOrder
+    introduction?: SortOrder
     school?: SortOrder
     studentId?: SortOrder
     password?: SortOrder
@@ -6963,6 +6979,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Challenger"> | string
     name?: StringWithAggregatesFilter<"Challenger"> | string
     nickname?: StringWithAggregatesFilter<"Challenger"> | string
+    introduction?: StringNullableWithAggregatesFilter<"Challenger"> | string | null
     school?: StringWithAggregatesFilter<"Challenger"> | string
     studentId?: StringWithAggregatesFilter<"Challenger"> | string
     password?: StringWithAggregatesFilter<"Challenger"> | string
@@ -7236,6 +7253,7 @@ export namespace Prisma {
     id?: string
     name: string
     nickname: string
+    introduction?: string | null
     school: string
     studentId: string
     password: string
@@ -7251,6 +7269,7 @@ export namespace Prisma {
     id?: string
     name: string
     nickname: string
+    introduction?: string | null
     school: string
     studentId: string
     password: string
@@ -7265,6 +7284,7 @@ export namespace Prisma {
   export type ChallengerUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
+    introduction?: NullableStringFieldUpdateOperationsInput | string | null
     school?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -7279,6 +7299,7 @@ export namespace Prisma {
   export type ChallengerUncheckedUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
+    introduction?: NullableStringFieldUpdateOperationsInput | string | null
     school?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -7294,6 +7315,7 @@ export namespace Prisma {
     id?: string
     name: string
     nickname: string
+    introduction?: string | null
     school: string
     studentId: string
     password: string
@@ -7306,6 +7328,7 @@ export namespace Prisma {
   export type ChallengerUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
+    introduction?: NullableStringFieldUpdateOperationsInput | string | null
     school?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -7318,6 +7341,7 @@ export namespace Prisma {
   export type ChallengerUncheckedUpdateManyInput = {
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
+    introduction?: NullableStringFieldUpdateOperationsInput | string | null
     school?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -7599,6 +7623,22 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+    isSet?: boolean
+  }
+
   export type EnumUserPartEnumFilter<$PrismaModel = never> = {
     equals?: $Enums.UserPartEnum | EnumUserPartEnumFieldRefInput<$PrismaModel>
     in?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
@@ -7653,6 +7693,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     nickname?: SortOrder
+    introduction?: SortOrder
     school?: SortOrder
     studentId?: SortOrder
     password?: SortOrder
@@ -7666,6 +7707,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     nickname?: SortOrder
+    introduction?: SortOrder
     school?: SortOrder
     studentId?: SortOrder
     password?: SortOrder
@@ -7679,6 +7721,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     nickname?: SortOrder
+    introduction?: SortOrder
     school?: SortOrder
     studentId?: SortOrder
     password?: SortOrder
@@ -7704,6 +7747,25 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+    isSet?: boolean
   }
 
   export type EnumUserPartEnumWithAggregatesFilter<$PrismaModel = never> = {
@@ -7961,6 +8023,11 @@ export namespace Prisma {
 
   export type StringFieldUpdateOperationsInput = {
     set?: string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+    unset?: boolean
   }
 
   export type EnumUserPartEnumFieldUpdateOperationsInput = {
@@ -8281,6 +8348,21 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+    isSet?: boolean
+  }
+
   export type NestedEnumUserPartEnumFilter<$PrismaModel = never> = {
     equals?: $Enums.UserPartEnum | EnumUserPartEnumFieldRefInput<$PrismaModel>
     in?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
@@ -8332,6 +8414,36 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+    isSet?: boolean
   }
 
   export type NestedEnumUserPartEnumWithAggregatesFilter<$PrismaModel = never> = {
@@ -8686,6 +8798,7 @@ export namespace Prisma {
     id?: string
     name: string
     nickname: string
+    introduction?: string | null
     school: string
     studentId: string
     password: string
@@ -8700,6 +8813,7 @@ export namespace Prisma {
     id?: string
     name: string
     nickname: string
+    introduction?: string | null
     school: string
     studentId: string
     password: string
@@ -8760,6 +8874,7 @@ export namespace Prisma {
   export type ChallengerUpdateWithoutProjectMemberInput = {
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
+    introduction?: NullableStringFieldUpdateOperationsInput | string | null
     school?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -8773,6 +8888,7 @@ export namespace Prisma {
   export type ChallengerUncheckedUpdateWithoutProjectMemberInput = {
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
+    introduction?: NullableStringFieldUpdateOperationsInput | string | null
     school?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -8787,6 +8903,7 @@ export namespace Prisma {
     id?: string
     name: string
     nickname: string
+    introduction?: string | null
     school: string
     studentId: string
     password: string
@@ -8801,6 +8918,7 @@ export namespace Prisma {
     id?: string
     name: string
     nickname: string
+    introduction?: string | null
     school: string
     studentId: string
     password: string
@@ -8889,6 +9007,7 @@ export namespace Prisma {
   export type ChallengerUpdateWithoutApplicationsInput = {
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
+    introduction?: NullableStringFieldUpdateOperationsInput | string | null
     school?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -8902,6 +9021,7 @@ export namespace Prisma {
   export type ChallengerUncheckedUpdateWithoutApplicationsInput = {
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
+    introduction?: NullableStringFieldUpdateOperationsInput | string | null
     school?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     password?: StringFieldUpdateOperationsInput | string
@@ -8968,22 +9088,6 @@ export namespace Prisma {
     endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-    isSet?: boolean
   }
 
   export type EnumQuestionTypeEnumFilter<$PrismaModel = never> = {
@@ -9192,21 +9296,6 @@ export namespace Prisma {
     value?: InputJsonValue | InputJsonValue
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-    isSet?: boolean
-  }
-
   export type NestedEnumQuestionTypeEnumFilter<$PrismaModel = never> = {
     equals?: $Enums.QuestionTypeEnum | EnumQuestionTypeEnumFieldRefInput<$PrismaModel>
     in?: $Enums.QuestionTypeEnum[] | ListEnumQuestionTypeEnumFieldRefInput<$PrismaModel>
@@ -9217,11 +9306,6 @@ export namespace Prisma {
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-    unset?: boolean
   }
 
   export type EnumQuestionTypeEnumFieldUpdateOperationsInput = {

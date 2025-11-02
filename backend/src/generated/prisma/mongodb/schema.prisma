@@ -71,14 +71,15 @@ type Answer {
 // --- Collections (MongoDB의 실제 컬렉션이 될 모델) ---
 
 model Challenger {
-  id        String       @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  nickname  String
-  school    String
-  studentId String
-  password  String
-  part      UserPartEnum
-  role      UserRoleEnum @default(USER)
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  nickname     String
+  introduction String?
+  school       String
+  studentId    String
+  password     String
+  part         UserPartEnum
+  role         UserRoleEnum @default(USER)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -117,6 +117,7 @@ exports.Prisma.ChallengerScalarFieldEnum = {
   id: 'id',
   name: 'name',
   nickname: 'nickname',
+  introduction: 'introduction',
   school: 'school',
   studentId: 'studentId',
   password: 'password',
