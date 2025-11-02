@@ -1,0 +1,28 @@
+pre-commit:
+  parallel: true
+  commands:
+    eslint:
+      glob: '**/*.ts'
+      run: |
+        echo "🔍 ========================================="
+        echo "🔧 Running ESLint on staged files..."
+        echo "🔍 ========================================="
+        pnpm exec eslint {staged_files} --fix || exit 1
+        echo "✅ ESLint completed successfully!"
+      stage_fixed: true
+    prettier:
+      glob: '**/*.{ts,json,yaml,md}'
+      run: |
+        echo "💅 ========================================="
+        echo "🎨 Running Prettier on staged files..."
+        echo "💅 ========================================="
+        pnpm exec prettier --write {staged_files} || exit 1
+        echo "✅ Code formatting completed!"
+      stage_fixed: true
+    type-check:
+      run: |
+        echo "🔍 ========================================="
+        echo "📝 Running TypeScript type checking..."
+        echo "🔍 ========================================="
+        pnpm type-check || exit 1
+        echo "✅ Type checking completed successfully!"

@@ -1,0 +1,158 @@
+'use client';
+
+import Image from 'next/image';
+import { useParams, useRouter } from 'next/navigation';
+
+import { FileTextIcon, InboxIcon, InfoIcon } from 'lucide-react';
+
+import { Badge } from '@styles/components/ui/badge';
+import { Button } from '@styles/components/ui/button';
+import { Card, CardContent, CardTitle } from '@styles/components/ui/card';
+import { Label } from '@styles/components/ui/label';
+import { Separator } from '@styles/components/ui/separator';
+
+import { useGetProjectDetailsQuery } from '@api/query/project';
+
+import { ROUTES } from '@common/constants/routes.constants';
+
+import { projectResponseToCardProps } from '@common/utils/project-response-card';
+
+import { useIsAdminChallenger, useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
+
+import DefaultSkeleton from '@common/components/DefaultSkeleton';
+import ProjectInfoCard from '@common/components/ProjectInfoCard';
+
+import { FormInfoCard } from '@features/projects/components/FormInfoCard';
+
+const ProjectFormsPage = () => {
+  const params = useParams();
+  const projectId = params.projectId as string;
+  const { data: project, isLoading } = useGetProjectDetailsQuery(projectId);
+  const isPlanChallenger = useIsPlanChallenger();
+  const isAdminChallenger = useIsAdminChallenger();
+
+  const hasPerms = isPlanChallenger || isAdminChallenger;
+
+  const router = useRouter();
+  const handleCreateFormClick = () => {
+    router.push(ROUTES.PROJECTS.CREATE_FORM(projectId));
+  };
+
+  if (isLoading || !project) {
+    return <DefaultSkeleton />;
+  }
+
+  return (
+    <div className="container mx-auto max-w-6xl space-y-8 p-6">
+      {/* Header Section */}
+      <Image
+        src={project.bannerImage || 'https://placehold.co/600x400'}
+        alt={'프로젝트 로고'}
+        width={1800}
+        height={300}
+        className={'h-300pxr w-full bg-gray-200 object-cover object-center'}
+      />
+
+      <div className={'flex flex-row items-center justify-between'}>
+        <div className={'text-30pxr flex flex-col gap-y-5'}>
+          {/*프로젝트명*/}
+          <div className={'flex flex-row items-start justify-start gap-2'}>
+            <span className={'w-50 flex-shrink-0'}>프로젝트명</span>
+            <span className="max-w-full flex-grow-1 font-bold break-words">{project.title}</span>
+          </div>
+
+          {/*한줄설명*/}
+          <div className={'flex flex-row items-start justify-start gap-2'}>
+            <span className={'w-50 flex-shrink-0'}>한줄 설명</span>
+            <p className="text-muted-foreground mt-auto mb-2 min-w-0 flex-grow text-2xl break-words">
+              {project.description}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/*TODO: 안내멘트, 삭제 필요*/}
+      {/*TODO: 중복된 내용 컴포넌트화하기*/}
+      <div className="text-md mb-5 flex flex-row items-center gap-x-2 tracking-tight text-black">
+        <InfoIcon className={'h-5 w-5'} />
+        <span className={'text-gray-600'}>파트별 TO | </span>
+        형식 : (현재 지원자 수) TO
+      </div>
+
+      <div className="mt-2 mb-5 flex w-full flex-col items-center gap-y-1">
+        {projectResponseToCardProps(project).partAndTo.map((partTo, index) => {
+          const { part, currentTo, maxTo } = partTo;
+          return (
+            <div key={index} className="flex w-full flex-row items-center justify-between">
+              <div className={'flex flex-row items-center text-lg text-gray-800'}>
+                <span className="min-w-35">{part}</span>
+                <span className={'tracking-wide'}>
+                  {currentTo}/{maxTo}
+                </span>
+              </div>
+              <Label
+                className={`text-lg font-semibold tracking-wide ${currentTo >= maxTo ? 'text-red-500' : 'text-green-600'}`}
+              >
+                {currentTo >= maxTo ? '모집 완료' : '모집 중'}
+              </Label>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className={'flex w-full flex-row items-center justify-start gap-x-2 text-xl'}>
+        <Label className={'text-xl'}>팀원 목록 : </Label>
+        {project.projectMember.map((member, idx) => {
+          return (
+            <span className={'text-gray-700'} key={idx}>
+              {member.user?.challengerSchool.name} {member.user?.nickname}/{member.user?.name} (
+              {member.user?.part})
+            </span>
+          );
+        })}
+      </div>
+
+      <Separator />
+
+      {/* Forms Section */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <h2 className="text-2xl font-semibold">지원용 폼 목록</h2>
+        </div>
+
+        {project.projectForms.length > 0 ? (
+          <div className="grid gap-4">
+            {project.projectForms.map((form) => (
+              <FormInfoCard key={form.id} form={form} />
+            ))}
+          </div>
+        ) : (
+          <Card className="border-dashed">
+            <CardContent className="flex flex-col items-center justify-center gap-y-1 py-16">
+              <InboxIcon className="text-muted-foreground h-12 w-12" />
+              <p className="text-muted-foreground text-lg font-medium">
+                이 프로젝트에 제출 가능한 폼이 존재하지 않습니다.
+              </p>
+              <p className="text-muted-foreground text-sm">
+                {hasPerms
+                  ? '폼을 생성해서 지원자를 모집해 보세요.'
+                  : 'Plan 챌린저에게 폼 생성을 요구해주세요.'}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+      {hasPerms && (
+        <Button
+          className={'mt-4 h-14 w-full py-4 text-2xl'}
+          variant={'secondary'}
+          onClick={handleCreateFormClick}
+        >
+          지원용 폼 생성하기
+        </Button>
+      )}
+    </div>
+  );
+};
+
+export default ProjectFormsPage;

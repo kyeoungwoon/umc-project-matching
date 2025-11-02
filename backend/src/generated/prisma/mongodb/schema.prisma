@@ -1,0 +1,255 @@
+// prisma generate --schema=prisma/mongodb/schema.prisma
+// prisma db push --schema=prisma/mongodb/schema.prisma
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../../src/generated/prisma/mongodb"
+  binaryTargets = ["native", "darwin", "darwin-arm64", "linux-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x", "windows", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL_MONGODB")
+}
+
+// --- Enums (데이터 일관성을 위한 열거형) ---
+
+enum UserPartEnum {
+  PLAN // 플
+  DESIGN // 디
+  WEB // 웹
+  ANDROID // 안드
+  IOS // iOS
+  SPRINGBOOT // 스프링
+  NODEJS // 노드
+  ADMIN // 운영진
+}
+
+enum UserStatusEnum {
+  ACTIVE
+  DROPPED
+  MATCHED
+  PENDING
+}
+
+enum QuestionTypeEnum {
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  SUBJECTIVE
+}
+
+enum ApplicationStatusEnum {
+  DRAFT
+  SUBMITTED
+  CONFIRMED
+  REJECTED
+}
+
+enum UserRoleEnum {
+  USER
+  ADMIN
+}
+
+enum GenderEnum {
+  MALE
+  FEMALE
+}
+
+enum ChallengerChapterEnum {
+  LEO_9TH
+}
+
+// --- Collections (MongoDB의 실제 컬렉션이 될 모델) ---
+
+model Challenger {
+  id               String                 @id @default(auto()) @map("_id") @db.ObjectId
+  umsbChallengerId String? // UMSB 챌린저 아이디
+  name             String
+  nickname         String
+  introduction     String?
+  school           String // School 모델의 handle 참조
+  studentId        String
+  password         String
+  part             UserPartEnum
+  role             UserRoleEnum           @default(USER)
+  gender           GenderEnum?
+  chapter          ChallengerChapterEnum?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+  applications     Application[]   @relation("ApplicantToApplications")
+  projects         Project[]
+  ProjectMember    ProjectMember[]
+  challengerSchool School          @relation(fields: [school], references: [handle], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([school, studentId]) // 학교 + 학번 복합 고유 키
+  @@map("challengers") // 실제 MongoDB 컬렉션 이름
+}
+
+// N차 매칭
+model MatchingRound {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String // 예: "1차 매칭"
+  startDatetime DateTime
+  endDatetime   DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  applicationsInRound Application[]
+
+  @@map("matching_rounds")
+}
+
+type ProjectTo {
+  part UserPartEnum
+  to   Int
+}
+
+model Project {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  link        String // Notion 등 상세 기획 링크
+  bannerImage String?     @map("banner_image") // 배너 이미지 URL
+  planId      String      @map("plan_id") @db.ObjectId // ProjectPlan 모델 참조
+  partTo      ProjectTo[] @map("part_to") // 각 파트별 목표 인원
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 (반대편) ---
+  // 이 프로젝트에 달린 지원서 (1-N)
+  projectMember ProjectMember[] @relation("ProjectToMembers")
+  projectForms  Form[]
+  projectPlan   Challenger      @relation(fields: [planId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([title])
+  @@map("projects")
+}
+
+model Form {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  projectId String @map("project_id") @db.ObjectId
+
+  title       String
+  description String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 이 양식을 사용할 수 있는 차수 ID 목록
+  availableMatchingRounds String[] @map("available_matching_rounds")
+
+  // --- 관계 ---
+  project      Project        @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  applications Application[]
+  questions    FormQuestion[]
+
+  @@map("forms")
+}
+
+// Project 모델 내부에 포함될 지원서 질문 양식
+model FormQuestion {
+  id          String           @id @default(auto()) @map("_id") @db.ObjectId
+  formId      String           @map("form_id") @db.ObjectId
+  questionNo  Int              @map("question_no") // 질문 순서
+  title       String
+  description String?
+  type        QuestionTypeEnum
+  options     String[] // 객관식 선택지
+  isRequired  Boolean          @default(true) @map("is_required")
+  isDeleted   Boolean          @default(false) @map("is_deleted")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+  form        Form         @relation(fields: [formId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  formAnswers FormAnswer[]
+
+  @@map("form_questions")
+}
+
+model ProjectMember {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  projectId String @map("project_id") @db.ObjectId
+  userId    String @map("user_id") @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+  project Project    @relation(name: "ProjectToMembers", fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user    Challenger @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([projectId, userId])
+  @@map("project_members")
+}
+
+// Application 모델 내부에 포함될 답변
+model FormAnswer {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  applicationId String @map("application_id") @db.ObjectId
+
+  questionId String   @map("question_id") @db.ObjectId
+  // 객관식, 주관식 모두 String 배열로 저장, 주관식은 길이 1짜리 배열로 저장
+  value      String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+  application Application  @relation(fields: [applicationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  question    FormQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("form_answers")
+}
+
+model Application {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  applicantId     String                @db.ObjectId
+  formId          String                @db.ObjectId
+  status          ApplicationStatusEnum @default(DRAFT)
+  matchingRoundId String                @map("matching_round_id") @db.ObjectId
+
+  // 질문이 변경될 경우 기존 데이터는 유실되는거로
+  // 객관식 : 선택지 보기가 변경되었을 경우 임시저장된 값은 무의미해짐
+  // 질문 type가 변경될 경우 : 기존 답변 무의미해짐 -> 질문 type는 변경할 수 없도록 함
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+
+  // 1. 지원자 (N-1)
+  applicant     Challenger    @relation("ApplicantToApplications", fields: [applicantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  // 2. 지원 프로젝트 (N-1)
+  form          Form          @relation(fields: [formId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  matchingRound MatchingRound @relation(fields: [matchingRoundId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  formAnswers   FormAnswer[]
+
+  // 하나의 프로젝트, 하나의 폼에는 차수별로 한 번만 지원 가능함
+  // 여러 개의 프로젝트에 지원서를 저장해도 ㄱㅊ긴 함
+  @@unique([applicantId, matchingRoundId])
+  @@map("applications")
+}
+
+model School {
+  handle String @id @map("_id") // 기본 키로 사용, 유니크함 보장됨
+  name   String // 학교명
+
+  // --- 메타 데이터 ---
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // --- 관계 ---
+  challengers Challenger[]
+
+  @@unique([handle, name])
+  @@index([name])
+  @@map("schools")
+}

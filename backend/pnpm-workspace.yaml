@@ -1,0 +1,14 @@
+packages:
+  - .
+
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@scarf/scarf'
+  - '@sentry-internal/node-cpu-profiler'
+  - '@swc/core'
+  - argon2
+  - lefthook
+  - prisma
+  - puppeteer
