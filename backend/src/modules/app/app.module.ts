@@ -31,6 +31,7 @@ import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { PrismaModule } from '@modules/prisma/prisma.module';
 import { TestModule } from '@modules/test/test.module';
 import { UsersModule } from '@modules/users/users.module';
+import { ProjectsModule } from '@modules/projects/projects.module';
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { UsersModule } from '@modules/users/users.module';
     UsersModule,
     PrismaModule,
     TestModule,
+    ProjectsModule,
   ],
   controllers: [],
   providers: [

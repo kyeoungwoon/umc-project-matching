@@ -13,7 +13,6 @@ import {
   UpdateFormRequestDto,
   UpdateProjectRequestDto,
 } from '@modules/projects/dto/project.dto';
-import { Answer } from '@generated/prisma/mongodb';
 
 @Injectable()
 export class ProjectsService {
@@ -49,6 +48,10 @@ export class ProjectsService {
         // 추가 필드가 있다면 여기에 작성
       },
     });
+  }
+
+  async getProjectList() {
+    return this.mongo.project.findMany();
   }
 
   // 프로젝트 삭제, 관리자만 접근 가능해야 함.
@@ -300,7 +303,13 @@ export class ProjectsService {
     }
   }
 
-  async getProjectApplicationFormByProjectId() {}
+  async getProjectApplicationsByProjectId(projectId: string) {
+    return this.mongo.application.findMany({
+      where: {
+        projectId,
+      },
+    });
+  }
 
   async changeApplicationStatus() {}
 }

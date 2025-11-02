@@ -43,6 +43,12 @@ export class UsersService {
     return user.part === UserPartEnum.ADMIN;
   }
 
+  async throwIfNotAdminChallenger(userId: string) {
+    const isAdminChallenger = await this.isAdminChallenger(userId);
+    if (!isAdminChallenger)
+      throw new ForbiddenException('관리자 챌린저만 접근할 수 있습니다.');
+  }
+
   // 학교와 학번으로 사용자 정보를 가져옵니다.
   async getUserBySchoolAndStudentId(school: string, studentId: string) {
     const user = await this.prisma.challenger.findUnique({

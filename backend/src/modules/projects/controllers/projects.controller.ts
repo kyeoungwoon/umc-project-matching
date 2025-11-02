@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -7,7 +8,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ProjectsService } from '@modules/projects/services/projects.service';
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { UsersService } from '@modules/users/services/users.service';
@@ -20,17 +21,28 @@ import {
   UpdateProjectRequestDto,
   UpdateQuestionRequestDto,
 } from '@modules/projects/dto/project.dto';
+import { API_TAGS } from '@common/constants/api-tags.constants';
 
 @Controller({
   path: 'projects',
   version: '1',
 })
+@ApiTags(API_TAGS.PROJECT)
 export class ProjectsController {
   constructor(
     private readonly projectService: ProjectsService,
     private readonly reqContext: RequestContextService,
     private readonly userService: UsersService,
   ) {}
+
+  @Get('')
+  @ApiOperation({
+    summary: '프로젝트 목록 조회',
+    description: '',
+  })
+  async getProjectList() {
+    return this.projectService.getProjectList();
+  }
 
   @Post('')
   @ApiOperation({
@@ -44,19 +56,45 @@ export class ProjectsController {
     return this.projectService.createProject(body);
   }
 
+  @Get(':projectId')
+  @ApiOperation({
+    summary: '프로젝트 상세 보기',
+    description: '',
+  })
+  async getProjectDetails(@Param('projectId') projectId: string) {
+    return this.projectService.getProjectById(projectId);
+  }
+
   @Patch(':projectId')
   @ApiOperation({
     summary: '프로젝트 내용 수정',
     description: '프로젝트 내용을 수정합니다.',
   })
-  async updateProject(@Body() body: UpdateProjectRequestDto) {
+  async updateProject(
+    @Param('projectId') projectId: string,
+    @Body() body: UpdateProjectRequestDto,
+  ) {
+    if (projectId !== body.projectId) {
+      throw new BadRequestException(
+        'path의 projectId와 body의 projectId가 일치하지 않습니다.',
+      );
+    }
     const userId = this.reqContext.getOrThrowUserId();
-    await this.projectService.throwIfUserNotPlanByProjectId(
-      userId,
-      body.projectId,
-    );
+    await this.projectService.throwIfUserNotPlanByProjectId(userId, projectId);
 
     return this.projectService.updateProjectByProjectId(body);
+  }
+
+  @Delete(':projectId')
+  @ApiOperation({
+    summary: '프로젝트 삭제',
+    description: '[ADMIN] 프로젝트를 삭제합니다.',
+  })
+  async deleteProject(@Param('projectId') projectId: string) {
+    const userId = this.reqContext.getOrThrowUserId();
+    await this.userService.throwIfNotAdminChallenger(userId);
+
+    return this.projectService.deleteProjectByProjectId(projectId);
   }
 
   @ApiOperation({
