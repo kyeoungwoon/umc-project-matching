@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -16,6 +16,8 @@ import { AuthService } from '@modules/auth/services/auth.service';
 import { Public } from '@modules/auth/decorators/public.decorator';
 import { CreateUserRequestDto } from '@modules/users/dto/user.dto';
 import { RequestContextService } from '@modules/als/services/request-context.service';
+import { UsersService } from '@modules/users/services/users.service';
+import { TokenAuthService } from '@modules/auth/services/token.auth.service';
 
 @Controller({
   version: '1',
@@ -26,6 +28,7 @@ import { RequestContextService } from '@modules/als/services/request-context.ser
 export class AuthV1Controller {
   constructor(
     private readonly auth: AuthService,
+    private readonly token: TokenAuthService,
     private readonly reqContext: RequestContextService,
   ) {}
 
@@ -48,9 +51,25 @@ export class AuthV1Controller {
       'AccessToken만 제공되며, 유효기간은 24시간 입니다.',
   })
   @Public()
-  login(@Body() body: LoginRequestDto) {
+  async login(@Body() body: LoginRequestDto) {
     const { school, studentId, password } = body;
-    return this.auth.loginWithPassword(school, studentId, password);
+    const loggedInUser = await this.auth.loginWithPassword(
+      school,
+      studentId,
+      password,
+    );
+
+    return this.token.generateTokens(loggedInUser.id);
+  }
+
+  @Delete('deactivate/:userId')
+  @ApiOperation({
+    summary: '[ADMIN] 회원 탈퇴',
+    description: '특정 챌린저를 삭제합니다. 관리자만 가능합니다.',
+  })
+  async deleteAccount(@Param('userId') userId: string) {
+    // TODO: 관리자 권한 체크 필요
+    return await this.auth.deleteUserByUserId(userId);
   }
 
   @Post('change-password')

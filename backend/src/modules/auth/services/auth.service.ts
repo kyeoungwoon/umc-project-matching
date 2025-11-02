@@ -19,7 +19,21 @@ export class AuthService {
   async loginWithPassword(school: string, studentId: string, password: string) {
     const user = await this.user.getUserBySchoolAndStudentId(school, studentId);
 
-    return await argon2.verify(user.password, password);
+    const result = await argon2.verify(user.password, password);
+
+    if (!result) {
+      throw new UnauthorizedException('비밀번호가 올바르지 않습니다.');
+    }
+
+    return user;
+  }
+
+  async deleteUserByUserId(userId: string) {
+    await this.mongo.challenger.delete({
+      where: {
+        id: userId,
+      },
+    });
   }
 
   async register(data: CreateUserRequestDto) {

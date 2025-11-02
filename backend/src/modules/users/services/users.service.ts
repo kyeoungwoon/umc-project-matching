@@ -10,11 +10,11 @@ import UserPartEnum = $Enums.UserPartEnum;
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: MongoDBPrismaService) {}
+  constructor(private readonly mongo: MongoDBPrismaService) {}
 
   // userId를 받아서 해당하는 사용자 정보를 DB에서 가져옵니다.
   async getUserByUserId(userId: string) {
-    const user = await this.prisma.challenger.findUnique({
+    const user = await this.mongo.challenger.findUnique({
       where: {
         id: userId,
       },
@@ -51,7 +51,7 @@ export class UsersService {
 
   // 학교와 학번으로 사용자 정보를 가져옵니다.
   async getUserBySchoolAndStudentId(school: string, studentId: string) {
-    const user = await this.prisma.challenger.findUnique({
+    const user = await this.mongo.challenger.findUnique({
       where: {
         school_studentId: {
           school,
