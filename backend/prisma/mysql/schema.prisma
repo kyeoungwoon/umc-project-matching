@@ -1,0 +1,13 @@
+// prisma generate --schema=prisma/mysql/schema.prisma
+// prisma db push --schema=prisma/mysql/schema.prisma
+
+// generator client {
+//   provider      = "prisma-client-js"
+//   output        = "../../src/generated/prisma/mysql"
+//   binaryTargets = ["native", "darwin", "darwin-arm64", "linux-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x", "windows", "debian-openssl-1.1.x"]
+// }
+//
+// datasource db {
+//   provider = "mysql"
+//   url      = env("DATABASE_URL_MYSQL")
+// }
