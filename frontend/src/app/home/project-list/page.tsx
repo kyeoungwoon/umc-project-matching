@@ -1,6 +1,5 @@
 'use client';
 
-import Header from '@common/components/Header';
 import ProjectCard, { ProjectCardProps } from '@common/components/ProjectCard';
 
 const mockProjectData: ProjectCardProps[] = [
@@ -64,10 +63,6 @@ const mockProjectData: ProjectCardProps[] = [
 const ProjectListPage = () => {
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <Header
-        title="프로젝트 목록 보기"
-        detail="스택별 모집 현황과 프로젝트 상세 정보를 확인하세요"
-      />
       <div className={'min-w-700pxr max-w-1000pxr flex flex-col justify-center gap-y-4 pt-5'}>
         {mockProjectData.map((proj, idx) => (
           <ProjectCard key={idx} {...proj} />

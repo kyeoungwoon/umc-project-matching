@@ -16,32 +16,21 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@styles/components/ui/popover';
 import { cn } from '@styles/lib/utils';
 
-const LoginComboBox = () => {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('');
+import { useGetSchoolsQuery } from '@api/query/auth';
 
-  const schools = [
-    {
-      value: 'cau',
-      label: '중앙대학교',
-    },
-    {
-      value: 'ewha',
-      label: '이화여자대학교',
-    },
-    {
-      value: 'dongduk',
-      label: '동덕여자대학교',
-    },
-    {
-      value: 'dankuk',
-      label: '단국대학교',
-    },
-    {
-      value: 'hufs',
-      label: '한국외국어대학교',
-    },
-  ];
+interface LoginComboBoxProps {
+  value: string;
+  onValueChange: (value: string) => void;
+}
+
+const LoginComboBox = ({ value, onValueChange }: LoginComboBoxProps) => {
+  const [open, setOpen] = useState(false);
+
+  const { data: schools, isLoading } = useGetSchoolsQuery();
+
+  if (isLoading || !schools) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -52,13 +41,11 @@ const LoginComboBox = () => {
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value
-            ? schools.find((framework) => framework.value === value)?.label
-            : '학교를 선택하세요'}
+          {value ? schools.find((school) => school.handle === value)?.name : '학교를 선택하세요'}
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
+      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
         <Command>
           <CommandInput placeholder="학교명 검색" />
           <CommandList>
@@ -66,20 +53,25 @@ const LoginComboBox = () => {
             <CommandGroup>
               {schools.map((school) => (
                 <CommandItem
-                  key={school.label}
-                  value={school.label}
+                  key={school.handle}
+                  value={school.name}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? '' : currentValue);
+                    const selectedSchool = schools.find(
+                      (s) => s.name.toLowerCase() === currentValue.toLowerCase(),
+                    );
+                    if (selectedSchool) {
+                      onValueChange(selectedSchool.handle === value ? '' : selectedSchool.handle);
+                    }
                     setOpen(false);
                   }}
                 >
                   <CheckIcon
                     className={cn(
                       'mr-2 h-4 w-4',
-                      value === school.value ? 'opacity-100' : 'opacity-0',
+                      value === school.handle ? 'opacity-100' : 'opacity-0',
                     )}
                   />
-                  {school.label}
+                  {school.name}
                 </CommandItem>
               ))}
             </CommandGroup>

@@ -1,9 +1,11 @@
-import { api } from '@api/axios';
+import { ApiResponse, api } from '@api/axios';
 import {
   ChangePasswordRequestDto,
   CreateSchoolRequestDto,
   CreateUserRequestDto,
   LoginRequestDto,
+  LoginResponseDto,
+  SchoolResponseDto,
 } from '@api/axios/auth/types';
 
 export const register = async (data: CreateUserRequestDto) => {
@@ -11,7 +13,9 @@ export const register = async (data: CreateUserRequestDto) => {
 };
 
 export const login = async (data: LoginRequestDto) => {
-  return api.post('/v1/auth/login', data);
+  const result = await api.post<ApiResponse<LoginResponseDto>>('/v1/auth/login', data);
+
+  return result.data.result;
 };
 
 export const deactivate = async (userId: string) => {
@@ -23,7 +27,9 @@ export const changePassword = async (data: ChangePasswordRequestDto) => {
 };
 
 export const getSchools = async () => {
-  return api.get('/v1/auth/schools');
+  const result = await api.get<ApiResponse<SchoolResponseDto>>('/v1/auth/schools');
+
+  return result.data.result;
 };
 
 export const createSchool = async (data: CreateSchoolRequestDto) => {

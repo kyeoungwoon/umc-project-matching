@@ -1,5 +1,8 @@
-import { api } from '@api/axios';
+import { ApiResponse, api } from '@api/axios';
+import { UserResponseDto } from '@api/axios/auth/types';
 
 export const getMyInfo = async () => {
-  return api.get<any>('/v1/users/me');
+  const res = await api.get<ApiResponse<UserResponseDto>>('/v1/users/me');
+
+  return res.data.result;
 };

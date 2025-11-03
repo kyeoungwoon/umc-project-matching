@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
+
 import * as test from '@api/axios/test';
 
 export const useTokenCheckQuery = () => {
@@ -6,7 +7,10 @@ export const useTokenCheckQuery = () => {
 };
 
 export const useGetTestTokenQuery = (userId: string) => {
-  return useQuery({ queryKey: ['test', 'testToken', userId], queryFn: () => test.getTestToken(userId) });
+  return useQuery({
+    queryKey: ['test', 'testToken', userId],
+    queryFn: () => test.getTestToken(userId),
+  });
 };
 
 export const useCheckCookieQuery = () => {
