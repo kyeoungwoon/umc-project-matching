@@ -1,22 +1,21 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { useForm } from '@tanstack/react-form';
 import { z } from 'zod';
 
 import { Button } from '@styles/components/ui/button';
-import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldTitle,
-} from '@styles/components/ui/field';
+import { Field, FieldError, FieldGroup, FieldLabel, FieldTitle } from '@styles/components/ui/field';
 import { Input } from '@styles/components/ui/input';
-import { Label } from '@styles/components/ui/label';
+
+import { useLoginMutation } from '@api/query/auth';
+
+import { ROUTES } from '@common/constants/routes.constants';
 
 import LoginComboBox from '@common/components/Combobox';
+
+import { useSetUser } from '@features/auth/hooks/useAuthStore';
 
 const loginSchema = z.object({
   school: z.string().min(1, '학교를 입력하세요'),
@@ -27,6 +26,10 @@ const loginSchema = z.object({
 type LoginInput = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
+  const { mutate, isPending, isError, error } = useLoginMutation();
+  const router = useRouter();
+  const setUser = useSetUser();
+
   const form = useForm({
     defaultValues: {
       school: '',
@@ -34,8 +37,32 @@ export default function LoginForm() {
       password: '',
     },
     onSubmit: async ({ value }) => {
-      // 로그인 처리
-      console.log('로그인 정보:', value);
+      console.log('login clicked!');
+      mutate(
+        {
+          school: value.school,
+          studentId: value.studentId,
+          password: value.password,
+        },
+        {
+          onSuccess: (data) => {
+            console.log('로그인 성공:', data);
+            if (!data) throw new Error('사용자 정보가 없습니다.');
+
+            setUser({
+              id: data.userId,
+              accessToken: data.accessToken,
+            });
+
+            router.push(ROUTES.HOME);
+            // 성공 시 처리 (예: 페이지 이동)
+          },
+          onError: (error) => {
+            console.error('로그인 실패:', error);
+            // 에러 처리
+          },
+        },
+      );
     },
     validators: {
       onSubmit: loginSchema,
@@ -91,13 +118,15 @@ export default function LoginForm() {
       >
         <FieldGroup>
           <FieldTitle className={'text-2xl'}>UPMS</FieldTitle>
-          <FormField name="school" label="학교" placeholder="학교 이름을 입력해주세요." />
           <form.Field
             name={'school'}
             children={(field) => {
+              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field className={'w-full'}>
-                  <LoginComboBox />
+                  <FieldLabel htmlFor={field.name}>학교</FieldLabel>
+                  <LoginComboBox value={field.state.value} onValueChange={field.handleChange} />
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
                 </Field>
               );
             }}
@@ -109,7 +138,14 @@ export default function LoginForm() {
             type="password"
             placeholder="비밀번호를 입력해주세요."
           />
-          <Button type="submit">로그인하기</Button>
+          {isError && (
+            <div className="text-sm text-red-500">
+              로그인에 실패했습니다. {error?.message || '다시 시도해주세요.'}
+            </div>
+          )}
+          <Button type="submit" disabled={isPending}>
+            {isPending ? '로그인 중...' : '로그인하기'}
+          </Button>
         </FieldGroup>
       </form>
     </div>

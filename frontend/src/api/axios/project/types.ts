@@ -1,72 +1,43 @@
+import { Part } from '@api/axios/auth/types';
+import { FormResponseDto } from '@api/axios/form/types';
+
+// Request DTOs
+export interface ProjectToDto {
+  part: any; // The spec says object, but no properties are defined
+  to: number;
+}
+
 export interface CreateProjectRequestDto {
   title: string;
   description: string;
   link: string;
   planId: string;
+  partTo: ProjectToDto[];
 }
 
 export interface UpdateProjectRequestDto {
-  projectId: string;
   title?: string;
   description?: string;
   link?: string;
+  partTo?: ProjectToDto[];
 }
 
-export interface CreateFormRequestDto {
-  title: string;
-  description?: string;
+// Response DTOs
+export interface ProjectMemberInProjectResponseDto {
+  id: string;
+  userId: string;
+  part: Part;
 }
 
-export interface UpdateFormRequestDto {
-  title?: string;
-  description?: string;
-}
-
-export type QuestionType = 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE' | 'SUBJECTIVE';
-
-export interface CreateFormQuestionDto {
-  questionNo: number;
+export interface ProjectResponseDto {
+  id: string;
   title: string;
   description: string;
-  type: QuestionType;
-  isRequired: boolean;
-  options: string[];
-}
-
-export interface CreateQuestionRequestDto {
-  questions: CreateFormQuestionDto[];
-}
-
-export interface UpdateFormQuestionDto {
-  id: string;
-  questionNo?: number;
-  title?: string;
-  description?: string;
-  isRequired?: boolean;
-  options?: string[];
-}
-
-export interface UpdateQuestionRequestDto {
-  questions: UpdateFormQuestionDto[];
-}
-
-export interface AnswerDto {
-  questionId: string;
-  value: string[];
-}
-
-export interface ApplyToProjectRequestDto {
-  answers: AnswerDto[];
-}
-
-export type ApplicationStatus = 'DRAFT' | 'SUBMITTED' | 'CONFIRMED' | 'REJECTED';
-
-export interface ChangeApplicationStatusDto {
-  status: ApplicationStatus;
-}
-
-export interface CreateMatchingRoundRequestDto {
-  name: string;
-  startDatetime: string; // ISO 8601 format
-  endDatetime: string; // ISO 8601 format
+  link: string;
+  planId: string;
+  partTo: ProjectToDto[];
+  projectForms: FormResponseDto[];
+  projectMember: ProjectMemberInProjectResponseDto[];
+  createdAt: string;
+  updatedAt: string;
 }

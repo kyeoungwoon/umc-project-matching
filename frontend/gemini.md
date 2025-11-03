@@ -517,9 +517,25 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ProjectResponseDto"
+                      }
+                    }
                   }
                 }
               }
@@ -549,6 +565,32 @@
           }
         },
         "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/ProjectResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "201": {
             "description": ""
           }
@@ -582,7 +624,23 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/ProjectResponseDto"
+                    }
+                  }
                 }
               }
             }
@@ -621,7 +679,30 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/ProjectResponseDto"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -648,7 +729,30 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/ProjectResponseDto"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -663,7 +767,7 @@
     "/v1/projects/{projectId}/form": {
       "post": {
         "description": "폼을 먼저 생성하고, 질문은 formId를 제공해서 추가해야 합니다.즉 FE에는, 폼 추가하기 버튼을 클릭하면 현재 API를 통해 생성한 후, 별도 페이지에서 formId를 받아서 추가해야 합니다.폼을 생성할 떄, 가능한 차수를 기입하여야 합니다.",
-        "operationId": "ProjectsController_createProjectApplicationForm_v1",
+        "operationId": "FormController_createProjectApplicationForm_v1",
         "parameters": [
           {
             "name": "projectId",
@@ -686,6 +790,32 @@
           }
         },
         "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/FormResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "201": {
             "description": ""
           }
@@ -696,13 +826,13 @@
           }
         ],
         "summary": "프로젝트 지원용 폼 생성 (틀 생성, 질문은 따로)",
-        "tags": ["프로젝트"]
+        "tags": ["프로젝트 지원 폼"]
       }
     },
     "/v1/projects/{projectId}/form/{formId}": {
       "get": {
         "description": "",
-        "operationId": "ProjectsController_getProjectApplicationForm_v1",
+        "operationId": "FormController_getProjectApplicationForm_v1",
         "parameters": [
           {
             "name": "projectId",
@@ -727,7 +857,23 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/FormWithDetailsResponseDto"
+                    }
+                  }
                 }
               }
             }
@@ -739,11 +885,11 @@
           }
         ],
         "summary": "formId에 해당하는 form의 정보를 조회",
-        "tags": ["프로젝트"]
+        "tags": ["프로젝트 지원 폼"]
       },
       "delete": {
         "description": "",
-        "operationId": "ProjectsController_deleteProjectApplicationForm_v1",
+        "operationId": "FormController_deleteProjectApplicationForm_v1",
         "parameters": [
           {
             "name": "formId",
@@ -764,7 +910,30 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/FormResponseDto"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -773,11 +942,11 @@
           }
         ],
         "summary": "formId로 폼을 삭제",
-        "tags": ["프로젝트"]
+        "tags": ["프로젝트 지원 폼"]
       },
       "patch": {
         "description": "",
-        "operationId": "ProjectsController_editProjectApplicationForm_v1",
+        "operationId": "FormController_editProjectApplicationForm_v1",
         "parameters": [
           {
             "name": "formId",
@@ -808,7 +977,30 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/FormResponseDto"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -817,13 +1009,13 @@
           }
         ],
         "summary": "formId로 폼 수정",
-        "tags": ["프로젝트"]
+        "tags": ["프로젝트 지원 폼"]
       }
     },
     "/v1/projects/{projectId}/forms/{formId}/questions": {
       "post": {
         "description": "",
-        "operationId": "ProjectsController_addQuestionsToForm_v1",
+        "operationId": "FormController_addQuestionsToForm_v1",
         "parameters": [
           {
             "name": "formId",
@@ -853,6 +1045,35 @@
           }
         },
         "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/FormQuestionDto"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
           "201": {
             "description": ""
           }
@@ -863,11 +1084,11 @@
           }
         ],
         "summary": "form에 질문 추가",
-        "tags": ["프로젝트"]
+        "tags": ["프로젝트 지원 폼"]
       },
       "patch": {
         "description": "",
-        "operationId": "ProjectsController_editQuestionsFromForm_v1",
+        "operationId": "FormController_editQuestionsFromForm_v1",
         "parameters": [
           {
             "name": "projectId",
@@ -898,7 +1119,33 @@
         },
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/FormQuestionDto"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -907,13 +1154,13 @@
           }
         ],
         "summary": "form에 질문 수정",
-        "tags": ["프로젝트"]
+        "tags": ["프로젝트 지원 폼"]
       }
     },
     "/v1/projects/{projectId}/form/{formId}/apply": {
       "post": {
         "description": "",
-        "operationId": "ProjectsController_applyToProject_v1",
+        "operationId": "ApplyController_applyToProject_v1",
         "parameters": [
           {
             "name": "projectId",
@@ -943,6 +1190,32 @@
           }
         },
         "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/ApplicationResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "201": {
             "description": ""
           }
@@ -959,7 +1232,7 @@
     "/v1/projects/{projectId}/apply/{applicationId}": {
       "get": {
         "description": "",
-        "operationId": "ProjectsController_getApplication_v1",
+        "operationId": "ApplyController_getApplication_v1",
         "parameters": [
           {
             "name": "applicationId",
@@ -978,7 +1251,30 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/ApplicationResponseDto"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -991,7 +1287,7 @@
       },
       "delete": {
         "description": "",
-        "operationId": "ProjectsController_deleteApplicationForm_v1",
+        "operationId": "ApplyController_deleteApplicationForm_v1",
         "parameters": [
           {
             "name": "applicationId",
@@ -1010,7 +1306,30 @@
         ],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/ApplicationResponseDto"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1024,7 +1343,7 @@
     },
     "/v1/projects/{projectId}/apply/{applicationId}/status": {
       "post": {
-        "operationId": "ProjectsController_changeApplicationStatus_v1",
+        "operationId": "ApplyController_changeApplicationStatus_v1",
         "parameters": [
           {
             "name": "projectId",
@@ -1054,6 +1373,32 @@
           }
         },
         "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/ApplicationResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "201": {
             "description": ""
           }
@@ -1066,14 +1411,82 @@
         "tags": ["프로젝트"]
       }
     },
-    "/v1/projects/matching-round/current": {
-      "get": {
-        "description": "현재 시간을 기준으로 매칭 세션을 가져옵니다. 여러 개의 매칭 세션이 있을 경우, 그 중 시작시간이 가장 늦은 것을 기준으로 가져옵니다.",
-        "operationId": "ProjectsController_getCurrentMatchingRound_v1",
+    "/v1/projects/test/matching-round": {
+      "post": {
+        "description": "현재 시간 기준 1시간 전부터 1시간 후까지의 매칭 라운드를 생성합니다.",
+        "operationId": "TestController_testCreateMatchingRound_v1",
         "parameters": [],
         "responses": {
           "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/TestCreateMatchingRoundResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201": {
             "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "[테스트용] 매칭 라운드 생성",
+        "tags": ["테스트 API"]
+      }
+    },
+    "/v1/projects/matching-round/current": {
+      "get": {
+        "description": "현재 시간을 기준으로 매칭 세션을 가져옵니다. 여러 개의 매칭 세션이 있을 경우, 그 중 시작시간이 가장 늦은 것을 기준으로 가져옵니다.",
+        "operationId": "MatchingRoundController_getCurrentMatchingRound_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/MatchingRoundResponseDto"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1088,7 +1501,7 @@
     "/v1/projects/matching-round": {
       "post": {
         "description": "이름, 시작 시간, 종료 시간을 기준으로 매칭 라운드를 생성합니다.",
-        "operationId": "ProjectsController_createMatchingRound_v1",
+        "operationId": "MatchingRoundController_createMatchingRound_v1",
         "parameters": [],
         "requestBody": {
           "required": true,
@@ -1101,6 +1514,32 @@
           }
         },
         "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "isSuccess": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "code": {
+                      "type": "string",
+                      "example": "COMMON_SUCCESS"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "요청에 성공했습니다."
+                    },
+                    "result": {
+                      "$ref": "#/components/schemas/MatchingRoundResponseDto"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "201": {
             "description": ""
           }
@@ -1112,25 +1551,6 @@
         ],
         "summary": "매칭 라운드 생성",
         "tags": ["프로젝트"]
-      }
-    },
-    "/v1/projects/test/matching-round": {
-      "post": {
-        "description": "현재 시간 기준 1시간 전부터 1시간 후까지의 매칭 라운드를 생성합니다.",
-        "operationId": "ProjectsController_testCreateMatchingRound_v1",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ],
-        "summary": "[테스트용] 매칭 라운드 생성",
-        "tags": ["프로젝트", "테스트 API"]
       }
     }
   },
@@ -1147,6 +1567,18 @@
   "tags": [
     {
       "name": "프로젝트",
+      "description": "APIs"
+    },
+    {
+      "name": "프로젝트 지원 폼",
+      "description": "APIs"
+    },
+    {
+      "name": "프로젝트 지원",
+      "description": "APIs"
+    },
+    {
+      "name": "매칭 라운드",
       "description": "APIs"
     },
     {
@@ -1260,6 +1692,138 @@
         "type": "object",
         "properties": {}
       },
+      "ProjectToDto": {
+        "type": "object",
+        "properties": {
+          "part": {
+            "type": "object"
+          },
+          "to": {
+            "type": "number"
+          }
+        },
+        "required": ["part", "to"]
+      },
+      "FormResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "폼 ID"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "프로젝트 ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "폼 제목"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "폼 설명"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "생성일"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "수정일"
+          }
+        },
+        "required": ["id", "projectId", "title", "createdAt", "updatedAt"]
+      },
+      "ProjectMemberInProjectResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "프로젝트 멤버 ID"
+          },
+          "userId": {
+            "type": "string",
+            "description": "유저 ID"
+          },
+          "part": {
+            "type": "string",
+            "description": "참여 파트",
+            "enum": ["PLAN", "DESIGN", "WEB", "ANDROID", "IOS", "SPRINGBOOT", "NODEJS", "ADMIN"]
+          }
+        },
+        "required": ["id", "userId", "part"]
+      },
+      "ProjectResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "프로젝트 ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "프로젝트 제목"
+          },
+          "description": {
+            "type": "string",
+            "description": "프로젝트 설명"
+          },
+          "link": {
+            "type": "string",
+            "description": "프로젝트 링크"
+          },
+          "planId": {
+            "type": "string",
+            "description": "기획자 ID"
+          },
+          "partTo": {
+            "description": "파트별 모집 인원",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectToDto"
+            }
+          },
+          "projectForms": {
+            "description": "프로젝트에 속한 폼 목록",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FormResponseDto"
+            }
+          },
+          "projectMember": {
+            "description": "프로젝트에 속한 멤버 목록",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectMemberInProjectResponseDto"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "생성일"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "수정일"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "link",
+          "planId",
+          "partTo",
+          "projectForms",
+          "projectMember",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
       "CreateProjectRequestDto": {
         "type": "object",
         "properties": {
@@ -1274,9 +1838,16 @@
           },
           "planId": {
             "type": "string"
+          },
+          "partTo": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectToDto"
+            }
           }
         },
-        "required": ["title", "description", "link", "planId"]
+        "required": ["title", "description", "link", "planId", "partTo"]
       },
       "UpdateProjectRequestDto": {
         "type": "object",
@@ -1292,6 +1863,13 @@
           },
           "link": {
             "type": "string"
+          },
+          "partTo": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectToDto"
+            }
           }
         },
         "required": ["projectId"]
@@ -1307,6 +1885,178 @@
           }
         },
         "required": ["title"]
+      },
+      "FormQuestionDto": {
+        "type": "object",
+        "properties": {
+          "questionNo": {
+            "type": "number",
+            "description": "질문 번호",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "질문 제목",
+            "example": "예시 질문입니다."
+          },
+          "description": {
+            "type": "string",
+            "description": "질문에 대한 설명입니다.",
+            "example": "질문 설명 예시입니다."
+          },
+          "type": {
+            "type": "string",
+            "description": "질문 유형",
+            "enum": ["SINGLE_CHOICE", "MULTIPLE_CHOICE", "SUBJECTIVE"],
+            "example": "SINGLE_CHOICE"
+          },
+          "isRequired": {
+            "type": "boolean",
+            "description": "질문 필수응답 여부"
+          },
+          "formId": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "questionNo",
+          "title",
+          "description",
+          "type",
+          "isRequired",
+          "formId",
+          "options"
+        ]
+      },
+      "AnswerDto": {
+        "type": "object",
+        "properties": {
+          "questionId": {
+            "type": "string"
+          },
+          "value": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": ["questionId", "value"]
+      },
+      "ApplicationResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "지원서 ID"
+          },
+          "formId": {
+            "type": "string",
+            "description": "폼 ID"
+          },
+          "applicantId": {
+            "type": "string",
+            "description": "지원자 ID"
+          },
+          "matchingRoundId": {
+            "type": "string",
+            "description": "매칭 회차 ID"
+          },
+          "status": {
+            "type": "string",
+            "description": "지원 상태",
+            "enum": ["DRAFT", "SUBMITTED", "CONFIRMED", "REJECTED"]
+          },
+          "answers": {
+            "description": "답변 목록",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AnswerDto"
+            }
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "생성일"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "수정일"
+          }
+        },
+        "required": [
+          "id",
+          "formId",
+          "applicantId",
+          "matchingRoundId",
+          "status",
+          "answers",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "FormWithDetailsResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "폼 ID"
+          },
+          "projectId": {
+            "type": "string",
+            "description": "프로젝트 ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "폼 제목"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "폼 설명"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "생성일"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "수정일"
+          },
+          "project": {
+            "description": "연관 프로젝트 정보",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ProjectResponseDto"
+              }
+            ]
+          },
+          "questions": {
+            "description": "폼 질문 목록",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FormQuestionDto"
+            }
+          },
+          "applications": {
+            "description": "지원서 목록",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApplicationResponseDto"
+            }
+          }
+        },
+        "required": ["id", "projectId", "title", "createdAt", "updatedAt", "project", "questions"]
       },
       "UpdateFormRequestDto": {
         "type": "object",
@@ -1416,22 +2166,6 @@
         },
         "required": ["questions"]
       },
-      "AnswerDto": {
-        "type": "object",
-        "properties": {
-          "questionId": {
-            "type": "string"
-          },
-          "value": {
-            "minItems": 1,
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "required": ["questionId", "value"]
-      },
       "ApplyToProjectRequestDto": {
         "type": "object",
         "properties": {
@@ -1456,6 +2190,74 @@
           }
         },
         "required": ["status"]
+      },
+      "TestCreateMatchingRoundResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "매칭 회차 ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "매칭 회차 이름"
+          },
+          "startDatetime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "시작 시간"
+          },
+          "endDatetime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "종료 시간"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "생성일"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "수정일"
+          }
+        },
+        "required": ["id", "name", "startDatetime", "endDatetime", "createdAt", "updatedAt"]
+      },
+      "MatchingRoundResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "매칭 회차 ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "매칭 회차 이름"
+          },
+          "startDatetime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "시작 시간"
+          },
+          "endDatetime": {
+            "format": "date-time",
+            "type": "string",
+            "description": "종료 시간"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "생성일"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "description": "수정일"
+          }
+        },
+        "required": ["id", "name", "startDatetime", "endDatetime", "createdAt", "updatedAt"]
       },
       "ApplyToQuestionRequestDto": {
         "type": "object",

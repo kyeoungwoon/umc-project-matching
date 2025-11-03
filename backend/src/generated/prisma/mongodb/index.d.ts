@@ -14,6 +14,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
+ * Model ProjectTo
+ * 
+ */
+export type ProjectTo = $Result.DefaultSelection<Prisma.$ProjectToPayload>
+/**
  * Model Answer
  * 
  */
@@ -1743,6 +1748,69 @@ export namespace Prisma {
   /**
    * Models
    */
+
+  /**
+   * Model ProjectTo
+   */
+
+
+
+
+
+  export type ProjectToSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    part?: boolean
+    to?: boolean
+  }, ExtArgs["result"]["projectTo"]>
+
+
+
+  export type ProjectToSelectScalar = {
+    part?: boolean
+    to?: boolean
+  }
+
+  export type ProjectToOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"part" | "to", ExtArgs["result"]["projectTo"]>
+
+  export type $ProjectToPayload = {
+    name: "ProjectTo"
+    objects: {}
+    scalars: {
+      part: $Enums.UserPartEnum
+      to: number
+    }
+    composites: {}
+  }
+
+  type ProjectToGetPayload<S extends boolean | null | undefined | ProjectToDefaultArgs> = $Result.GetResult<Prisma.$ProjectToPayload, S>
+
+
+
+
+
+  /**
+   * Fields of the ProjectTo model
+   */
+  interface ProjectToFieldRefs {
+    readonly part: FieldRef<"ProjectTo", 'UserPartEnum'>
+    readonly to: FieldRef<"ProjectTo", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProjectTo without action
+   */
+  export type ProjectToDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+  }
+
 
   /**
    * Model Answer
@@ -4132,6 +4200,7 @@ export namespace Prisma {
     description?: boolean
     link?: boolean
     planId?: boolean
+    partTo?: boolean | ProjectToDefaultArgs<ExtArgs>
     createdAt?: boolean
     updatedAt?: boolean
     projectMember?: boolean | Project$projectMemberArgs<ExtArgs>
@@ -4152,7 +4221,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "link" | "planId" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "link" | "planId" | "partTo" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     projectMember?: boolean | Project$projectMemberArgs<ExtArgs>
     projectForms?: boolean | Project$projectFormsArgs<ExtArgs>
@@ -4176,7 +4245,9 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["project"]>
-    composites: {}
+    composites: {
+      partTo: Prisma.$ProjectToPayload[]
+    }
   }
 
   type ProjectGetPayload<S extends boolean | null | undefined | ProjectDefaultArgs> = $Result.GetResult<Prisma.$ProjectPayload, S>
@@ -10537,6 +10608,7 @@ export namespace Prisma {
     description?: StringFilter<"Project"> | string
     link?: StringFilter<"Project"> | string
     planId?: StringFilter<"Project"> | string
+    partTo?: ProjectToCompositeListFilter | ProjectToObjectEqualityInput[]
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     projectMember?: ProjectMemberListRelationFilter
@@ -10550,6 +10622,7 @@ export namespace Prisma {
     description?: SortOrder
     link?: SortOrder
     planId?: SortOrder
+    partTo?: ProjectToOrderByCompositeAggregateInput
     createdAt?: SortOrder
     updatedAt?: SortOrder
     projectMember?: ProjectMemberOrderByRelationAggregateInput
@@ -10566,6 +10639,7 @@ export namespace Prisma {
     description?: StringFilter<"Project"> | string
     link?: StringFilter<"Project"> | string
     planId?: StringFilter<"Project"> | string
+    partTo?: ProjectToCompositeListFilter | ProjectToObjectEqualityInput[]
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     projectMember?: ProjectMemberListRelationFilter
@@ -11110,6 +11184,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     projectMember?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -11123,6 +11198,7 @@ export namespace Prisma {
     description: string
     link: string
     planId: string
+    partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     projectMember?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -11133,6 +11209,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMember?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -11145,6 +11222,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
     planId?: StringFieldUpdateOperationsInput | string
+    partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMember?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -11157,6 +11235,7 @@ export namespace Prisma {
     description: string
     link: string
     planId: string
+    partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11165,6 +11244,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11174,6 +11254,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
     planId?: StringFieldUpdateOperationsInput | string
+    partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11742,6 +11823,20 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type ProjectToCompositeListFilter = {
+    equals?: ProjectToObjectEqualityInput[]
+    every?: ProjectToWhereInput
+    some?: ProjectToWhereInput
+    none?: ProjectToWhereInput
+    isEmpty?: boolean
+    isSet?: boolean
+  }
+
+  export type ProjectToObjectEqualityInput = {
+    part: $Enums.UserPartEnum
+    to: number
+  }
+
   export type FormListRelationFilter = {
     every?: FormWhereInput
     some?: FormWhereInput
@@ -11751,6 +11846,10 @@ export namespace Prisma {
   export type ChallengerScalarRelationFilter = {
     is?: ChallengerWhereInput
     isNot?: ChallengerWhereInput
+  }
+
+  export type ProjectToOrderByCompositeAggregateInput = {
+    _count?: SortOrder
   }
 
   export type FormOrderByRelationAggregateInput = {
@@ -12289,6 +12388,15 @@ export namespace Prisma {
     deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
   }
 
+  export type ProjectToListCreateEnvelopeInput = {
+    set?: ProjectToCreateInput | ProjectToCreateInput[]
+  }
+
+  export type ProjectToCreateInput = {
+    part: $Enums.UserPartEnum
+    to: number
+  }
+
   export type ProjectMemberCreateNestedManyWithoutProjectInput = {
     create?: XOR<ProjectMemberCreateWithoutProjectInput, ProjectMemberUncheckedCreateWithoutProjectInput> | ProjectMemberCreateWithoutProjectInput[] | ProjectMemberUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: ProjectMemberCreateOrConnectWithoutProjectInput | ProjectMemberCreateOrConnectWithoutProjectInput[]
@@ -12321,6 +12429,13 @@ export namespace Prisma {
     connectOrCreate?: FormCreateOrConnectWithoutProjectInput | FormCreateOrConnectWithoutProjectInput[]
     createMany?: FormCreateManyProjectInputEnvelope
     connect?: FormWhereUniqueInput | FormWhereUniqueInput[]
+  }
+
+  export type ProjectToListUpdateEnvelopeInput = {
+    set?: ProjectToCreateInput | ProjectToCreateInput[]
+    push?: ProjectToCreateInput | ProjectToCreateInput[]
+    updateMany?: ProjectToUpdateManyInput
+    deleteMany?: ProjectToDeleteManyInput
   }
 
   export type ProjectMemberUpdateManyWithoutProjectNestedInput = {
@@ -12811,6 +12926,14 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type ProjectToWhereInput = {
+    AND?: ProjectToWhereInput | ProjectToWhereInput[]
+    OR?: ProjectToWhereInput[]
+    NOT?: ProjectToWhereInput | ProjectToWhereInput[]
+    part?: EnumUserPartEnumFilter<"ProjectTo"> | $Enums.UserPartEnum
+    to?: IntFilter<"ProjectTo"> | number
+  }
+
   export type NestedEnumQuestionTypeEnumFilter<$PrismaModel = never> = {
     equals?: $Enums.QuestionTypeEnum | EnumQuestionTypeEnumFieldRefInput<$PrismaModel>
     in?: $Enums.QuestionTypeEnum[] | ListEnumQuestionTypeEnumFieldRefInput<$PrismaModel>
@@ -12927,6 +13050,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     projectMember?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -12938,6 +13062,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     projectMember?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -13239,6 +13364,15 @@ export namespace Prisma {
     create: XOR<ChallengerCreateWithoutProjectsInput, ChallengerUncheckedCreateWithoutProjectsInput>
   }
 
+  export type ProjectToUpdateManyInput = {
+    where: ProjectToWhereInput
+    data: ProjectToUpdateInput
+  }
+
+  export type ProjectToDeleteManyInput = {
+    where: ProjectToWhereInput
+  }
+
   export type ProjectMemberUpsertWithWhereUniqueWithoutProjectInput = {
     where: ProjectMemberWhereUniqueInput
     update: XOR<ProjectMemberUpdateWithoutProjectInput, ProjectMemberUncheckedUpdateWithoutProjectInput>
@@ -13330,6 +13464,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     projectMember?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -13342,6 +13477,7 @@ export namespace Prisma {
     description: string
     link: string
     planId: string
+    partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     projectMember?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
@@ -13429,6 +13565,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMember?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -13440,6 +13577,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
     planId?: StringFieldUpdateOperationsInput | string
+    partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMember?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -13556,6 +13694,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     projectForms?: FormCreateNestedManyWithoutProjectInput
@@ -13568,6 +13707,7 @@ export namespace Prisma {
     description: string
     link: string
     planId: string
+    partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     projectForms?: FormUncheckedCreateNestedManyWithoutProjectInput
@@ -13630,6 +13770,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectForms?: FormUpdateManyWithoutProjectNestedInput
@@ -13641,6 +13782,7 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
     planId?: StringFieldUpdateOperationsInput | string
+    partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectForms?: FormUncheckedUpdateManyWithoutProjectNestedInput
@@ -13975,6 +14117,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14017,6 +14160,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMember?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -14027,6 +14171,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMember?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
@@ -14037,6 +14182,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14110,6 +14256,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     availableMatchingRounds?: FormCreateavailableMatchingRoundsInput | string[]
+  }
+
+  export type ProjectToUpdateInput = {
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
+    to?: IntFieldUpdateOperationsInput | number
   }
 
   export type ProjectMemberUpdateWithoutProjectInput = {

@@ -91,12 +91,18 @@ model MatchingRound {
   @@map("matching_round")
 }
 
+type ProjectTo {
+  part UserPartEnum
+  to   Int
+}
+
 model Project {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
   title       String
   description String
   link        String // Notion 등 상세 기획 링크
-  planId      String @map("plan_id") @db.ObjectId // ProjectPlan 모델 참조
+  planId      String      @map("plan_id") @db.ObjectId // ProjectPlan 모델 참조
+  partTo      ProjectTo[] @map("part_to") // 각 파트별 목표 인원
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -214,7 +220,7 @@ model School {
   // --- 관계 ---
   Challenger Challenger[]
 
-  @@index([name])
   @@unique([handle, name])
+  @@index([name])
   @@map("schools")
 }

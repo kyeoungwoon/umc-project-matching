@@ -13,8 +13,10 @@ import {
   ShieldUserIcon,
   SquarePenIcon,
   UserPenIcon,
+  UserRoundIcon,
 } from 'lucide-react';
 
+import { Separator } from '@styles/components/ui/separator';
 import {
   Sidebar,
   SidebarContent,
@@ -27,24 +29,26 @@ import {
   SidebarMenuItem,
 } from '@styles/components/ui/sidebar';
 
+import { ROUTES } from '@common/constants/routes.constants';
+
 import UpmsLogo from '@common/components/UpmsLogo';
 
 // Menu items.
 const generalMenu = [
   {
     title: '홈',
-    url: '#',
+    url: ROUTES.HOME,
     icon: HomeIcon,
   },
   {
     title: '지부 내 프로젝트 보기',
-    url: '#',
+    url: ROUTES.PROJECTS.LIST,
     icon: FolderOpen,
   },
   {
-    title: '내 정보 수정',
-    url: '#',
-    icon: UserPenIcon,
+    title: '내 정보',
+    url: ROUTES.MY.INFO,
+    icon: UserRoundIcon,
   },
 ];
 
@@ -122,7 +126,13 @@ const UpmsSideBar = () => {
           </SidebarMenu>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Plan 제외</SidebarGroupLabel>
+          <SidebarGroupLabel className={'flex h-5 flex-row items-center gap-1'}>
+            Design
+            <Separator orientation={'vertical'} />
+            Frontend
+            <Separator orientation={'vertical'} />
+            Backend
+          </SidebarGroupLabel>
           <SidebarMenu>
             {exceptPmMenu.map((item) => (
               <SidebarMenuItem key={item.title}>
