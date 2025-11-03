@@ -1,21 +1,23 @@
 'use client';
 
 import { useState } from 'react';
-import { useGetMyInfoQuery } from '@api/query/user';
-import { useChangePasswordMutation } from '@api/query/auth';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@styles/components/ui/card';
-import { Label } from '@styles/components/ui/label';
-import { Input } from '@styles/components/ui/input';
+
 import { Button } from '@styles/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@styles/components/ui/card';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
-  DialogClose,
+  DialogHeader,
+  DialogTitle,
 } from '@styles/components/ui/dialog';
+import { Input } from '@styles/components/ui/input';
+import { Label } from '@styles/components/ui/label';
+
+import { useChangePasswordMutation } from '@api/query/auth';
+import { useGetMyInfoQuery } from '@api/query/user';
 
 const MyInfoPage = () => {
   const { data: user, isLoading } = useGetMyInfoQuery();

@@ -14,6 +14,7 @@ import { useLoginMutation } from '@api/query/auth';
 import { ROUTES } from '@common/constants/routes.constants';
 
 import LoginComboBox from '@common/components/Combobox';
+import FormField from '@common/components/FormField';
 
 import { useSetUser } from '@features/auth/hooks/useAuthStore';
 
@@ -71,42 +72,6 @@ export default function LoginForm() {
     },
   });
 
-  function FormField({
-    name,
-    label,
-    type = 'text',
-    placeholder,
-  }: {
-    name: keyof LoginInput;
-    label: string;
-    type?: string;
-    placeholder: string;
-  }) {
-    return (
-      <form.Field
-        name={name}
-        children={(field) => {
-          const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-          return (
-            <Field>
-              <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-              <Input
-                type={type}
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder={placeholder}
-              />
-              {isInvalid && <FieldError errors={field.state.meta.errors} />}
-            </Field>
-          );
-        }}
-      />
-    );
-  }
-
   return (
     <div>
       <form
@@ -131,8 +96,9 @@ export default function LoginForm() {
               );
             }}
           />
-          <FormField name="studentId" label="학번" placeholder="학번을 입력해주세요." />
+          <FormField form={form} name="studentId" label="학번" placeholder="학번을 입력해주세요." />
           <FormField
+            form={form}
             name="password"
             label="비밀번호"
             type="password"

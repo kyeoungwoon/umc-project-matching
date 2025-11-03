@@ -12,6 +12,7 @@ import {
   Settings,
   ShieldUserIcon,
   SquarePenIcon,
+  SquarePlusIcon,
   UserPenIcon,
   UserRoundIcon,
 } from 'lucide-react';
@@ -57,6 +58,11 @@ const pmMenu = [
     title: '내 프로젝트 관리',
     url: '#',
     icon: Settings,
+  },
+  {
+    title: '프로젝트 생성',
+    url: ROUTES.PROJECTS.CREATE,
+    icon: SquarePlusIcon,
   },
   {
     title: '지원서 폼 제작',
@@ -126,13 +132,7 @@ const UpmsSideBar = () => {
           </SidebarMenu>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel className={'flex h-5 flex-row items-center gap-1'}>
-            Design
-            <Separator orientation={'vertical'} />
-            Frontend
-            <Separator orientation={'vertical'} />
-            Backend
-          </SidebarGroupLabel>
+          <SidebarGroupLabel>Design | Frontend | Backend</SidebarGroupLabel>
           <SidebarMenu>
             {exceptPmMenu.map((item) => (
               <SidebarMenuItem key={item.title}>

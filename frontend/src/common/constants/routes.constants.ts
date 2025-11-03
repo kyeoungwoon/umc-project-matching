@@ -9,7 +9,8 @@ export const ROUTES = {
     // 지원자용, 프로젝트가 가지고 있는 폼 목록 조회
     FORM_LIST: (projectId: string) => `/projects/${projectId}/forms`,
     // Plan용, 프로젝트 폼 조회 및 생성
-    CREATE_FORM: (projectId: string) => `/projects/${projectId}/form/create`,
+    CREATE_FORM: (projectId: string) => `/projects/${projectId}/forms/create`,
+    EDIT_FORM: (projectId: string, formId: string) => `/projects/${projectId}/forms/${formId}/edit`,
     APPLICATION: (projectId: string) => `/projects/${projectId}/apply`,
   },
   MY: {

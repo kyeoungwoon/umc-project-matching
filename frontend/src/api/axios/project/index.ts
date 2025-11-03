@@ -1,5 +1,9 @@
 import { ApiResponse, api } from '@api/axios';
-import { CreateProjectRequestDto, ProjectResponseDto, UpdateProjectRequestDto } from '@api/axios/project/types';
+import {
+  CreateProjectRequestDto,
+  ProjectResponseDto,
+  UpdateProjectRequestDto,
+} from '@api/axios/project/types';
 
 export const getProjectList = async () => {
   const res = await api.get<ApiResponse<ProjectResponseDto[]>>('/v1/projects');

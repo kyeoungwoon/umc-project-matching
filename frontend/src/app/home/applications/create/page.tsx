@@ -13,8 +13,6 @@ import {
 import Header from '@common/components/Header';
 import QuestionCard from '@common/components/QuestionCard';
 
-
-
 const CreateApplicationPage = () => {
   return (
     <div className="flex w-full flex-col items-center justify-center">
@@ -24,7 +22,7 @@ const CreateApplicationPage = () => {
       />
       <Card className={'min-w-700pxr max-w-1000pxr mt-5 flex flex-col justify-center p-5 px-0'}>
         <CardHeader className="gap-5">
-          <CardTitle className='font-medium'>{'프로젝트 이름'}</CardTitle>
+          <CardTitle className="font-medium">{'프로젝트 이름'}</CardTitle>
           <Button
             variant="secondary"
             size="lg"
