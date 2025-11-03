@@ -28,9 +28,9 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('UPMS API Docs')
     .setDescription(
-      'UMC Project Matching System, UPMS 입니다.\n' +
-        '만든이 : 중앙대학교 하늘/박경운, 보니/정보운\n' +
-        '도운이 : 중앙대학교 벨라/황지원',
+      '## UMC Project Matching System, UPMS\n\n' +
+        '#### Made By : 중앙대학교 하늘/박경운, 보니/정보운\n\n' +
+        '##### Suppoted By : 중앙대학교 벨라/황지원',
     )
     .setVersion('0.1.0')
     .addBearerAuth()

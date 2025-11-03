@@ -1,3 +1,16 @@
+###
+# UMC 프로젝트 매칭 시스템 - 회원가입/로그인 플로우 테스트
+#
+# ⚠️ 중요: 이 파일의 모든 요청은 순차적으로 실행되어야 합니다.
+#
+# 실행 방법:
+# 1. 첫 번째 요청부터 순서대로 하나씩 실행 (각 요청 옆의 ▶️ 버튼 클릭)
+# 2. 또는 "Run All Requests in File" 사용
+#
+# 각 요청은 이전 요청의 응답에서 받은 데이터(accessToken, userId 등)를 사용합니다.
+# client.global.set()으로 저장된 변수들은 {{variable}} 형태로 다음 요청에서 사용됩니다.
+###
+
 @baseUrl = http://localhost:9999
 @school = 중앙대학교
 @studentId = 20240001
@@ -70,12 +83,11 @@ Authorization: Bearer {{accessToken}}
 > {%
     client.test("내 정보 조회 성공", function () {
         client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
-        client.assert(response.body.result.studentId === client.global.get("studentId") || response.body.result.data.studentId === client.global.get("studentId"), "학번이 일치해야 합니다");
+        client.assert(response.body.result, "응답에 result가 포함되어야 합니다");
+        client.assert(response.body.result.studentId === "{{studentId}}", "학번이 일치해야 합니다");
         // userId 저장 (회원 탈퇴에 사용)
         if (response.body.result.id) {
             client.global.set("userId", response.body.result.id);
-        } else if (response.body.result.data && response.body.result.data.id) {
-            client.global.set("userId", response.body.result.data.id);
         }
     });
 %}

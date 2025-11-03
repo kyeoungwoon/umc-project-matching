@@ -18,6 +18,9 @@ import { CommonSuccessCode } from '@common/codes/success/common.success.code';
 export class BasicTestController {
   constructor(private readonly requestContextService: RequestContextService) {}
 
+  @ApiOperation({
+    summary: '[TEST] 요청의 Body & Query 그대로 반환',
+  })
   @Get('mirror')
   mirror(@Body() body: any, @Query() query: any) {
     return {
@@ -29,7 +32,7 @@ export class BasicTestController {
   @Get('hello')
   @CustomResponse(CommonSuccessCode.COMMON_SUCCESS)
   @ApiOperation({
-    summary: 'Health-Check API',
+    summary: '[TEST] Health-Check API',
     description: `서버 상태 확인 및 ApiBaseResponse를 확인하기 위한 API 입니다.
     \nHello World!를 return 합니다.`,
   })
@@ -37,6 +40,9 @@ export class BasicTestController {
     return 'Hello World!';
   }
 
+  @ApiOperation({
+    summary: '[TEST] Async Local Storage Context 반환',
+  })
   @Get('als')
   getRequestContext() {
     return this.requestContextService.getContext();

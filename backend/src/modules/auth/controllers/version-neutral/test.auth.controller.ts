@@ -36,7 +36,7 @@ export class AuthTestController {
   ) {}
 
   @ApiOperation({
-    summary: '토큰 검증 API',
+    summary: '[TEST] 토큰 검증 API',
     description: 'GET 요청을 보냈을 때 JwtGuard를 통과했는지 확인합니다.',
   })
   @Get('protected')
@@ -52,7 +52,7 @@ export class AuthTestController {
   }
 
   @ApiOperation({
-    summary: '테스트 토큰 생성 API',
+    summary: '[TEST] 테스트 토큰 생성 API',
     description: 'Query String으로 userId를 첨부하세요.',
   })
   @ApiQuery({
@@ -67,6 +67,9 @@ export class AuthTestController {
     return this.authService.generateTokens(userId);
   }
 
+  @ApiOperation({
+    summary: '[TEST] 요청에 포함된 쿠키 반환',
+  })
   @Get('cookie')
   @Public()
   checkCookie(@Req() req: Request) {

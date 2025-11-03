@@ -106,9 +106,25 @@ export class AuthV1Controller {
     return this.auth.createSchool(body.name, body.handle);
   }
 
-  @Post('school/init')
+  @ApiTags(API_TAGS.TEST)
+  @Post('drop-all/:type')
+  @ApiParam({
+    name: 'test/type',
+    description: '삭제할 데이터 타입',
+    enum: ['school', 'challenger'],
+  })
   @ApiOperation({
     summary: '[TEST] 모든 데이터 삭제',
+  })
+  dropAll(@Param() params: { type: string }) {
+    return this.auth.dropAll(params.type);
+  }
+
+  @ApiTags(API_TAGS.TEST)
+  @Post('test/school/init')
+  @ApiOperation({
+    summary: '[TEST] 9th Leo 지부 학교 추가',
+    description: '기존 학교는 모두 drop 처리합니다.',
   })
   async initSchool() {
     await this.auth.dropAll('school');
@@ -124,16 +140,19 @@ export class AuthV1Controller {
     return res;
   }
 
-  @Post('drop-all/:type')
-  @ApiParam({
-    name: 'type',
-    description: '삭제할 데이터 타입',
-    enum: ['school', 'challenger'],
-  })
+  @ApiTags(API_TAGS.TEST)
+  @Post('test/user/init')
   @ApiOperation({
-    summary: '[TEST] 모든 데이터 삭제',
+    summary: '[TEST] 유령 박경운 생성',
   })
-  dropAll(@Param() params: { type: string }) {
-    return this.auth.dropAll(params.type);
+  async createSampleUser() {
+    return await this.auth.register({
+      name: '박경운',
+      nickname: '하늘',
+      school: 'cau',
+      studentId: crypto.randomUUID().slice(0, 8),
+      password: 'password123',
+      part: 'ADMIN',
+    });
   }
 }
