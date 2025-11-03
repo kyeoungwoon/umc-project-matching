@@ -127,7 +127,7 @@ exports.Prisma.ChallengerScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.RoundScalarFieldEnum = {
+exports.Prisma.MatchingRoundScalarFieldEnum = {
   id: 'id',
   name: 'name',
   startDatetime: 'startDatetime',
@@ -153,7 +153,7 @@ exports.Prisma.FormScalarFieldEnum = {
   description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  availableRounds: 'availableRounds'
+  availableMatchingRounds: 'availableMatchingRounds'
 };
 
 exports.Prisma.FormQuestionScalarFieldEnum = {
@@ -180,9 +180,9 @@ exports.Prisma.ProjectMemberScalarFieldEnum = {
 exports.Prisma.ApplicationScalarFieldEnum = {
   id: 'id',
   applicantId: 'applicantId',
-  projectId: 'projectId',
+  formId: 'formId',
   status: 'status',
-  roundId: 'roundId',
+  matchingRoundId: 'matchingRoundId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -234,7 +234,7 @@ exports.ApplicationStatusEnum = exports.$Enums.ApplicationStatusEnum = {
 
 exports.Prisma.ModelName = {
   Challenger: 'Challenger',
-  Round: 'Round',
+  MatchingRound: 'MatchingRound',
   Project: 'Project',
   Form: 'Form',
   FormQuestion: 'FormQuestion',

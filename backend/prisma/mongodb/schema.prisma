@@ -77,17 +77,18 @@ model Challenger {
 }
 
 // N차 매칭
-model Round {
+model MatchingRound {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   name          String // 예: "1차 매칭"
   startDatetime DateTime
   endDatetime   DateTime
 
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
   Application Application[]
 
-  @@map("rounds")
+  @@map("matching_round")
 }
 
 model Project {
@@ -102,7 +103,6 @@ model Project {
 
   // --- 관계 (반대편) ---
   // 이 프로젝트에 달린 지원서 (1-N)
-  applications  Application[]   @relation("ProjectToApplications")
   projectMember ProjectMember[] @relation("ProjectToMembers")
   projectForms  Form[]
   plan          Challenger      @relation(fields: [planId], references: [id])
@@ -122,11 +122,12 @@ model Form {
   updatedAt DateTime @updatedAt
 
   // 이 양식을 사용할 수 있는 차수 ID 목록
-  availableRounds String[] @map("available_rounds")
+  availableMatchingRounds String[] @map("available_matching_rounds")
 
   // --- 관계 ---
-  project   Project        @relation(fields: [projectId], references: [id])
-  questions FormQuestion[]
+  project      Project        @relation(fields: [projectId], references: [id])
+  applications Application[]
+  questions    FormQuestion[]
 
   @@map("forms")
 }
@@ -174,10 +175,10 @@ type Answer {
 model Application {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  applicantId String                @db.ObjectId
-  projectId   String                @db.ObjectId
-  status      ApplicationStatusEnum @default(DRAFT)
-  roundId     String                @map("round_id") @db.ObjectId
+  applicantId     String                @db.ObjectId
+  formId          String                @db.ObjectId
+  status          ApplicationStatusEnum @default(DRAFT)
+  matchingRoundId String                @map("matching_round_id") @db.ObjectId
 
   answers Answer[] // 질문에 대한 응답들 모음
 
@@ -191,14 +192,14 @@ model Application {
   // --- 관계 ---
 
   // 1. 지원자 (N-1)
-  applicant Challenger @relation("ApplicantToApplications", fields: [applicantId], references: [id])
+  applicant     Challenger    @relation("ApplicantToApplications", fields: [applicantId], references: [id])
   // 2. 지원 프로젝트 (N-1)
-  project   Project    @relation("ProjectToApplications", fields: [projectId], references: [id])
-  round     Round      @relation(fields: [roundId], references: [id])
+  form          Form          @relation(fields: [formId], references: [id])
+  matchingRound MatchingRound @relation(fields: [matchingRoundId], references: [id])
 
-  // 하나의 프로젝트에는 차수별로 한 번만 지원 가능함
+  // 하나의 프로젝트, 하나의 폼에는 차수별로 한 번만 지원 가능함
   // 여러 개의 프로젝트에 지원서를 저장해도 ㄱㅊ긴 함
-  @@unique([applicantId, projectId, roundId])
+  @@unique([applicantId, formId, matchingRoundId])
   @@map("applications")
 }
 

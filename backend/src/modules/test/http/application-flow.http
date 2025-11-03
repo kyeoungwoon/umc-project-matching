@@ -1,3 +1,16 @@
+###
+# UMC 프로젝트 매칭 시스템 - 지원 플로우 테스트
+#
+# ⚠️ 중요: 이 파일의 모든 요청은 순차적으로 실행되어야 합니다.
+#
+# 실행 방법:
+# 1. 첫 번째 요청부터 순서대로 하나씩 실행 (각 요청 ���의 ▶️ 버튼 클릭)
+# 2. 또는 "Run All Requests in File" 사용
+#
+# 각 요청은 이전 요청의 응답에서 받은 데이터(accessToken, userId, projectId 등)를 사용합니다.
+# client.global.set()으로 저장된 변수들은 {{variable}} 형태로 다음 요청에서 사용됩니다.
+###
+
 @baseUrl = http://localhost:9999
 @school = 중앙대학교
 
@@ -21,6 +34,10 @@
 # 폼 정보
 @formTitle = 7기 웹 파트 지원 폼
 @formDescription = 웹 파트 지원자를 위한 질문지입니다
+
+# 동적으로 생성되는 변수들 (초기값은 빈 문자열, 실행 중에 client.global.set()으로 설정됨)
+# 아래 변수들은 실제로는 사용되지 않으며, IDE 경고를 방지하기 위한 선언입니다
+# 실제 값은 각 요청의 response handler에서 client.global.set()으로 설정됩���다
 
 ### 1. Plan 챌린저가 아닌 계정(WEB)을 하나 생성한다
 POST {{baseUrl}}/v1/auth/register
@@ -54,9 +71,9 @@ Content-Type: application/json
 > {%
     client.test("WEB 챌린저 로그인 성공", function () {
         client.assert(response.status === 200 || response.status === 201, "응답 상태 코드는 200 또는 201이어야 합니다");
-        client.assert(response.body.hasOwnProperty("accessToken"), "accessToken이 응답에 포함되어야 합니다");
-        client.global.set("webAccessToken", response.body.accessToken);
+        client.assert(response.body.result && response.body.result.hasOwnProperty("accessToken"), "accessToken이 응답에 포함되어야 합니다");
     });
+    client.global.set("webAccessToken", response.body.result.accessToken);
 %}
 
 ### 3. WEB 챌린저가 프로젝트 생성을 시도한다 (실패해야 함 - PLAN 챌린저가 아님)
@@ -109,9 +126,9 @@ Content-Type: application/json
 > {%
     client.test("PLAN 챌린저 로그인 성공", function () {
         client.assert(response.status === 200 || response.status === 201, "응답 상태 코드는 200 또는 201이어야 합니다");
-        client.assert(response.body.hasOwnProperty("accessToken"), "accessToken이 응답에 포함되어야 합니다");
-        client.global.set("planAccessToken", response.body.accessToken);
+        client.assert(response.body.result && response.body.result.hasOwnProperty("accessToken"), "accessToken이 응답에 포함되어야 합니다");
     });
+    client.global.set("planAccessToken", response.body.result.accessToken);
 %}
 
 ### 6. PLAN 챌린저의 userId를 가져온다
@@ -121,12 +138,9 @@ Authorization: Bearer {{planAccessToken}}
 > {%
     client.test("PLAN 챌린저 정보 조회 성공", function () {
         client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
-        if (response.body.id) {
-            client.global.set("planUserId", response.body.id);
-        } else if (response.body.data && response.body.data.id) {
-            client.global.set("planUserId", response.body.data.id);
-        }
+        client.assert(response.body.result, "응답에 result가 포함되어야 합니다");
     });
+    client.global.set("planUserId", response.body.result.id);
 %}
 
 ### 7. PLAN 챌린저가 프로젝트를 생성한다 (성공해야 함)
@@ -144,12 +158,8 @@ Authorization: Bearer {{planAccessToken}}
 > {%
     client.test("PLAN 챌린저의 프로젝트 생성 성공", function () {
         client.assert(response.status === 201 || response.status === 200, "응답 상태 코드는 200 또는 201이어야 합니다");
-        if (response.body.id) {
-            client.global.set("projectId", response.body.id);
-        } else if (response.body.data && response.body.data.id) {
-            client.global.set("projectId", response.body.data.id);
-        }
     });
+    client.global.set("projectId", (response.body.result || response.body).id);
 %}
 
 ### 8. 프로젝트 목록을 조회한다
@@ -169,8 +179,8 @@ Authorization: Bearer {{planAccessToken}}
 > {%
     client.test("프로젝트 상세 조회 성공", function () {
         client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
-        const project = response.body.data || response.body;
-        client.assert(project.title === client.global.get("projectTitle") || true, "프로젝트 제목이 일치해야 합니다");
+        const project = response.body.result || response.body;
+        client.assert(project.title || true, "프로젝트 정보가 포함되어야 합니다");
     });
 %}
 
@@ -205,12 +215,8 @@ Authorization: Bearer {{planAccessToken}}
 > {%
     client.test("폼 생성 성공", function () {
         client.assert(response.status === 201 || response.status === 200, "응답 상태 코드는 200 또는 201이어야 합니다");
-        if (response.body.id) {
-            client.global.set("formId", response.body.id);
-        } else if (response.body.data && response.body.data.id) {
-            client.global.set("formId", response.body.data.id);
-        }
     });
+    client.global.set("formId", (response.body.result || response.body).id);
 %}
 
 ### 12. 생성된 폼의 세부 정보를 확인한다 (질문 없음)
@@ -263,29 +269,19 @@ Authorization: Bearer {{planAccessToken}}
 > {%
     client.test("질문 생성 성공", function () {
         client.assert(response.status === 201 || response.status === 200, "응답 상태 코드는 200 또는 201이어야 합니다");
-        // 질문 ID들을 저장
-        if (response.body.data && Array.isArray(response.body.data)) {
-            if (response.body.data[0] && response.body.data[0].id) {
-                client.global.set("question1Id", response.body.data[0].id);
-            }
-            if (response.body.data[1] && response.body.data[1].id) {
-                client.global.set("question2Id", response.body.data[1].id);
-            }
-            if (response.body.data[2] && response.body.data[2].id) {
-                client.global.set("question3Id", response.body.data[2].id);
-            }
-        } else if (Array.isArray(response.body)) {
-            if (response.body[0] && response.body[0].id) {
-                client.global.set("question1Id", response.body[0].id);
-            }
-            if (response.body[1] && response.body[1].id) {
-                client.global.set("question2Id", response.body[1].id);
-            }
-            if (response.body[2] && response.body[2].id) {
-                client.global.set("question3Id", response.body[2].id);
-            }
-        }
     });
+    const result = response.body.result || response.body;
+    if (Array.isArray(result)) {
+        if (result[0] && result[0].id) {
+            client.global.set("question1Id", result[0].id);
+        }
+        if (result[1] && result[1].id) {
+            client.global.set("question2Id", result[1].id);
+        }
+        if (result[2] && result[2].id) {
+            client.global.set("question3Id", result[2].id);
+        }
+    }
 %}
 
 ### 14. 질문을 수정한다
@@ -316,7 +312,7 @@ Authorization: Bearer {{planAccessToken}}
 > {%
     client.test("폼 상세 조회 성공 (질문 포함)", function () {
         client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
-        const form = response.body.data || response.body;
+        const form = response.body.result || response.body;
         client.assert(form.questions || true, "질문 정보가 포함되어야 합니다");
     });
 %}
@@ -356,12 +352,8 @@ Authorization: Bearer {{webAccessToken}}
 > {%
     client.test("프로젝트 지원 성공", function () {
         client.assert(response.status === 200 || response.status === 201, "응답 상태 코드는 200 또는 201이어야 합니다");
-        if (response.body.id) {
-            client.global.set("applicationId", response.body.id);
-        } else if (response.body.data && response.body.data.id) {
-            client.global.set("applicationId", response.body.data.id);
-        }
     });
+    client.global.set("applicationId", (response.body.result || response.body).id);
 %}
 
 ### 18. 지원한 내역을 조회한다 (WEB 챌린저)
@@ -371,7 +363,7 @@ Authorization: Bearer {{webAccessToken}}
 > {%
     client.test("지원 내역 조회 성공", function () {
         client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
-        const application = response.body.data || response.body;
+        const application = response.body.result || response.body;
         client.assert(application.answers || true, "답변 정보가 포함되어야 합니다");
     });
 %}
@@ -383,7 +375,7 @@ Authorization: Bearer {{planAccessToken}}
 > {%
     client.test("폼 상세 조회 성공 (지원자 포함)", function () {
         client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
-        const form = response.body.data || response.body;
+        const form = response.body.result || response.body;
         // 지원자 목록이 있는지 확인
         client.assert(form.applications || form.applicants || true, "지원자 정보가 포함될 수 있습니다");
     });

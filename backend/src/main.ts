@@ -7,6 +7,7 @@ import * as Sentry from '@sentry/nestjs';
 import { corsOptions } from '@common/configs/cors-options.config';
 
 import { AppModule } from '@modules/app/app.module';
+import { API_TAGS } from '@common/constants/api-tags.constants';
 
 async function bootstrap() {
   Sentry.init({
@@ -25,19 +26,24 @@ async function bootstrap() {
   });
 
   // DocumentBuilder를 이용해 Swagger 문서 기본 정보 구성
-  const config = new DocumentBuilder()
+  const configBuilder = new DocumentBuilder()
     .setTitle('UPMS API Docs')
     .setDescription(
-      'UMC Project Matching System, UPMS 입니다.\n' +
-        '만든이 : 중앙대학교 하늘/박경운, 보니/정보운\n' +
-        '도운이 : 중앙대학교 벨라/황지원',
+      '## UMC Project Matching System, UPMS\n\n' +
+        '#### Made By : 중앙대학교 하늘/박경운, 보니/정보운\n\n' +
+        '##### Suppoted By : 중앙대학교 벨라/황지원',
     )
     .setVersion('0.1.0')
     .addBearerAuth()
-    .addServer('http://localhost:9999', 'Local server')
-    .addServer('https://umc-team-matching.kyeoungwoon.kr', 'Dev')
-    .setLicense('MIT', 'https://opensource.org/license/mit/')
-    .build();
+    .addServer('http://localhost:9999', 'Local')
+    .addServer('https://api.upms.kyeoungwoon.kr', 'Production')
+    .setLicense('MIT', 'https://opensource.org/license/mit/');
+
+  Object.values(API_TAGS).forEach((tag) => {
+    configBuilder.addTag(tag, `APIs`); // 각 태그에 설명 추가
+  });
+
+  const config = configBuilder.build();
 
   // 설정을 바탕으로 문서 생성
   const document = SwaggerModule.createDocument(app, config);
