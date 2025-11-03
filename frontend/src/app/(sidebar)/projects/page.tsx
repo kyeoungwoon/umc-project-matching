@@ -1,5 +1,7 @@
 'use client';
 
+import { useGetProjectListQuery } from '@api/query/project';
+
 import ProjectCard, { ProjectCardProps } from '@common/components/ProjectCard';
 
 const mockProjectData: ProjectCardProps[] = [
@@ -61,6 +63,10 @@ const mockProjectData: ProjectCardProps[] = [
 ];
 
 const ProjectListPage = () => {
+  const { data, isLoading } = useGetProjectListQuery();
+
+  if (isLoading) return null;
+
   return (
     <div className="flex w-full flex-col items-center justify-center">
       <div className={'min-w-700pxr max-w-1000pxr flex flex-col justify-center gap-y-4 pt-5'}>
