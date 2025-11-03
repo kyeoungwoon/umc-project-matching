@@ -12,7 +12,7 @@ const UpmsHomeLayout = ({ children }: { children?: ReactNode }) => {
       <SidebarProvider>
         <UpmsSideBar />
         <main className={'w-full'}>
-          <SidebarTrigger />
+          {/* <SidebarTrigger />*/}
           {children}
         </main>
       </SidebarProvider>
