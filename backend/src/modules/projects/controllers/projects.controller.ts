@@ -22,20 +22,11 @@ import {
   UpdateProjectRequestDto,
 } from '@modules/projects/dto/project.dto';
 import { API_TAGS } from '@common/constants/api-tags.constants';
-import { ApplicationStatusEnum } from '@generated/prisma/mongodb';
+import { ProjectResponseDto } from '@modules/projects/dto/ok-responses/project.ok-response.dto';
 import {
-  CreateFormRequestDto,
-  UpdateFormRequestDto,
-} from '@modules/projects/dto/form.dto';
-import {
-  CreateQuestionRequestDto,
-  UpdateQuestionRequestDto,
-} from '@modules/projects/dto/form-question.dto';
-import {
-  ApplyToProjectRequestDto,
-  ApplyToQuestionRequestDto,
-  ChangeApplicationStatus,
-} from '@modules/projects/dto/apply.dto';
+  ApiOkResponseCommon,
+  ApiOkResponseCommonArray,
+} from '@common/decorators/response/api-ok-response-common.decorator';
 
 @Controller({
   path: 'projects',
@@ -55,6 +46,7 @@ export class ProjectsController {
     summary: '프로젝트 목록 조회',
     description: '',
   })
+  @ApiOkResponseCommonArray(ProjectResponseDto)
   async getProjectList() {
     return this.projectService.getProjectList();
   }
@@ -64,6 +56,7 @@ export class ProjectsController {
     summary: '새로운 프로젝트 생성',
     description: 'Plan 챌린저만 가능합니다.',
   })
+  @ApiOkResponseCommon(ProjectResponseDto)
   async createProject(@Body() body: CreateProjectRequestDto) {
     const userId = this.reqContext.getOrThrowUserId();
     await this.userService.throwIfNotPlanChallenger(userId);
@@ -76,6 +69,7 @@ export class ProjectsController {
     summary: '프로젝트 상세 보기',
     description: '',
   })
+  @ApiOkResponseCommon(ProjectResponseDto)
   async getProjectDetails(@Param('projectId') projectId: string) {
     return this.projectService.getProjectById(projectId);
   }
@@ -85,6 +79,7 @@ export class ProjectsController {
     summary: '프로젝트 내용 수정',
     description: '프로젝트 내용을 수정합니다.',
   })
+  @ApiOkResponseCommon(ProjectResponseDto)
   async updateProject(
     @Param('projectId') projectId: string,
     @Body() body: UpdateProjectRequestDto,
@@ -110,6 +105,7 @@ export class ProjectsController {
     summary: '프로젝트 삭제',
     description: '[ADMIN] 프로젝트를 삭제합니다.',
   })
+  @ApiOkResponseCommon(ProjectResponseDto)
   async deleteProject(@Param('projectId') projectId: string) {
     const userId = this.reqContext.getOrThrowUserId();
     await this.userService.throwIfNotAdminChallenger(userId);

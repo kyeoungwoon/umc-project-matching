@@ -16,6 +16,8 @@ import {
   ApplyToProjectRequestDto,
   ChangeApplicationStatus,
 } from '@modules/projects/dto/apply.dto';
+import { ApplicationResponseDto } from '@modules/projects/dto/ok-responses/apply.ok-response.dto';
+import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
 
 @Controller({
   path: 'projects',
@@ -45,6 +47,7 @@ export class ApplyController {
     name: 'formId',
     required: true,
   })
+  @ApiOkResponseCommon(ApplicationResponseDto)
   @Post(':projectId/form/:formId/apply')
   async applyToProject(
     @Param('projectId') projectId: string,
@@ -73,6 +76,7 @@ export class ApplyController {
     name: 'applicationId',
     required: true,
   })
+  @ApiOkResponseCommon(ApplicationResponseDto)
   @Get(':projectId/apply/:applicationId')
   async getApplication(@Param('applicationId') applicationId: string) {
     const userId = this.reqContext.getOrThrowUserId();
@@ -96,6 +100,7 @@ export class ApplyController {
     name: 'applicationId',
     required: true,
   })
+  @ApiOkResponseCommon(ApplicationResponseDto)
   @Delete(':projectId/apply/:applicationId')
   async deleteApplicationForm(@Param('applicationId') applicationId: string) {
     const userId = this.reqContext.getOrThrowUserId();
@@ -108,6 +113,7 @@ export class ApplyController {
   }
 
   // Plan 전용, 지원서 상태 변경
+  @ApiOkResponseCommon(ApplicationResponseDto)
   @Post(':projectId/apply/:applicationId/status')
   async changeApplicationStatus(
     @Param('projectId') projectId: string,

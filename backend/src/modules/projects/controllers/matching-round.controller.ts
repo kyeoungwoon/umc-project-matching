@@ -9,6 +9,8 @@ import { RequestContextService } from '@modules/als/services/request-context.ser
 import { UsersService } from '@modules/users/services/users.service';
 
 import { ApplyToQuestionRequestDto } from '@modules/projects/dto/apply.dto';
+import { MatchingRoundResponseDto } from '@modules/projects/dto/ok-responses/matching-round.ok-response.dto';
+import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
 
 @Controller({
   path: 'projects',
@@ -31,6 +33,7 @@ export class MatchingRoundController {
     description:
       '현재 시간을 기준으로 매칭 세션을 가져옵니다. 여러 개의 매칭 세션이 있을 경우, 그 중 시작시간이 가장 늦은 것을 기준으로 가져옵니다.',
   })
+  @ApiOkResponseCommon(MatchingRoundResponseDto)
   @Get('matching-round/current')
   async getCurrentMatchingRound() {
     return this.matchingRoundService.getOrThrowCurrentProjectMatchingRound();
@@ -41,6 +44,7 @@ export class MatchingRoundController {
     description:
       '이름, 시작 시간, 종료 시간을 기준으로 매칭 라운드를 생성합니다.',
   })
+  @ApiOkResponseCommon(MatchingRoundResponseDto)
   @Post('matching-round')
   createMatchingRound(@Body() body: ApplyToQuestionRequestDto) {
     return this.matchingRoundService.createMatchingRound(body);

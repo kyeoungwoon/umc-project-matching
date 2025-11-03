@@ -7,6 +7,8 @@ import { MatchingRoundService } from '@modules/projects/services/matching-round.
 import { ApplyService } from '@modules/projects/services/apply.service';
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { UsersService } from '@modules/users/services/users.service';
+import { TestCreateMatchingRoundResponseDto } from '@modules/projects/dto/ok-responses/test.ok-response.dto';
+import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
 
 @Controller({
   path: 'projects',
@@ -30,6 +32,7 @@ export class TestController {
     description:
       '현재 시간 기준 1시간 전부터 1시간 후까지의 매칭 라운드를 생성합니다.',
   })
+  @ApiOkResponseCommon(TestCreateMatchingRoundResponseDto)
   async testCreateMatchingRound() {
     const startDatetime = new Date(Date.now() - 60 * 60 * 1000);
     const endDatetime = new Date(Date.now() + 60 * 60 * 1000);

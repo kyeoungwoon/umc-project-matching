@@ -26,8 +26,17 @@ import {
 } from '@modules/projects/dto/form.dto';
 import {
   CreateQuestionRequestDto,
+  FormQuestionDto,
   UpdateQuestionRequestDto,
 } from '@modules/projects/dto/form-question.dto';
+import {
+  FormResponseDto,
+  FormWithDetailsResponseDto,
+} from '@modules/projects/dto/ok-responses/form.ok-response.dto';
+import {
+  ApiOkResponseCommon,
+  ApiOkResponseCommonArray,
+} from '@common/decorators/response/api-ok-response-common.decorator';
 
 @Controller({
   path: 'projects',
@@ -57,6 +66,7 @@ export class FormController {
     description: '폼을 생성할 프로젝트의 ID',
     required: true,
   })
+  @ApiOkResponseCommon(FormResponseDto)
   @Post(':projectId/form')
   async createProjectApplicationForm(
     @Param('projectId') projectId: string,
@@ -80,6 +90,7 @@ export class FormController {
     name: 'formId',
     required: true,
   })
+  @ApiOkResponseCommon(FormWithDetailsResponseDto)
   @Get(':projectId/form/:formId')
   async getProjectApplicationForm(
     @Param('projectId') projectId: string,
@@ -107,6 +118,7 @@ export class FormController {
     name: 'formId',
     required: true,
   })
+  @ApiOkResponseCommon(FormResponseDto)
   @Delete(':projectId/form/:formId')
   async deleteProjectApplicationForm(
     @Param('formId') formId: string,
@@ -132,6 +144,7 @@ export class FormController {
     name: 'formId',
     required: true,
   })
+  @ApiOkResponseCommon(FormResponseDto)
   @Patch(':projectId/form/:formId')
   async editProjectApplicationForm(
     @Param('formId') formId: string,
@@ -157,6 +170,7 @@ export class FormController {
     name: 'formId',
     required: true,
   })
+  @ApiOkResponseCommonArray(FormQuestionDto)
   @Post(':projectId/forms/:formId/questions')
   async addQuestionsToForm(
     @Param('formId') formId: string,
@@ -176,6 +190,7 @@ export class FormController {
     summary: 'form에 질문 수정',
     description: '',
   })
+  @ApiOkResponseCommonArray(FormQuestionDto)
   @Patch(':projectId/forms/:formId/questions')
   async editQuestionsFromForm(
     @Param('projectId') projectId: string,
