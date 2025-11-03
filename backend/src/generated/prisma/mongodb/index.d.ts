@@ -24,10 +24,10 @@ export type Answer = $Result.DefaultSelection<Prisma.$AnswerPayload>
  */
 export type Challenger = $Result.DefaultSelection<Prisma.$ChallengerPayload>
 /**
- * Model Round
+ * Model MatchingRound
  * 
  */
-export type Round = $Result.DefaultSelection<Prisma.$RoundPayload>
+export type MatchingRound = $Result.DefaultSelection<Prisma.$MatchingRoundPayload>
 /**
  * Model Project
  * 
@@ -238,14 +238,14 @@ export class PrismaClient<
   get challenger(): Prisma.ChallengerDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.round`: Exposes CRUD operations for the **Round** model.
+   * `prisma.matchingRound`: Exposes CRUD operations for the **MatchingRound** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Rounds
-    * const rounds = await prisma.round.findMany()
+    * // Fetch zero or more MatchingRounds
+    * const matchingRounds = await prisma.matchingRound.findMany()
     * ```
     */
-  get round(): Prisma.RoundDelegate<ExtArgs, ClientOptions>;
+  get matchingRound(): Prisma.MatchingRoundDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.project`: Exposes CRUD operations for the **Project** model.
@@ -747,7 +747,7 @@ export namespace Prisma {
 
   export const ModelName: {
     Challenger: 'Challenger',
-    Round: 'Round',
+    MatchingRound: 'MatchingRound',
     Project: 'Project',
     Form: 'Form',
     FormQuestion: 'FormQuestion',
@@ -772,7 +772,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "challenger" | "round" | "project" | "form" | "formQuestion" | "projectMember" | "application" | "school"
+      modelProps: "challenger" | "matchingRound" | "project" | "form" | "formQuestion" | "projectMember" | "application" | "school"
       txIsolationLevel: never
     }
     model: {
@@ -850,77 +850,77 @@ export namespace Prisma {
           }
         }
       }
-      Round: {
-        payload: Prisma.$RoundPayload<ExtArgs>
-        fields: Prisma.RoundFieldRefs
+      MatchingRound: {
+        payload: Prisma.$MatchingRoundPayload<ExtArgs>
+        fields: Prisma.MatchingRoundFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.RoundFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RoundPayload> | null
+            args: Prisma.MatchingRoundFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MatchingRoundPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.RoundFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+            args: Prisma.MatchingRoundFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MatchingRoundPayload>
           }
           findFirst: {
-            args: Prisma.RoundFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RoundPayload> | null
+            args: Prisma.MatchingRoundFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MatchingRoundPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.RoundFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+            args: Prisma.MatchingRoundFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MatchingRoundPayload>
           }
           findMany: {
-            args: Prisma.RoundFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RoundPayload>[]
+            args: Prisma.MatchingRoundFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MatchingRoundPayload>[]
           }
           create: {
-            args: Prisma.RoundCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+            args: Prisma.MatchingRoundCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MatchingRoundPayload>
           }
           createMany: {
-            args: Prisma.RoundCreateManyArgs<ExtArgs>
+            args: Prisma.MatchingRoundCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           delete: {
-            args: Prisma.RoundDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+            args: Prisma.MatchingRoundDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MatchingRoundPayload>
           }
           update: {
-            args: Prisma.RoundUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+            args: Prisma.MatchingRoundUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MatchingRoundPayload>
           }
           deleteMany: {
-            args: Prisma.RoundDeleteManyArgs<ExtArgs>
+            args: Prisma.MatchingRoundDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.RoundUpdateManyArgs<ExtArgs>
+            args: Prisma.MatchingRoundUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           upsert: {
-            args: Prisma.RoundUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$RoundPayload>
+            args: Prisma.MatchingRoundUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MatchingRoundPayload>
           }
           aggregate: {
-            args: Prisma.RoundAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateRound>
+            args: Prisma.MatchingRoundAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMatchingRound>
           }
           groupBy: {
-            args: Prisma.RoundGroupByArgs<ExtArgs>
-            result: $Utils.Optional<RoundGroupByOutputType>[]
+            args: Prisma.MatchingRoundGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MatchingRoundGroupByOutputType>[]
           }
           findRaw: {
-            args: Prisma.RoundFindRawArgs<ExtArgs>
+            args: Prisma.MatchingRoundFindRawArgs<ExtArgs>
             result: JsonObject
           }
           aggregateRaw: {
-            args: Prisma.RoundAggregateRawArgs<ExtArgs>
+            args: Prisma.MatchingRoundAggregateRawArgs<ExtArgs>
             result: JsonObject
           }
           count: {
-            args: Prisma.RoundCountArgs<ExtArgs>
-            result: $Utils.Optional<RoundCountAggregateOutputType> | number
+            args: Prisma.MatchingRoundCountArgs<ExtArgs>
+            result: $Utils.Optional<MatchingRoundCountAggregateOutputType> | number
           }
         }
       }
@@ -1448,7 +1448,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     challenger?: ChallengerOmit
-    round?: RoundOmit
+    matchingRound?: MatchingRoundOmit
     project?: ProjectOmit
     form?: FormOmit
     formQuestion?: FormQuestionOmit
@@ -1599,32 +1599,32 @@ export namespace Prisma {
 
 
   /**
-   * Count Type RoundCountOutputType
+   * Count Type MatchingRoundCountOutputType
    */
 
-  export type RoundCountOutputType = {
+  export type MatchingRoundCountOutputType = {
     Application: number
   }
 
-  export type RoundCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Application?: boolean | RoundCountOutputTypeCountApplicationArgs
+  export type MatchingRoundCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Application?: boolean | MatchingRoundCountOutputTypeCountApplicationArgs
   }
 
   // Custom InputTypes
   /**
-   * RoundCountOutputType without action
+   * MatchingRoundCountOutputType without action
    */
-  export type RoundCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the RoundCountOutputType
+     * Select specific fields to fetch from the MatchingRoundCountOutputType
      */
-    select?: RoundCountOutputTypeSelect<ExtArgs> | null
+    select?: MatchingRoundCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * RoundCountOutputType without action
+   * MatchingRoundCountOutputType without action
    */
-  export type RoundCountOutputTypeCountApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundCountOutputTypeCountApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ApplicationWhereInput
   }
 
@@ -1634,13 +1634,11 @@ export namespace Prisma {
    */
 
   export type ProjectCountOutputType = {
-    applications: number
     projectMember: number
     projectForms: number
   }
 
   export type ProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    applications?: boolean | ProjectCountOutputTypeCountApplicationsArgs
     projectMember?: boolean | ProjectCountOutputTypeCountProjectMemberArgs
     projectForms?: boolean | ProjectCountOutputTypeCountProjectFormsArgs
   }
@@ -1654,13 +1652,6 @@ export namespace Prisma {
      * Select specific fields to fetch from the ProjectCountOutputType
      */
     select?: ProjectCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * ProjectCountOutputType without action
-   */
-  export type ProjectCountOutputTypeCountApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ApplicationWhereInput
   }
 
   /**
@@ -1683,10 +1674,12 @@ export namespace Prisma {
    */
 
   export type FormCountOutputType = {
+    applications: number
     questions: number
   }
 
   export type FormCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    applications?: boolean | FormCountOutputTypeCountApplicationsArgs
     questions?: boolean | FormCountOutputTypeCountQuestionsArgs
   }
 
@@ -1699,6 +1692,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the FormCountOutputType
      */
     select?: FormCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FormCountOutputType without action
+   */
+  export type FormCountOutputTypeCountApplicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ApplicationWhereInput
   }
 
   /**
@@ -2939,16 +2939,16 @@ export namespace Prisma {
 
 
   /**
-   * Model Round
+   * Model MatchingRound
    */
 
-  export type AggregateRound = {
-    _count: RoundCountAggregateOutputType | null
-    _min: RoundMinAggregateOutputType | null
-    _max: RoundMaxAggregateOutputType | null
+  export type AggregateMatchingRound = {
+    _count: MatchingRoundCountAggregateOutputType | null
+    _min: MatchingRoundMinAggregateOutputType | null
+    _max: MatchingRoundMaxAggregateOutputType | null
   }
 
-  export type RoundMinAggregateOutputType = {
+  export type MatchingRoundMinAggregateOutputType = {
     id: string | null
     name: string | null
     startDatetime: Date | null
@@ -2957,7 +2957,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type RoundMaxAggregateOutputType = {
+  export type MatchingRoundMaxAggregateOutputType = {
     id: string | null
     name: string | null
     startDatetime: Date | null
@@ -2966,7 +2966,7 @@ export namespace Prisma {
     updatedAt: Date | null
   }
 
-  export type RoundCountAggregateOutputType = {
+  export type MatchingRoundCountAggregateOutputType = {
     id: number
     name: number
     startDatetime: number
@@ -2977,7 +2977,7 @@ export namespace Prisma {
   }
 
 
-  export type RoundMinAggregateInputType = {
+  export type MatchingRoundMinAggregateInputType = {
     id?: true
     name?: true
     startDatetime?: true
@@ -2986,7 +2986,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type RoundMaxAggregateInputType = {
+  export type MatchingRoundMaxAggregateInputType = {
     id?: true
     name?: true
     startDatetime?: true
@@ -2995,7 +2995,7 @@ export namespace Prisma {
     updatedAt?: true
   }
 
-  export type RoundCountAggregateInputType = {
+  export type MatchingRoundCountAggregateInputType = {
     id?: true
     name?: true
     startDatetime?: true
@@ -3005,118 +3005,118 @@ export namespace Prisma {
     _all?: true
   }
 
-  export type RoundAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Round to aggregate.
+     * Filter which MatchingRound to aggregate.
      */
-    where?: RoundWhereInput
+    where?: MatchingRoundWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Rounds to fetch.
+     * Determine the order of MatchingRounds to fetch.
      */
-    orderBy?: RoundOrderByWithRelationInput | RoundOrderByWithRelationInput[]
+    orderBy?: MatchingRoundOrderByWithRelationInput | MatchingRoundOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: RoundWhereUniqueInput
+    cursor?: MatchingRoundWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Rounds from the position of the cursor.
+     * Take `±n` MatchingRounds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Rounds.
+     * Skip the first `n` MatchingRounds.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned Rounds
+     * Count returned MatchingRounds
     **/
-    _count?: true | RoundCountAggregateInputType
+    _count?: true | MatchingRoundCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: RoundMinAggregateInputType
+    _min?: MatchingRoundMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: RoundMaxAggregateInputType
+    _max?: MatchingRoundMaxAggregateInputType
   }
 
-  export type GetRoundAggregateType<T extends RoundAggregateArgs> = {
-        [P in keyof T & keyof AggregateRound]: P extends '_count' | 'count'
+  export type GetMatchingRoundAggregateType<T extends MatchingRoundAggregateArgs> = {
+        [P in keyof T & keyof AggregateMatchingRound]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateRound[P]>
-      : GetScalarType<T[P], AggregateRound[P]>
+        : GetScalarType<T[P], AggregateMatchingRound[P]>
+      : GetScalarType<T[P], AggregateMatchingRound[P]>
   }
 
 
 
 
-  export type RoundGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: RoundWhereInput
-    orderBy?: RoundOrderByWithAggregationInput | RoundOrderByWithAggregationInput[]
-    by: RoundScalarFieldEnum[] | RoundScalarFieldEnum
-    having?: RoundScalarWhereWithAggregatesInput
+  export type MatchingRoundGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MatchingRoundWhereInput
+    orderBy?: MatchingRoundOrderByWithAggregationInput | MatchingRoundOrderByWithAggregationInput[]
+    by: MatchingRoundScalarFieldEnum[] | MatchingRoundScalarFieldEnum
+    having?: MatchingRoundScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: RoundCountAggregateInputType | true
-    _min?: RoundMinAggregateInputType
-    _max?: RoundMaxAggregateInputType
+    _count?: MatchingRoundCountAggregateInputType | true
+    _min?: MatchingRoundMinAggregateInputType
+    _max?: MatchingRoundMaxAggregateInputType
   }
 
-  export type RoundGroupByOutputType = {
+  export type MatchingRoundGroupByOutputType = {
     id: string
     name: string
     startDatetime: Date
     endDatetime: Date
     createdAt: Date
     updatedAt: Date
-    _count: RoundCountAggregateOutputType | null
-    _min: RoundMinAggregateOutputType | null
-    _max: RoundMaxAggregateOutputType | null
+    _count: MatchingRoundCountAggregateOutputType | null
+    _min: MatchingRoundMinAggregateOutputType | null
+    _max: MatchingRoundMaxAggregateOutputType | null
   }
 
-  type GetRoundGroupByPayload<T extends RoundGroupByArgs> = Prisma.PrismaPromise<
+  type GetMatchingRoundGroupByPayload<T extends MatchingRoundGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<RoundGroupByOutputType, T['by']> &
+      PickEnumerable<MatchingRoundGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof RoundGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof MatchingRoundGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], RoundGroupByOutputType[P]>
-            : GetScalarType<T[P], RoundGroupByOutputType[P]>
+              : GetScalarType<T[P], MatchingRoundGroupByOutputType[P]>
+            : GetScalarType<T[P], MatchingRoundGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type RoundSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type MatchingRoundSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
     startDatetime?: boolean
     endDatetime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    Application?: boolean | Round$ApplicationArgs<ExtArgs>
-    _count?: boolean | RoundCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["round"]>
+    Application?: boolean | MatchingRound$ApplicationArgs<ExtArgs>
+    _count?: boolean | MatchingRoundCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["matchingRound"]>
 
 
 
-  export type RoundSelectScalar = {
+  export type MatchingRoundSelectScalar = {
     id?: boolean
     name?: boolean
     startDatetime?: boolean
@@ -3125,14 +3125,14 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type RoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "startDatetime" | "endDatetime" | "createdAt" | "updatedAt", ExtArgs["result"]["round"]>
-  export type RoundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Application?: boolean | Round$ApplicationArgs<ExtArgs>
-    _count?: boolean | RoundCountOutputTypeDefaultArgs<ExtArgs>
+  export type MatchingRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "startDatetime" | "endDatetime" | "createdAt" | "updatedAt", ExtArgs["result"]["matchingRound"]>
+  export type MatchingRoundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    Application?: boolean | MatchingRound$ApplicationArgs<ExtArgs>
+    _count?: boolean | MatchingRoundCountOutputTypeDefaultArgs<ExtArgs>
   }
 
-  export type $RoundPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Round"
+  export type $MatchingRoundPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "MatchingRound"
     objects: {
       Application: Prisma.$ApplicationPayload<ExtArgs>[]
     }
@@ -3143,143 +3143,143 @@ export namespace Prisma {
       endDatetime: Date
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["round"]>
+    }, ExtArgs["result"]["matchingRound"]>
     composites: {}
   }
 
-  type RoundGetPayload<S extends boolean | null | undefined | RoundDefaultArgs> = $Result.GetResult<Prisma.$RoundPayload, S>
+  type MatchingRoundGetPayload<S extends boolean | null | undefined | MatchingRoundDefaultArgs> = $Result.GetResult<Prisma.$MatchingRoundPayload, S>
 
-  type RoundCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<RoundFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: RoundCountAggregateInputType | true
+  type MatchingRoundCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<MatchingRoundFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MatchingRoundCountAggregateInputType | true
     }
 
-  export interface RoundDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Round'], meta: { name: 'Round' } }
+  export interface MatchingRoundDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['MatchingRound'], meta: { name: 'MatchingRound' } }
     /**
-     * Find zero or one Round that matches the filter.
-     * @param {RoundFindUniqueArgs} args - Arguments to find a Round
+     * Find zero or one MatchingRound that matches the filter.
+     * @param {MatchingRoundFindUniqueArgs} args - Arguments to find a MatchingRound
      * @example
-     * // Get one Round
-     * const round = await prisma.round.findUnique({
+     * // Get one MatchingRound
+     * const matchingRound = await prisma.matchingRound.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends RoundFindUniqueArgs>(args: SelectSubset<T, RoundFindUniqueArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends MatchingRoundFindUniqueArgs>(args: SelectSubset<T, MatchingRoundFindUniqueArgs<ExtArgs>>): Prisma__MatchingRoundClient<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one Round that matches the filter or throw an error with `error.code='P2025'`
+     * Find one MatchingRound that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {RoundFindUniqueOrThrowArgs} args - Arguments to find a Round
+     * @param {MatchingRoundFindUniqueOrThrowArgs} args - Arguments to find a MatchingRound
      * @example
-     * // Get one Round
-     * const round = await prisma.round.findUniqueOrThrow({
+     * // Get one MatchingRound
+     * const matchingRound = await prisma.matchingRound.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends RoundFindUniqueOrThrowArgs>(args: SelectSubset<T, RoundFindUniqueOrThrowArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends MatchingRoundFindUniqueOrThrowArgs>(args: SelectSubset<T, MatchingRoundFindUniqueOrThrowArgs<ExtArgs>>): Prisma__MatchingRoundClient<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Round that matches the filter.
+     * Find the first MatchingRound that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {RoundFindFirstArgs} args - Arguments to find a Round
+     * @param {MatchingRoundFindFirstArgs} args - Arguments to find a MatchingRound
      * @example
-     * // Get one Round
-     * const round = await prisma.round.findFirst({
+     * // Get one MatchingRound
+     * const matchingRound = await prisma.matchingRound.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends RoundFindFirstArgs>(args?: SelectSubset<T, RoundFindFirstArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends MatchingRoundFindFirstArgs>(args?: SelectSubset<T, MatchingRoundFindFirstArgs<ExtArgs>>): Prisma__MatchingRoundClient<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first Round that matches the filter or
+     * Find the first MatchingRound that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {RoundFindFirstOrThrowArgs} args - Arguments to find a Round
+     * @param {MatchingRoundFindFirstOrThrowArgs} args - Arguments to find a MatchingRound
      * @example
-     * // Get one Round
-     * const round = await prisma.round.findFirstOrThrow({
+     * // Get one MatchingRound
+     * const matchingRound = await prisma.matchingRound.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends RoundFindFirstOrThrowArgs>(args?: SelectSubset<T, RoundFindFirstOrThrowArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends MatchingRoundFindFirstOrThrowArgs>(args?: SelectSubset<T, MatchingRoundFindFirstOrThrowArgs<ExtArgs>>): Prisma__MatchingRoundClient<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Rounds that matches the filter.
+     * Find zero or more MatchingRounds that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {RoundFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {MatchingRoundFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all Rounds
-     * const rounds = await prisma.round.findMany()
+     * // Get all MatchingRounds
+     * const matchingRounds = await prisma.matchingRound.findMany()
      * 
-     * // Get first 10 Rounds
-     * const rounds = await prisma.round.findMany({ take: 10 })
+     * // Get first 10 MatchingRounds
+     * const matchingRounds = await prisma.matchingRound.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const roundWithIdOnly = await prisma.round.findMany({ select: { id: true } })
+     * const matchingRoundWithIdOnly = await prisma.matchingRound.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends RoundFindManyArgs>(args?: SelectSubset<T, RoundFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends MatchingRoundFindManyArgs>(args?: SelectSubset<T, MatchingRoundFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a Round.
-     * @param {RoundCreateArgs} args - Arguments to create a Round.
+     * Create a MatchingRound.
+     * @param {MatchingRoundCreateArgs} args - Arguments to create a MatchingRound.
      * @example
-     * // Create one Round
-     * const Round = await prisma.round.create({
+     * // Create one MatchingRound
+     * const MatchingRound = await prisma.matchingRound.create({
      *   data: {
-     *     // ... data to create a Round
+     *     // ... data to create a MatchingRound
      *   }
      * })
      * 
      */
-    create<T extends RoundCreateArgs>(args: SelectSubset<T, RoundCreateArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends MatchingRoundCreateArgs>(args: SelectSubset<T, MatchingRoundCreateArgs<ExtArgs>>): Prisma__MatchingRoundClient<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many Rounds.
-     * @param {RoundCreateManyArgs} args - Arguments to create many Rounds.
+     * Create many MatchingRounds.
+     * @param {MatchingRoundCreateManyArgs} args - Arguments to create many MatchingRounds.
      * @example
-     * // Create many Rounds
-     * const round = await prisma.round.createMany({
+     * // Create many MatchingRounds
+     * const matchingRound = await prisma.matchingRound.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends RoundCreateManyArgs>(args?: SelectSubset<T, RoundCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends MatchingRoundCreateManyArgs>(args?: SelectSubset<T, MatchingRoundCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Delete a Round.
-     * @param {RoundDeleteArgs} args - Arguments to delete one Round.
+     * Delete a MatchingRound.
+     * @param {MatchingRoundDeleteArgs} args - Arguments to delete one MatchingRound.
      * @example
-     * // Delete one Round
-     * const Round = await prisma.round.delete({
+     * // Delete one MatchingRound
+     * const MatchingRound = await prisma.matchingRound.delete({
      *   where: {
-     *     // ... filter to delete one Round
+     *     // ... filter to delete one MatchingRound
      *   }
      * })
      * 
      */
-    delete<T extends RoundDeleteArgs>(args: SelectSubset<T, RoundDeleteArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends MatchingRoundDeleteArgs>(args: SelectSubset<T, MatchingRoundDeleteArgs<ExtArgs>>): Prisma__MatchingRoundClient<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one Round.
-     * @param {RoundUpdateArgs} args - Arguments to update one Round.
+     * Update one MatchingRound.
+     * @param {MatchingRoundUpdateArgs} args - Arguments to update one MatchingRound.
      * @example
-     * // Update one Round
-     * const round = await prisma.round.update({
+     * // Update one MatchingRound
+     * const matchingRound = await prisma.matchingRound.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3289,30 +3289,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends RoundUpdateArgs>(args: SelectSubset<T, RoundUpdateArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends MatchingRoundUpdateArgs>(args: SelectSubset<T, MatchingRoundUpdateArgs<ExtArgs>>): Prisma__MatchingRoundClient<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more Rounds.
-     * @param {RoundDeleteManyArgs} args - Arguments to filter Rounds to delete.
+     * Delete zero or more MatchingRounds.
+     * @param {MatchingRoundDeleteManyArgs} args - Arguments to filter MatchingRounds to delete.
      * @example
-     * // Delete a few Rounds
-     * const { count } = await prisma.round.deleteMany({
+     * // Delete a few MatchingRounds
+     * const { count } = await prisma.matchingRound.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends RoundDeleteManyArgs>(args?: SelectSubset<T, RoundDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends MatchingRoundDeleteManyArgs>(args?: SelectSubset<T, MatchingRoundDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more Rounds.
+     * Update zero or more MatchingRounds.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {RoundUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {MatchingRoundUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many Rounds
-     * const round = await prisma.round.updateMany({
+     * // Update many MatchingRounds
+     * const matchingRound = await prisma.matchingRound.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -3322,79 +3322,79 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends RoundUpdateManyArgs>(args: SelectSubset<T, RoundUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends MatchingRoundUpdateManyArgs>(args: SelectSubset<T, MatchingRoundUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create or update one Round.
-     * @param {RoundUpsertArgs} args - Arguments to update or create a Round.
+     * Create or update one MatchingRound.
+     * @param {MatchingRoundUpsertArgs} args - Arguments to update or create a MatchingRound.
      * @example
-     * // Update or create a Round
-     * const round = await prisma.round.upsert({
+     * // Update or create a MatchingRound
+     * const matchingRound = await prisma.matchingRound.upsert({
      *   create: {
-     *     // ... data to create a Round
+     *     // ... data to create a MatchingRound
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the Round we want to update
+     *     // ... the filter for the MatchingRound we want to update
      *   }
      * })
      */
-    upsert<T extends RoundUpsertArgs>(args: SelectSubset<T, RoundUpsertArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends MatchingRoundUpsertArgs>(args: SelectSubset<T, MatchingRoundUpsertArgs<ExtArgs>>): Prisma__MatchingRoundClient<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more Rounds that matches the filter.
-     * @param {RoundFindRawArgs} args - Select which filters you would like to apply.
+     * Find zero or more MatchingRounds that matches the filter.
+     * @param {MatchingRoundFindRawArgs} args - Select which filters you would like to apply.
      * @example
-     * const round = await prisma.round.findRaw({
+     * const matchingRound = await prisma.matchingRound.findRaw({
      *   filter: { age: { $gt: 25 } }
      * })
      */
-    findRaw(args?: RoundFindRawArgs): Prisma.PrismaPromise<JsonObject>
+    findRaw(args?: MatchingRoundFindRawArgs): Prisma.PrismaPromise<JsonObject>
 
     /**
-     * Perform aggregation operations on a Round.
-     * @param {RoundAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * Perform aggregation operations on a MatchingRound.
+     * @param {MatchingRoundAggregateRawArgs} args - Select which aggregations you would like to apply.
      * @example
-     * const round = await prisma.round.aggregateRaw({
+     * const matchingRound = await prisma.matchingRound.aggregateRaw({
      *   pipeline: [
      *     { $match: { status: "registered" } },
      *     { $group: { _id: "$country", total: { $sum: 1 } } }
      *   ]
      * })
      */
-    aggregateRaw(args?: RoundAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+    aggregateRaw(args?: MatchingRoundAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
 
 
     /**
-     * Count the number of Rounds.
+     * Count the number of MatchingRounds.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {RoundCountArgs} args - Arguments to filter Rounds to count.
+     * @param {MatchingRoundCountArgs} args - Arguments to filter MatchingRounds to count.
      * @example
-     * // Count the number of Rounds
-     * const count = await prisma.round.count({
+     * // Count the number of MatchingRounds
+     * const count = await prisma.matchingRound.count({
      *   where: {
-     *     // ... the filter for the Rounds we want to count
+     *     // ... the filter for the MatchingRounds we want to count
      *   }
      * })
     **/
-    count<T extends RoundCountArgs>(
-      args?: Subset<T, RoundCountArgs>,
+    count<T extends MatchingRoundCountArgs>(
+      args?: Subset<T, MatchingRoundCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], RoundCountAggregateOutputType>
+          : GetScalarType<T['select'], MatchingRoundCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a Round.
+     * Allows you to perform aggregations operations on a MatchingRound.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {RoundAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {MatchingRoundAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -3414,13 +3414,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends RoundAggregateArgs>(args: Subset<T, RoundAggregateArgs>): Prisma.PrismaPromise<GetRoundAggregateType<T>>
+    aggregate<T extends MatchingRoundAggregateArgs>(args: Subset<T, MatchingRoundAggregateArgs>): Prisma.PrismaPromise<GetMatchingRoundAggregateType<T>>
 
     /**
-     * Group by Round.
+     * Group by MatchingRound.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {RoundGroupByArgs} args - Group by arguments.
+     * @param {MatchingRoundGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -3435,14 +3435,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends RoundGroupByArgs,
+      T extends MatchingRoundGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: RoundGroupByArgs['orderBy'] }
-        : { orderBy?: RoundGroupByArgs['orderBy'] },
+        ? { orderBy: MatchingRoundGroupByArgs['orderBy'] }
+        : { orderBy?: MatchingRoundGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -3491,22 +3491,22 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, RoundGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRoundGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, MatchingRoundGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMatchingRoundGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the Round model
+   * Fields of the MatchingRound model
    */
-  readonly fields: RoundFieldRefs;
+  readonly fields: MatchingRoundFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for Round.
+   * The delegate class that acts as a "Promise-like" for MatchingRound.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__RoundClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__MatchingRoundClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Application<T extends Round$ApplicationArgs<ExtArgs> = {}>(args?: Subset<T, Round$ApplicationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    Application<T extends MatchingRound$ApplicationArgs<ExtArgs> = {}>(args?: Subset<T, MatchingRound$ApplicationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3533,360 +3533,360 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the Round model
+   * Fields of the MatchingRound model
    */
-  interface RoundFieldRefs {
-    readonly id: FieldRef<"Round", 'String'>
-    readonly name: FieldRef<"Round", 'String'>
-    readonly startDatetime: FieldRef<"Round", 'DateTime'>
-    readonly endDatetime: FieldRef<"Round", 'DateTime'>
-    readonly createdAt: FieldRef<"Round", 'DateTime'>
-    readonly updatedAt: FieldRef<"Round", 'DateTime'>
+  interface MatchingRoundFieldRefs {
+    readonly id: FieldRef<"MatchingRound", 'String'>
+    readonly name: FieldRef<"MatchingRound", 'String'>
+    readonly startDatetime: FieldRef<"MatchingRound", 'DateTime'>
+    readonly endDatetime: FieldRef<"MatchingRound", 'DateTime'>
+    readonly createdAt: FieldRef<"MatchingRound", 'DateTime'>
+    readonly updatedAt: FieldRef<"MatchingRound", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * Round findUnique
+   * MatchingRound findUnique
    */
-  export type RoundFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Round
+     * Select specific fields to fetch from the MatchingRound
      */
-    select?: RoundSelect<ExtArgs> | null
+    select?: MatchingRoundSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Round
+     * Omit specific fields from the MatchingRound
      */
-    omit?: RoundOmit<ExtArgs> | null
+    omit?: MatchingRoundOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RoundInclude<ExtArgs> | null
+    include?: MatchingRoundInclude<ExtArgs> | null
     /**
-     * Filter, which Round to fetch.
+     * Filter, which MatchingRound to fetch.
      */
-    where: RoundWhereUniqueInput
+    where: MatchingRoundWhereUniqueInput
   }
 
   /**
-   * Round findUniqueOrThrow
+   * MatchingRound findUniqueOrThrow
    */
-  export type RoundFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Round
+     * Select specific fields to fetch from the MatchingRound
      */
-    select?: RoundSelect<ExtArgs> | null
+    select?: MatchingRoundSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Round
+     * Omit specific fields from the MatchingRound
      */
-    omit?: RoundOmit<ExtArgs> | null
+    omit?: MatchingRoundOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RoundInclude<ExtArgs> | null
+    include?: MatchingRoundInclude<ExtArgs> | null
     /**
-     * Filter, which Round to fetch.
+     * Filter, which MatchingRound to fetch.
      */
-    where: RoundWhereUniqueInput
+    where: MatchingRoundWhereUniqueInput
   }
 
   /**
-   * Round findFirst
+   * MatchingRound findFirst
    */
-  export type RoundFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Round
+     * Select specific fields to fetch from the MatchingRound
      */
-    select?: RoundSelect<ExtArgs> | null
+    select?: MatchingRoundSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Round
+     * Omit specific fields from the MatchingRound
      */
-    omit?: RoundOmit<ExtArgs> | null
+    omit?: MatchingRoundOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RoundInclude<ExtArgs> | null
+    include?: MatchingRoundInclude<ExtArgs> | null
     /**
-     * Filter, which Round to fetch.
+     * Filter, which MatchingRound to fetch.
      */
-    where?: RoundWhereInput
+    where?: MatchingRoundWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Rounds to fetch.
+     * Determine the order of MatchingRounds to fetch.
      */
-    orderBy?: RoundOrderByWithRelationInput | RoundOrderByWithRelationInput[]
+    orderBy?: MatchingRoundOrderByWithRelationInput | MatchingRoundOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Rounds.
+     * Sets the position for searching for MatchingRounds.
      */
-    cursor?: RoundWhereUniqueInput
+    cursor?: MatchingRoundWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Rounds from the position of the cursor.
+     * Take `±n` MatchingRounds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Rounds.
+     * Skip the first `n` MatchingRounds.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Rounds.
+     * Filter by unique combinations of MatchingRounds.
      */
-    distinct?: RoundScalarFieldEnum | RoundScalarFieldEnum[]
+    distinct?: MatchingRoundScalarFieldEnum | MatchingRoundScalarFieldEnum[]
   }
 
   /**
-   * Round findFirstOrThrow
+   * MatchingRound findFirstOrThrow
    */
-  export type RoundFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Round
+     * Select specific fields to fetch from the MatchingRound
      */
-    select?: RoundSelect<ExtArgs> | null
+    select?: MatchingRoundSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Round
+     * Omit specific fields from the MatchingRound
      */
-    omit?: RoundOmit<ExtArgs> | null
+    omit?: MatchingRoundOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RoundInclude<ExtArgs> | null
+    include?: MatchingRoundInclude<ExtArgs> | null
     /**
-     * Filter, which Round to fetch.
+     * Filter, which MatchingRound to fetch.
      */
-    where?: RoundWhereInput
+    where?: MatchingRoundWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Rounds to fetch.
+     * Determine the order of MatchingRounds to fetch.
      */
-    orderBy?: RoundOrderByWithRelationInput | RoundOrderByWithRelationInput[]
+    orderBy?: MatchingRoundOrderByWithRelationInput | MatchingRoundOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for Rounds.
+     * Sets the position for searching for MatchingRounds.
      */
-    cursor?: RoundWhereUniqueInput
+    cursor?: MatchingRoundWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Rounds from the position of the cursor.
+     * Take `±n` MatchingRounds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Rounds.
+     * Skip the first `n` MatchingRounds.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of Rounds.
+     * Filter by unique combinations of MatchingRounds.
      */
-    distinct?: RoundScalarFieldEnum | RoundScalarFieldEnum[]
+    distinct?: MatchingRoundScalarFieldEnum | MatchingRoundScalarFieldEnum[]
   }
 
   /**
-   * Round findMany
+   * MatchingRound findMany
    */
-  export type RoundFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Round
+     * Select specific fields to fetch from the MatchingRound
      */
-    select?: RoundSelect<ExtArgs> | null
+    select?: MatchingRoundSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Round
+     * Omit specific fields from the MatchingRound
      */
-    omit?: RoundOmit<ExtArgs> | null
+    omit?: MatchingRoundOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RoundInclude<ExtArgs> | null
+    include?: MatchingRoundInclude<ExtArgs> | null
     /**
-     * Filter, which Rounds to fetch.
+     * Filter, which MatchingRounds to fetch.
      */
-    where?: RoundWhereInput
+    where?: MatchingRoundWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of Rounds to fetch.
+     * Determine the order of MatchingRounds to fetch.
      */
-    orderBy?: RoundOrderByWithRelationInput | RoundOrderByWithRelationInput[]
+    orderBy?: MatchingRoundOrderByWithRelationInput | MatchingRoundOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing Rounds.
+     * Sets the position for listing MatchingRounds.
      */
-    cursor?: RoundWhereUniqueInput
+    cursor?: MatchingRoundWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` Rounds from the position of the cursor.
+     * Take `±n` MatchingRounds from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` Rounds.
+     * Skip the first `n` MatchingRounds.
      */
     skip?: number
-    distinct?: RoundScalarFieldEnum | RoundScalarFieldEnum[]
+    distinct?: MatchingRoundScalarFieldEnum | MatchingRoundScalarFieldEnum[]
   }
 
   /**
-   * Round create
+   * MatchingRound create
    */
-  export type RoundCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Round
+     * Select specific fields to fetch from the MatchingRound
      */
-    select?: RoundSelect<ExtArgs> | null
+    select?: MatchingRoundSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Round
+     * Omit specific fields from the MatchingRound
      */
-    omit?: RoundOmit<ExtArgs> | null
+    omit?: MatchingRoundOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RoundInclude<ExtArgs> | null
+    include?: MatchingRoundInclude<ExtArgs> | null
     /**
-     * The data needed to create a Round.
+     * The data needed to create a MatchingRound.
      */
-    data: XOR<RoundCreateInput, RoundUncheckedCreateInput>
+    data: XOR<MatchingRoundCreateInput, MatchingRoundUncheckedCreateInput>
   }
 
   /**
-   * Round createMany
+   * MatchingRound createMany
    */
-  export type RoundCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many Rounds.
+     * The data used to create many MatchingRounds.
      */
-    data: RoundCreateManyInput | RoundCreateManyInput[]
+    data: MatchingRoundCreateManyInput | MatchingRoundCreateManyInput[]
   }
 
   /**
-   * Round update
+   * MatchingRound update
    */
-  export type RoundUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Round
+     * Select specific fields to fetch from the MatchingRound
      */
-    select?: RoundSelect<ExtArgs> | null
+    select?: MatchingRoundSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Round
+     * Omit specific fields from the MatchingRound
      */
-    omit?: RoundOmit<ExtArgs> | null
+    omit?: MatchingRoundOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RoundInclude<ExtArgs> | null
+    include?: MatchingRoundInclude<ExtArgs> | null
     /**
-     * The data needed to update a Round.
+     * The data needed to update a MatchingRound.
      */
-    data: XOR<RoundUpdateInput, RoundUncheckedUpdateInput>
+    data: XOR<MatchingRoundUpdateInput, MatchingRoundUncheckedUpdateInput>
     /**
-     * Choose, which Round to update.
+     * Choose, which MatchingRound to update.
      */
-    where: RoundWhereUniqueInput
+    where: MatchingRoundWhereUniqueInput
   }
 
   /**
-   * Round updateMany
+   * MatchingRound updateMany
    */
-  export type RoundUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update Rounds.
+     * The data used to update MatchingRounds.
      */
-    data: XOR<RoundUpdateManyMutationInput, RoundUncheckedUpdateManyInput>
+    data: XOR<MatchingRoundUpdateManyMutationInput, MatchingRoundUncheckedUpdateManyInput>
     /**
-     * Filter which Rounds to update
+     * Filter which MatchingRounds to update
      */
-    where?: RoundWhereInput
+    where?: MatchingRoundWhereInput
     /**
-     * Limit how many Rounds to update.
+     * Limit how many MatchingRounds to update.
      */
     limit?: number
   }
 
   /**
-   * Round upsert
+   * MatchingRound upsert
    */
-  export type RoundUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Round
+     * Select specific fields to fetch from the MatchingRound
      */
-    select?: RoundSelect<ExtArgs> | null
+    select?: MatchingRoundSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Round
+     * Omit specific fields from the MatchingRound
      */
-    omit?: RoundOmit<ExtArgs> | null
+    omit?: MatchingRoundOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RoundInclude<ExtArgs> | null
+    include?: MatchingRoundInclude<ExtArgs> | null
     /**
-     * The filter to search for the Round to update in case it exists.
+     * The filter to search for the MatchingRound to update in case it exists.
      */
-    where: RoundWhereUniqueInput
+    where: MatchingRoundWhereUniqueInput
     /**
-     * In case the Round found by the `where` argument doesn't exist, create a new Round with this data.
+     * In case the MatchingRound found by the `where` argument doesn't exist, create a new MatchingRound with this data.
      */
-    create: XOR<RoundCreateInput, RoundUncheckedCreateInput>
+    create: XOR<MatchingRoundCreateInput, MatchingRoundUncheckedCreateInput>
     /**
-     * In case the Round was found with the provided `where` argument, update it with this data.
+     * In case the MatchingRound was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<RoundUpdateInput, RoundUncheckedUpdateInput>
+    update: XOR<MatchingRoundUpdateInput, MatchingRoundUncheckedUpdateInput>
   }
 
   /**
-   * Round delete
+   * MatchingRound delete
    */
-  export type RoundDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Round
+     * Select specific fields to fetch from the MatchingRound
      */
-    select?: RoundSelect<ExtArgs> | null
+    select?: MatchingRoundSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Round
+     * Omit specific fields from the MatchingRound
      */
-    omit?: RoundOmit<ExtArgs> | null
+    omit?: MatchingRoundOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RoundInclude<ExtArgs> | null
+    include?: MatchingRoundInclude<ExtArgs> | null
     /**
-     * Filter which Round to delete.
+     * Filter which MatchingRound to delete.
      */
-    where: RoundWhereUniqueInput
+    where: MatchingRoundWhereUniqueInput
   }
 
   /**
-   * Round deleteMany
+   * MatchingRound deleteMany
    */
-  export type RoundDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which Rounds to delete
+     * Filter which MatchingRounds to delete
      */
-    where?: RoundWhereInput
+    where?: MatchingRoundWhereInput
     /**
-     * Limit how many Rounds to delete.
+     * Limit how many MatchingRounds to delete.
      */
     limit?: number
   }
 
   /**
-   * Round findRaw
+   * MatchingRound findRaw
    */
-  export type RoundFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
      */
@@ -3898,9 +3898,9 @@ export namespace Prisma {
   }
 
   /**
-   * Round aggregateRaw
+   * MatchingRound aggregateRaw
    */
-  export type RoundAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
      */
@@ -3912,9 +3912,9 @@ export namespace Prisma {
   }
 
   /**
-   * Round.Application
+   * MatchingRound.Application
    */
-  export type Round$ApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRound$ApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Application
      */
@@ -3936,21 +3936,21 @@ export namespace Prisma {
   }
 
   /**
-   * Round without action
+   * MatchingRound without action
    */
-  export type RoundDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Round
+     * Select specific fields to fetch from the MatchingRound
      */
-    select?: RoundSelect<ExtArgs> | null
+    select?: MatchingRoundSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Round
+     * Omit specific fields from the MatchingRound
      */
-    omit?: RoundOmit<ExtArgs> | null
+    omit?: MatchingRoundOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: RoundInclude<ExtArgs> | null
+    include?: MatchingRoundInclude<ExtArgs> | null
   }
 
 
@@ -4134,7 +4134,6 @@ export namespace Prisma {
     planId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    applications?: boolean | Project$applicationsArgs<ExtArgs>
     projectMember?: boolean | Project$projectMemberArgs<ExtArgs>
     projectForms?: boolean | Project$projectFormsArgs<ExtArgs>
     plan?: boolean | ChallengerDefaultArgs<ExtArgs>
@@ -4155,7 +4154,6 @@ export namespace Prisma {
 
   export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "link" | "planId" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    applications?: boolean | Project$applicationsArgs<ExtArgs>
     projectMember?: boolean | Project$projectMemberArgs<ExtArgs>
     projectForms?: boolean | Project$projectFormsArgs<ExtArgs>
     plan?: boolean | ChallengerDefaultArgs<ExtArgs>
@@ -4165,7 +4163,6 @@ export namespace Prisma {
   export type $ProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Project"
     objects: {
-      applications: Prisma.$ApplicationPayload<ExtArgs>[]
       projectMember: Prisma.$ProjectMemberPayload<ExtArgs>[]
       projectForms: Prisma.$FormPayload<ExtArgs>[]
       plan: Prisma.$ChallengerPayload<ExtArgs>
@@ -4541,7 +4538,6 @@ export namespace Prisma {
    */
   export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    applications<T extends Project$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, Project$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     projectMember<T extends Project$projectMemberArgs<ExtArgs> = {}>(args?: Subset<T, Project$projectMemberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     projectForms<T extends Project$projectFormsArgs<ExtArgs> = {}>(args?: Subset<T, Project$projectFormsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     plan<T extends ChallengerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChallengerDefaultArgs<ExtArgs>>): Prisma__ChallengerClient<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -4951,30 +4947,6 @@ export namespace Prisma {
   }
 
   /**
-   * Project.applications
-   */
-  export type Project$applicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Application
-     */
-    select?: ApplicationSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Application
-     */
-    omit?: ApplicationOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ApplicationInclude<ExtArgs> | null
-    where?: ApplicationWhereInput
-    orderBy?: ApplicationOrderByWithRelationInput | ApplicationOrderByWithRelationInput[]
-    cursor?: ApplicationWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ApplicationScalarFieldEnum | ApplicationScalarFieldEnum[]
-  }
-
-  /**
    * Project.projectMember
    */
   export type Project$projectMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5076,7 +5048,7 @@ export namespace Prisma {
     description: number
     createdAt: number
     updatedAt: number
-    availableRounds: number
+    availableMatchingRounds: number
     _all: number
   }
 
@@ -5106,7 +5078,7 @@ export namespace Prisma {
     description?: true
     createdAt?: true
     updatedAt?: true
-    availableRounds?: true
+    availableMatchingRounds?: true
     _all?: true
   }
 
@@ -5189,7 +5161,7 @@ export namespace Prisma {
     description: string | null
     createdAt: Date
     updatedAt: Date
-    availableRounds: string[]
+    availableMatchingRounds: string[]
     _count: FormCountAggregateOutputType | null
     _min: FormMinAggregateOutputType | null
     _max: FormMaxAggregateOutputType | null
@@ -5216,8 +5188,9 @@ export namespace Prisma {
     description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    availableRounds?: boolean
+    availableMatchingRounds?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
+    applications?: boolean | Form$applicationsArgs<ExtArgs>
     questions?: boolean | Form$questionsArgs<ExtArgs>
     _count?: boolean | FormCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["form"]>
@@ -5231,12 +5204,13 @@ export namespace Prisma {
     description?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    availableRounds?: boolean
+    availableMatchingRounds?: boolean
   }
 
-  export type FormOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "title" | "description" | "createdAt" | "updatedAt" | "availableRounds", ExtArgs["result"]["form"]>
+  export type FormOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "title" | "description" | "createdAt" | "updatedAt" | "availableMatchingRounds", ExtArgs["result"]["form"]>
   export type FormInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
+    applications?: boolean | Form$applicationsArgs<ExtArgs>
     questions?: boolean | Form$questionsArgs<ExtArgs>
     _count?: boolean | FormCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -5245,6 +5219,7 @@ export namespace Prisma {
     name: "Form"
     objects: {
       project: Prisma.$ProjectPayload<ExtArgs>
+      applications: Prisma.$ApplicationPayload<ExtArgs>[]
       questions: Prisma.$FormQuestionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -5254,7 +5229,7 @@ export namespace Prisma {
       description: string | null
       createdAt: Date
       updatedAt: Date
-      availableRounds: string[]
+      availableMatchingRounds: string[]
     }, ExtArgs["result"]["form"]>
     composites: {}
   }
@@ -5619,6 +5594,7 @@ export namespace Prisma {
   export interface Prisma__FormClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    applications<T extends Form$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, Form$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     questions<T extends Form$questionsArgs<ExtArgs> = {}>(args?: Subset<T, Form$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -5655,7 +5631,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Form", 'String'>
     readonly createdAt: FieldRef<"Form", 'DateTime'>
     readonly updatedAt: FieldRef<"Form", 'DateTime'>
-    readonly availableRounds: FieldRef<"Form", 'String[]'>
+    readonly availableMatchingRounds: FieldRef<"Form", 'String[]'>
   }
     
 
@@ -6023,6 +5999,30 @@ export namespace Prisma {
      * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
      */
     options?: InputJsonValue
+  }
+
+  /**
+   * Form.applications
+   */
+  export type Form$applicationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Application
+     */
+    select?: ApplicationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Application
+     */
+    omit?: ApplicationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ApplicationInclude<ExtArgs> | null
+    where?: ApplicationWhereInput
+    orderBy?: ApplicationOrderByWithRelationInput | ApplicationOrderByWithRelationInput[]
+    cursor?: ApplicationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ApplicationScalarFieldEnum | ApplicationScalarFieldEnum[]
   }
 
   /**
@@ -8128,9 +8128,9 @@ export namespace Prisma {
   export type ApplicationMinAggregateOutputType = {
     id: string | null
     applicantId: string | null
-    projectId: string | null
+    formId: string | null
     status: $Enums.ApplicationStatusEnum | null
-    roundId: string | null
+    matchingRoundId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8138,9 +8138,9 @@ export namespace Prisma {
   export type ApplicationMaxAggregateOutputType = {
     id: string | null
     applicantId: string | null
-    projectId: string | null
+    formId: string | null
     status: $Enums.ApplicationStatusEnum | null
-    roundId: string | null
+    matchingRoundId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8148,9 +8148,9 @@ export namespace Prisma {
   export type ApplicationCountAggregateOutputType = {
     id: number
     applicantId: number
-    projectId: number
+    formId: number
     status: number
-    roundId: number
+    matchingRoundId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -8160,9 +8160,9 @@ export namespace Prisma {
   export type ApplicationMinAggregateInputType = {
     id?: true
     applicantId?: true
-    projectId?: true
+    formId?: true
     status?: true
-    roundId?: true
+    matchingRoundId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8170,9 +8170,9 @@ export namespace Prisma {
   export type ApplicationMaxAggregateInputType = {
     id?: true
     applicantId?: true
-    projectId?: true
+    formId?: true
     status?: true
-    roundId?: true
+    matchingRoundId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8180,9 +8180,9 @@ export namespace Prisma {
   export type ApplicationCountAggregateInputType = {
     id?: true
     applicantId?: true
-    projectId?: true
+    formId?: true
     status?: true
-    roundId?: true
+    matchingRoundId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -8263,9 +8263,9 @@ export namespace Prisma {
   export type ApplicationGroupByOutputType = {
     id: string
     applicantId: string
-    projectId: string
+    formId: string
     status: $Enums.ApplicationStatusEnum
-    roundId: string
+    matchingRoundId: string
     createdAt: Date
     updatedAt: Date
     _count: ApplicationCountAggregateOutputType | null
@@ -8290,15 +8290,15 @@ export namespace Prisma {
   export type ApplicationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     applicantId?: boolean
-    projectId?: boolean
+    formId?: boolean
     status?: boolean
-    roundId?: boolean
+    matchingRoundId?: boolean
     answers?: boolean | AnswerDefaultArgs<ExtArgs>
     createdAt?: boolean
     updatedAt?: boolean
     applicant?: boolean | ChallengerDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    round?: boolean | RoundDefaultArgs<ExtArgs>
+    form?: boolean | FormDefaultArgs<ExtArgs>
+    matchingRound?: boolean | MatchingRoundDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["application"]>
 
 
@@ -8306,33 +8306,33 @@ export namespace Prisma {
   export type ApplicationSelectScalar = {
     id?: boolean
     applicantId?: boolean
-    projectId?: boolean
+    formId?: boolean
     status?: boolean
-    roundId?: boolean
+    matchingRoundId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicantId" | "projectId" | "status" | "roundId" | "answers" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
+  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicantId" | "formId" | "status" | "matchingRoundId" | "answers" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
   export type ApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applicant?: boolean | ChallengerDefaultArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    round?: boolean | RoundDefaultArgs<ExtArgs>
+    form?: boolean | FormDefaultArgs<ExtArgs>
+    matchingRound?: boolean | MatchingRoundDefaultArgs<ExtArgs>
   }
 
   export type $ApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Application"
     objects: {
       applicant: Prisma.$ChallengerPayload<ExtArgs>
-      project: Prisma.$ProjectPayload<ExtArgs>
-      round: Prisma.$RoundPayload<ExtArgs>
+      form: Prisma.$FormPayload<ExtArgs>
+      matchingRound: Prisma.$MatchingRoundPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       applicantId: string
-      projectId: string
+      formId: string
       status: $Enums.ApplicationStatusEnum
-      roundId: string
+      matchingRoundId: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["application"]>
@@ -8701,8 +8701,8 @@ export namespace Prisma {
   export interface Prisma__ApplicationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     applicant<T extends ChallengerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChallengerDefaultArgs<ExtArgs>>): Prisma__ChallengerClient<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    round<T extends RoundDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoundDefaultArgs<ExtArgs>>): Prisma__RoundClient<$Result.GetResult<Prisma.$RoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    form<T extends FormDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FormDefaultArgs<ExtArgs>>): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    matchingRound<T extends MatchingRoundDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MatchingRoundDefaultArgs<ExtArgs>>): Prisma__MatchingRoundClient<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8734,9 +8734,9 @@ export namespace Prisma {
   interface ApplicationFieldRefs {
     readonly id: FieldRef<"Application", 'String'>
     readonly applicantId: FieldRef<"Application", 'String'>
-    readonly projectId: FieldRef<"Application", 'String'>
+    readonly formId: FieldRef<"Application", 'String'>
     readonly status: FieldRef<"Application", 'ApplicationStatusEnum'>
-    readonly roundId: FieldRef<"Application", 'String'>
+    readonly matchingRoundId: FieldRef<"Application", 'String'>
     readonly createdAt: FieldRef<"Application", 'DateTime'>
     readonly updatedAt: FieldRef<"Application", 'DateTime'>
   }
@@ -10142,7 +10142,7 @@ export namespace Prisma {
   export type ChallengerScalarFieldEnum = (typeof ChallengerScalarFieldEnum)[keyof typeof ChallengerScalarFieldEnum]
 
 
-  export const RoundScalarFieldEnum: {
+  export const MatchingRoundScalarFieldEnum: {
     id: 'id',
     name: 'name',
     startDatetime: 'startDatetime',
@@ -10151,7 +10151,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt'
   };
 
-  export type RoundScalarFieldEnum = (typeof RoundScalarFieldEnum)[keyof typeof RoundScalarFieldEnum]
+  export type MatchingRoundScalarFieldEnum = (typeof MatchingRoundScalarFieldEnum)[keyof typeof MatchingRoundScalarFieldEnum]
 
 
   export const ProjectScalarFieldEnum: {
@@ -10174,7 +10174,7 @@ export namespace Prisma {
     description: 'description',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    availableRounds: 'availableRounds'
+    availableMatchingRounds: 'availableMatchingRounds'
   };
 
   export type FormScalarFieldEnum = (typeof FormScalarFieldEnum)[keyof typeof FormScalarFieldEnum]
@@ -10210,9 +10210,9 @@ export namespace Prisma {
   export const ApplicationScalarFieldEnum: {
     id: 'id',
     applicantId: 'applicantId',
-    projectId: 'projectId',
+    formId: 'formId',
     status: 'status',
-    roundId: 'roundId',
+    matchingRoundId: 'matchingRoundId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -10468,20 +10468,20 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Challenger"> | Date | string
   }
 
-  export type RoundWhereInput = {
-    AND?: RoundWhereInput | RoundWhereInput[]
-    OR?: RoundWhereInput[]
-    NOT?: RoundWhereInput | RoundWhereInput[]
-    id?: StringFilter<"Round"> | string
-    name?: StringFilter<"Round"> | string
-    startDatetime?: DateTimeFilter<"Round"> | Date | string
-    endDatetime?: DateTimeFilter<"Round"> | Date | string
-    createdAt?: DateTimeFilter<"Round"> | Date | string
-    updatedAt?: DateTimeFilter<"Round"> | Date | string
+  export type MatchingRoundWhereInput = {
+    AND?: MatchingRoundWhereInput | MatchingRoundWhereInput[]
+    OR?: MatchingRoundWhereInput[]
+    NOT?: MatchingRoundWhereInput | MatchingRoundWhereInput[]
+    id?: StringFilter<"MatchingRound"> | string
+    name?: StringFilter<"MatchingRound"> | string
+    startDatetime?: DateTimeFilter<"MatchingRound"> | Date | string
+    endDatetime?: DateTimeFilter<"MatchingRound"> | Date | string
+    createdAt?: DateTimeFilter<"MatchingRound"> | Date | string
+    updatedAt?: DateTimeFilter<"MatchingRound"> | Date | string
     Application?: ApplicationListRelationFilter
   }
 
-  export type RoundOrderByWithRelationInput = {
+  export type MatchingRoundOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     startDatetime?: SortOrder
@@ -10491,41 +10491,41 @@ export namespace Prisma {
     Application?: ApplicationOrderByRelationAggregateInput
   }
 
-  export type RoundWhereUniqueInput = Prisma.AtLeast<{
+  export type MatchingRoundWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    AND?: RoundWhereInput | RoundWhereInput[]
-    OR?: RoundWhereInput[]
-    NOT?: RoundWhereInput | RoundWhereInput[]
-    name?: StringFilter<"Round"> | string
-    startDatetime?: DateTimeFilter<"Round"> | Date | string
-    endDatetime?: DateTimeFilter<"Round"> | Date | string
-    createdAt?: DateTimeFilter<"Round"> | Date | string
-    updatedAt?: DateTimeFilter<"Round"> | Date | string
+    AND?: MatchingRoundWhereInput | MatchingRoundWhereInput[]
+    OR?: MatchingRoundWhereInput[]
+    NOT?: MatchingRoundWhereInput | MatchingRoundWhereInput[]
+    name?: StringFilter<"MatchingRound"> | string
+    startDatetime?: DateTimeFilter<"MatchingRound"> | Date | string
+    endDatetime?: DateTimeFilter<"MatchingRound"> | Date | string
+    createdAt?: DateTimeFilter<"MatchingRound"> | Date | string
+    updatedAt?: DateTimeFilter<"MatchingRound"> | Date | string
     Application?: ApplicationListRelationFilter
   }, "id">
 
-  export type RoundOrderByWithAggregationInput = {
+  export type MatchingRoundOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     startDatetime?: SortOrder
     endDatetime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: RoundCountOrderByAggregateInput
-    _max?: RoundMaxOrderByAggregateInput
-    _min?: RoundMinOrderByAggregateInput
+    _count?: MatchingRoundCountOrderByAggregateInput
+    _max?: MatchingRoundMaxOrderByAggregateInput
+    _min?: MatchingRoundMinOrderByAggregateInput
   }
 
-  export type RoundScalarWhereWithAggregatesInput = {
-    AND?: RoundScalarWhereWithAggregatesInput | RoundScalarWhereWithAggregatesInput[]
-    OR?: RoundScalarWhereWithAggregatesInput[]
-    NOT?: RoundScalarWhereWithAggregatesInput | RoundScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Round"> | string
-    name?: StringWithAggregatesFilter<"Round"> | string
-    startDatetime?: DateTimeWithAggregatesFilter<"Round"> | Date | string
-    endDatetime?: DateTimeWithAggregatesFilter<"Round"> | Date | string
-    createdAt?: DateTimeWithAggregatesFilter<"Round"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Round"> | Date | string
+  export type MatchingRoundScalarWhereWithAggregatesInput = {
+    AND?: MatchingRoundScalarWhereWithAggregatesInput | MatchingRoundScalarWhereWithAggregatesInput[]
+    OR?: MatchingRoundScalarWhereWithAggregatesInput[]
+    NOT?: MatchingRoundScalarWhereWithAggregatesInput | MatchingRoundScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MatchingRound"> | string
+    name?: StringWithAggregatesFilter<"MatchingRound"> | string
+    startDatetime?: DateTimeWithAggregatesFilter<"MatchingRound"> | Date | string
+    endDatetime?: DateTimeWithAggregatesFilter<"MatchingRound"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"MatchingRound"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MatchingRound"> | Date | string
   }
 
   export type ProjectWhereInput = {
@@ -10539,7 +10539,6 @@ export namespace Prisma {
     planId?: StringFilter<"Project"> | string
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
-    applications?: ApplicationListRelationFilter
     projectMember?: ProjectMemberListRelationFilter
     projectForms?: FormListRelationFilter
     plan?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
@@ -10553,7 +10552,6 @@ export namespace Prisma {
     planId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    applications?: ApplicationOrderByRelationAggregateInput
     projectMember?: ProjectMemberOrderByRelationAggregateInput
     projectForms?: FormOrderByRelationAggregateInput
     plan?: ChallengerOrderByWithRelationInput
@@ -10570,7 +10568,6 @@ export namespace Prisma {
     planId?: StringFilter<"Project"> | string
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
-    applications?: ApplicationListRelationFilter
     projectMember?: ProjectMemberListRelationFilter
     projectForms?: FormListRelationFilter
     plan?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
@@ -10612,8 +10609,9 @@ export namespace Prisma {
     description?: StringNullableFilter<"Form"> | string | null
     createdAt?: DateTimeFilter<"Form"> | Date | string
     updatedAt?: DateTimeFilter<"Form"> | Date | string
-    availableRounds?: StringNullableListFilter<"Form">
+    availableMatchingRounds?: StringNullableListFilter<"Form">
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    applications?: ApplicationListRelationFilter
     questions?: FormQuestionListRelationFilter
   }
 
@@ -10624,8 +10622,9 @@ export namespace Prisma {
     description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    availableRounds?: SortOrder
+    availableMatchingRounds?: SortOrder
     project?: ProjectOrderByWithRelationInput
+    applications?: ApplicationOrderByRelationAggregateInput
     questions?: FormQuestionOrderByRelationAggregateInput
   }
 
@@ -10639,8 +10638,9 @@ export namespace Prisma {
     description?: StringNullableFilter<"Form"> | string | null
     createdAt?: DateTimeFilter<"Form"> | Date | string
     updatedAt?: DateTimeFilter<"Form"> | Date | string
-    availableRounds?: StringNullableListFilter<"Form">
+    availableMatchingRounds?: StringNullableListFilter<"Form">
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    applications?: ApplicationListRelationFilter
     questions?: FormQuestionListRelationFilter
   }, "id">
 
@@ -10651,7 +10651,7 @@ export namespace Prisma {
     description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    availableRounds?: SortOrder
+    availableMatchingRounds?: SortOrder
     _count?: FormCountOrderByAggregateInput
     _max?: FormMaxOrderByAggregateInput
     _min?: FormMinOrderByAggregateInput
@@ -10667,7 +10667,7 @@ export namespace Prisma {
     description?: StringNullableWithAggregatesFilter<"Form"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Form"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Form"> | Date | string
-    availableRounds?: StringNullableListFilter<"Form">
+    availableMatchingRounds?: StringNullableListFilter<"Form">
   }
 
   export type FormQuestionWhereInput = {
@@ -10817,55 +10817,55 @@ export namespace Prisma {
     NOT?: ApplicationWhereInput | ApplicationWhereInput[]
     id?: StringFilter<"Application"> | string
     applicantId?: StringFilter<"Application"> | string
-    projectId?: StringFilter<"Application"> | string
+    formId?: StringFilter<"Application"> | string
     status?: EnumApplicationStatusEnumFilter<"Application"> | $Enums.ApplicationStatusEnum
-    roundId?: StringFilter<"Application"> | string
+    matchingRoundId?: StringFilter<"Application"> | string
     answers?: AnswerCompositeListFilter | AnswerObjectEqualityInput[]
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     applicant?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
-    round?: XOR<RoundScalarRelationFilter, RoundWhereInput>
+    form?: XOR<FormScalarRelationFilter, FormWhereInput>
+    matchingRound?: XOR<MatchingRoundScalarRelationFilter, MatchingRoundWhereInput>
   }
 
   export type ApplicationOrderByWithRelationInput = {
     id?: SortOrder
     applicantId?: SortOrder
-    projectId?: SortOrder
+    formId?: SortOrder
     status?: SortOrder
-    roundId?: SortOrder
+    matchingRoundId?: SortOrder
     answers?: AnswerOrderByCompositeAggregateInput
     createdAt?: SortOrder
     updatedAt?: SortOrder
     applicant?: ChallengerOrderByWithRelationInput
-    project?: ProjectOrderByWithRelationInput
-    round?: RoundOrderByWithRelationInput
+    form?: FormOrderByWithRelationInput
+    matchingRound?: MatchingRoundOrderByWithRelationInput
   }
 
   export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    applicantId_projectId_roundId?: ApplicationApplicantIdProjectIdRoundIdCompoundUniqueInput
+    applicantId_formId_matchingRoundId?: ApplicationApplicantIdFormIdMatchingRoundIdCompoundUniqueInput
     AND?: ApplicationWhereInput | ApplicationWhereInput[]
     OR?: ApplicationWhereInput[]
     NOT?: ApplicationWhereInput | ApplicationWhereInput[]
     applicantId?: StringFilter<"Application"> | string
-    projectId?: StringFilter<"Application"> | string
+    formId?: StringFilter<"Application"> | string
     status?: EnumApplicationStatusEnumFilter<"Application"> | $Enums.ApplicationStatusEnum
-    roundId?: StringFilter<"Application"> | string
+    matchingRoundId?: StringFilter<"Application"> | string
     answers?: AnswerCompositeListFilter | AnswerObjectEqualityInput[]
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     applicant?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
-    round?: XOR<RoundScalarRelationFilter, RoundWhereInput>
-  }, "id" | "applicantId_projectId_roundId">
+    form?: XOR<FormScalarRelationFilter, FormWhereInput>
+    matchingRound?: XOR<MatchingRoundScalarRelationFilter, MatchingRoundWhereInput>
+  }, "id" | "applicantId_formId_matchingRoundId">
 
   export type ApplicationOrderByWithAggregationInput = {
     id?: SortOrder
     applicantId?: SortOrder
-    projectId?: SortOrder
+    formId?: SortOrder
     status?: SortOrder
-    roundId?: SortOrder
+    matchingRoundId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ApplicationCountOrderByAggregateInput
@@ -10879,9 +10879,9 @@ export namespace Prisma {
     NOT?: ApplicationScalarWhereWithAggregatesInput | ApplicationScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Application"> | string
     applicantId?: StringWithAggregatesFilter<"Application"> | string
-    projectId?: StringWithAggregatesFilter<"Application"> | string
+    formId?: StringWithAggregatesFilter<"Application"> | string
     status?: EnumApplicationStatusEnumWithAggregatesFilter<"Application"> | $Enums.ApplicationStatusEnum
-    roundId?: StringWithAggregatesFilter<"Application"> | string
+    matchingRoundId?: StringWithAggregatesFilter<"Application"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Application"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Application"> | Date | string
   }
@@ -11042,45 +11042,45 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type RoundCreateInput = {
+  export type MatchingRoundCreateInput = {
     id?: string
     name: string
     startDatetime: Date | string
     endDatetime: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    Application?: ApplicationCreateNestedManyWithoutRoundInput
+    Application?: ApplicationCreateNestedManyWithoutMatchingRoundInput
   }
 
-  export type RoundUncheckedCreateInput = {
+  export type MatchingRoundUncheckedCreateInput = {
     id?: string
     name: string
     startDatetime: Date | string
     endDatetime: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    Application?: ApplicationUncheckedCreateNestedManyWithoutRoundInput
+    Application?: ApplicationUncheckedCreateNestedManyWithoutMatchingRoundInput
   }
 
-  export type RoundUpdateInput = {
+  export type MatchingRoundUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Application?: ApplicationUpdateManyWithoutRoundNestedInput
+    Application?: ApplicationUpdateManyWithoutMatchingRoundNestedInput
   }
 
-  export type RoundUncheckedUpdateInput = {
+  export type MatchingRoundUncheckedUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Application?: ApplicationUncheckedUpdateManyWithoutRoundNestedInput
+    Application?: ApplicationUncheckedUpdateManyWithoutMatchingRoundNestedInput
   }
 
-  export type RoundCreateManyInput = {
+  export type MatchingRoundCreateManyInput = {
     id?: string
     name: string
     startDatetime: Date | string
@@ -11089,7 +11089,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type RoundUpdateManyMutationInput = {
+  export type MatchingRoundUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
     startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11097,7 +11097,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type RoundUncheckedUpdateManyInput = {
+  export type MatchingRoundUncheckedUpdateManyInput = {
     name?: StringFieldUpdateOperationsInput | string
     startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11112,7 +11112,6 @@ export namespace Prisma {
     link: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    applications?: ApplicationCreateNestedManyWithoutProjectInput
     projectMember?: ProjectMemberCreateNestedManyWithoutProjectInput
     projectForms?: FormCreateNestedManyWithoutProjectInput
     plan: ChallengerCreateNestedOneWithoutProjectsInput
@@ -11126,7 +11125,6 @@ export namespace Prisma {
     planId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    applications?: ApplicationUncheckedCreateNestedManyWithoutProjectInput
     projectMember?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
     projectForms?: FormUncheckedCreateNestedManyWithoutProjectInput
   }
@@ -11137,7 +11135,6 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: ApplicationUpdateManyWithoutProjectNestedInput
     projectMember?: ProjectMemberUpdateManyWithoutProjectNestedInput
     projectForms?: FormUpdateManyWithoutProjectNestedInput
     plan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
@@ -11150,7 +11147,6 @@ export namespace Prisma {
     planId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: ApplicationUncheckedUpdateManyWithoutProjectNestedInput
     projectMember?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
     projectForms?: FormUncheckedUpdateManyWithoutProjectNestedInput
   }
@@ -11188,8 +11184,9 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    availableRounds?: FormCreateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormCreateavailableMatchingRoundsInput | string[]
     project: ProjectCreateNestedOneWithoutProjectFormsInput
+    applications?: ApplicationCreateNestedManyWithoutFormInput
     questions?: FormQuestionCreateNestedManyWithoutFormInput
   }
 
@@ -11200,7 +11197,8 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    availableRounds?: FormCreateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormCreateavailableMatchingRoundsInput | string[]
+    applications?: ApplicationUncheckedCreateNestedManyWithoutFormInput
     questions?: FormQuestionUncheckedCreateNestedManyWithoutFormInput
   }
 
@@ -11209,8 +11207,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    availableRounds?: FormUpdateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormUpdateavailableMatchingRoundsInput | string[]
     project?: ProjectUpdateOneRequiredWithoutProjectFormsNestedInput
+    applications?: ApplicationUpdateManyWithoutFormNestedInput
     questions?: FormQuestionUpdateManyWithoutFormNestedInput
   }
 
@@ -11220,7 +11219,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    availableRounds?: FormUpdateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormUpdateavailableMatchingRoundsInput | string[]
+    applications?: ApplicationUncheckedUpdateManyWithoutFormNestedInput
     questions?: FormQuestionUncheckedUpdateManyWithoutFormNestedInput
   }
 
@@ -11231,7 +11231,7 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    availableRounds?: FormCreateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormCreateavailableMatchingRoundsInput | string[]
   }
 
   export type FormUpdateManyMutationInput = {
@@ -11239,7 +11239,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    availableRounds?: FormUpdateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormUpdateavailableMatchingRoundsInput | string[]
   }
 
   export type FormUncheckedUpdateManyInput = {
@@ -11248,7 +11248,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    availableRounds?: FormUpdateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormUpdateavailableMatchingRoundsInput | string[]
   }
 
   export type FormQuestionCreateInput = {
@@ -11394,16 +11394,16 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applicant: ChallengerCreateNestedOneWithoutApplicationsInput
-    project: ProjectCreateNestedOneWithoutApplicationsInput
-    round: RoundCreateNestedOneWithoutApplicationInput
+    form: FormCreateNestedOneWithoutApplicationsInput
+    matchingRound: MatchingRoundCreateNestedOneWithoutApplicationInput
   }
 
   export type ApplicationUncheckedCreateInput = {
     id?: string
     applicantId: string
-    projectId: string
+    formId: string
     status?: $Enums.ApplicationStatusEnum
-    roundId: string
+    matchingRoundId: string
     answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11415,15 +11415,15 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
-    project?: ProjectUpdateOneRequiredWithoutApplicationsNestedInput
-    round?: RoundUpdateOneRequiredWithoutApplicationNestedInput
+    form?: FormUpdateOneRequiredWithoutApplicationsNestedInput
+    matchingRound?: MatchingRoundUpdateOneRequiredWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateInput = {
     applicantId?: StringFieldUpdateOperationsInput | string
-    projectId?: StringFieldUpdateOperationsInput | string
+    formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    roundId?: StringFieldUpdateOperationsInput | string
+    matchingRoundId?: StringFieldUpdateOperationsInput | string
     answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11432,9 +11432,9 @@ export namespace Prisma {
   export type ApplicationCreateManyInput = {
     id?: string
     applicantId: string
-    projectId: string
+    formId: string
     status?: $Enums.ApplicationStatusEnum
-    roundId: string
+    matchingRoundId: string
     answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11449,9 +11449,9 @@ export namespace Prisma {
 
   export type ApplicationUncheckedUpdateManyInput = {
     applicantId?: StringFieldUpdateOperationsInput | string
-    projectId?: StringFieldUpdateOperationsInput | string
+    formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    roundId?: StringFieldUpdateOperationsInput | string
+    matchingRoundId?: StringFieldUpdateOperationsInput | string
     answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11715,7 +11715,7 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type RoundCountOrderByAggregateInput = {
+  export type MatchingRoundCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     startDatetime?: SortOrder
@@ -11724,7 +11724,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type RoundMaxOrderByAggregateInput = {
+  export type MatchingRoundMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     startDatetime?: SortOrder
@@ -11733,7 +11733,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type RoundMinOrderByAggregateInput = {
+  export type MatchingRoundMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     startDatetime?: SortOrder
@@ -11817,7 +11817,7 @@ export namespace Prisma {
     description?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    availableRounds?: SortOrder
+    availableMatchingRounds?: SortOrder
   }
 
   export type FormMaxOrderByAggregateInput = {
@@ -11995,27 +11995,27 @@ export namespace Prisma {
     value?: string[]
   }
 
-  export type RoundScalarRelationFilter = {
-    is?: RoundWhereInput
-    isNot?: RoundWhereInput
+  export type MatchingRoundScalarRelationFilter = {
+    is?: MatchingRoundWhereInput
+    isNot?: MatchingRoundWhereInput
   }
 
   export type AnswerOrderByCompositeAggregateInput = {
     _count?: SortOrder
   }
 
-  export type ApplicationApplicantIdProjectIdRoundIdCompoundUniqueInput = {
+  export type ApplicationApplicantIdFormIdMatchingRoundIdCompoundUniqueInput = {
     applicantId: string
-    projectId: string
-    roundId: string
+    formId: string
+    matchingRoundId: string
   }
 
   export type ApplicationCountOrderByAggregateInput = {
     id?: SortOrder
     applicantId?: SortOrder
-    projectId?: SortOrder
+    formId?: SortOrder
     status?: SortOrder
-    roundId?: SortOrder
+    matchingRoundId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12023,9 +12023,9 @@ export namespace Prisma {
   export type ApplicationMaxOrderByAggregateInput = {
     id?: SortOrder
     applicantId?: SortOrder
-    projectId?: SortOrder
+    formId?: SortOrder
     status?: SortOrder
-    roundId?: SortOrder
+    matchingRoundId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12033,9 +12033,9 @@ export namespace Prisma {
   export type ApplicationMinOrderByAggregateInput = {
     id?: SortOrder
     applicantId?: SortOrder
-    projectId?: SortOrder
+    formId?: SortOrder
     status?: SortOrder
-    roundId?: SortOrder
+    matchingRoundId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12247,53 +12247,46 @@ export namespace Prisma {
     deleteMany?: ProjectMemberScalarWhereInput | ProjectMemberScalarWhereInput[]
   }
 
-  export type ApplicationCreateNestedManyWithoutRoundInput = {
-    create?: XOR<ApplicationCreateWithoutRoundInput, ApplicationUncheckedCreateWithoutRoundInput> | ApplicationCreateWithoutRoundInput[] | ApplicationUncheckedCreateWithoutRoundInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutRoundInput | ApplicationCreateOrConnectWithoutRoundInput[]
-    createMany?: ApplicationCreateManyRoundInputEnvelope
+  export type ApplicationCreateNestedManyWithoutMatchingRoundInput = {
+    create?: XOR<ApplicationCreateWithoutMatchingRoundInput, ApplicationUncheckedCreateWithoutMatchingRoundInput> | ApplicationCreateWithoutMatchingRoundInput[] | ApplicationUncheckedCreateWithoutMatchingRoundInput[]
+    connectOrCreate?: ApplicationCreateOrConnectWithoutMatchingRoundInput | ApplicationCreateOrConnectWithoutMatchingRoundInput[]
+    createMany?: ApplicationCreateManyMatchingRoundInputEnvelope
     connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
   }
 
-  export type ApplicationUncheckedCreateNestedManyWithoutRoundInput = {
-    create?: XOR<ApplicationCreateWithoutRoundInput, ApplicationUncheckedCreateWithoutRoundInput> | ApplicationCreateWithoutRoundInput[] | ApplicationUncheckedCreateWithoutRoundInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutRoundInput | ApplicationCreateOrConnectWithoutRoundInput[]
-    createMany?: ApplicationCreateManyRoundInputEnvelope
+  export type ApplicationUncheckedCreateNestedManyWithoutMatchingRoundInput = {
+    create?: XOR<ApplicationCreateWithoutMatchingRoundInput, ApplicationUncheckedCreateWithoutMatchingRoundInput> | ApplicationCreateWithoutMatchingRoundInput[] | ApplicationUncheckedCreateWithoutMatchingRoundInput[]
+    connectOrCreate?: ApplicationCreateOrConnectWithoutMatchingRoundInput | ApplicationCreateOrConnectWithoutMatchingRoundInput[]
+    createMany?: ApplicationCreateManyMatchingRoundInputEnvelope
     connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
   }
 
-  export type ApplicationUpdateManyWithoutRoundNestedInput = {
-    create?: XOR<ApplicationCreateWithoutRoundInput, ApplicationUncheckedCreateWithoutRoundInput> | ApplicationCreateWithoutRoundInput[] | ApplicationUncheckedCreateWithoutRoundInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutRoundInput | ApplicationCreateOrConnectWithoutRoundInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutRoundInput | ApplicationUpsertWithWhereUniqueWithoutRoundInput[]
-    createMany?: ApplicationCreateManyRoundInputEnvelope
+  export type ApplicationUpdateManyWithoutMatchingRoundNestedInput = {
+    create?: XOR<ApplicationCreateWithoutMatchingRoundInput, ApplicationUncheckedCreateWithoutMatchingRoundInput> | ApplicationCreateWithoutMatchingRoundInput[] | ApplicationUncheckedCreateWithoutMatchingRoundInput[]
+    connectOrCreate?: ApplicationCreateOrConnectWithoutMatchingRoundInput | ApplicationCreateOrConnectWithoutMatchingRoundInput[]
+    upsert?: ApplicationUpsertWithWhereUniqueWithoutMatchingRoundInput | ApplicationUpsertWithWhereUniqueWithoutMatchingRoundInput[]
+    createMany?: ApplicationCreateManyMatchingRoundInputEnvelope
     set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
     disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
     delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
     connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutRoundInput | ApplicationUpdateWithWhereUniqueWithoutRoundInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutRoundInput | ApplicationUpdateManyWithWhereWithoutRoundInput[]
+    update?: ApplicationUpdateWithWhereUniqueWithoutMatchingRoundInput | ApplicationUpdateWithWhereUniqueWithoutMatchingRoundInput[]
+    updateMany?: ApplicationUpdateManyWithWhereWithoutMatchingRoundInput | ApplicationUpdateManyWithWhereWithoutMatchingRoundInput[]
     deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
   }
 
-  export type ApplicationUncheckedUpdateManyWithoutRoundNestedInput = {
-    create?: XOR<ApplicationCreateWithoutRoundInput, ApplicationUncheckedCreateWithoutRoundInput> | ApplicationCreateWithoutRoundInput[] | ApplicationUncheckedCreateWithoutRoundInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutRoundInput | ApplicationCreateOrConnectWithoutRoundInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutRoundInput | ApplicationUpsertWithWhereUniqueWithoutRoundInput[]
-    createMany?: ApplicationCreateManyRoundInputEnvelope
+  export type ApplicationUncheckedUpdateManyWithoutMatchingRoundNestedInput = {
+    create?: XOR<ApplicationCreateWithoutMatchingRoundInput, ApplicationUncheckedCreateWithoutMatchingRoundInput> | ApplicationCreateWithoutMatchingRoundInput[] | ApplicationUncheckedCreateWithoutMatchingRoundInput[]
+    connectOrCreate?: ApplicationCreateOrConnectWithoutMatchingRoundInput | ApplicationCreateOrConnectWithoutMatchingRoundInput[]
+    upsert?: ApplicationUpsertWithWhereUniqueWithoutMatchingRoundInput | ApplicationUpsertWithWhereUniqueWithoutMatchingRoundInput[]
+    createMany?: ApplicationCreateManyMatchingRoundInputEnvelope
     set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
     disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
     delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
     connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutRoundInput | ApplicationUpdateWithWhereUniqueWithoutRoundInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutRoundInput | ApplicationUpdateManyWithWhereWithoutRoundInput[]
+    update?: ApplicationUpdateWithWhereUniqueWithoutMatchingRoundInput | ApplicationUpdateWithWhereUniqueWithoutMatchingRoundInput[]
+    updateMany?: ApplicationUpdateManyWithWhereWithoutMatchingRoundInput | ApplicationUpdateManyWithWhereWithoutMatchingRoundInput[]
     deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
-  }
-
-  export type ApplicationCreateNestedManyWithoutProjectInput = {
-    create?: XOR<ApplicationCreateWithoutProjectInput, ApplicationUncheckedCreateWithoutProjectInput> | ApplicationCreateWithoutProjectInput[] | ApplicationUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutProjectInput | ApplicationCreateOrConnectWithoutProjectInput[]
-    createMany?: ApplicationCreateManyProjectInputEnvelope
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
   }
 
   export type ProjectMemberCreateNestedManyWithoutProjectInput = {
@@ -12316,13 +12309,6 @@ export namespace Prisma {
     connect?: ChallengerWhereUniqueInput
   }
 
-  export type ApplicationUncheckedCreateNestedManyWithoutProjectInput = {
-    create?: XOR<ApplicationCreateWithoutProjectInput, ApplicationUncheckedCreateWithoutProjectInput> | ApplicationCreateWithoutProjectInput[] | ApplicationUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutProjectInput | ApplicationCreateOrConnectWithoutProjectInput[]
-    createMany?: ApplicationCreateManyProjectInputEnvelope
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-  }
-
   export type ProjectMemberUncheckedCreateNestedManyWithoutProjectInput = {
     create?: XOR<ProjectMemberCreateWithoutProjectInput, ProjectMemberUncheckedCreateWithoutProjectInput> | ProjectMemberCreateWithoutProjectInput[] | ProjectMemberUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: ProjectMemberCreateOrConnectWithoutProjectInput | ProjectMemberCreateOrConnectWithoutProjectInput[]
@@ -12335,20 +12321,6 @@ export namespace Prisma {
     connectOrCreate?: FormCreateOrConnectWithoutProjectInput | FormCreateOrConnectWithoutProjectInput[]
     createMany?: FormCreateManyProjectInputEnvelope
     connect?: FormWhereUniqueInput | FormWhereUniqueInput[]
-  }
-
-  export type ApplicationUpdateManyWithoutProjectNestedInput = {
-    create?: XOR<ApplicationCreateWithoutProjectInput, ApplicationUncheckedCreateWithoutProjectInput> | ApplicationCreateWithoutProjectInput[] | ApplicationUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutProjectInput | ApplicationCreateOrConnectWithoutProjectInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutProjectInput | ApplicationUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: ApplicationCreateManyProjectInputEnvelope
-    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutProjectInput | ApplicationUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutProjectInput | ApplicationUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
   }
 
   export type ProjectMemberUpdateManyWithoutProjectNestedInput = {
@@ -12387,20 +12359,6 @@ export namespace Prisma {
     update?: XOR<XOR<ChallengerUpdateToOneWithWhereWithoutProjectsInput, ChallengerUpdateWithoutProjectsInput>, ChallengerUncheckedUpdateWithoutProjectsInput>
   }
 
-  export type ApplicationUncheckedUpdateManyWithoutProjectNestedInput = {
-    create?: XOR<ApplicationCreateWithoutProjectInput, ApplicationUncheckedCreateWithoutProjectInput> | ApplicationCreateWithoutProjectInput[] | ApplicationUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: ApplicationCreateOrConnectWithoutProjectInput | ApplicationCreateOrConnectWithoutProjectInput[]
-    upsert?: ApplicationUpsertWithWhereUniqueWithoutProjectInput | ApplicationUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: ApplicationCreateManyProjectInputEnvelope
-    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
-    update?: ApplicationUpdateWithWhereUniqueWithoutProjectInput | ApplicationUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?: ApplicationUpdateManyWithWhereWithoutProjectInput | ApplicationUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
-  }
-
   export type ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput = {
     create?: XOR<ProjectMemberCreateWithoutProjectInput, ProjectMemberUncheckedCreateWithoutProjectInput> | ProjectMemberCreateWithoutProjectInput[] | ProjectMemberUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: ProjectMemberCreateOrConnectWithoutProjectInput | ProjectMemberCreateOrConnectWithoutProjectInput[]
@@ -12429,7 +12387,7 @@ export namespace Prisma {
     deleteMany?: FormScalarWhereInput | FormScalarWhereInput[]
   }
 
-  export type FormCreateavailableRoundsInput = {
+  export type FormCreateavailableMatchingRoundsInput = {
     set: string[]
   }
 
@@ -12439,11 +12397,25 @@ export namespace Prisma {
     connect?: ProjectWhereUniqueInput
   }
 
+  export type ApplicationCreateNestedManyWithoutFormInput = {
+    create?: XOR<ApplicationCreateWithoutFormInput, ApplicationUncheckedCreateWithoutFormInput> | ApplicationCreateWithoutFormInput[] | ApplicationUncheckedCreateWithoutFormInput[]
+    connectOrCreate?: ApplicationCreateOrConnectWithoutFormInput | ApplicationCreateOrConnectWithoutFormInput[]
+    createMany?: ApplicationCreateManyFormInputEnvelope
+    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
+  }
+
   export type FormQuestionCreateNestedManyWithoutFormInput = {
     create?: XOR<FormQuestionCreateWithoutFormInput, FormQuestionUncheckedCreateWithoutFormInput> | FormQuestionCreateWithoutFormInput[] | FormQuestionUncheckedCreateWithoutFormInput[]
     connectOrCreate?: FormQuestionCreateOrConnectWithoutFormInput | FormQuestionCreateOrConnectWithoutFormInput[]
     createMany?: FormQuestionCreateManyFormInputEnvelope
     connect?: FormQuestionWhereUniqueInput | FormQuestionWhereUniqueInput[]
+  }
+
+  export type ApplicationUncheckedCreateNestedManyWithoutFormInput = {
+    create?: XOR<ApplicationCreateWithoutFormInput, ApplicationUncheckedCreateWithoutFormInput> | ApplicationCreateWithoutFormInput[] | ApplicationUncheckedCreateWithoutFormInput[]
+    connectOrCreate?: ApplicationCreateOrConnectWithoutFormInput | ApplicationCreateOrConnectWithoutFormInput[]
+    createMany?: ApplicationCreateManyFormInputEnvelope
+    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
   }
 
   export type FormQuestionUncheckedCreateNestedManyWithoutFormInput = {
@@ -12453,7 +12425,7 @@ export namespace Prisma {
     connect?: FormQuestionWhereUniqueInput | FormQuestionWhereUniqueInput[]
   }
 
-  export type FormUpdateavailableRoundsInput = {
+  export type FormUpdateavailableMatchingRoundsInput = {
     set?: string[]
     push?: string | string[]
   }
@@ -12464,6 +12436,20 @@ export namespace Prisma {
     upsert?: ProjectUpsertWithoutProjectFormsInput
     connect?: ProjectWhereUniqueInput
     update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutProjectFormsInput, ProjectUpdateWithoutProjectFormsInput>, ProjectUncheckedUpdateWithoutProjectFormsInput>
+  }
+
+  export type ApplicationUpdateManyWithoutFormNestedInput = {
+    create?: XOR<ApplicationCreateWithoutFormInput, ApplicationUncheckedCreateWithoutFormInput> | ApplicationCreateWithoutFormInput[] | ApplicationUncheckedCreateWithoutFormInput[]
+    connectOrCreate?: ApplicationCreateOrConnectWithoutFormInput | ApplicationCreateOrConnectWithoutFormInput[]
+    upsert?: ApplicationUpsertWithWhereUniqueWithoutFormInput | ApplicationUpsertWithWhereUniqueWithoutFormInput[]
+    createMany?: ApplicationCreateManyFormInputEnvelope
+    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
+    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
+    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
+    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
+    update?: ApplicationUpdateWithWhereUniqueWithoutFormInput | ApplicationUpdateWithWhereUniqueWithoutFormInput[]
+    updateMany?: ApplicationUpdateManyWithWhereWithoutFormInput | ApplicationUpdateManyWithWhereWithoutFormInput[]
+    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
   }
 
   export type FormQuestionUpdateManyWithoutFormNestedInput = {
@@ -12478,6 +12464,20 @@ export namespace Prisma {
     update?: FormQuestionUpdateWithWhereUniqueWithoutFormInput | FormQuestionUpdateWithWhereUniqueWithoutFormInput[]
     updateMany?: FormQuestionUpdateManyWithWhereWithoutFormInput | FormQuestionUpdateManyWithWhereWithoutFormInput[]
     deleteMany?: FormQuestionScalarWhereInput | FormQuestionScalarWhereInput[]
+  }
+
+  export type ApplicationUncheckedUpdateManyWithoutFormNestedInput = {
+    create?: XOR<ApplicationCreateWithoutFormInput, ApplicationUncheckedCreateWithoutFormInput> | ApplicationCreateWithoutFormInput[] | ApplicationUncheckedCreateWithoutFormInput[]
+    connectOrCreate?: ApplicationCreateOrConnectWithoutFormInput | ApplicationCreateOrConnectWithoutFormInput[]
+    upsert?: ApplicationUpsertWithWhereUniqueWithoutFormInput | ApplicationUpsertWithWhereUniqueWithoutFormInput[]
+    createMany?: ApplicationCreateManyFormInputEnvelope
+    set?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
+    disconnect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
+    delete?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
+    connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
+    update?: ApplicationUpdateWithWhereUniqueWithoutFormInput | ApplicationUpdateWithWhereUniqueWithoutFormInput[]
+    updateMany?: ApplicationUpdateManyWithWhereWithoutFormInput | ApplicationUpdateManyWithWhereWithoutFormInput[]
+    deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
   }
 
   export type FormQuestionUncheckedUpdateManyWithoutFormNestedInput = {
@@ -12576,16 +12576,16 @@ export namespace Prisma {
     connect?: ChallengerWhereUniqueInput
   }
 
-  export type ProjectCreateNestedOneWithoutApplicationsInput = {
-    create?: XOR<ProjectCreateWithoutApplicationsInput, ProjectUncheckedCreateWithoutApplicationsInput>
-    connectOrCreate?: ProjectCreateOrConnectWithoutApplicationsInput
-    connect?: ProjectWhereUniqueInput
+  export type FormCreateNestedOneWithoutApplicationsInput = {
+    create?: XOR<FormCreateWithoutApplicationsInput, FormUncheckedCreateWithoutApplicationsInput>
+    connectOrCreate?: FormCreateOrConnectWithoutApplicationsInput
+    connect?: FormWhereUniqueInput
   }
 
-  export type RoundCreateNestedOneWithoutApplicationInput = {
-    create?: XOR<RoundCreateWithoutApplicationInput, RoundUncheckedCreateWithoutApplicationInput>
-    connectOrCreate?: RoundCreateOrConnectWithoutApplicationInput
-    connect?: RoundWhereUniqueInput
+  export type MatchingRoundCreateNestedOneWithoutApplicationInput = {
+    create?: XOR<MatchingRoundCreateWithoutApplicationInput, MatchingRoundUncheckedCreateWithoutApplicationInput>
+    connectOrCreate?: MatchingRoundCreateOrConnectWithoutApplicationInput
+    connect?: MatchingRoundWhereUniqueInput
   }
 
   export type EnumApplicationStatusEnumFieldUpdateOperationsInput = {
@@ -12607,20 +12607,20 @@ export namespace Prisma {
     update?: XOR<XOR<ChallengerUpdateToOneWithWhereWithoutApplicationsInput, ChallengerUpdateWithoutApplicationsInput>, ChallengerUncheckedUpdateWithoutApplicationsInput>
   }
 
-  export type ProjectUpdateOneRequiredWithoutApplicationsNestedInput = {
-    create?: XOR<ProjectCreateWithoutApplicationsInput, ProjectUncheckedCreateWithoutApplicationsInput>
-    connectOrCreate?: ProjectCreateOrConnectWithoutApplicationsInput
-    upsert?: ProjectUpsertWithoutApplicationsInput
-    connect?: ProjectWhereUniqueInput
-    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutApplicationsInput, ProjectUpdateWithoutApplicationsInput>, ProjectUncheckedUpdateWithoutApplicationsInput>
+  export type FormUpdateOneRequiredWithoutApplicationsNestedInput = {
+    create?: XOR<FormCreateWithoutApplicationsInput, FormUncheckedCreateWithoutApplicationsInput>
+    connectOrCreate?: FormCreateOrConnectWithoutApplicationsInput
+    upsert?: FormUpsertWithoutApplicationsInput
+    connect?: FormWhereUniqueInput
+    update?: XOR<XOR<FormUpdateToOneWithWhereWithoutApplicationsInput, FormUpdateWithoutApplicationsInput>, FormUncheckedUpdateWithoutApplicationsInput>
   }
 
-  export type RoundUpdateOneRequiredWithoutApplicationNestedInput = {
-    create?: XOR<RoundCreateWithoutApplicationInput, RoundUncheckedCreateWithoutApplicationInput>
-    connectOrCreate?: RoundCreateOrConnectWithoutApplicationInput
-    upsert?: RoundUpsertWithoutApplicationInput
-    connect?: RoundWhereUniqueInput
-    update?: XOR<XOR<RoundUpdateToOneWithWhereWithoutApplicationInput, RoundUpdateWithoutApplicationInput>, RoundUncheckedUpdateWithoutApplicationInput>
+  export type MatchingRoundUpdateOneRequiredWithoutApplicationNestedInput = {
+    create?: XOR<MatchingRoundCreateWithoutApplicationInput, MatchingRoundUncheckedCreateWithoutApplicationInput>
+    connectOrCreate?: MatchingRoundCreateOrConnectWithoutApplicationInput
+    upsert?: MatchingRoundUpsertWithoutApplicationInput
+    connect?: MatchingRoundWhereUniqueInput
+    update?: XOR<XOR<MatchingRoundUpdateToOneWithWhereWithoutApplicationInput, MatchingRoundUpdateWithoutApplicationInput>, MatchingRoundUncheckedUpdateWithoutApplicationInput>
   }
 
   export type ChallengerCreateNestedManyWithoutChallengerSchoolInput = {
@@ -12899,15 +12899,15 @@ export namespace Prisma {
     answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
-    project: ProjectCreateNestedOneWithoutApplicationsInput
-    round: RoundCreateNestedOneWithoutApplicationInput
+    form: FormCreateNestedOneWithoutApplicationsInput
+    matchingRound: MatchingRoundCreateNestedOneWithoutApplicationInput
   }
 
   export type ApplicationUncheckedCreateWithoutApplicantInput = {
     id?: string
-    projectId: string
+    formId: string
     status?: $Enums.ApplicationStatusEnum
-    roundId: string
+    matchingRoundId: string
     answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12929,7 +12929,6 @@ export namespace Prisma {
     link: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    applications?: ApplicationCreateNestedManyWithoutProjectInput
     projectMember?: ProjectMemberCreateNestedManyWithoutProjectInput
     projectForms?: FormCreateNestedManyWithoutProjectInput
   }
@@ -12941,7 +12940,6 @@ export namespace Prisma {
     link: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    applications?: ApplicationUncheckedCreateNestedManyWithoutProjectInput
     projectMember?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
     projectForms?: FormUncheckedCreateNestedManyWithoutProjectInput
   }
@@ -13019,9 +13017,9 @@ export namespace Prisma {
     NOT?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
     id?: StringFilter<"Application"> | string
     applicantId?: StringFilter<"Application"> | string
-    projectId?: StringFilter<"Application"> | string
+    formId?: StringFilter<"Application"> | string
     status?: EnumApplicationStatusEnumFilter<"Application"> | $Enums.ApplicationStatusEnum
-    roundId?: StringFilter<"Application"> | string
+    matchingRoundId?: StringFilter<"Application"> | string
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
   }
@@ -13105,78 +13103,49 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ApplicationCreateWithoutRoundInput = {
+  export type ApplicationCreateWithoutMatchingRoundInput = {
     id?: string
     status?: $Enums.ApplicationStatusEnum
     answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     applicant: ChallengerCreateNestedOneWithoutApplicationsInput
-    project: ProjectCreateNestedOneWithoutApplicationsInput
+    form: FormCreateNestedOneWithoutApplicationsInput
   }
 
-  export type ApplicationUncheckedCreateWithoutRoundInput = {
+  export type ApplicationUncheckedCreateWithoutMatchingRoundInput = {
     id?: string
     applicantId: string
-    projectId: string
+    formId: string
     status?: $Enums.ApplicationStatusEnum
     answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type ApplicationCreateOrConnectWithoutRoundInput = {
+  export type ApplicationCreateOrConnectWithoutMatchingRoundInput = {
     where: ApplicationWhereUniqueInput
-    create: XOR<ApplicationCreateWithoutRoundInput, ApplicationUncheckedCreateWithoutRoundInput>
+    create: XOR<ApplicationCreateWithoutMatchingRoundInput, ApplicationUncheckedCreateWithoutMatchingRoundInput>
   }
 
-  export type ApplicationCreateManyRoundInputEnvelope = {
-    data: ApplicationCreateManyRoundInput | ApplicationCreateManyRoundInput[]
+  export type ApplicationCreateManyMatchingRoundInputEnvelope = {
+    data: ApplicationCreateManyMatchingRoundInput | ApplicationCreateManyMatchingRoundInput[]
   }
 
-  export type ApplicationUpsertWithWhereUniqueWithoutRoundInput = {
+  export type ApplicationUpsertWithWhereUniqueWithoutMatchingRoundInput = {
     where: ApplicationWhereUniqueInput
-    update: XOR<ApplicationUpdateWithoutRoundInput, ApplicationUncheckedUpdateWithoutRoundInput>
-    create: XOR<ApplicationCreateWithoutRoundInput, ApplicationUncheckedCreateWithoutRoundInput>
+    update: XOR<ApplicationUpdateWithoutMatchingRoundInput, ApplicationUncheckedUpdateWithoutMatchingRoundInput>
+    create: XOR<ApplicationCreateWithoutMatchingRoundInput, ApplicationUncheckedCreateWithoutMatchingRoundInput>
   }
 
-  export type ApplicationUpdateWithWhereUniqueWithoutRoundInput = {
+  export type ApplicationUpdateWithWhereUniqueWithoutMatchingRoundInput = {
     where: ApplicationWhereUniqueInput
-    data: XOR<ApplicationUpdateWithoutRoundInput, ApplicationUncheckedUpdateWithoutRoundInput>
+    data: XOR<ApplicationUpdateWithoutMatchingRoundInput, ApplicationUncheckedUpdateWithoutMatchingRoundInput>
   }
 
-  export type ApplicationUpdateManyWithWhereWithoutRoundInput = {
+  export type ApplicationUpdateManyWithWhereWithoutMatchingRoundInput = {
     where: ApplicationScalarWhereInput
-    data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyWithoutRoundInput>
-  }
-
-  export type ApplicationCreateWithoutProjectInput = {
-    id?: string
-    status?: $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    applicant: ChallengerCreateNestedOneWithoutApplicationsInput
-    round: RoundCreateNestedOneWithoutApplicationInput
-  }
-
-  export type ApplicationUncheckedCreateWithoutProjectInput = {
-    id?: string
-    applicantId: string
-    status?: $Enums.ApplicationStatusEnum
-    roundId: string
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ApplicationCreateOrConnectWithoutProjectInput = {
-    where: ApplicationWhereUniqueInput
-    create: XOR<ApplicationCreateWithoutProjectInput, ApplicationUncheckedCreateWithoutProjectInput>
-  }
-
-  export type ApplicationCreateManyProjectInputEnvelope = {
-    data: ApplicationCreateManyProjectInput | ApplicationCreateManyProjectInput[]
+    data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyWithoutMatchingRoundInput>
   }
 
   export type ProjectMemberCreateWithoutProjectInput = {
@@ -13208,7 +13177,8 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    availableRounds?: FormCreateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormCreateavailableMatchingRoundsInput | string[]
+    applications?: ApplicationCreateNestedManyWithoutFormInput
     questions?: FormQuestionCreateNestedManyWithoutFormInput
   }
 
@@ -13218,7 +13188,8 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    availableRounds?: FormCreateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormCreateavailableMatchingRoundsInput | string[]
+    applications?: ApplicationUncheckedCreateNestedManyWithoutFormInput
     questions?: FormQuestionUncheckedCreateNestedManyWithoutFormInput
   }
 
@@ -13268,22 +13239,6 @@ export namespace Prisma {
     create: XOR<ChallengerCreateWithoutProjectsInput, ChallengerUncheckedCreateWithoutProjectsInput>
   }
 
-  export type ApplicationUpsertWithWhereUniqueWithoutProjectInput = {
-    where: ApplicationWhereUniqueInput
-    update: XOR<ApplicationUpdateWithoutProjectInput, ApplicationUncheckedUpdateWithoutProjectInput>
-    create: XOR<ApplicationCreateWithoutProjectInput, ApplicationUncheckedCreateWithoutProjectInput>
-  }
-
-  export type ApplicationUpdateWithWhereUniqueWithoutProjectInput = {
-    where: ApplicationWhereUniqueInput
-    data: XOR<ApplicationUpdateWithoutProjectInput, ApplicationUncheckedUpdateWithoutProjectInput>
-  }
-
-  export type ApplicationUpdateManyWithWhereWithoutProjectInput = {
-    where: ApplicationScalarWhereInput
-    data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyWithoutProjectInput>
-  }
-
   export type ProjectMemberUpsertWithWhereUniqueWithoutProjectInput = {
     where: ProjectMemberWhereUniqueInput
     update: XOR<ProjectMemberUpdateWithoutProjectInput, ProjectMemberUncheckedUpdateWithoutProjectInput>
@@ -13326,7 +13281,7 @@ export namespace Prisma {
     description?: StringNullableFilter<"Form"> | string | null
     createdAt?: DateTimeFilter<"Form"> | Date | string
     updatedAt?: DateTimeFilter<"Form"> | Date | string
-    availableRounds?: StringNullableListFilter<"Form">
+    availableMatchingRounds?: StringNullableListFilter<"Form">
   }
 
   export type ChallengerUpsertWithoutProjectsInput = {
@@ -13377,7 +13332,6 @@ export namespace Prisma {
     link: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    applications?: ApplicationCreateNestedManyWithoutProjectInput
     projectMember?: ProjectMemberCreateNestedManyWithoutProjectInput
     plan: ChallengerCreateNestedOneWithoutProjectsInput
   }
@@ -13390,13 +13344,41 @@ export namespace Prisma {
     planId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    applications?: ApplicationUncheckedCreateNestedManyWithoutProjectInput
     projectMember?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutProjectFormsInput = {
     where: ProjectWhereUniqueInput
     create: XOR<ProjectCreateWithoutProjectFormsInput, ProjectUncheckedCreateWithoutProjectFormsInput>
+  }
+
+  export type ApplicationCreateWithoutFormInput = {
+    id?: string
+    status?: $Enums.ApplicationStatusEnum
+    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    applicant: ChallengerCreateNestedOneWithoutApplicationsInput
+    matchingRound: MatchingRoundCreateNestedOneWithoutApplicationInput
+  }
+
+  export type ApplicationUncheckedCreateWithoutFormInput = {
+    id?: string
+    applicantId: string
+    status?: $Enums.ApplicationStatusEnum
+    matchingRoundId: string
+    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ApplicationCreateOrConnectWithoutFormInput = {
+    where: ApplicationWhereUniqueInput
+    create: XOR<ApplicationCreateWithoutFormInput, ApplicationUncheckedCreateWithoutFormInput>
+  }
+
+  export type ApplicationCreateManyFormInputEnvelope = {
+    data: ApplicationCreateManyFormInput | ApplicationCreateManyFormInput[]
   }
 
   export type FormQuestionCreateWithoutFormInput = {
@@ -13449,7 +13431,6 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: ApplicationUpdateManyWithoutProjectNestedInput
     projectMember?: ProjectMemberUpdateManyWithoutProjectNestedInput
     plan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
   }
@@ -13461,8 +13442,23 @@ export namespace Prisma {
     planId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: ApplicationUncheckedUpdateManyWithoutProjectNestedInput
     projectMember?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ApplicationUpsertWithWhereUniqueWithoutFormInput = {
+    where: ApplicationWhereUniqueInput
+    update: XOR<ApplicationUpdateWithoutFormInput, ApplicationUncheckedUpdateWithoutFormInput>
+    create: XOR<ApplicationCreateWithoutFormInput, ApplicationUncheckedCreateWithoutFormInput>
+  }
+
+  export type ApplicationUpdateWithWhereUniqueWithoutFormInput = {
+    where: ApplicationWhereUniqueInput
+    data: XOR<ApplicationUpdateWithoutFormInput, ApplicationUncheckedUpdateWithoutFormInput>
+  }
+
+  export type ApplicationUpdateManyWithWhereWithoutFormInput = {
+    where: ApplicationScalarWhereInput
+    data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyWithoutFormInput>
   }
 
   export type FormQuestionUpsertWithWhereUniqueWithoutFormInput = {
@@ -13503,8 +13499,9 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    availableRounds?: FormCreateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormCreateavailableMatchingRoundsInput | string[]
     project: ProjectCreateNestedOneWithoutProjectFormsInput
+    applications?: ApplicationCreateNestedManyWithoutFormInput
   }
 
   export type FormUncheckedCreateWithoutQuestionsInput = {
@@ -13514,7 +13511,8 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    availableRounds?: FormCreateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormCreateavailableMatchingRoundsInput | string[]
+    applications?: ApplicationUncheckedCreateNestedManyWithoutFormInput
   }
 
   export type FormCreateOrConnectWithoutQuestionsInput = {
@@ -13538,8 +13536,9 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    availableRounds?: FormUpdateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormUpdateavailableMatchingRoundsInput | string[]
     project?: ProjectUpdateOneRequiredWithoutProjectFormsNestedInput
+    applications?: ApplicationUpdateManyWithoutFormNestedInput
   }
 
   export type FormUncheckedUpdateWithoutQuestionsInput = {
@@ -13548,7 +13547,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    availableRounds?: FormUpdateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormUpdateavailableMatchingRoundsInput | string[]
+    applications?: ApplicationUncheckedUpdateManyWithoutFormNestedInput
   }
 
   export type ProjectCreateWithoutProjectMemberInput = {
@@ -13558,7 +13558,6 @@ export namespace Prisma {
     link: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    applications?: ApplicationCreateNestedManyWithoutProjectInput
     projectForms?: FormCreateNestedManyWithoutProjectInput
     plan: ChallengerCreateNestedOneWithoutProjectsInput
   }
@@ -13571,7 +13570,6 @@ export namespace Prisma {
     planId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    applications?: ApplicationUncheckedCreateNestedManyWithoutProjectInput
     projectForms?: FormUncheckedCreateNestedManyWithoutProjectInput
   }
 
@@ -13634,7 +13632,6 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: ApplicationUpdateManyWithoutProjectNestedInput
     projectForms?: FormUpdateManyWithoutProjectNestedInput
     plan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
   }
@@ -13646,7 +13643,6 @@ export namespace Prisma {
     planId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: ApplicationUncheckedUpdateManyWithoutProjectNestedInput
     projectForms?: FormUncheckedUpdateManyWithoutProjectNestedInput
   }
 
@@ -13732,36 +13728,34 @@ export namespace Prisma {
     create: XOR<ChallengerCreateWithoutApplicationsInput, ChallengerUncheckedCreateWithoutApplicationsInput>
   }
 
-  export type ProjectCreateWithoutApplicationsInput = {
+  export type FormCreateWithoutApplicationsInput = {
     id?: string
     title: string
-    description: string
-    link: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    projectMember?: ProjectMemberCreateNestedManyWithoutProjectInput
-    projectForms?: FormCreateNestedManyWithoutProjectInput
-    plan: ChallengerCreateNestedOneWithoutProjectsInput
+    availableMatchingRounds?: FormCreateavailableMatchingRoundsInput | string[]
+    project: ProjectCreateNestedOneWithoutProjectFormsInput
+    questions?: FormQuestionCreateNestedManyWithoutFormInput
   }
 
-  export type ProjectUncheckedCreateWithoutApplicationsInput = {
+  export type FormUncheckedCreateWithoutApplicationsInput = {
     id?: string
+    projectId: string
     title: string
-    description: string
-    link: string
-    planId: string
+    description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    projectMember?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
-    projectForms?: FormUncheckedCreateNestedManyWithoutProjectInput
+    availableMatchingRounds?: FormCreateavailableMatchingRoundsInput | string[]
+    questions?: FormQuestionUncheckedCreateNestedManyWithoutFormInput
   }
 
-  export type ProjectCreateOrConnectWithoutApplicationsInput = {
-    where: ProjectWhereUniqueInput
-    create: XOR<ProjectCreateWithoutApplicationsInput, ProjectUncheckedCreateWithoutApplicationsInput>
+  export type FormCreateOrConnectWithoutApplicationsInput = {
+    where: FormWhereUniqueInput
+    create: XOR<FormCreateWithoutApplicationsInput, FormUncheckedCreateWithoutApplicationsInput>
   }
 
-  export type RoundCreateWithoutApplicationInput = {
+  export type MatchingRoundCreateWithoutApplicationInput = {
     id?: string
     name: string
     startDatetime: Date | string
@@ -13770,7 +13764,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type RoundUncheckedCreateWithoutApplicationInput = {
+  export type MatchingRoundUncheckedCreateWithoutApplicationInput = {
     id?: string
     name: string
     startDatetime: Date | string
@@ -13779,9 +13773,9 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type RoundCreateOrConnectWithoutApplicationInput = {
-    where: RoundWhereUniqueInput
-    create: XOR<RoundCreateWithoutApplicationInput, RoundUncheckedCreateWithoutApplicationInput>
+  export type MatchingRoundCreateOrConnectWithoutApplicationInput = {
+    where: MatchingRoundWhereUniqueInput
+    create: XOR<MatchingRoundCreateWithoutApplicationInput, MatchingRoundUncheckedCreateWithoutApplicationInput>
   }
 
   export type AnswerUpdateManyInput = {
@@ -13834,51 +13828,49 @@ export namespace Prisma {
     ProjectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
-  export type ProjectUpsertWithoutApplicationsInput = {
-    update: XOR<ProjectUpdateWithoutApplicationsInput, ProjectUncheckedUpdateWithoutApplicationsInput>
-    create: XOR<ProjectCreateWithoutApplicationsInput, ProjectUncheckedCreateWithoutApplicationsInput>
-    where?: ProjectWhereInput
+  export type FormUpsertWithoutApplicationsInput = {
+    update: XOR<FormUpdateWithoutApplicationsInput, FormUncheckedUpdateWithoutApplicationsInput>
+    create: XOR<FormCreateWithoutApplicationsInput, FormUncheckedCreateWithoutApplicationsInput>
+    where?: FormWhereInput
   }
 
-  export type ProjectUpdateToOneWithWhereWithoutApplicationsInput = {
-    where?: ProjectWhereInput
-    data: XOR<ProjectUpdateWithoutApplicationsInput, ProjectUncheckedUpdateWithoutApplicationsInput>
+  export type FormUpdateToOneWithWhereWithoutApplicationsInput = {
+    where?: FormWhereInput
+    data: XOR<FormUpdateWithoutApplicationsInput, FormUncheckedUpdateWithoutApplicationsInput>
   }
 
-  export type ProjectUpdateWithoutApplicationsInput = {
+  export type FormUpdateWithoutApplicationsInput = {
     title?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    link?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projectMember?: ProjectMemberUpdateManyWithoutProjectNestedInput
-    projectForms?: FormUpdateManyWithoutProjectNestedInput
-    plan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
+    availableMatchingRounds?: FormUpdateavailableMatchingRoundsInput | string[]
+    project?: ProjectUpdateOneRequiredWithoutProjectFormsNestedInput
+    questions?: FormQuestionUpdateManyWithoutFormNestedInput
   }
 
-  export type ProjectUncheckedUpdateWithoutApplicationsInput = {
+  export type FormUncheckedUpdateWithoutApplicationsInput = {
+    projectId?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    link?: StringFieldUpdateOperationsInput | string
-    planId?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projectMember?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
-    projectForms?: FormUncheckedUpdateManyWithoutProjectNestedInput
+    availableMatchingRounds?: FormUpdateavailableMatchingRoundsInput | string[]
+    questions?: FormQuestionUncheckedUpdateManyWithoutFormNestedInput
   }
 
-  export type RoundUpsertWithoutApplicationInput = {
-    update: XOR<RoundUpdateWithoutApplicationInput, RoundUncheckedUpdateWithoutApplicationInput>
-    create: XOR<RoundCreateWithoutApplicationInput, RoundUncheckedCreateWithoutApplicationInput>
-    where?: RoundWhereInput
+  export type MatchingRoundUpsertWithoutApplicationInput = {
+    update: XOR<MatchingRoundUpdateWithoutApplicationInput, MatchingRoundUncheckedUpdateWithoutApplicationInput>
+    create: XOR<MatchingRoundCreateWithoutApplicationInput, MatchingRoundUncheckedCreateWithoutApplicationInput>
+    where?: MatchingRoundWhereInput
   }
 
-  export type RoundUpdateToOneWithWhereWithoutApplicationInput = {
-    where?: RoundWhereInput
-    data: XOR<RoundUpdateWithoutApplicationInput, RoundUncheckedUpdateWithoutApplicationInput>
+  export type MatchingRoundUpdateToOneWithWhereWithoutApplicationInput = {
+    where?: MatchingRoundWhereInput
+    data: XOR<MatchingRoundUpdateWithoutApplicationInput, MatchingRoundUncheckedUpdateWithoutApplicationInput>
   }
 
-  export type RoundUpdateWithoutApplicationInput = {
+  export type MatchingRoundUpdateWithoutApplicationInput = {
     name?: StringFieldUpdateOperationsInput | string
     startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13886,7 +13878,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type RoundUncheckedUpdateWithoutApplicationInput = {
+  export type MatchingRoundUncheckedUpdateWithoutApplicationInput = {
     name?: StringFieldUpdateOperationsInput | string
     startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13970,9 +13962,9 @@ export namespace Prisma {
 
   export type ApplicationCreateManyApplicantInput = {
     id?: string
-    projectId: string
+    formId: string
     status?: $Enums.ApplicationStatusEnum
-    roundId: string
+    matchingRoundId: string
     answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -13999,23 +13991,23 @@ export namespace Prisma {
     answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneRequiredWithoutApplicationsNestedInput
-    round?: RoundUpdateOneRequiredWithoutApplicationNestedInput
+    form?: FormUpdateOneRequiredWithoutApplicationsNestedInput
+    matchingRound?: MatchingRoundUpdateOneRequiredWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateWithoutApplicantInput = {
-    projectId?: StringFieldUpdateOperationsInput | string
+    formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    roundId?: StringFieldUpdateOperationsInput | string
+    matchingRoundId?: StringFieldUpdateOperationsInput | string
     answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ApplicationUncheckedUpdateManyWithoutApplicantInput = {
-    projectId?: StringFieldUpdateOperationsInput | string
+    formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    roundId?: StringFieldUpdateOperationsInput | string
+    matchingRoundId?: StringFieldUpdateOperationsInput | string
     answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14027,7 +14019,6 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: ApplicationUpdateManyWithoutProjectNestedInput
     projectMember?: ProjectMemberUpdateManyWithoutProjectNestedInput
     projectForms?: FormUpdateManyWithoutProjectNestedInput
   }
@@ -14038,7 +14029,6 @@ export namespace Prisma {
     link?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applications?: ApplicationUncheckedUpdateManyWithoutProjectNestedInput
     projectMember?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
     projectForms?: FormUncheckedUpdateManyWithoutProjectNestedInput
   }
@@ -14069,51 +14059,41 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ApplicationCreateManyRoundInput = {
+  export type ApplicationCreateManyMatchingRoundInput = {
     id?: string
     applicantId: string
-    projectId: string
+    formId: string
     status?: $Enums.ApplicationStatusEnum
     answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type ApplicationUpdateWithoutRoundInput = {
+  export type ApplicationUpdateWithoutMatchingRoundInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
-    project?: ProjectUpdateOneRequiredWithoutApplicationsNestedInput
+    form?: FormUpdateOneRequiredWithoutApplicationsNestedInput
   }
 
-  export type ApplicationUncheckedUpdateWithoutRoundInput = {
+  export type ApplicationUncheckedUpdateWithoutMatchingRoundInput = {
     applicantId?: StringFieldUpdateOperationsInput | string
-    projectId?: StringFieldUpdateOperationsInput | string
+    formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ApplicationUncheckedUpdateManyWithoutRoundInput = {
+  export type ApplicationUncheckedUpdateManyWithoutMatchingRoundInput = {
     applicantId?: StringFieldUpdateOperationsInput | string
-    projectId?: StringFieldUpdateOperationsInput | string
+    formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApplicationCreateManyProjectInput = {
-    id?: string
-    applicantId: string
-    status?: $Enums.ApplicationStatusEnum
-    roundId: string
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
-    createdAt?: Date | string
-    updatedAt?: Date | string
   }
 
   export type ProjectMemberCreateManyProjectInput = {
@@ -14129,34 +14109,7 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    availableRounds?: FormCreateavailableRoundsInput | string[]
-  }
-
-  export type ApplicationUpdateWithoutProjectInput = {
-    status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
-    round?: RoundUpdateOneRequiredWithoutApplicationNestedInput
-  }
-
-  export type ApplicationUncheckedUpdateWithoutProjectInput = {
-    applicantId?: StringFieldUpdateOperationsInput | string
-    status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    roundId?: StringFieldUpdateOperationsInput | string
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ApplicationUncheckedUpdateManyWithoutProjectInput = {
-    applicantId?: StringFieldUpdateOperationsInput | string
-    status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    roundId?: StringFieldUpdateOperationsInput | string
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    availableMatchingRounds?: FormCreateavailableMatchingRoundsInput | string[]
   }
 
   export type ProjectMemberUpdateWithoutProjectInput = {
@@ -14182,7 +14135,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    availableRounds?: FormUpdateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormUpdateavailableMatchingRoundsInput | string[]
+    applications?: ApplicationUpdateManyWithoutFormNestedInput
     questions?: FormQuestionUpdateManyWithoutFormNestedInput
   }
 
@@ -14191,7 +14145,8 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    availableRounds?: FormUpdateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormUpdateavailableMatchingRoundsInput | string[]
+    applications?: ApplicationUncheckedUpdateManyWithoutFormNestedInput
     questions?: FormQuestionUncheckedUpdateManyWithoutFormNestedInput
   }
 
@@ -14200,7 +14155,17 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    availableRounds?: FormUpdateavailableRoundsInput | string[]
+    availableMatchingRounds?: FormUpdateavailableMatchingRoundsInput | string[]
+  }
+
+  export type ApplicationCreateManyFormInput = {
+    id?: string
+    applicantId: string
+    status?: $Enums.ApplicationStatusEnum
+    matchingRoundId: string
+    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type FormQuestionCreateManyFormInput = {
@@ -14213,6 +14178,33 @@ export namespace Prisma {
     isRequired?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type ApplicationUpdateWithoutFormInput = {
+    status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
+    matchingRound?: MatchingRoundUpdateOneRequiredWithoutApplicationNestedInput
+  }
+
+  export type ApplicationUncheckedUpdateWithoutFormInput = {
+    applicantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    matchingRoundId?: StringFieldUpdateOperationsInput | string
+    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ApplicationUncheckedUpdateManyWithoutFormInput = {
+    applicantId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    matchingRoundId?: StringFieldUpdateOperationsInput | string
+    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type FormQuestionUpdateWithoutFormInput = {
