@@ -22,7 +22,6 @@ interface AuthStoreState {
   user: User | null;
   actions: {
     setUser: (newUser: User) => void;
-    clearTokens: () => void;
     clearUser: () => void;
   };
 }
@@ -38,13 +37,6 @@ const AuthStore = create<AuthStoreState>()(
               state.user = { ...state.user, ...newUser };
               // 상태가 null인 경우에도 새로운 유저 정보를 설정할 수 있도록 함
             }),
-          clearTokens: () => {
-            set((state) => {
-              if (state.user) {
-                state.user.accessToken = null;
-              }
-            });
-          },
           clearUser: () => {
             set((state) => {
               state.user = null;

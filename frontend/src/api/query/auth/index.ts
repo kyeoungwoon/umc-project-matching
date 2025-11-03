@@ -1,27 +1,26 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-
-import * as auth from '@api/axios/auth';
+import { getSchools, register, login, deactivate, changePassword, createSchool } from '@api/axios/auth';
 
 export const useGetSchoolsQuery = () => {
-  return useQuery({ queryKey: ['schools'], queryFn: auth.getSchools });
+  return useQuery({ queryKey: ['schools'], queryFn: getSchools });
 };
 
 export const useRegisterMutation = () => {
-  return useMutation({ mutationFn: auth.register });
+  return useMutation({ mutationFn: register });
 };
 
 export const useLoginMutation = () => {
-  return useMutation({ mutationFn: auth.login });
+  return useMutation({ mutationFn: login });
 };
 
 export const useDeactivateMutation = () => {
-  return useMutation({ mutationFn: auth.deactivate });
+  return useMutation({ mutationFn: deactivate });
 };
 
 export const useChangePasswordMutation = () => {
-  return useMutation({ mutationFn: auth.changePassword });
+  return useMutation({ mutationFn: changePassword });
 };
 
 export const useCreateSchoolMutation = () => {
-  return useMutation({ mutationFn: auth.createSchool });
+  return useMutation({ mutationFn: createSchool });
 };

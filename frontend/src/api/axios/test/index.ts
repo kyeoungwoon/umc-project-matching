@@ -1,33 +1,41 @@
-import { api } from '@api/axios';
+import { ApiResponse, api } from '@api/axios';
 
 export const tokenCheck = async () => {
-  return api.get('/auth/test/protected');
+  const res = await api.get<ApiResponse<null>>('/auth/test/protected');
+  return res.data.result;
 };
 
 export const getTestToken = async (userId: string) => {
-  return api.get('/auth/test/token', { params: { userId } });
+  const res = await api.get<ApiResponse<any>>('/auth/test/token', { params: { userId } });
+  return res.data.result;
 };
 
 export const checkCookie = async () => {
-  return api.get('/auth/test/cookie');
+  const res = await api.get<ApiResponse<any>>('/auth/test/cookie');
+  return res.data.result;
 };
 
 export const raiseError = async (type: 'HTTP' | 'NORMAL' | 'CUSTOM') => {
-  return api.get('/test/error/exception', { params: { type } });
+  const res = await api.get<ApiResponse<string>>('/test/error/exception', { params: { type } });
+  return res.data.result;
 };
 
 export const mongoCreateTest = async () => {
-  return api.post('/test/db/mongo/create-test');
+  const res = await api.post<ApiResponse<null>>('/test/db/mongo/create-test');
+  return res.data.result;
 };
 
 export const mirror = async () => {
-  return api.get('/test/basic/mirror');
+  const res = await api.get<ApiResponse<any>>('/test/basic/mirror');
+  return res.data.result;
 };
 
 export const getHello = async () => {
-  return api.get('/test/basic/hello');
+  const res = await api.get<ApiResponse<string>>('/test/basic/hello');
+  return res.data.result;
 };
 
 export const getRequestContext = async () => {
-  return api.get('/test/basic/als');
+  const res = await api.get<ApiResponse<any>>('/test/basic/als');
+  return res.data.result;
 };

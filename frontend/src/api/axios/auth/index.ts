@@ -9,7 +9,8 @@ import {
 } from '@api/axios/auth/types';
 
 export const register = async (data: CreateUserRequestDto) => {
-  return api.post('/v1/auth/register', data);
+  const result = await api.post<ApiResponse<null>>('/v1/auth/register', data);
+  return result.data.result;
 };
 
 export const login = async (data: LoginRequestDto) => {
@@ -19,11 +20,13 @@ export const login = async (data: LoginRequestDto) => {
 };
 
 export const deactivate = async (userId: string) => {
-  return api.delete(`/v1/auth/deactivate/${userId}`);
+  const result = await api.delete<ApiResponse<null>>(`/v1/auth/deactivate/${userId}`);
+  return result.data.result;
 };
 
 export const changePassword = async (data: ChangePasswordRequestDto) => {
-  return api.post('/v1/auth/change-password', data);
+  const result = await api.post<ApiResponse<null>>('/v1/auth/change-password', data);
+  return result.data.result;
 };
 
 export const getSchools = async () => {
@@ -33,5 +36,6 @@ export const getSchools = async () => {
 };
 
 export const createSchool = async (data: CreateSchoolRequestDto) => {
-  return api.post('/v1/auth/school', data);
+  const result = await api.post<ApiResponse<null>>('/v1/auth/school', data);
+  return result.data.result;
 };

@@ -6,4 +6,4 @@ export const useSetUser = () => {
   return AuthStore((state) => state.actions.setUser);
 };
 
-export const useClearTokens = () => AuthStore((state) => state.actions.clearTokens);
+export const useClearUser = () => AuthStore((state) => state.actions.clearUser);
