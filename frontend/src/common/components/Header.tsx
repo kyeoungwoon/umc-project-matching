@@ -51,9 +51,11 @@ const Header = ({ section }: { section: { title: string; description: string } }
           {isLoggedIn && (
             <div>
               <p className="text-14pxr">
-                {data?.challengerSchool?.name} {data?.part}
+                {data.challengerSchool.name} {data.part}
               </p>
-              <p className="text-14pxr text-[#6A7282]">{data?.name}</p>
+              <p className="text-14pxr text-[#6A7282]">
+                {data.nickname}/{data.name}
+              </p>
             </div>
           )}
           <Button variant="outline" onClick={handleLogout}>

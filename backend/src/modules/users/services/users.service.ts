@@ -18,6 +18,9 @@ export class UsersService {
       where: {
         id: userId,
       },
+      include: {
+        challengerSchool: true,
+      },
     });
 
     if (!user) throw new NotFoundException('사용자가 존재하지 않습니다.');
