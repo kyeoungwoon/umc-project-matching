@@ -36,5 +36,8 @@ RUN pnpm install --prod --frozen-lockfile
 # Builder 스테이지에서 빌드된 결과물(dist)만 복사합니다.
 COPY --from=builder /app/dist ./dist
 
+# 디버깅용, 전부 복사
+# COPY --from=builder /app ./
+
 # 애플리케이션 실행 (Node가 dist/main.js를 실행)
 CMD ["node", "dist/main.js"]

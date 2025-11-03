@@ -36,7 +36,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ./backend
+          context: ${{secrets.DOCKER_BUILD_CONTEXT_PATH}} # 빌드 컨텍스트 경로
           file: ${{secrets.DOCKER_DOCKERFILE_PATH}} # Dockerfile path
           push: true # 빌드 후 푸시 실행
           tags: ${{secrets.DOCKER_IMAGE_NAME_WITH_TAG}} # version은 latest로 우선 고정
