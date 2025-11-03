@@ -37,7 +37,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./backend
-          file: scripts/docker/dockerfile # Dockerfile path
+          file: ${{secrets.DOCKER_DOCKERFILE_PATH}} # Dockerfile path
           push: true # 빌드 후 푸시 실행
           tags: ${{secrets.DOCKER_IMAGE_NAME_WITH_TAG}} # version은 latest로 우선 고정
           platforms: linux/amd64,linux/arm64
