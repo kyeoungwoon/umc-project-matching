@@ -42,6 +42,9 @@ echo "✅ Docker Hub 로그인 성공"
 
 echo "🔨 멀티 아키텍처 Docker 이미지 빌드 및 푸시 시작"
 
+cd backend || { echo "❌ backend 디렉토리로 이동 실패"; exit 1; }
+pnpm remove-leftovers
+
 docker buildx build \
   --platform linux/amd64,linux/arm64 \
   -t "$DOCKER_USER_NAME/$DOCKER_IMAGE_NAME:latest" \

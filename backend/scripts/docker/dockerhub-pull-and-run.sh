@@ -2,7 +2,7 @@ DOCKER_USER_NAME="kyeoungwoon"
 DOCKER_IMAGE_NAME="upms-server"
 
 DOCKER_CONTAINER_NAME="upms-server"
-DOCKER_ENV_FILE_PATH="/home/ubuntu/.env"
+DOCKER_ENV_FILE_PATH="/.env"
 
 echo "=============================="
 echo "📦 최신 Docker 이미지 Pull 시작"
@@ -24,7 +24,7 @@ echo "🚀 새 컨테이너 실행 시작"
 echo "=============================="
 docker run \
   -d \
-  -p 40001:7777 \
+  -p 45001:9999 \
   --name "$DOCKER_CONTAINER_NAME"  \
   --restart always \
   --env-file "$DOCKER_ENV_FILE_PATH" \

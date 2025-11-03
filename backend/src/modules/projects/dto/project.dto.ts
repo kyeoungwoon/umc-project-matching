@@ -11,7 +11,6 @@ import {
   ValidateNested,
 } from 'class-validator';
 import {
-  Answer,
   ApplicationStatusEnum,
   QuestionTypeEnum,
 } from '@generated/prisma/mongodb';
