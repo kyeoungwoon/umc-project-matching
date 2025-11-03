@@ -93,6 +93,7 @@ export class AuthV1Controller {
     description: '등록된 학교들의 목록을 조회합니다.',
   })
   @Get('schools')
+  @Public()
   getSchoolList() {
     return this.auth.getSchoolList();
   }
