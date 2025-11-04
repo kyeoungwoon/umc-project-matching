@@ -18,6 +18,8 @@ import { cn } from '@styles/lib/utils';
 
 import { useGetSchoolsQuery } from '@api/query/auth';
 
+import DefaultSkeleton from '@common/components/DefaultSkeleton';
+
 interface LoginComboBoxProps {
   value: string;
   onValueChange: (value: string) => void;
@@ -29,7 +31,7 @@ const LoginComboBox = ({ value, onValueChange }: LoginComboBoxProps) => {
   const { data: schools, isLoading } = useGetSchoolsQuery();
 
   if (isLoading || !schools) {
-    return <div>Loading...</div>;
+    return <DefaultSkeleton />;
   }
 
   return (

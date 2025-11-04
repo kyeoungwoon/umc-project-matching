@@ -8,7 +8,7 @@ import { ApplyService } from '@modules/projects/services/apply.service';
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { UsersService } from '@modules/users/services/users.service';
 
-import { ApplyToQuestionRequestDto } from '@modules/projects/dto/apply.dto';
+import { CreateMatchingRoundDto } from '@modules/projects/dto/apply.dto';
 import { MatchingRoundResponseDto } from '@modules/projects/dto/ok-responses/matching-round.ok-response.dto';
 import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
 
@@ -46,7 +46,7 @@ export class MatchingRoundController {
   })
   @ApiOkResponseCommon(MatchingRoundResponseDto)
   @Post('matching-round')
-  createMatchingRound(@Body() body: ApplyToQuestionRequestDto) {
+  createMatchingRound(@Body() body: CreateMatchingRoundDto) {
     return this.matchingRoundService.createMatchingRound(body);
   }
 }

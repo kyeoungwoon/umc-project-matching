@@ -9,7 +9,8 @@ import { useGetMyInfoQuery } from '@api/query/user';
 
 import { projectResponseToCardProps } from '@common/utils/project-response-card';
 
-import ProjectCard, { ProjectCardProps, ProjectPartAndTo } from '@common/components/ProjectCard';
+import DefaultSkeleton from '@common/components/DefaultSkeleton';
+import ProjectCard from '@common/components/ProjectCard';
 
 const MyProjectsPage = () => {
   const { data: user, isLoading: isUserLoading } = useGetMyInfoQuery();
@@ -18,12 +19,13 @@ const MyProjectsPage = () => {
   const isLoading = isUserLoading || areProjectsLoading;
 
   if (isLoading || !user || !projects) {
-    return <div>Loading...</div>;
+    return <DefaultSkeleton />;
   }
 
   // Filter projects where the current user is the planner.
   const myProjects = projects.filter((p) => p.planId === user.id);
 
+  console.log(myProjects);
   const projectCards = myProjects.map(projectResponseToCardProps);
 
   return (
@@ -31,7 +33,7 @@ const MyProjectsPage = () => {
       <div className="mt-5 w-full max-w-4xl">
         <div className="mb-4 flex justify-end">
           <Link href="/projects/create">
-            <Button>+ 새 프로젝트 생성</Button>
+            <Button>새 프로젝트 생성</Button>
           </Link>
         </div>
         <div className="space-y-4">

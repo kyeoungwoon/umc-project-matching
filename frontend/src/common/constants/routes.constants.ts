@@ -10,6 +10,7 @@ export const ROUTES = {
     FORM_LIST: (projectId: string) => `/projects/${projectId}/forms`,
     // Plan용, 프로젝트 폼 조회 및 생성
     CREATE_FORM: (projectId: string) => `/projects/${projectId}/forms/create`,
+    MY_PROJECTS: '/projects/my', // 내가 만든 프로젝트 목록 보기
     EDIT_FORM: (projectId: string, formId: string) => `/projects/${projectId}/forms/${formId}/edit`,
     APPLICATION: (projectId: string) => `/projects/${projectId}/apply`,
   },
@@ -20,5 +21,6 @@ export const ROUTES = {
   },
   ADMIN: {
     DASHBOARD: '/admin/dashboard',
+    MATCHING_ROUNDS: '/admin/matching-rounds',
   },
 } as const;

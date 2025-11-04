@@ -35,4 +35,8 @@ export const HEADER_SECTION = {
     title: '프로젝트 생성하기',
     description: '새로운 프로젝트를 생성하고 팀원을 모집하세요.',
   },
+  ADMIN: {
+    title: '관리자 메뉴',
+    description: '지원 현황을 확인하고 매칭 과정 전반을 관리하세요.',
+  },
 } as const;

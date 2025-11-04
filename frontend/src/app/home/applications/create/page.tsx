@@ -16,10 +16,6 @@ import QuestionCard from '@common/components/QuestionCard';
 const CreateApplicationPage = () => {
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <Header
-        title="프로젝트 지원서 생성"
-        detail="프로젝트에 지원하는 지원자들을 위해 지원서를 생성해주세요"
-      />
       <Card className={'min-w-700pxr max-w-1000pxr mt-5 flex flex-col justify-center p-5 px-0'}>
         <CardHeader className="gap-5">
           <CardTitle className="font-medium">{'프로젝트 이름'}</CardTitle>

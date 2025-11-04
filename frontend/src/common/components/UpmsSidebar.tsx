@@ -42,7 +42,7 @@ const generalMenu = [
     icon: HomeIcon,
   },
   {
-    title: '지부 내 프로젝트 보기',
+    title: '프로젝트 목록 및 지원',
     url: ROUTES.PROJECTS.LIST,
     icon: FolderOpen,
   },
@@ -56,7 +56,7 @@ const generalMenu = [
 const pmMenu = [
   {
     title: '내 프로젝트 관리',
-    url: '#',
+    url: ROUTES.PROJECTS.MY_PROJECTS,
     icon: Settings,
   },
   {
@@ -86,9 +86,14 @@ const exceptPmMenu = [
 
 const adminMenu = [
   {
-    title: '지원 현황 보기',
-    url: '#',
+    title: '운영진 대시보드',
+    url: ROUTES.ADMIN.DASHBOARD,
     icon: ShieldUserIcon,
+  },
+  {
+    title: '매칭 차수 설정',
+    url: ROUTES.ADMIN.MATCHING_ROUNDS,
+    icon: SquarePenIcon,
   },
 ];
 

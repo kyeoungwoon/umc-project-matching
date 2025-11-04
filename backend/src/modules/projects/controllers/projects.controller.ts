@@ -84,15 +84,10 @@ export class ProjectsController {
     @Param('projectId') projectId: string,
     @Body() body: UpdateProjectRequestDto,
   ) {
-    if (projectId !== body.projectId) {
-      throw new BadRequestException(
-        'path의 projectId와 body의 projectId가 일치하지 않습니다.',
-      );
-    }
     const userId = this.reqContext.getOrThrowUserId();
     await this.projectService.throwIfUserNotPlanByProjectId(userId, projectId);
 
-    return this.projectService.updateProjectByProjectId(body);
+    return this.projectService.updateProjectByProjectId(projectId, body);
   }
 
   @Delete(':projectId')

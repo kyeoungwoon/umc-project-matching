@@ -19,6 +19,8 @@ import { Label } from '@styles/components/ui/label';
 import { useChangePasswordMutation } from '@api/query/auth';
 import { useGetMyInfoQuery } from '@api/query/user';
 
+import DefaultSkeleton from '@common/components/DefaultSkeleton';
+
 const MyInfoPage = () => {
   const { data: user, isLoading } = useGetMyInfoQuery();
   const { mutate: changePassword, isPending } = useChangePasswordMutation();
@@ -59,7 +61,7 @@ const MyInfoPage = () => {
   };
 
   if (isLoading || !user) {
-    return <div>Loading...</div>;
+    return <DefaultSkeleton />;
   }
 
   return (

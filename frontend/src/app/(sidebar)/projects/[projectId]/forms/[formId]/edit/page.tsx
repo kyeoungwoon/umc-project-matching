@@ -1,11 +1,17 @@
 'use client';
 
 import { useParams, useRouter } from 'next/navigation';
-import { useGetFormQuery, useAddQuestionsToFormMutation } from '@api/query/form';
-import { QuestionFormBuilder } from '@features/form/components/QuestionFormBuilder';
-import Header from '@common/components/Header';
+
+import { toast } from 'sonner';
+
 import { CreateQuestionRequestDto } from '@api/axios/form/types';
+import { useAddQuestionsToFormMutation, useGetFormQuery } from '@api/query/form';
+
 import { ROUTES } from '@common/constants/routes.constants';
+
+import DefaultSkeleton from '@common/components/DefaultSkeleton';
+
+import { QuestionFormBuilder } from '@features/form/components/QuestionFormBuilder';
 
 const EditProjectFormPage = () => {
   const params = useParams();
@@ -17,25 +23,29 @@ const EditProjectFormPage = () => {
   const { mutate: addQuestions } = useAddQuestionsToFormMutation(projectId);
 
   const handleFormSubmit = (questionsData: CreateQuestionRequestDto) => {
-    addQuestions({ formId, data: questionsData }, {
-      onSuccess: () => {
-        alert('질문이 저장되었습니다.');
-        router.push(ROUTES.PROJECTS.FORM_LIST(projectId));
+    addQuestions(
+      { formId, data: questionsData },
+      {
+        onSuccess: () => {
+          toast.success('질문이 저장되었습니다.', { richColors: true });
+          router.push(ROUTES.PROJECTS.FORM_LIST(projectId));
+        },
+        onError: () => {
+          toast.success('질문 저장에 실패했습니다.', { richColors: true });
+        },
       },
-      onError: () => {
-        alert('질문 저장에 실패했습니다.');
-      }
-    });
+    );
   };
 
-  if (isLoading || !form) {
-    return <div>Loading...</div>;
+  if (isLoading) {
+    return <DefaultSkeleton />;
   }
+
+  if (!form) throw new Error('Form에 대한 정보가 없습니다.');
 
   return (
     <div className="flex w-full flex-col items-center justify-center p-4">
-      <Header title={`지원서 수정: ${form.title}`} detail="지원서에 포함될 질문들을 추가하고 수정해주세요." />
-      <div className="w-full max-w-4xl mt-5">
+      <div className="mt-5 w-full max-w-4xl">
         <QuestionFormBuilder onSubmit={handleFormSubmit} initialData={form.questions} />
       </div>
     </div>

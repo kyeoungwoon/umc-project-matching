@@ -40,7 +40,7 @@ export const useEditFormMutation = (projectId: string, formId: string) => {
 export const useAddQuestionsToFormMutation = (projectId: string) => {
   return useMutation({
     mutationFn: (variables: { formId: string; data: CreateQuestionRequestDto }) =>
-      form.addQuestionsToForm(projectId, variables.formId, variables.data),
+      addQuestionsToForm(projectId, variables.formId, variables.data),
   });
 };
 

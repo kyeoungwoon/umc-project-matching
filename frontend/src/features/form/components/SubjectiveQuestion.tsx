@@ -1,7 +1,5 @@
 'use client';
 
-import { FieldApi } from '@tanstack/react-form';
-
 import {
   Card,
   CardContent,
@@ -14,7 +12,7 @@ import { Input } from '@styles/components/ui/input';
 import { FormQuestionDto } from '@api/axios/form/types';
 
 interface SubjectiveQuestionProps {
-  field: FieldApi<any, any, any, any>;
+  field: any;
   question: FormQuestionDto;
 }
 

@@ -51,6 +51,7 @@ export interface FormResponseDto {
 }
 
 export interface FormQuestionDto {
+  id: string;
   questionNo: number;
   title: string;
   description: string;

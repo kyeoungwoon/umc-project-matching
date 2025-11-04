@@ -51,6 +51,7 @@ export class MatchingRoundDto {
 
   @IsNotEmpty()
   @IsDate()
+  @Type(() => Date)
   @ApiProperty({
     description: '매칭 시작 일시, UTC 시간으로 제공하세요.',
     example: '2024-07-01T10:00:00Z',
@@ -60,6 +61,7 @@ export class MatchingRoundDto {
   startDatetime!: Date;
 
   @IsNotEmpty()
+  @Type(() => Date)
   @IsDate()
   @ApiProperty({
     description: '매칭 종료 일시, UTC 시간으로 제공하세요.',
@@ -70,7 +72,7 @@ export class MatchingRoundDto {
   endDatetime!: Date;
 }
 
-export class ApplyToQuestionRequestDto extends OmitType(MatchingRoundDto, [
+export class CreateMatchingRoundDto extends OmitType(MatchingRoundDto, [
   'id',
 ]) {}
 

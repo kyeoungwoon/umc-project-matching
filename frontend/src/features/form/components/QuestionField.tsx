@@ -6,18 +6,18 @@ import { ObjectiveQuestion } from './ObjectiveQuestion';
 import { SubjectiveQuestion } from './SubjectiveQuestion';
 
 interface QuestionFieldProps {
-  form: any;
+  tanstackForm: any;
   question: FormQuestionDto;
   index: number;
 }
 
-export const QuestionField = ({ form, question, index }: QuestionFieldProps) => {
+export const QuestionField = ({ tanstackForm, question, index }: QuestionFieldProps) => {
   // This component is designed for the 'answering' mode.
   // For 'creation' mode, we would need a different set of components
   // to build the FormQuestionDto object itself, likely using a dynamic form for questions and options.
 
   return (
-    <form.Field
+    <tanstackForm.Field
       name={`answers[${index}].value`}
       children={(field: any) => {
         if (question.type === 'SUBJECTIVE') {

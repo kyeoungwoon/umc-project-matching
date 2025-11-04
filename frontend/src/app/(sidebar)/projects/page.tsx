@@ -5,13 +5,14 @@ import { useGetProjectListQuery } from '@api/query/project';
 
 import { projectResponseToCardProps } from '@common/utils/project-response-card';
 
+import DefaultSkeleton from '@common/components/DefaultSkeleton';
 import ProjectCard, { ProjectCardProps, ProjectPartAndTo } from '@common/components/ProjectCard';
 
 const ProjectListPage = () => {
   const { data, isLoading } = useGetProjectListQuery();
 
   if (isLoading || !data) {
-    return <div>Loading...</div>;
+    return <DefaultSkeleton />;
   }
 
   const projects = data.map(projectResponseToCardProps);

@@ -1,5 +1,7 @@
 'use client';
 
+import { toast } from 'sonner';
+
 import {
   Card,
   CardContent,
@@ -10,14 +12,17 @@ import {
 
 import { useGetCurrentMatchingRoundQuery } from '@api/query/matching-round';
 
-const AnnouncementCard = () => {
-  const { data, isLoading } = useGetCurrentMatchingRoundQuery();
+import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
-  if (isLoading || !data) {
-    return <div>Loading...</div>;
+const AnnouncementCard = () => {
+  const { data, isLoading, isError, error } = useGetCurrentMatchingRoundQuery();
+
+  if (isLoading) {
+    return <DefaultSkeleton />;
   }
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return '[날짜 없음]';
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: '2-digit',
@@ -25,6 +30,14 @@ const AnnouncementCard = () => {
     };
     return new Date(dateString).toLocaleDateString('ko-KR', options);
   };
+
+  if (isError) {
+    console.error('매칭 차수 조회 오류:', error);
+    toast.error('현재 매칭 차수를 불러오지 못했습니다.', {
+      richColors: true,
+      description: (error as any)?.response?.data?.error?.message,
+    });
+  }
 
   return (
     <Card className={'w-100'}>
@@ -34,10 +47,10 @@ const AnnouncementCard = () => {
       </CardHeader>
       <CardContent>
         <ul>
-          <li>기획-디자인 매칭 : </li>
-          <li>현재 매칭 차수 : {data.name}</li>
+          <li>현재 매칭 차수 : {data?.name ?? '현재 매칭 차수가 존재하지 않습니다'}</li>
           <li>
-            현재 매칭 차수 기간 : {formatDate(data.startDatetime)} ~ {formatDate(data.endDatetime)}
+            현재 매칭 차수 기간 : {formatDate(data?.startDatetime)} ~{' '}
+            {formatDate(data?.endDatetime)}
           </li>
         </ul>
       </CardContent>

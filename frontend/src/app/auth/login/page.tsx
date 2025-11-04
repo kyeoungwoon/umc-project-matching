@@ -7,7 +7,6 @@ import { z } from 'zod';
 
 import { Button } from '@styles/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel, FieldTitle } from '@styles/components/ui/field';
-import { Input } from '@styles/components/ui/input';
 
 import { useLoginMutation } from '@api/query/auth';
 
@@ -23,8 +22,6 @@ const loginSchema = z.object({
   studentId: z.string().min(1, '학번을 입력하세요'),
   password: z.string().min(1, '비밀번호를 입력하세요'),
 });
-
-type LoginInput = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const { mutate, isPending, isError, error } = useLoginMutation();
@@ -82,6 +79,7 @@ export default function LoginForm() {
         className="min-w-md"
       >
         <FieldGroup>
+          {/* ...existing code... */}
           <FieldTitle className={'text-2xl'}>UPMS</FieldTitle>
           <form.Field
             name={'school'}
@@ -96,9 +94,14 @@ export default function LoginForm() {
               );
             }}
           />
-          <FormField form={form} name="studentId" label="학번" placeholder="학번을 입력해주세요." />
           <FormField
-            form={form}
+            tanstackForm={form}
+            name="studentId"
+            label="학번"
+            placeholder="학번을 입력해주세요."
+          />
+          <FormField
+            tanstackForm={form}
             name="password"
             label="비밀번호"
             type="password"

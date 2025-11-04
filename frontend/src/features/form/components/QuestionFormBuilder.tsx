@@ -7,7 +7,7 @@ import { Button } from '@styles/components/ui/button';
 
 import { CreateFormQuestionDto, CreateQuestionRequestDto } from '@api/axios/form/types';
 
-import { QuestionCreator } from './QuestionCreator';
+import QuestionCreator from '@features/form/components/QuestionCreator';
 
 interface QuestionFormBuilderProps {
   onSubmit: (data: CreateQuestionRequestDto) => void;
@@ -19,13 +19,15 @@ const formSchema = z.object({
     z.object({
       questionNo: z.number(),
       title: z.string().min(1, '질문 제목을 입력해주세요.'),
-      description: z.string(),
+      description: z.string().min(1, '질문에 대한 설명을 입력해주세요.'),
       type: z.enum(['SINGLE_CHOICE', 'MULTIPLE_CHOICE', 'SUBJECTIVE']),
       isRequired: z.boolean(),
-      options: z.array(z.string()),
+      options: z.array(z.string().min(1, '선택지를 입력해주세요.')),
     }),
   ),
 });
+
+// type FormValues = z.infer<typeof formSchema>;
 
 export const QuestionFormBuilder = ({ onSubmit, initialData }: QuestionFormBuilderProps) => {
   const form = useForm({
@@ -42,10 +44,10 @@ export const QuestionFormBuilder = ({ onSubmit, initialData }: QuestionFormBuild
 
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
         e.stopPropagation();
-        form.handleSubmit();
+        await form.handleSubmit();
       }}
       className="space-y-4"
     >
@@ -56,12 +58,15 @@ export const QuestionFormBuilder = ({ onSubmit, initialData }: QuestionFormBuild
           <div className="space-y-4">
             {field.state.value.map((_, index) => (
               <QuestionCreator
-                key={index} // Using index as key is not ideal but acceptable for this case
-                form={form}
+                key={index}
+                tanstackForm={form}
                 index={index}
                 remove={() => field.removeValue(index)}
               />
             ))}
+
+            {/* 폼에 속한 모든 문항들이 표시되고 나서 가장 최하단임! */}
+            {/* 문항 추가 및 지원서 저장 버튼 */}
             <div className="flex justify-between">
               <Button
                 type="button"
@@ -77,7 +82,7 @@ export const QuestionFormBuilder = ({ onSubmit, initialData }: QuestionFormBuild
                   })
                 }
               >
-                + 질문 추가하기
+                새로운 질문 추가하기
               </Button>
               <Button type="submit">지원서 저장</Button>
             </div>

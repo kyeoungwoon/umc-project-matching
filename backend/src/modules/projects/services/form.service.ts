@@ -61,6 +61,14 @@ export class FormService {
     });
   }
 
+  async deleteAllQuestionsInForm(formId: string) {
+    return this.mongo.formQuestion.deleteMany({
+      where: {
+        formId,
+      },
+    });
+  }
+
   /**
    * formId에 질문을 추가합니다.
    */

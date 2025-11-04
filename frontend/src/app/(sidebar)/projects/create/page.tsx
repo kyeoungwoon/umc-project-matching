@@ -3,7 +3,6 @@
 import { useState } from 'react';
 
 import { useForm } from '@tanstack/react-form';
-import { zodValidator } from '@tanstack/zod-form-adapter';
 import { z } from 'zod';
 
 import { Button } from '@styles/components/ui/button';
@@ -113,7 +112,7 @@ const CreateProjectPage = () => {
             <CardTitle className="font-medium">프로젝트 정보</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <FormField form={form} name="title" label="프로젝트 이름" />
+            <FormField tanstackForm={form} name="title" label="프로젝트 이름" />
             <form.Field
               name="description"
               children={(field) => (
@@ -128,7 +127,7 @@ const CreateProjectPage = () => {
                 </Field>
               )}
             />
-            <FormField form={form} name={'link'} label="기획안 링크 (Notion 등)" />
+            <FormField tanstackForm={form} name={'link'} label="기획안 링크 (Notion 등)" />
             <FieldGroup>
               <FieldLabel>모집 파트 및 인원</FieldLabel>
               <form.Field

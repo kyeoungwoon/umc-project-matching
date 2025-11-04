@@ -108,17 +108,18 @@ export class AuthV1Controller {
   }
 
   @ApiTags(API_TAGS.TEST)
-  @Post('drop-all/:type')
+  @Post('drop/:type')
   @ApiParam({
-    name: 'test/type',
+    name: 'type',
     description: '삭제할 데이터 타입',
-    enum: ['school', 'challenger'],
+    enum: ['school', 'challenger', 'all'],
   })
   @ApiOperation({
     summary: '[TEST] 모든 데이터 삭제',
   })
+  @Public()
   dropAll(@Param() params: { type: string }) {
-    return this.auth.dropAll(params.type);
+    return this.auth.dropTableByType(params.type);
   }
 
   @ApiTags(API_TAGS.TEST)
@@ -127,8 +128,9 @@ export class AuthV1Controller {
     summary: '[TEST] 9th Leo 지부 학교 추가',
     description: '기존 학교는 모두 drop 처리합니다.',
   })
+  @Public()
   async initSchool() {
-    await this.auth.dropAll('school');
+    await this.auth.dropTableByType('school');
 
     const res = Promise.all([
       this.auth.createSchool('중앙대학교', 'cau'),
