@@ -1,5 +1,5 @@
-import { ProjectResponseDto } from '@api/axios/project/types';
 import { ApplicationResponseDto } from '@api/axios/application/types';
+import { ProjectResponseDto } from '@api/axios/project/types';
 
 // Request DTOs
 export interface CreateFormRequestDto {
@@ -48,9 +48,11 @@ export interface FormResponseDto {
   description: string | null;
   createdAt: string;
   updatedAt: string;
+  availableMatchingRounds: string[];
 }
 
 export interface FormQuestionDto {
+  id: string;
   questionNo: number;
   title: string;
   description: string;

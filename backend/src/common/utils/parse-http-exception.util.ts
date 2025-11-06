@@ -47,14 +47,17 @@ export const parseHttpExceptionToErrorDetails = (
   const { code: errorCode, message: errorMessage } =
     CommonErrorCode.DEFAULT_HTTP_EXCEPTION;
 
-  // console.log(errorResponse, 'errorResponse');
+  const returnMessage =
+    typeof errorResponse === 'object' && 'message' in errorResponse
+      ? (errorResponse as any).message
+      : errorMessage;
 
   return {
     name: exception.constructor.name,
     httpStatusCode,
     code: errorCode,
     stack: exception.stack ?? undefined,
-    message: errorMessage,
+    message: returnMessage,
     data: errorResponse,
   };
 };

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import AuthStore from '@features/auth/stores/auth-store';
 
@@ -29,5 +29,22 @@ api.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
+  },
+);
+
+api.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  (err: AxiosError) => {
+    if (err.response) {
+      const { code, message, error } = err.response.data as any;
+      return Promise.reject({
+        code,
+        message,
+        error,
+      });
+    }
+    return Promise.reject(err);
   },
 );

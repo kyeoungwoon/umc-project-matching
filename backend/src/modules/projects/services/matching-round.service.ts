@@ -5,14 +5,14 @@ import {
 } from '@nestjs/common';
 import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
 
-import { ApplyToQuestionRequestDto } from '@modules/projects/dto/apply.dto';
+import { CreateMatchingRoundDto } from '@modules/projects/dto/apply.dto';
 
 @Injectable()
 export class MatchingRoundService {
   constructor(private readonly mongo: MongoDBPrismaService) {}
 
   /**
-   * start ~ end 사이에 있는 프로젝트 매칭 차수를 반환합니다.
+   * start ~ end 사이에 있는 프로젝트 매칭 차수를 하나만 반환합니다.
    */
   async getProjectMatchingRoundByStartEndDatetime(
     startDatetime: Date,
@@ -25,6 +25,28 @@ export class MatchingRoundService {
         },
         endDatetime: {
           gte: endDatetime,
+        },
+      },
+      orderBy: {
+        startDatetime: 'desc',
+      },
+    });
+  }
+
+  /**
+   * start ~ end 사이에 있는 프로젝트 매칭 차수를 모두 반환합니다.
+   */
+  async getAllProjectMatchingRoundByStartEndDatetime(
+    startDatetime: Date,
+    endDatetime: Date,
+  ) {
+    return this.mongo.matchingRound.findMany({
+      where: {
+        startDatetime: {
+          gte: startDatetime,
+        },
+        endDatetime: {
+          lte: endDatetime,
         },
       },
       orderBy: {
@@ -67,7 +89,7 @@ export class MatchingRoundService {
    *
    * 동일 기간에 겹치는 매칭 차수가 존재하면 에러를 발생시킵니다.
    */
-  async createMatchingRound(data: ApplyToQuestionRequestDto) {
+  async createMatchingRound(data: CreateMatchingRoundDto) {
     const { name, startDatetime, endDatetime } = data;
 
     // 일치하는 매칭 차수가 존재하는지 확인

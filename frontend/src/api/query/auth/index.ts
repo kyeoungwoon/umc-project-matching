@@ -1,5 +1,13 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getSchools, register, login, deactivate, changePassword, createSchool } from '@api/axios/auth';
+
+import {
+  changePassword,
+  createSchool,
+  deactivate,
+  getSchools,
+  login,
+  register,
+} from '@api/axios/auth';
 
 export const useGetSchoolsQuery = () => {
   return useQuery({ queryKey: ['schools'], queryFn: getSchools });

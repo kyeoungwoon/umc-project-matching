@@ -127,11 +127,24 @@ export class AuthService {
     return this.mongo.challenger.deleteMany({});
   }
 
-  async dropAll(type: string) {
+  async dropAllData() {
+    await this.mongo.challenger.deleteMany({});
+    await this.mongo.matchingRound.deleteMany({});
+    await this.mongo.project.deleteMany({});
+    await this.mongo.projectMember.deleteMany({});
+    await this.mongo.school.deleteMany({});
+    await this.mongo.form.deleteMany({});
+    await this.mongo.formQuestion.deleteMany({});
+    await this.mongo.application.deleteMany({});
+  }
+
+  async dropTableByType(type: string) {
     if (type === 'school') {
       return this.dropAllSchool();
     } else if (type === 'challenger') {
       return this.dropAllChallengers();
+    } else if (type === 'all') {
+      return await this.dropAllData();
     } else {
       throw new BadRequestException('올바르지 않은 타입 입니다.');
     }

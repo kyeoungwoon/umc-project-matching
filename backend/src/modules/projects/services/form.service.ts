@@ -13,6 +13,7 @@ import {
   CreateFormQuestionDto,
   UpdateFormQuestionDto,
 } from '@modules/projects/dto/form-question.dto';
+import string from 'zod/src/v3/benchmarks/string';
 
 @Injectable()
 export class FormService {
@@ -57,6 +58,14 @@ export class FormService {
     return this.mongo.form.delete({
       where: {
         id: formId,
+      },
+    });
+  }
+
+  async deleteAllQuestionsInForm(formId: string) {
+    return this.mongo.formQuestion.deleteMany({
+      where: {
+        formId,
       },
     });
   }
@@ -132,6 +141,10 @@ export class FormService {
             {
               where: {
                 NOT: { status: ApplicationStatusEnum.DRAFT },
+              },
+              include: {
+                form: true,
+                matchingRound: true,
               },
             }
           : false,

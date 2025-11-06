@@ -70,7 +70,7 @@ model Challenger {
   applications     Application[]   @relation("ApplicantToApplications")
   projects         Project[]
   ProjectMember    ProjectMember[]
-  challengerSchool School          @relation(fields: [school], references: [handle])
+  challengerSchool School          @relation(fields: [school], references: [handle], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([school, studentId]) // 학교 + 학번 복합 고유 키
   @@map("challengers") // 실제 MongoDB 컬렉션 이름
@@ -111,7 +111,7 @@ model Project {
   // 이 프로젝트에 달린 지원서 (1-N)
   projectMember ProjectMember[] @relation("ProjectToMembers")
   projectForms  Form[]
-  plan          Challenger      @relation(fields: [planId], references: [id])
+  plan          Challenger      @relation(fields: [planId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([title])
   @@map("projects")
@@ -131,7 +131,7 @@ model Form {
   availableMatchingRounds String[] @map("available_matching_rounds")
 
   // --- 관계 ---
-  project      Project        @relation(fields: [projectId], references: [id])
+  project      Project        @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   applications Application[]
   questions    FormQuestion[]
 
@@ -153,7 +153,7 @@ model FormQuestion {
   updatedAt DateTime @updatedAt
 
   // --- 관계 ---
-  form Form @relation(fields: [formId], references: [id])
+  form Form @relation(fields: [formId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model ProjectMember {
@@ -165,8 +165,8 @@ model ProjectMember {
   updatedAt DateTime @updatedAt
 
   // --- 관계 ---
-  project Project    @relation(name: "ProjectToMembers", fields: [projectId], references: [id])
-  user    Challenger @relation(fields: [userId], references: [id])
+  project Project    @relation(name: "ProjectToMembers", fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user    Challenger @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([projectId, userId])
   @@map("project_members")
@@ -198,10 +198,10 @@ model Application {
   // --- 관계 ---
 
   // 1. 지원자 (N-1)
-  applicant     Challenger    @relation("ApplicantToApplications", fields: [applicantId], references: [id])
+  applicant     Challenger    @relation("ApplicantToApplications", fields: [applicantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   // 2. 지원 프로젝트 (N-1)
-  form          Form          @relation(fields: [formId], references: [id])
-  matchingRound MatchingRound @relation(fields: [matchingRoundId], references: [id])
+  form          Form          @relation(fields: [formId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  matchingRound MatchingRound @relation(fields: [matchingRoundId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   // 하나의 프로젝트, 하나의 폼에는 차수별로 한 번만 지원 가능함
   // 여러 개의 프로젝트에 지원서를 저장해도 ㄱㅊ긴 함

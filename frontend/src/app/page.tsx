@@ -4,10 +4,10 @@ import { redirect, useRouter } from 'next/navigation';
 
 import { ROUTES } from '@common/constants/routes.constants';
 
-import { useGetUserInfo } from '@features/auth/hooks/useAuthStore';
+import { useGetUser } from '@features/auth/hooks/useAuthStore';
 
 const RootPage = () => {
-  const user = useGetUserInfo();
+  const user = useGetUser();
   const router = useRouter();
 
   if (!user) {

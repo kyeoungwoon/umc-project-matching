@@ -16,7 +16,6 @@ export class AnswerDto {
   @IsString()
   questionId!: string;
 
-  @IsNotEmpty()
   @IsArray() // 배열임을 명시
   @ArrayNotEmpty() // 빈 배열은 안 됨
   @IsString({ each: true }) // 배열 각 요소가 문자열인지 검사
@@ -24,11 +23,6 @@ export class AnswerDto {
 }
 
 export class ApplyToProjectRequestDto {
-  // @IsNotEmpty()
-  // @IsString()
-  // formId!: string;
-
-  @IsNotEmpty()
   @ArrayNotEmpty() // 배열이 비어있지 않은지!
   @ValidateNested({ each: true }) // 배열의 각 요소에 대해 유효성 검사
   @Type(() => AnswerDto) // 변환을 위해 필요
@@ -51,6 +45,7 @@ export class MatchingRoundDto {
 
   @IsNotEmpty()
   @IsDate()
+  @Type(() => Date)
   @ApiProperty({
     description: '매칭 시작 일시, UTC 시간으로 제공하세요.',
     example: '2024-07-01T10:00:00Z',
@@ -60,6 +55,7 @@ export class MatchingRoundDto {
   startDatetime!: Date;
 
   @IsNotEmpty()
+  @Type(() => Date)
   @IsDate()
   @ApiProperty({
     description: '매칭 종료 일시, UTC 시간으로 제공하세요.',
@@ -70,7 +66,7 @@ export class MatchingRoundDto {
   endDatetime!: Date;
 }
 
-export class ApplyToQuestionRequestDto extends OmitType(MatchingRoundDto, [
+export class CreateMatchingRoundDto extends OmitType(MatchingRoundDto, [
   'id',
 ]) {}
 
@@ -84,4 +80,16 @@ export class ChangeApplicationStatus {
     required: true,
   })
   status!: ApplicationStatusEnum;
+}
+
+export class QueryMatchingRoundsDto {
+  @IsNotEmpty()
+  @IsDate()
+  @Type(() => Date)
+  start!: Date;
+
+  @IsNotEmpty()
+  @IsDate()
+  @Type(() => Date)
+  end!: Date;
 }

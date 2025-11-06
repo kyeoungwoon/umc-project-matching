@@ -11,7 +11,7 @@ import { TestCreateMatchingRoundResponseDto } from '@modules/projects/dto/ok-res
 import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
 
 @Controller({
-  path: 'projects',
+  path: 'projects/test',
   version: '1',
 })
 @ApiTags(API_TAGS.TEST)
@@ -26,7 +26,7 @@ export class TestController {
     private readonly userService: UsersService,
   ) {}
 
-  @Post('test/matching-round')
+  @Post('matching-round')
   @ApiOperation({
     summary: '[테스트용] 매칭 라운드 생성',
     description:

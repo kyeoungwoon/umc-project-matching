@@ -7,23 +7,24 @@ import { z } from 'zod';
 
 import { Button } from '@styles/components/ui/button';
 import { Field, FieldError, FieldGroup, FieldLabel, FieldTitle } from '@styles/components/ui/field';
-import { Input } from '@styles/components/ui/input';
 
 import { useLoginMutation } from '@api/query/auth';
 
 import { ROUTES } from '@common/constants/routes.constants';
 
 import LoginComboBox from '@common/components/Combobox';
+import FormField from '@common/components/FormField';
 
 import { useSetUser } from '@features/auth/hooks/useAuthStore';
 
 const loginSchema = z.object({
-  school: z.string().min(1, '학교를 입력하세요'),
+  school: z.object({
+    name: z.string().min(1, '학교를 선택하세요'),
+    handle: z.string().min(1, '학교를 선택하세요'),
+  }),
   studentId: z.string().min(1, '학번을 입력하세요'),
   password: z.string().min(1, '비밀번호를 입력하세요'),
 });
-
-type LoginInput = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const { mutate, isPending, isError, error } = useLoginMutation();
@@ -32,15 +33,18 @@ export default function LoginForm() {
 
   const form = useForm({
     defaultValues: {
-      school: '',
+      school: {
+        name: '',
+        handle: '',
+      },
       studentId: '',
       password: '',
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: ({ value }) => {
       console.log('login clicked!');
       mutate(
         {
-          school: value.school,
+          school: value.school.handle,
           studentId: value.studentId,
           password: value.password,
         },
@@ -71,42 +75,6 @@ export default function LoginForm() {
     },
   });
 
-  function FormField({
-    name,
-    label,
-    type = 'text',
-    placeholder,
-  }: {
-    name: keyof LoginInput;
-    label: string;
-    type?: string;
-    placeholder: string;
-  }) {
-    return (
-      <form.Field
-        name={name}
-        children={(field) => {
-          const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
-          return (
-            <Field>
-              <FieldLabel htmlFor={field.name}>{label}</FieldLabel>
-              <Input
-                type={type}
-                id={field.name}
-                name={field.name}
-                value={field.state.value}
-                onBlur={field.handleBlur}
-                onChange={(e) => field.handleChange(e.target.value)}
-                placeholder={placeholder}
-              />
-              {isInvalid && <FieldError errors={field.state.meta.errors} />}
-            </Field>
-          );
-        }}
-      />
-    );
-  }
-
   return (
     <div>
       <form
@@ -117,6 +85,7 @@ export default function LoginForm() {
         className="min-w-md"
       >
         <FieldGroup>
+          {/* ...existing code... */}
           <FieldTitle className={'text-2xl'}>UPMS</FieldTitle>
           <form.Field
             name={'school'}
@@ -131,8 +100,14 @@ export default function LoginForm() {
               );
             }}
           />
-          <FormField name="studentId" label="학번" placeholder="학번을 입력해주세요." />
           <FormField
+            tanstackForm={form}
+            name="studentId"
+            label="학번"
+            placeholder="학번을 입력해주세요."
+          />
+          <FormField
+            tanstackForm={form}
             name="password"
             label="비밀번호"
             type="password"

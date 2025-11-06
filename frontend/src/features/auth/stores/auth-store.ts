@@ -2,17 +2,12 @@ import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
-interface UserInfo {
-  name?: string;
-  nickname?: string;
-  introduction?: string;
-  school?: string;
-  part?: string;
-  role?: string;
-}
+import { UserResponseDto } from '@api/axios/user/types';
+
+type UserInfo = UserResponseDto;
 
 // TODO: BE 구현 후에 Optional 전부 제거하기
-interface User {
+export interface User {
   id: string;
   accessToken: string | null;
   info?: UserInfo;
@@ -22,6 +17,7 @@ interface AuthStoreState {
   user: User | null;
   actions: {
     setUser: (newUser: User) => void;
+    setUserInfo: (userInfo: UserInfo) => void;
     clearUser: () => void;
   };
 }
@@ -42,6 +38,12 @@ const AuthStore = create<AuthStoreState>()(
               state.user = null;
             });
           },
+          setUserInfo: (userInfo: UserInfo) =>
+            set((state) => {
+              if (state.user) {
+                state.user.info = userInfo;
+              }
+            }),
         },
       })),
       {

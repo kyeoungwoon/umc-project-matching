@@ -7,12 +7,14 @@ import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.se
 import { ApplicationStatusEnum } from '@generated/prisma/mongodb';
 import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
 import { AnswerDto } from '@modules/projects/dto/apply.dto';
+import { ProjectsService } from '@modules/projects/services/projects.service';
 
 @Injectable()
 export class ApplyService {
   constructor(
     private readonly mongo: MongoDBPrismaService,
     private readonly matching: MatchingRoundService,
+    private readonly projectsService: ProjectsService,
   ) {}
 
   /**
@@ -25,6 +27,7 @@ export class ApplyService {
     userId: string,
     answers: AnswerDto[],
   ) {
+    // 지원한 시간에 따라서 자동으로 현재 매칭 차수를 기입합니다.
     const currentRoundId =
       await this.matching.getCurrentProjectMatchingRoundId();
 
@@ -64,9 +67,13 @@ export class ApplyService {
   /**
    * applicationId로 지원서를 조회합니다.
    */
-  async getApplicationByApplicationId(applicationId: string) {
+  async getApplication(applicationId: string) {
     const application = await this.mongo.application.findUnique({
       where: { id: applicationId },
+      include: {
+        applicant: true,
+        form: true,
+      },
     });
 
     if (!application) {
@@ -83,7 +90,7 @@ export class ApplyService {
     userId: string,
     applicationId: string,
   ): Promise<boolean> {
-    const application = await this.getApplicationByApplicationId(applicationId);
+    const application = await this.getApplication(applicationId);
     return application.applicantId === userId;
   }
 
@@ -101,10 +108,25 @@ export class ApplyService {
     applicationId: string,
     status: ApplicationStatusEnum,
   ) {
+    if (status === ApplicationStatusEnum.CONFIRMED) {
+      // 팀원에도 추가해야함
+      const { projectId, userId } =
+        await this.getProjectAndUserIdByApplicationId(applicationId);
+      await this.projectsService.addTeamMember(projectId, userId);
+    }
+
     return this.mongo.application.update({
       where: { id: applicationId },
       data: { status },
     });
+  }
+
+  async getProjectAndUserIdByApplicationId(applicationId: string) {
+    const application = await this.getApplication(applicationId);
+    return {
+      projectId: application.form.projectId,
+      userId: application.applicantId,
+    };
   }
 
   /**
@@ -113,9 +135,38 @@ export class ApplyService {
    * 의도치 않은 지원서 상태 변경을 막아줍니다.
    */
   async throwIfApplicationStatusNotSubmitted(applicationId: string) {
-    const application = await this.getApplicationByApplicationId(applicationId);
+    const application = await this.getApplication(applicationId);
     if (application.status !== ApplicationStatusEnum.SUBMITTED) {
       throw new ForbiddenException('지원서 상태를 변경할 수 없습니다.');
     }
+  }
+
+  async getMyApplications(userId: string) {
+    const applications = await this.mongo.application.findMany({
+      where: { applicantId: userId },
+      include: {
+        form: true,
+        matchingRound: true,
+      },
+    });
+
+    // 각 answer에 question의 title만 추가
+    return await Promise.all(
+      applications.map(async (app) => {
+        // map으로 생성된 Promise 배열 모두 처리
+        const answersWithTitle = await Promise.all(
+          // 지원서마다, answer를 돌고, 그 answer의 questionId를 mongo에 때려서 가져옴.
+          app.answers.map(async (ans) => {
+            const question = await this.mongo.formQuestion.findUnique({
+              where: { id: ans.questionId },
+              select: { title: true },
+            });
+            return { ...ans, questionTitle: question?.title };
+          }),
+        );
+        // 큰 map return
+        return { ...app, answers: answersWithTitle };
+      }),
+    );
   }
 }

@@ -47,7 +47,7 @@ export class CreateProjectRequestDto {
 export class UpdateProjectRequestDto extends PartialType(
   OmitType(CreateProjectRequestDto, ['planId']),
 ) {
-  @IsNotEmpty()
-  @IsString()
-  projectId!: string;
+  // @IsNotEmpty()
+  // @IsString()
+  // projectId!: string;
 }

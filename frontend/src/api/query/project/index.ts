@@ -1,6 +1,13 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { getProjectList, createProject, getProjectDetails, updateProject, deleteProject } from '@api/axios/project';
-import { CreateProjectRequestDto, UpdateProjectRequestDto } from '@api/axios/project/types';
+
+import {
+  createProject,
+  deleteProject,
+  getProjectDetails,
+  getProjectList,
+  updateProject,
+} from '@api/axios/project';
+import { UpdateProjectRequestDto } from '@api/axios/project/types';
 
 export const useGetProjectListQuery = () => {
   return useQuery({ queryKey: ['projects'], queryFn: getProjectList });
@@ -11,11 +18,18 @@ export const useCreateProjectMutation = () => {
 };
 
 export const useGetProjectDetailsQuery = (projectId: string) => {
-  return useQuery({ queryKey: ['project', projectId], queryFn: () => getProjectDetails(projectId), enabled: !!projectId });
+  return useQuery({
+    queryKey: ['project', projectId],
+    queryFn: () => getProjectDetails(projectId),
+    enabled: !!projectId,
+  });
 };
 
 export const useUpdateProjectMutation = (projectId: string) => {
-  return useMutation({ mutationFn: (data: UpdateProjectRequestDto) => updateProject(projectId, data) });
+  console.log('useUpdateProjectMutation projectId:', projectId);
+  return useMutation({
+    mutationFn: (data: UpdateProjectRequestDto) => updateProject(projectId, data),
+  });
 };
 
 export const useDeleteProjectMutation = () => {

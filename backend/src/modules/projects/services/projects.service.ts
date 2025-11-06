@@ -8,19 +8,6 @@ import {
   CreateProjectRequestDto,
   UpdateProjectRequestDto,
 } from '@modules/projects/dto/project.dto';
-import { ApplicationStatusEnum } from '@generated/prisma/mongodb';
-import {
-  CreateFormRequestDto,
-  UpdateFormRequestDto,
-} from '@modules/projects/dto/form.dto';
-import {
-  CreateFormQuestionDto,
-  UpdateFormQuestionDto,
-} from '@modules/projects/dto/form-question.dto';
-import {
-  AnswerDto,
-  ApplyToQuestionRequestDto,
-} from '@modules/projects/dto/apply.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -42,8 +29,11 @@ export class ProjectsService {
   }
 
   // 프로젝트 수정
-  async updateProjectByProjectId(data: UpdateProjectRequestDto) {
-    const { projectId, title, description, link } = data;
+  async updateProjectByProjectId(
+    projectId: string,
+    data: UpdateProjectRequestDto,
+  ) {
+    const { title, description, link } = data;
 
     return this.mongo.project.update({
       where: {
@@ -132,5 +122,14 @@ export class ProjectsService {
     if (!isPlan) {
       throw new ForbiddenException('해당 프로젝트에 대한 권한이 없습니다.');
     }
+  }
+
+  async addTeamMember(projectId: string, userId: string) {
+    return this.mongo.projectMember.create({
+      data: {
+        projectId,
+        userId,
+      },
+    });
   }
 }

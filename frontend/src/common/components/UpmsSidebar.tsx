@@ -12,6 +12,7 @@ import {
   Settings,
   ShieldUserIcon,
   SquarePenIcon,
+  SquarePlusIcon,
   UserPenIcon,
   UserRoundIcon,
 } from 'lucide-react';
@@ -41,7 +42,7 @@ const generalMenu = [
     icon: HomeIcon,
   },
   {
-    title: '지부 내 프로젝트 보기',
+    title: '프로젝트 목록 및 지원',
     url: ROUTES.PROJECTS.LIST,
     icon: FolderOpen,
   },
@@ -55,34 +56,34 @@ const generalMenu = [
 const pmMenu = [
   {
     title: '내 프로젝트 관리',
-    url: '#',
+    url: ROUTES.PROJECTS.MY_PROJECTS,
     icon: Settings,
   },
   {
-    title: '지원서 폼 제작',
-    url: '#',
-    icon: SquarePenIcon,
-  },
-  {
-    title: '지원자 목록 보기',
-    url: '#',
-    icon: ScrollTextIcon,
+    title: '프로젝트 생성',
+    url: ROUTES.PROJECTS.CREATE,
+    icon: SquarePlusIcon,
   },
 ];
 
 const exceptPmMenu = [
   {
     title: '내 지원서 보기',
-    url: '#',
+    url: ROUTES.MY.APPLICATIONS,
     icon: FileUserIcon,
   },
 ];
 
 const adminMenu = [
   {
-    title: '지원 현황 보기',
-    url: '#',
+    title: '운영진 대시보드',
+    url: ROUTES.ADMIN.DASHBOARD,
     icon: ShieldUserIcon,
+  },
+  {
+    title: '매칭 차수 설정',
+    url: ROUTES.ADMIN.MATCHING_ROUNDS,
+    icon: SquarePenIcon,
   },
 ];
 
@@ -126,13 +127,7 @@ const UpmsSideBar = () => {
           </SidebarMenu>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel className={'flex h-5 flex-row items-center gap-1'}>
-            Design
-            <Separator orientation={'vertical'} />
-            Frontend
-            <Separator orientation={'vertical'} />
-            Backend
-          </SidebarGroupLabel>
+          <SidebarGroupLabel>Design | Frontend | Backend</SidebarGroupLabel>
           <SidebarMenu>
             {exceptPmMenu.map((item) => (
               <SidebarMenuItem key={item.title}>

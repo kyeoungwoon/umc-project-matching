@@ -39,7 +39,7 @@ import {
 } from '@common/decorators/response/api-ok-response-common.decorator';
 
 @Controller({
-  path: 'projects',
+  path: 'projects/form',
   version: '1',
 })
 @ApiTags(API_TAGS.FORM)
@@ -67,7 +67,7 @@ export class FormController {
     required: true,
   })
   @ApiOkResponseCommon(FormResponseDto)
-  @Post(':projectId/form')
+  @Post('project/:projectId/form')
   async createProjectApplicationForm(
     @Param('projectId') projectId: string,
     @Body() body: CreateFormRequestDto,
@@ -91,7 +91,7 @@ export class FormController {
     required: true,
   })
   @ApiOkResponseCommon(FormWithDetailsResponseDto)
-  @Get(':projectId/form/:formId')
+  @Get('project/:projectId/form/:formId')
   async getProjectApplicationForm(
     @Param('projectId') projectId: string,
     @Param('formId') formId: string,
@@ -119,7 +119,7 @@ export class FormController {
     required: true,
   })
   @ApiOkResponseCommon(FormResponseDto)
-  @Delete(':projectId/form/:formId')
+  @Delete('project/:projectId/form/:formId')
   async deleteProjectApplicationForm(
     @Param('formId') formId: string,
     @Param('projectId') projectId: string,
@@ -133,34 +133,9 @@ export class FormController {
   }
 
   @ApiOperation({
-    summary: 'formId로 폼 수정',
-    description: '',
-  })
-  @ApiParam({
-    name: 'projectId',
-    required: true,
-  })
-  @ApiParam({
-    name: 'formId',
-    required: true,
-  })
-  @ApiOkResponseCommon(FormResponseDto)
-  @Patch(':projectId/form/:formId')
-  async editProjectApplicationForm(
-    @Param('formId') formId: string,
-    @Param('projectId') projectId: string,
-    @Body() body: UpdateFormRequestDto,
-  ) {
-    const userId = this.reqContext.getOrThrowUserId();
-    await this.formService.throwIfUserNotPlanByFormId(userId, formId);
-    await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
-
-    return this.formService.updateForm(formId, body);
-  }
-
-  @ApiOperation({
-    summary: 'form에 질문 추가',
-    description: '',
+    summary: 'Form에 질문을 생성합니다. 기존 질문들은 모두 삭제 처리됩니다.',
+    description:
+      '기존 질문들에 대한 응답은 어떻게 될지 고민을 해봐야 해요. 난 몰?루',
   })
   @ApiParam({
     name: 'projectId',
@@ -171,7 +146,7 @@ export class FormController {
     required: true,
   })
   @ApiOkResponseCommonArray(FormQuestionDto)
-  @Post(':projectId/forms/:formId/questions')
+  @Post('project/:projectId/forms/:formId/questions')
   async addQuestionsToForm(
     @Param('formId') formId: string,
     @Param('projectId') projectId: string,
@@ -182,27 +157,54 @@ export class FormController {
 
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
 
+    await this.formService.deleteAllQuestionsInForm(formId);
     return this.formService.addFormQuestions(formId, body.questions);
   }
 
-  // form 질문 수정
-  @ApiOperation({
-    summary: 'form에 질문 수정',
-    description: '',
-  })
-  @ApiOkResponseCommonArray(FormQuestionDto)
-  @Patch(':projectId/forms/:formId/questions')
-  async editQuestionsFromForm(
-    @Param('projectId') projectId: string,
-    @Param('formId') formId: string,
-    @Body() body: UpdateQuestionRequestDto,
-  ) {
-    const userId = this.reqContext.getOrThrowUserId();
-    await this.formService.throwIfUserNotPlanByFormId(userId, formId);
+  // // form 질문 수정
+  // @ApiOperation({
+  //   summary: 'form에 질문 수정',
+  //   description: '',
+  // })
+  // @ApiOkResponseCommonArray(FormQuestionDto)
+  // @Patch(':projectId/forms/:formId/questions')
+  // async editQuestionsFromForm(
+  //   @Param('projectId') projectId: string,
+  //   @Param('formId') formId: string,
+  //   @Body() body: UpdateQuestionRequestDto,
+  // ) {
+  //   const userId = this.reqContext.getOrThrowUserId();
+  //   await this.formService.throwIfUserNotPlanByFormId(userId, formId);
+  //
+  //   await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
+  //   // TODO: 현재 검증은 폼이 프로젝트에 속하는지만 함, 질문이 폼에 속하는지는 나중에!
+  //
+  //   return this.formService.updateFormQuestions(body.questions);
+  // }
 
-    await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
-    // TODO: 현재 검증은 폼이 프로젝트에 속하는지만 함, 질문이 폼에 속하는지는 나중에!
-
-    return this.formService.updateFormQuestions(body.questions);
-  }
+  // @ApiOperation({
+  //   summary: 'formId로 폼 수정',
+  //   description: '',
+  // })
+  // @ApiParam({
+  //   name: 'projectId',
+  //   required: true,
+  // })
+  // @ApiParam({
+  //   name: 'formId',
+  //   required: true,
+  // })
+  // @ApiOkResponseCommon(FormResponseDto)
+  // @Patch(':projectId/form/:formId')
+  // async editProjectApplicationForm(
+  //   @Param('formId') formId: string,
+  //   @Param('projectId') projectId: string,
+  //   @Body() body: UpdateFormRequestDto,
+  // ) {
+  //   const userId = this.reqContext.getOrThrowUserId();
+  //   await this.formService.throwIfUserNotPlanByFormId(userId, formId);
+  //   await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
+  //
+  //   return this.formService.updateForm(formId, body);
+  // }
 }

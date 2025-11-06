@@ -94,7 +94,8 @@ import { ProjectsModule } from '@modules/projects/projects.module';
         // DTO에 정의되지 않은 속성은 자동으로 제거합니다.
         whitelist: true,
         // DTO에 정의되지 않은 속성이 들어오면 에러를 발생시킵니다.
-        forbidNonWhitelisted: true,
+        // 개발 과정에서 일단 제거 ..
+        // forbidNonWhitelisted: true,
       }),
     },
   ],
