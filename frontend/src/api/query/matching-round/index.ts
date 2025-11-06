@@ -3,7 +3,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import {
   createMatchingRound,
   getCurrentMatchingRound,
-  testCreateMatchingRound,
+  getMatchingRoundsByStartEndDatetime,
 } from '@api/axios/matching-round';
 import { CreateMatchingRoundRequestDto } from '@api/axios/matching-round/types';
 
@@ -17,6 +17,9 @@ export const useCreateMatchingRoundMutation = () => {
   });
 };
 
-export const useTestCreateMatchingRoundMutation = () => {
-  return useMutation({ mutationFn: testCreateMatchingRound });
+export const useGetMatchingRoundByStartEndDatetime = (startDate: Date, endDate: Date) => {
+  return useQuery({
+    queryKey: ['matching-round', 'start-end-datetime', startDate, endDate],
+    queryFn: () => getMatchingRoundsByStartEndDatetime(startDate, endDate),
+  });
 };

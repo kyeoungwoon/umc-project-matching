@@ -10,27 +10,30 @@ import {
 } from '@api/axios/form/types';
 
 export const createForm = async (projectId: string, data: CreateFormRequestDto) => {
-  const res = await api.post<ApiResponse<FormResponseDto>>(`/v1/projects/${projectId}/form`, data);
+  const res = await api.post<ApiResponse<FormResponseDto>>(
+    `/v1/projects/form/project/${projectId}/form`,
+    data,
+  );
   return res.data.result;
 };
 
 export const getForm = async (projectId: string, formId: string) => {
   const res = await api.get<ApiResponse<FormWithDetailsResponseDto>>(
-    `/v1/projects/${projectId}/form/${formId}`,
+    `/v1/projects/form/project/${projectId}/form/${formId}`,
   );
   return res.data.result;
 };
 
 export const deleteForm = async (projectId: string, formId: string) => {
   const res = await api.delete<ApiResponse<FormResponseDto>>(
-    `/v1/projects/${projectId}/form/${formId}`,
+    `/v1/projects/form/project/${projectId}/form/${formId}`,
   );
   return res.data.result;
 };
 
 export const editForm = async (projectId: string, formId: string, data: UpdateFormRequestDto) => {
   const res = await api.patch<ApiResponse<FormResponseDto>>(
-    `/v1/projects/${projectId}/form/${formId}`,
+    `/v1/projects/form/project/${projectId}/form/${formId}`,
     data,
   );
   return res.data.result;
@@ -42,8 +45,13 @@ export const addQuestionsToForm = async (
   data: CreateQuestionRequestDto,
 ) => {
   const res = await api.post<ApiResponse<FormQuestionDto[]>>(
-    `/v1/projects/${projectId}/forms/${formId}/questions`,
-    data,
+    `/v1/projects/form/project/${projectId}/forms/${formId}/questions`,
+    {
+      questions: data.questions.map((q) => {
+        const { questionNo, title, description, type, isRequired, options } = q;
+        return { questionNo, title, description, type, isRequired, options };
+      }),
+    },
   );
   return res.data.result;
 };
@@ -54,7 +62,7 @@ export const editQuestionsFromForm = async (
   data: UpdateQuestionRequestDto,
 ) => {
   const res = await api.patch<ApiResponse<FormQuestionDto[]>>(
-    `/v1/projects/${projectId}/forms/${formId}/questions`,
+    `/v1/projects/form/project/${projectId}/forms/${formId}/questions`,
     data,
   );
   return res.data.result;

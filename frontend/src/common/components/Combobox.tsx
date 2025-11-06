@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import { clsx } from 'clsx';
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
 
 import { Button } from '@styles/components/ui/button';
@@ -14,15 +15,19 @@ import {
   CommandList,
 } from '@styles/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@styles/components/ui/popover';
-import { cn } from '@styles/lib/utils';
 
 import { useGetSchoolsQuery } from '@api/query/auth';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
+interface School {
+  handle: string;
+  name: string;
+}
+
 interface LoginComboBoxProps {
-  value: string;
-  onValueChange: (value: string) => void;
+  value: School;
+  onValueChange: (value: School) => void;
 }
 
 const LoginComboBox = ({ value, onValueChange }: LoginComboBoxProps) => {
@@ -43,7 +48,7 @@ const LoginComboBox = ({ value, onValueChange }: LoginComboBoxProps) => {
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value ? schools.find((school) => school.handle === value)?.name : '학교를 선택하세요'}
+          {value.name ? value.name : '학교를 선택하세요.'}
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -57,20 +62,20 @@ const LoginComboBox = ({ value, onValueChange }: LoginComboBoxProps) => {
                 <CommandItem
                   key={school.handle}
                   value={school.name}
-                  onSelect={(currentValue) => {
-                    const selectedSchool = schools.find(
-                      (s) => s.name.toLowerCase() === currentValue.toLowerCase(),
-                    );
-                    if (selectedSchool) {
-                      onValueChange(selectedSchool.handle === value ? '' : selectedSchool.handle);
+                  onSelect={() => {
+                    // 선택된 학교를 다시 선택하면, 빈 값으로 변경
+                    if (value.handle === school.handle) {
+                      onValueChange({ handle: '', name: '' });
+                    } else {
+                      onValueChange(school);
                     }
                     setOpen(false);
                   }}
                 >
                   <CheckIcon
-                    className={cn(
+                    className={clsx(
                       'mr-2 h-4 w-4',
-                      value === school.handle ? 'opacity-100' : 'opacity-0',
+                      value.handle === school.handle ? 'opacity-100' : 'opacity-0',
                     )}
                   />
                   {school.name}

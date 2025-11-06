@@ -20,9 +20,12 @@ export const createMatchingRound = async (data: CreateMatchingRoundRequestDto) =
   return res.data.result;
 };
 
-export const testCreateMatchingRound = async () => {
-  const res = await api.post<ApiResponse<TestCreateMatchingRoundResponseDto>>(
-    '/v1/projects/test/matching-round',
+export const getMatchingRoundsByStartEndDatetime = async (startDate: Date, endDate: Date) => {
+  const res = await api.get<ApiResponse<MatchingRoundResponseDto[]>>(
+    '/v1/projects/matching-round/query',
+    {
+      params: { start: startDate.toISOString(), end: endDate.toISOString() },
+    },
   );
   return res.data.result;
 };

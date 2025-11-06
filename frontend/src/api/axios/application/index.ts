@@ -11,7 +11,7 @@ export const applyToProject = async (
   data: ApplyToProjectRequestDto,
 ) => {
   const res = await api.post<ApiResponse<ApplicationResponseDto>>(
-    `/v1/projects/${projectId}/form/${formId}/apply`,
+    `/v1/projects/applications/${projectId}/form/${formId}/apply`,
     data,
   );
   return res.data.result;
@@ -19,14 +19,14 @@ export const applyToProject = async (
 
 export const getApplication = async (projectId: string, applicationId: string) => {
   const res = await api.get<ApiResponse<ApplicationResponseDto>>(
-    `/v1/projects/${projectId}/apply/${applicationId}`,
+    `/v1/projects/applications/${projectId}/apply/${applicationId}`,
   );
   return res.data.result;
 };
 
 export const deleteApplication = async (projectId: string, applicationId: string) => {
   const res = await api.delete<ApiResponse<ApplicationResponseDto>>(
-    `/v1/projects/${projectId}/apply/${applicationId}`,
+    `/v1/projects/applications/${projectId}/apply/${applicationId}`,
   );
   return res.data.result;
 };
@@ -37,8 +37,15 @@ export const changeApplicationStatus = async (
   data: ChangeApplicationStatusDto,
 ) => {
   const res = await api.post<ApiResponse<ApplicationResponseDto>>(
-    `/v1/projects/${projectId}/apply/${applicationId}/status`,
+    `/v1/projects/applications/project/${projectId}/apply/${applicationId}/status`,
     data,
   );
+
+  return res.data.result;
+};
+
+export const getMyApplications = async () => {
+  const res = await api.get<ApiResponse<ApplicationResponseDto[]>>('/v1/projects/applications/me');
+
   return res.data.result;
 };

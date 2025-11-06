@@ -1,20 +1,29 @@
 'use client';
 
+import { useEffect } from 'react';
+
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@styles/components/ui/button';
 
 import { useGetMyInfoQuery } from '@api/query/user';
 
-import { HEADER_SECTION } from '@common/constants/header-title-description.constants';
 import { ROUTES } from '@common/constants/routes.constants';
 
-import { useClearUser } from '@features/auth/hooks/useAuthStore';
+import { useClearUser, useSetUserInfo } from '@features/auth/hooks/useAuthStore';
 
 const Header = ({ section }: { section: { title: string; description: string } }) => {
   const { data, isLoading } = useGetMyInfoQuery();
   const router = useRouter();
   const clearUser = useClearUser();
+  const setUserInfo = useSetUserInfo();
+
+  // useEffect로 이동하여 렌더링 중 setState 방지
+  useEffect(() => {
+    if (data) {
+      setUserInfo(data);
+    }
+  }, [data, setUserInfo]);
 
   const handleLogout = () => {
     clearUser();

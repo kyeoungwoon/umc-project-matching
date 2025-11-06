@@ -39,7 +39,7 @@ import {
 } from '@common/decorators/response/api-ok-response-common.decorator';
 
 @Controller({
-  path: 'projects',
+  path: 'projects/form',
   version: '1',
 })
 @ApiTags(API_TAGS.FORM)
@@ -67,7 +67,7 @@ export class FormController {
     required: true,
   })
   @ApiOkResponseCommon(FormResponseDto)
-  @Post(':projectId/form')
+  @Post('project/:projectId/form')
   async createProjectApplicationForm(
     @Param('projectId') projectId: string,
     @Body() body: CreateFormRequestDto,
@@ -91,7 +91,7 @@ export class FormController {
     required: true,
   })
   @ApiOkResponseCommon(FormWithDetailsResponseDto)
-  @Get(':projectId/form/:formId')
+  @Get('project/:projectId/form/:formId')
   async getProjectApplicationForm(
     @Param('projectId') projectId: string,
     @Param('formId') formId: string,
@@ -119,7 +119,7 @@ export class FormController {
     required: true,
   })
   @ApiOkResponseCommon(FormResponseDto)
-  @Delete(':projectId/form/:formId')
+  @Delete('project/:projectId/form/:formId')
   async deleteProjectApplicationForm(
     @Param('formId') formId: string,
     @Param('projectId') projectId: string,
@@ -146,7 +146,7 @@ export class FormController {
     required: true,
   })
   @ApiOkResponseCommonArray(FormQuestionDto)
-  @Post(':projectId/forms/:formId/questions')
+  @Post('project/:projectId/forms/:formId/questions')
   async addQuestionsToForm(
     @Param('formId') formId: string,
     @Param('projectId') projectId: string,

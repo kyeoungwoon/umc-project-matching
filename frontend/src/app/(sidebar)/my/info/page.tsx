@@ -17,12 +17,15 @@ import { Input } from '@styles/components/ui/input';
 import { Label } from '@styles/components/ui/label';
 
 import { useChangePasswordMutation } from '@api/query/auth';
-import { useGetMyInfoQuery } from '@api/query/user';
 
-import DefaultSkeleton from '@common/components/DefaultSkeleton';
+import { useGetUser } from '@features/auth/hooks/useAuthStore';
 
 const MyInfoPage = () => {
-  const { data: user, isLoading } = useGetMyInfoQuery();
+  const userObj = useGetUser();
+  const user = userObj?.info;
+
+  if (!user) throw new Error('로그인되지 않은 사용자일 것 같습니다.');
+
   const { mutate: changePassword, isPending } = useChangePasswordMutation();
 
   const [currentPassword, setCurrentPassword] = useState('');
@@ -59,10 +62,6 @@ const MyInfoPage = () => {
       },
     );
   };
-
-  if (isLoading || !user) {
-    return <DefaultSkeleton />;
-  }
 
   return (
     <div className="flex w-full flex-col items-center justify-center gap-y-4 p-4">

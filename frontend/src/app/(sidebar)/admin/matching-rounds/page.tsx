@@ -8,65 +8,65 @@ import { Button } from '@styles/components/ui/button';
 import { Card, CardContent } from '@styles/components/ui/card';
 import { Input } from '@styles/components/ui/input';
 
-import { useCreateMatchingRoundMutation } from '@api/query/matching-round';
+import {
+  useCreateMatchingRoundMutation,
+  useGetMatchingRoundByStartEndDatetime,
+} from '@api/query/matching-round';
 
 import DatetimePicker from '@common/components/DatetimePicker';
+import DefaultSkeleton from '@common/components/DefaultSkeleton';
+
+import CreateMatchingRoundCard from '@features/form/components/CreateMatchingRoundCard';
 
 const MatchingRounds = () => {
-  const { mutate: matchingCreate } = useCreateMatchingRoundMutation();
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
 
-  const startDatetime = new Date(Date.now() - 60 * 60 * 1000);
-  const endDatetime = new Date(Date.now() + 60 * 60 * 1000);
+  const nextMonth = new Date();
+  nextMonth.setMonth(nextMonth.getMonth() + 1);
 
-  const [start, setStart] = useState<Date | undefined>(startDatetime);
-  const [end, setEnd] = useState<Date | undefined>(endDatetime);
+  const [startDate, setStartDate] = useState<Date>(yesterday);
+  const [endDate, setEndDate] = useState<Date>(nextMonth);
 
-  const [roundName, setRoundName] = useState<string>('');
+  const { data, isFetching } = useGetMatchingRoundByStartEndDatetime(startDate, endDate);
 
-  const handleCreateMatchingRound = () => {
-    if (!start || !end || !roundName) {
-      return toast.error('이름 및 시작/종료 날짜를 모두 입력해야 합니다.', {
-        richColors: true,
-      });
-    }
-    // 매칭 라운드 생성 로직을 여기에 작성하세요.
-    matchingCreate(
-      {
-        name: roundName,
-        startDatetime: start.toISOString(),
-        endDatetime: end.toISOString(),
-      },
-      {
-        onSuccess: (data) => {
-          console.log('매칭 라운드가 성공적으로 생성되었습니다:', data);
-          toast.success('매칭 라운드가 성공적으로 생성되었습니다.', { richColors: true });
-        },
-        onError: (err) => {
-          console.error('매칭 라운드 생성에 실패했습니다:', err);
-          toast.error('매칭 라운드 생성에 실패했습니다. 다시 시도해주세요.', { richColors: true });
-        },
-      },
-    );
-  };
+  if (isFetching) return <DefaultSkeleton />;
 
   return (
-    <Card className={'w-150'}>
-      <CardContent>
-        <div className="space-y-4">
-          <Input
-            value={roundName}
-            onChange={(e) => setRoundName(e.target.value)}
-            type="text"
-            placeholder="매칭 라운드 이름"
-          />
-          <DatetimePicker date={start} onDateChange={(date) => setStart(date)} />
-          <DatetimePicker date={end} onDateChange={(date) => setEnd(date)} />
-          <Button type="button" onClick={handleCreateMatchingRound}>
-            매칭 라운드 생성
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+    <>
+      <CreateMatchingRoundCard />
+      <Card className="mt-6">
+        <CardContent>
+          <div className="mb-4 flex items-center gap-4">
+            <DatetimePicker date={startDate} onDateChange={(date) => date && setStartDate(date)} />
+            <DatetimePicker date={endDate} onDateChange={(date) => date && setEndDate(date)} />
+            <Button
+              onClick={() => {
+                if (isFetching) return;
+                toast.success('조회가 완료되었습니다.');
+              }}
+            >
+              조회
+            </Button>
+          </div>
+          <div>
+            {data && data.length > 0 ? (
+              data.map((round) => (
+                <div key={round.id} className="mb-4 rounded border p-4">
+                  <div>매칭 라운드 ID: {round.id}</div>
+                  <div>매칭 차수 이름: {round.name}</div>
+
+                  <div>시작 날짜: {new Date(round.startDatetime).toLocaleString('ko-KR')}</div>
+                  <div>종료 날짜: {new Date(round.endDatetime).toLocaleString('ko-KR')}</div>
+                </div>
+              ))
+            ) : (
+              <div>해당 기간에 매칭 라운드가 없습니다.</div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 

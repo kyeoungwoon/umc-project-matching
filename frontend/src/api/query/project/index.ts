@@ -7,7 +7,7 @@ import {
   getProjectList,
   updateProject,
 } from '@api/axios/project';
-import { CreateProjectRequestDto, UpdateProjectRequestDto } from '@api/axios/project/types';
+import { UpdateProjectRequestDto } from '@api/axios/project/types';
 
 export const useGetProjectListQuery = () => {
   return useQuery({ queryKey: ['projects'], queryFn: getProjectList });

@@ -12,7 +12,7 @@ export class MatchingRoundService {
   constructor(private readonly mongo: MongoDBPrismaService) {}
 
   /**
-   * start ~ end 사이에 있는 프로젝트 매칭 차수를 반환합니다.
+   * start ~ end 사이에 있는 프로젝트 매칭 차수를 하나만 반환합니다.
    */
   async getProjectMatchingRoundByStartEndDatetime(
     startDatetime: Date,
@@ -25,6 +25,28 @@ export class MatchingRoundService {
         },
         endDatetime: {
           gte: endDatetime,
+        },
+      },
+      orderBy: {
+        startDatetime: 'desc',
+      },
+    });
+  }
+
+  /**
+   * start ~ end 사이에 있는 프로젝트 매칭 차수를 모두 반환합니다.
+   */
+  async getAllProjectMatchingRoundByStartEndDatetime(
+    startDatetime: Date,
+    endDatetime: Date,
+  ) {
+    return this.mongo.matchingRound.findMany({
+      where: {
+        startDatetime: {
+          gte: startDatetime,
+        },
+        endDatetime: {
+          lte: endDatetime,
         },
       },
       orderBy: {

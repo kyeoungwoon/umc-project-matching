@@ -14,7 +14,7 @@ import { useGetCurrentMatchingRoundQuery } from '@api/query/matching-round';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
-const AnnouncementCard = () => {
+const MatchingRoundAnnouncementCard = () => {
   const { data, isLoading, isError, error } = useGetCurrentMatchingRoundQuery();
 
   if (isLoading) {
@@ -27,6 +27,8 @@ const AnnouncementCard = () => {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
     };
     return new Date(dateString).toLocaleDateString('ko-KR', options);
   };
@@ -35,7 +37,7 @@ const AnnouncementCard = () => {
     console.error('매칭 차수 조회 오류:', error);
     toast.error('현재 매칭 차수를 불러오지 못했습니다.', {
       richColors: true,
-      description: (error as any)?.response?.data?.error?.message,
+      description: '무언가 잘못되었어요 ...',
     });
   }
 
@@ -58,4 +60,4 @@ const AnnouncementCard = () => {
   );
 };
 
-export default AnnouncementCard;
+export default MatchingRoundAnnouncementCard;

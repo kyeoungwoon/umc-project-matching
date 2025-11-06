@@ -48,6 +48,7 @@ export interface FormResponseDto {
   description: string | null;
   createdAt: string;
   updatedAt: string;
+  availableMatchingRounds: string[];
 }
 
 export interface FormQuestionDto {

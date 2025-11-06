@@ -18,7 +18,10 @@ import FormField from '@common/components/FormField';
 import { useSetUser } from '@features/auth/hooks/useAuthStore';
 
 const loginSchema = z.object({
-  school: z.string().min(1, '학교를 입력하세요'),
+  school: z.object({
+    name: z.string().min(1, '학교를 선택하세요'),
+    handle: z.string().min(1, '학교를 선택하세요'),
+  }),
   studentId: z.string().min(1, '학번을 입력하세요'),
   password: z.string().min(1, '비밀번호를 입력하세요'),
 });
@@ -30,15 +33,18 @@ export default function LoginForm() {
 
   const form = useForm({
     defaultValues: {
-      school: '',
+      school: {
+        name: '',
+        handle: '',
+      },
       studentId: '',
       password: '',
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: ({ value }) => {
       console.log('login clicked!');
       mutate(
         {
-          school: value.school,
+          school: value.school.handle,
           studentId: value.studentId,
           password: value.password,
         },

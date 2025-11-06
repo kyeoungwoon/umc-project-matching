@@ -28,9 +28,10 @@ import {
 
 import { Part } from '@api/axios/auth/types';
 import { useCreateProjectMutation } from '@api/query/project';
-import { useGetMyInfoQuery } from '@api/query/user';
 
 import FormField from '@common/components/FormField';
+
+import { useGetUser } from '@features/auth/hooks/useAuthStore';
 
 const partOptions: Part[] = ['PLAN', 'DESIGN', 'WEB', 'ANDROID', 'IOS', 'SPRINGBOOT', 'NODEJS'];
 
@@ -49,7 +50,8 @@ const projectSchema = z.object({
 });
 
 const CreateProjectPage = () => {
-  const { data: user } = useGetMyInfoQuery();
+  const user = useGetUser();
+
   const { mutate: createProject, isPending } = useCreateProjectMutation();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState('');
@@ -64,7 +66,7 @@ const CreateProjectPage = () => {
       partTo: [{ part: 'PLAN' as Part, to: 1 }],
     },
     onSubmit: async ({ value }) => {
-      if (!user) return;
+      if (!user) throw new Error('로그인되지 않은 사용자 입니다.');
       createProject(
         { ...value, planId: user.id },
         {

@@ -25,9 +25,9 @@ export const SubjectiveQuestion = ({ field, question }: SubjectiveQuestionProps)
       </CardHeader>
       <CardContent>
         <Input
-          value={field.state.value}
+          value={field.state.value[0] ?? ''}
           onBlur={field.handleBlur}
-          onChange={(e) => field.handleChange(e.target.value)}
+          onChange={(e) => field.handleChange([e.target.value])}
           placeholder="답변을 입력해주세요."
         />
       </CardContent>

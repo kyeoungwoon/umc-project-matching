@@ -5,6 +5,7 @@ import {
   changeApplicationStatus,
   deleteApplication,
   getApplication,
+  getMyApplications,
 } from '@api/axios/application';
 import { ApplyToProjectRequestDto, ChangeApplicationStatusDto } from '@api/axios/application/types';
 
@@ -30,5 +31,12 @@ export const useChangeApplicationStatusMutation = (projectId: string, applicatio
   return useMutation({
     mutationFn: (data: ChangeApplicationStatusDto) =>
       changeApplicationStatus(projectId, applicationId, data),
+  });
+};
+
+export const useGetMyApplicationsQuery = () => {
+  return useQuery({
+    queryKey: ['applications', 'me'],
+    queryFn: getMyApplications,
   });
 };

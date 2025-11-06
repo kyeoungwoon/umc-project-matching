@@ -19,6 +19,8 @@ import { useUpdateProjectMutation } from '@api/query/project';
 
 import { ROUTES } from '@common/constants/routes.constants';
 
+import { useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
+
 export interface ProjectCardProps {
   id: string;
   name: string;
@@ -40,7 +42,7 @@ export enum ProjectCardMode {
 
 const ProjectCard = (props: ProjectCardProps) => {
   const { id, name, description, link, partAndTo } = props;
-  console.log('ProjectCard props:', id);
+  const isPlan = useIsPlanChallenger();
 
   const [mode, setMode] = useState<ProjectCardMode>(ProjectCardMode.VIEW);
   const [editedProject, setEditedProject] = useState<UpdateProjectRequestDto>({
@@ -144,8 +146,8 @@ const ProjectCard = (props: ProjectCardProps) => {
           </Button>
         ) : (
           <ButtonGroup>
-            <Button size={'sm'} variant={'outline'} onClick={handleEditModeClick}>
-              수정하기
+            <Button hidden={!isPlan} size={'sm'} variant={'outline'} onClick={handleEditModeClick}>
+              프로젝트 정보 수정
             </Button>
             <Button
               onClick={handleViewMoreClick}
@@ -153,7 +155,7 @@ const ProjectCard = (props: ProjectCardProps) => {
               variant={'outline'}
               className={'text-semibold text-sm'}
             >
-              기획안 보기
+              기획안 보러가기
             </Button>
             <Button
               onClick={handleApplyClick}
@@ -161,7 +163,7 @@ const ProjectCard = (props: ProjectCardProps) => {
               variant={'outline'}
               className={'text-semibold text-sm'}
             >
-              지원하기
+              지원 가능한 폼 보기
             </Button>
           </ButtonGroup>
         )}

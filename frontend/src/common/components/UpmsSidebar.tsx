@@ -64,22 +64,12 @@ const pmMenu = [
     url: ROUTES.PROJECTS.CREATE,
     icon: SquarePlusIcon,
   },
-  {
-    title: '지원서 폼 제작',
-    url: '#',
-    icon: SquarePenIcon,
-  },
-  {
-    title: '지원자 목록 보기',
-    url: '#',
-    icon: ScrollTextIcon,
-  },
 ];
 
 const exceptPmMenu = [
   {
     title: '내 지원서 보기',
-    url: '#',
+    url: ROUTES.MY.APPLICATIONS,
     icon: FileUserIcon,
   },
 ];

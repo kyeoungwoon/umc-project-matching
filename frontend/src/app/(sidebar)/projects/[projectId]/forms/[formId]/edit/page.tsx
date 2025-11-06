@@ -19,7 +19,7 @@ const EditProjectFormPage = () => {
   const projectId = params.projectId as string;
   const formId = params.formId as string;
 
-  const { data: form, isLoading } = useGetFormQuery(projectId, formId);
+  const { data: fetchedForm, isLoading } = useGetFormQuery(projectId, formId);
   const { mutate: addQuestions } = useAddQuestionsToFormMutation(projectId);
 
   const handleFormSubmit = (questionsData: CreateQuestionRequestDto) => {
@@ -30,8 +30,8 @@ const EditProjectFormPage = () => {
           toast.success('질문이 저장되었습니다.', { richColors: true });
           router.push(ROUTES.PROJECTS.FORM_LIST(projectId));
         },
-        onError: () => {
-          toast.success('질문 저장에 실패했습니다.', { richColors: true });
+        onError: (err) => {
+          toast.error('질문 저장에 실패했습니다.', { richColors: true, description: err?.message });
         },
       },
     );
@@ -41,12 +41,12 @@ const EditProjectFormPage = () => {
     return <DefaultSkeleton />;
   }
 
-  if (!form) throw new Error('Form에 대한 정보가 없습니다.');
+  if (!fetchedForm) throw new Error('Form에 대한 정보가 없습니다.');
 
   return (
     <div className="flex w-full flex-col items-center justify-center p-4">
       <div className="mt-5 w-full max-w-4xl">
-        <QuestionFormBuilder onSubmit={handleFormSubmit} initialData={form.questions} />
+        <QuestionFormBuilder onSubmit={handleFormSubmit} initialData={fetchedForm.questions} />
       </div>
     </div>
   );

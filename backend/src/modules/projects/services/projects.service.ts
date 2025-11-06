@@ -123,4 +123,13 @@ export class ProjectsService {
       throw new ForbiddenException('해당 프로젝트에 대한 권한이 없습니다.');
     }
   }
+
+  async addTeamMember(projectId: string, userId: string) {
+    return this.mongo.projectMember.create({
+      data: {
+        projectId,
+        userId,
+      },
+    });
+  }
 }

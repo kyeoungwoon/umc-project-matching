@@ -30,9 +30,15 @@ const formSchema = z.object({
 // type FormValues = z.infer<typeof formSchema>;
 
 export const QuestionFormBuilder = ({ onSubmit, initialData }: QuestionFormBuilderProps) => {
+  // 초기값이 지정된 것 이상으로 주어졌을 때 그 이상보내는 것을 방
+  // const initialQuestionData: CreateFormQuestionDto[] = initialData?.map((q) => {
+  //   const { questionNo, title, description, type, isRequired, options } = q;
+  //   return { questionNo, title, description, type, isRequired, options };
+  // });
+
   const form = useForm({
     defaultValues: {
-      questions: initialData || [],
+      questions: initialData ?? [],
     },
     onSubmit: ({ value }) => onSubmit(value),
     validators: {

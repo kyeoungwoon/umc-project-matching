@@ -20,7 +20,7 @@ import { ApplicationResponseDto } from '@modules/projects/dto/ok-responses/apply
 import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
 
 @Controller({
-  path: 'projects',
+  path: 'projects/applications',
   version: '1',
 })
 @ApiTags(API_TAGS.PROJECT)
@@ -34,6 +34,18 @@ export class ApplyController {
     private readonly reqContext: RequestContextService,
     private readonly userService: UsersService,
   ) {}
+
+  // 내가 작성한 지원서 모두 보기
+  @ApiOperation({
+    summary: '내가 작성한 지원서 모두 보기',
+    description: '',
+  })
+  @Get('/me')
+  async getMyApplications() {
+    const userId = this.reqContext.getOrThrowUserId();
+
+    return this.applyService.getMyApplications(userId);
+  }
 
   @ApiOperation({
     summary: '프로젝트 지원하기',
@@ -77,7 +89,7 @@ export class ApplyController {
     required: true,
   })
   @ApiOkResponseCommon(ApplicationResponseDto)
-  @Get(':projectId/apply/:applicationId')
+  @Get('project/:projectId/apply/:applicationId')
   async getApplication(@Param('applicationId') applicationId: string) {
     const userId = this.reqContext.getOrThrowUserId();
     await this.applyService.throwIfUserNotApplicationOwner(
@@ -85,7 +97,7 @@ export class ApplyController {
       applicationId,
     );
 
-    return this.applyService.getApplicationByApplicationId(applicationId);
+    return this.applyService.getApplication(applicationId);
   }
 
   @ApiOperation({
@@ -101,7 +113,7 @@ export class ApplyController {
     required: true,
   })
   @ApiOkResponseCommon(ApplicationResponseDto)
-  @Delete(':projectId/apply/:applicationId')
+  @Delete('project/:projectId/apply/:applicationId')
   async deleteApplicationForm(@Param('applicationId') applicationId: string) {
     const userId = this.reqContext.getOrThrowUserId();
     await this.applyService.throwIfUserNotApplicationOwner(
@@ -114,7 +126,7 @@ export class ApplyController {
 
   // Plan 전용, 지원서 상태 변경
   @ApiOkResponseCommon(ApplicationResponseDto)
-  @Post(':projectId/apply/:applicationId/status')
+  @Post('project/:projectId/apply/:applicationId/status')
   async changeApplicationStatus(
     @Param('projectId') projectId: string,
     @Param('applicationId') applicationId: string,
