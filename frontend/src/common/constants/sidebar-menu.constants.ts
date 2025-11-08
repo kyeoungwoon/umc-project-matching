@@ -51,11 +51,6 @@ export const pmMenu: menuItem[] = [
     url: ROUTES.PROJECTS.MY_PROJECTS,
     icon: Settings,
   },
-  {
-    title: '프로젝트 생성',
-    url: ROUTES.PROJECTS.CREATE,
-    icon: SquarePlusIcon,
-  },
 ];
 
 export const exceptPmMenu: menuItem[] = [
@@ -76,6 +71,11 @@ export const adminMenu: menuItem[] = [
     title: '매칭 차수 설정',
     url: ROUTES.ADMIN.MATCHING_ROUNDS,
     icon: SquarePenIcon,
+  },
+  {
+    title: '프로젝트 생성',
+    url: ROUTES.PROJECTS.CREATE,
+    icon: SquarePlusIcon,
   },
 ];
 

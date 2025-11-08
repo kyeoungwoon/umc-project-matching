@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@styles/components/ui/card';
-import { Input } from '@styles/components/ui/input';
+import { Textarea } from '@styles/components/ui/textarea';
 
 import { FormQuestionDto } from '@api/axios/form/types';
 
@@ -30,10 +30,15 @@ export const SubjectiveQuestion = ({ field, question }: SubjectiveQuestionProps)
         <CardDescription>{question.description}</CardDescription>
       </CardHeader>
       <CardContent>
-        <Input
+        <Textarea
           value={field.state.value[0] ?? ''}
           onBlur={field.handleBlur}
           onChange={(e) => field.handleChange([e.target.value || ''])}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}
           placeholder="답변을 입력해주세요."
         />
       </CardContent>

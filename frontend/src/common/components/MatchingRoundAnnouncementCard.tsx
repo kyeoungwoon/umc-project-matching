@@ -17,6 +17,8 @@ import { useGetCurrentMatchingRoundQuery } from '@api/query/matching-round';
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 import MatchingRoundInfoCard from '@common/components/MatchingRoundInfoCard';
 
+import JeewonMatchingInfoCard from '@features/form/components/JeewonMatchingInfoCard';
+
 const MatchingRoundAnnouncementCard = () => {
   const { data, isLoading, isError, error } = useGetCurrentMatchingRoundQuery();
 
@@ -50,7 +52,7 @@ const MatchingRoundAnnouncementCard = () => {
   }
 
   return (
-    <Card className="w-200 overflow-hidden shadow-md">
+    <Card className="w-full overflow-hidden shadow-md">
       <CardHeader className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
@@ -64,7 +66,7 @@ const MatchingRoundAnnouncementCard = () => {
       </CardHeader>
       <CardContent className="pt-2">
         {data ? (
-          <MatchingRoundInfoCard data={data} />
+          <JeewonMatchingInfoCard data={data} />
         ) : (
           <div className="flex flex-col items-center justify-center py-8 text-center">
             <div className="bg-muted mb-3 flex h-12 w-12 items-center justify-center rounded-full">
