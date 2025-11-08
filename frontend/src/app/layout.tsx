@@ -3,8 +3,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
-import { QueryClientProvider } from '@tanstack/react-query';
-
+import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import clsx from 'clsx';
 
@@ -35,6 +34,7 @@ const RootLayout = ({
       <body className={clsx('flex min-h-screen flex-col', pretendard.variable)}>
         <QueryClientProviders>
           <SpeedInsights />
+          <Analytics />
           <Toaster />
           {children}
         </QueryClientProviders>
