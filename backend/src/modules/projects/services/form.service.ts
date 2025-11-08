@@ -70,6 +70,17 @@ export class FormService {
     });
   }
 
+  async softDeleteAllQuestionsInForm(formId: string) {
+    return this.mongo.formQuestion.updateMany({
+      where: {
+        formId,
+      },
+      data: {
+        isDeleted: true,
+      },
+    });
+  }
+
   /**
    * formId에 질문을 추가합니다.
    */

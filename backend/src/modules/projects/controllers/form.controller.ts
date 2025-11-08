@@ -156,7 +156,7 @@ export class FormController {
 
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
 
-    await this.formService.deleteAllQuestionsInForm(formId);
+    await this.formService.softDeleteAllQuestionsInForm(formId);
     return this.formService.addFormQuestions(formId, body.questions);
   }
 

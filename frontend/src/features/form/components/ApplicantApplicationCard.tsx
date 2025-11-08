@@ -40,18 +40,15 @@ const ApplicantApplicationCard = ({
   application: ApplicationResponseDto;
   projectId: string;
 }) => {
-  console.log('application:', application);
-  console.log('projectId:', projectId);
+  // console.log('application:', application);
+  // console.log('projectId:', projectId);
 
   const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus | null>(
     application.status,
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { mutate: changeStatus, isPending } = useChangeApplicationStatusMutation(
-    projectId,
-    application.id,
-  );
+  const { mutate: changeStatus } = useChangeApplicationStatusMutation(projectId, application.id);
 
   const handleButtonClick = (newStatus: ApplicationStatus) => {
     setSelectedStatus(newStatus);

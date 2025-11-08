@@ -48,6 +48,20 @@ const getStatusText = (status: string) => {
 const ApplicationInfoCard = ({ application }: { application: ApplicationResponseDto }) => {
   return (
     <Card key={application.id} className="transition-shadow hover:shadow-md">
+      {/*내 지원서에도 쓰이는 관계로 합/불 여부 표시*/}
+      <CardHeader>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="text-lg font-semibold">지원서 정보</CardTitle>
+          <Badge variant={getStatusBadgeVariant(application.status)}>
+            {getStatusText(application.status)}
+          </Badge>
+        </div>
+        {application.createdAt && (
+          <CardDescription className="text-muted-foreground mt-1 text-sm">
+            제출일: {new Date(application.createdAt).toLocaleString()}
+          </CardDescription>
+        )}
+      </CardHeader>
       {/*본문은 매칭 라운드 + 답변 배열로 나열*/}
       <CardContent>
         <div className="grid gap-3 text-sm">
