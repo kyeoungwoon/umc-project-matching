@@ -60,6 +60,19 @@ export class AuthService {
     });
   }
 
+  async registerBulk(data: CreateUserRequestDto[]) {
+    const bulkData = await Promise.all(
+      data.map(async (d) => {
+        const hashedPassword = await argon2.hash(d.password);
+        return { ...d, password: hashedPassword };
+      }),
+    );
+
+    return this.mongo.challenger.createMany({
+      data: bulkData,
+    });
+  }
+
   // userId와 password를 검증합니다.
   async verifyPasswordWithUserId(
     userId: string,

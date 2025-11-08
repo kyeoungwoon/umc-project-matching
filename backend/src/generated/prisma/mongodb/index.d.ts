@@ -118,6 +118,21 @@ export const UserRoleEnum: {
 
 export type UserRoleEnum = (typeof UserRoleEnum)[keyof typeof UserRoleEnum]
 
+
+export const GenderEnum: {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE'
+};
+
+export type GenderEnum = (typeof GenderEnum)[keyof typeof GenderEnum]
+
+
+export const ChallengerChapterEnum: {
+  LEO_9TH: 'LEO_9TH'
+};
+
+export type ChallengerChapterEnum = (typeof ChallengerChapterEnum)[keyof typeof ChallengerChapterEnum]
+
 }
 
 export type UserPartEnum = $Enums.UserPartEnum
@@ -139,6 +154,14 @@ export const ApplicationStatusEnum: typeof $Enums.ApplicationStatusEnum
 export type UserRoleEnum = $Enums.UserRoleEnum
 
 export const UserRoleEnum: typeof $Enums.UserRoleEnum
+
+export type GenderEnum = $Enums.GenderEnum
+
+export const GenderEnum: typeof $Enums.GenderEnum
+
+export type ChallengerChapterEnum = $Enums.ChallengerChapterEnum
+
+export const ChallengerChapterEnum: typeof $Enums.ChallengerChapterEnum
 
 /**
  * ##  Prisma Client ʲˢ
@@ -1972,6 +1995,7 @@ export namespace Prisma {
 
   export type ChallengerMinAggregateOutputType = {
     id: string | null
+    umsbChallengerId: string | null
     name: string | null
     nickname: string | null
     introduction: string | null
@@ -1980,12 +2004,15 @@ export namespace Prisma {
     password: string | null
     part: $Enums.UserPartEnum | null
     role: $Enums.UserRoleEnum | null
+    gender: $Enums.GenderEnum | null
+    chapter: $Enums.ChallengerChapterEnum | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type ChallengerMaxAggregateOutputType = {
     id: string | null
+    umsbChallengerId: string | null
     name: string | null
     nickname: string | null
     introduction: string | null
@@ -1994,12 +2021,15 @@ export namespace Prisma {
     password: string | null
     part: $Enums.UserPartEnum | null
     role: $Enums.UserRoleEnum | null
+    gender: $Enums.GenderEnum | null
+    chapter: $Enums.ChallengerChapterEnum | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type ChallengerCountAggregateOutputType = {
     id: number
+    umsbChallengerId: number
     name: number
     nickname: number
     introduction: number
@@ -2008,6 +2038,8 @@ export namespace Prisma {
     password: number
     part: number
     role: number
+    gender: number
+    chapter: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2016,6 +2048,7 @@ export namespace Prisma {
 
   export type ChallengerMinAggregateInputType = {
     id?: true
+    umsbChallengerId?: true
     name?: true
     nickname?: true
     introduction?: true
@@ -2024,12 +2057,15 @@ export namespace Prisma {
     password?: true
     part?: true
     role?: true
+    gender?: true
+    chapter?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type ChallengerMaxAggregateInputType = {
     id?: true
+    umsbChallengerId?: true
     name?: true
     nickname?: true
     introduction?: true
@@ -2038,12 +2074,15 @@ export namespace Prisma {
     password?: true
     part?: true
     role?: true
+    gender?: true
+    chapter?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type ChallengerCountAggregateInputType = {
     id?: true
+    umsbChallengerId?: true
     name?: true
     nickname?: true
     introduction?: true
@@ -2052,6 +2091,8 @@ export namespace Prisma {
     password?: true
     part?: true
     role?: true
+    gender?: true
+    chapter?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2131,6 +2172,7 @@ export namespace Prisma {
 
   export type ChallengerGroupByOutputType = {
     id: string
+    umsbChallengerId: string | null
     name: string
     nickname: string
     introduction: string | null
@@ -2139,6 +2181,8 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role: $Enums.UserRoleEnum
+    gender: $Enums.GenderEnum | null
+    chapter: $Enums.ChallengerChapterEnum | null
     createdAt: Date
     updatedAt: Date
     _count: ChallengerCountAggregateOutputType | null
@@ -2162,6 +2206,7 @@ export namespace Prisma {
 
   export type ChallengerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    umsbChallengerId?: boolean
     name?: boolean
     nickname?: boolean
     introduction?: boolean
@@ -2170,6 +2215,8 @@ export namespace Prisma {
     password?: boolean
     part?: boolean
     role?: boolean
+    gender?: boolean
+    chapter?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     applications?: boolean | Challenger$applicationsArgs<ExtArgs>
@@ -2183,6 +2230,7 @@ export namespace Prisma {
 
   export type ChallengerSelectScalar = {
     id?: boolean
+    umsbChallengerId?: boolean
     name?: boolean
     nickname?: boolean
     introduction?: boolean
@@ -2191,11 +2239,13 @@ export namespace Prisma {
     password?: boolean
     part?: boolean
     role?: boolean
+    gender?: boolean
+    chapter?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ChallengerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "nickname" | "introduction" | "school" | "studentId" | "password" | "part" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["challenger"]>
+  export type ChallengerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "umsbChallengerId" | "name" | "nickname" | "introduction" | "school" | "studentId" | "password" | "part" | "role" | "gender" | "chapter" | "createdAt" | "updatedAt", ExtArgs["result"]["challenger"]>
   export type ChallengerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | Challenger$applicationsArgs<ExtArgs>
     projects?: boolean | Challenger$projectsArgs<ExtArgs>
@@ -2214,6 +2264,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
+      umsbChallengerId: string | null
       name: string
       nickname: string
       introduction: string | null
@@ -2222,6 +2273,8 @@ export namespace Prisma {
       password: string
       part: $Enums.UserPartEnum
       role: $Enums.UserRoleEnum
+      gender: $Enums.GenderEnum | null
+      chapter: $Enums.ChallengerChapterEnum | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["challenger"]>
@@ -2621,6 +2674,7 @@ export namespace Prisma {
    */
   interface ChallengerFieldRefs {
     readonly id: FieldRef<"Challenger", 'String'>
+    readonly umsbChallengerId: FieldRef<"Challenger", 'String'>
     readonly name: FieldRef<"Challenger", 'String'>
     readonly nickname: FieldRef<"Challenger", 'String'>
     readonly introduction: FieldRef<"Challenger", 'String'>
@@ -2629,6 +2683,8 @@ export namespace Prisma {
     readonly password: FieldRef<"Challenger", 'String'>
     readonly part: FieldRef<"Challenger", 'UserPartEnum'>
     readonly role: FieldRef<"Challenger", 'UserRoleEnum'>
+    readonly gender: FieldRef<"Challenger", 'GenderEnum'>
+    readonly chapter: FieldRef<"Challenger", 'ChallengerChapterEnum'>
     readonly createdAt: FieldRef<"Challenger", 'DateTime'>
     readonly updatedAt: FieldRef<"Challenger", 'DateTime'>
   }
@@ -11341,6 +11397,7 @@ export namespace Prisma {
 
   export const ChallengerScalarFieldEnum: {
     id: 'id',
+    umsbChallengerId: 'umsbChallengerId',
     name: 'name',
     nickname: 'nickname',
     introduction: 'introduction',
@@ -11349,6 +11406,8 @@ export namespace Prisma {
     password: 'password',
     part: 'part',
     role: 'role',
+    gender: 'gender',
+    chapter: 'chapter',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -11521,6 +11580,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'GenderEnum'
+   */
+  export type EnumGenderEnumFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GenderEnum'>
+    
+
+
+  /**
+   * Reference to a field of type 'GenderEnum[]'
+   */
+  export type ListEnumGenderEnumFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'GenderEnum[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ChallengerChapterEnum'
+   */
+  export type EnumChallengerChapterEnumFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChallengerChapterEnum'>
+    
+
+
+  /**
+   * Reference to a field of type 'ChallengerChapterEnum[]'
+   */
+  export type ListEnumChallengerChapterEnumFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChallengerChapterEnum[]'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -11605,6 +11692,7 @@ export namespace Prisma {
     OR?: ChallengerWhereInput[]
     NOT?: ChallengerWhereInput | ChallengerWhereInput[]
     id?: StringFilter<"Challenger"> | string
+    umsbChallengerId?: StringNullableFilter<"Challenger"> | string | null
     name?: StringFilter<"Challenger"> | string
     nickname?: StringFilter<"Challenger"> | string
     introduction?: StringNullableFilter<"Challenger"> | string | null
@@ -11613,6 +11701,8 @@ export namespace Prisma {
     password?: StringFilter<"Challenger"> | string
     part?: EnumUserPartEnumFilter<"Challenger"> | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFilter<"Challenger"> | $Enums.UserRoleEnum
+    gender?: EnumGenderEnumNullableFilter<"Challenger"> | $Enums.GenderEnum | null
+    chapter?: EnumChallengerChapterEnumNullableFilter<"Challenger"> | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFilter<"Challenger"> | Date | string
     updatedAt?: DateTimeFilter<"Challenger"> | Date | string
     applications?: ApplicationListRelationFilter
@@ -11623,6 +11713,7 @@ export namespace Prisma {
 
   export type ChallengerOrderByWithRelationInput = {
     id?: SortOrder
+    umsbChallengerId?: SortOrder
     name?: SortOrder
     nickname?: SortOrder
     introduction?: SortOrder
@@ -11631,6 +11722,8 @@ export namespace Prisma {
     password?: SortOrder
     part?: SortOrder
     role?: SortOrder
+    gender?: SortOrder
+    chapter?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     applications?: ApplicationOrderByRelationAggregateInput
@@ -11645,6 +11738,7 @@ export namespace Prisma {
     AND?: ChallengerWhereInput | ChallengerWhereInput[]
     OR?: ChallengerWhereInput[]
     NOT?: ChallengerWhereInput | ChallengerWhereInput[]
+    umsbChallengerId?: StringNullableFilter<"Challenger"> | string | null
     name?: StringFilter<"Challenger"> | string
     nickname?: StringFilter<"Challenger"> | string
     introduction?: StringNullableFilter<"Challenger"> | string | null
@@ -11653,6 +11747,8 @@ export namespace Prisma {
     password?: StringFilter<"Challenger"> | string
     part?: EnumUserPartEnumFilter<"Challenger"> | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFilter<"Challenger"> | $Enums.UserRoleEnum
+    gender?: EnumGenderEnumNullableFilter<"Challenger"> | $Enums.GenderEnum | null
+    chapter?: EnumChallengerChapterEnumNullableFilter<"Challenger"> | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFilter<"Challenger"> | Date | string
     updatedAt?: DateTimeFilter<"Challenger"> | Date | string
     applications?: ApplicationListRelationFilter
@@ -11663,6 +11759,7 @@ export namespace Prisma {
 
   export type ChallengerOrderByWithAggregationInput = {
     id?: SortOrder
+    umsbChallengerId?: SortOrder
     name?: SortOrder
     nickname?: SortOrder
     introduction?: SortOrder
@@ -11671,6 +11768,8 @@ export namespace Prisma {
     password?: SortOrder
     part?: SortOrder
     role?: SortOrder
+    gender?: SortOrder
+    chapter?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ChallengerCountOrderByAggregateInput
@@ -11683,6 +11782,7 @@ export namespace Prisma {
     OR?: ChallengerScalarWhereWithAggregatesInput[]
     NOT?: ChallengerScalarWhereWithAggregatesInput | ChallengerScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Challenger"> | string
+    umsbChallengerId?: StringNullableWithAggregatesFilter<"Challenger"> | string | null
     name?: StringWithAggregatesFilter<"Challenger"> | string
     nickname?: StringWithAggregatesFilter<"Challenger"> | string
     introduction?: StringNullableWithAggregatesFilter<"Challenger"> | string | null
@@ -11691,6 +11791,8 @@ export namespace Prisma {
     password?: StringWithAggregatesFilter<"Challenger"> | string
     part?: EnumUserPartEnumWithAggregatesFilter<"Challenger"> | $Enums.UserPartEnum
     role?: EnumUserRoleEnumWithAggregatesFilter<"Challenger"> | $Enums.UserRoleEnum
+    gender?: EnumGenderEnumNullableWithAggregatesFilter<"Challenger"> | $Enums.GenderEnum | null
+    chapter?: EnumChallengerChapterEnumNullableWithAggregatesFilter<"Challenger"> | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeWithAggregatesFilter<"Challenger"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Challenger"> | Date | string
   }
@@ -12240,6 +12342,7 @@ export namespace Prisma {
 
   export type ChallengerCreateInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -12247,6 +12350,8 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
@@ -12257,6 +12362,7 @@ export namespace Prisma {
 
   export type ChallengerUncheckedCreateInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -12265,6 +12371,8 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
@@ -12273,6 +12381,7 @@ export namespace Prisma {
   }
 
   export type ChallengerUpdateInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12280,6 +12389,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
@@ -12289,6 +12400,7 @@ export namespace Prisma {
   }
 
   export type ChallengerUncheckedUpdateInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12297,6 +12409,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
@@ -12306,6 +12420,7 @@ export namespace Prisma {
 
   export type ChallengerCreateManyInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -12314,11 +12429,14 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ChallengerUpdateManyMutationInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12326,11 +12444,14 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ChallengerUncheckedUpdateManyInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12339,6 +12460,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12924,6 +13047,22 @@ export namespace Prisma {
     not?: NestedEnumUserRoleEnumFilter<$PrismaModel> | $Enums.UserRoleEnum
   }
 
+  export type EnumGenderEnumNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.GenderEnum | EnumGenderEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GenderEnum[] | ListEnumGenderEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GenderEnum[] | ListEnumGenderEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderEnumNullableFilter<$PrismaModel> | $Enums.GenderEnum | null
+    isSet?: boolean
+  }
+
+  export type EnumChallengerChapterEnumNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChallengerChapterEnum | EnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChallengerChapterEnum[] | ListEnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ChallengerChapterEnum[] | ListEnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumChallengerChapterEnumNullableFilter<$PrismaModel> | $Enums.ChallengerChapterEnum | null
+    isSet?: boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -12977,6 +13116,7 @@ export namespace Prisma {
 
   export type ChallengerCountOrderByAggregateInput = {
     id?: SortOrder
+    umsbChallengerId?: SortOrder
     name?: SortOrder
     nickname?: SortOrder
     introduction?: SortOrder
@@ -12985,12 +13125,15 @@ export namespace Prisma {
     password?: SortOrder
     part?: SortOrder
     role?: SortOrder
+    gender?: SortOrder
+    chapter?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type ChallengerMaxOrderByAggregateInput = {
     id?: SortOrder
+    umsbChallengerId?: SortOrder
     name?: SortOrder
     nickname?: SortOrder
     introduction?: SortOrder
@@ -12999,12 +13142,15 @@ export namespace Prisma {
     password?: SortOrder
     part?: SortOrder
     role?: SortOrder
+    gender?: SortOrder
+    chapter?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type ChallengerMinOrderByAggregateInput = {
     id?: SortOrder
+    umsbChallengerId?: SortOrder
     name?: SortOrder
     nickname?: SortOrder
     introduction?: SortOrder
@@ -13013,6 +13159,8 @@ export namespace Prisma {
     password?: SortOrder
     part?: SortOrder
     role?: SortOrder
+    gender?: SortOrder
+    chapter?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13072,6 +13220,28 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleEnumFilter<$PrismaModel>
     _max?: NestedEnumUserRoleEnumFilter<$PrismaModel>
+  }
+
+  export type EnumGenderEnumNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GenderEnum | EnumGenderEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GenderEnum[] | ListEnumGenderEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GenderEnum[] | ListEnumGenderEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderEnumNullableWithAggregatesFilter<$PrismaModel> | $Enums.GenderEnum | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGenderEnumNullableFilter<$PrismaModel>
+    _max?: NestedEnumGenderEnumNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
+  export type EnumChallengerChapterEnumNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChallengerChapterEnum | EnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChallengerChapterEnum[] | ListEnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ChallengerChapterEnum[] | ListEnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumChallengerChapterEnumNullableWithAggregatesFilter<$PrismaModel> | $Enums.ChallengerChapterEnum | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumChallengerChapterEnumNullableFilter<$PrismaModel>
+    _max?: NestedEnumChallengerChapterEnumNullableFilter<$PrismaModel>
+    isSet?: boolean
   }
 
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -13555,13 +13725,13 @@ export namespace Prisma {
     connect?: ProjectMemberWhereUniqueInput | ProjectMemberWhereUniqueInput[]
   }
 
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
-  }
-
   export type NullableStringFieldUpdateOperationsInput = {
     set?: string | null
     unset?: boolean
+  }
+
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
   }
 
   export type EnumUserPartEnumFieldUpdateOperationsInput = {
@@ -13570,6 +13740,16 @@ export namespace Prisma {
 
   export type EnumUserRoleEnumFieldUpdateOperationsInput = {
     set?: $Enums.UserRoleEnum
+  }
+
+  export type NullableEnumGenderEnumFieldUpdateOperationsInput = {
+    set?: $Enums.GenderEnum | null
+    unset?: boolean
+  }
+
+  export type NullableEnumChallengerChapterEnumFieldUpdateOperationsInput = {
+    set?: $Enums.ChallengerChapterEnum | null
+    unset?: boolean
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -14250,6 +14430,22 @@ export namespace Prisma {
     not?: NestedEnumUserRoleEnumFilter<$PrismaModel> | $Enums.UserRoleEnum
   }
 
+  export type NestedEnumGenderEnumNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.GenderEnum | EnumGenderEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GenderEnum[] | ListEnumGenderEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GenderEnum[] | ListEnumGenderEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderEnumNullableFilter<$PrismaModel> | $Enums.GenderEnum | null
+    isSet?: boolean
+  }
+
+  export type NestedEnumChallengerChapterEnumNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChallengerChapterEnum | EnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChallengerChapterEnum[] | ListEnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ChallengerChapterEnum[] | ListEnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumChallengerChapterEnumNullableFilter<$PrismaModel> | $Enums.ChallengerChapterEnum | null
+    isSet?: boolean
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -14337,6 +14533,28 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleEnumFilter<$PrismaModel>
     _max?: NestedEnumUserRoleEnumFilter<$PrismaModel>
+  }
+
+  export type NestedEnumGenderEnumNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.GenderEnum | EnumGenderEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.GenderEnum[] | ListEnumGenderEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.GenderEnum[] | ListEnumGenderEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumGenderEnumNullableWithAggregatesFilter<$PrismaModel> | $Enums.GenderEnum | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumGenderEnumNullableFilter<$PrismaModel>
+    _max?: NestedEnumGenderEnumNullableFilter<$PrismaModel>
+    isSet?: boolean
+  }
+
+  export type NestedEnumChallengerChapterEnumNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChallengerChapterEnum | EnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    in?: $Enums.ChallengerChapterEnum[] | ListEnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.ChallengerChapterEnum[] | ListEnumChallengerChapterEnumFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumChallengerChapterEnumNullableWithAggregatesFilter<$PrismaModel> | $Enums.ChallengerChapterEnum | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumChallengerChapterEnumNullableFilter<$PrismaModel>
+    _max?: NestedEnumChallengerChapterEnumNullableFilter<$PrismaModel>
+    isSet?: boolean
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
@@ -14748,6 +14966,7 @@ export namespace Prisma {
 
   export type ChallengerCreateWithoutProjectsInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -14755,6 +14974,8 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
@@ -14764,6 +14985,7 @@ export namespace Prisma {
 
   export type ChallengerUncheckedCreateWithoutProjectsInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -14772,6 +14994,8 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
@@ -14849,6 +15073,7 @@ export namespace Prisma {
   }
 
   export type ChallengerUpdateWithoutProjectsInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14856,6 +15081,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
@@ -14864,6 +15091,7 @@ export namespace Prisma {
   }
 
   export type ChallengerUncheckedUpdateWithoutProjectsInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14872,6 +15100,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
@@ -15197,6 +15427,7 @@ export namespace Prisma {
 
   export type ChallengerCreateWithoutProjectMemberInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -15204,6 +15435,8 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
@@ -15213,6 +15446,7 @@ export namespace Prisma {
 
   export type ChallengerUncheckedCreateWithoutProjectMemberInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -15221,6 +15455,8 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
@@ -15277,6 +15513,7 @@ export namespace Prisma {
   }
 
   export type ChallengerUpdateWithoutProjectMemberInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15284,6 +15521,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
@@ -15292,6 +15531,7 @@ export namespace Prisma {
   }
 
   export type ChallengerUncheckedUpdateWithoutProjectMemberInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15300,6 +15540,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
@@ -15432,6 +15674,7 @@ export namespace Prisma {
 
   export type ChallengerCreateWithoutApplicationsInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -15439,6 +15682,8 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutProjectPlanInput
@@ -15448,6 +15693,7 @@ export namespace Prisma {
 
   export type ChallengerUncheckedCreateWithoutApplicationsInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -15456,6 +15702,8 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
@@ -15554,6 +15802,7 @@ export namespace Prisma {
   }
 
   export type ChallengerUpdateWithoutApplicationsInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15561,6 +15810,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutProjectPlanNestedInput
@@ -15569,6 +15820,7 @@ export namespace Prisma {
   }
 
   export type ChallengerUncheckedUpdateWithoutApplicationsInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15577,6 +15829,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
@@ -15659,6 +15913,7 @@ export namespace Prisma {
 
   export type ChallengerCreateWithoutChallengerSchoolInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -15666,6 +15921,8 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
@@ -15675,6 +15932,7 @@ export namespace Prisma {
 
   export type ChallengerUncheckedCreateWithoutChallengerSchoolInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -15682,6 +15940,8 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
@@ -15719,6 +15979,7 @@ export namespace Prisma {
     OR?: ChallengerScalarWhereInput[]
     NOT?: ChallengerScalarWhereInput | ChallengerScalarWhereInput[]
     id?: StringFilter<"Challenger"> | string
+    umsbChallengerId?: StringNullableFilter<"Challenger"> | string | null
     name?: StringFilter<"Challenger"> | string
     nickname?: StringFilter<"Challenger"> | string
     introduction?: StringNullableFilter<"Challenger"> | string | null
@@ -15727,6 +15988,8 @@ export namespace Prisma {
     password?: StringFilter<"Challenger"> | string
     part?: EnumUserPartEnumFilter<"Challenger"> | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFilter<"Challenger"> | $Enums.UserRoleEnum
+    gender?: EnumGenderEnumNullableFilter<"Challenger"> | $Enums.GenderEnum | null
+    chapter?: EnumChallengerChapterEnumNullableFilter<"Challenger"> | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFilter<"Challenger"> | Date | string
     updatedAt?: DateTimeFilter<"Challenger"> | Date | string
   }
@@ -16080,6 +16343,7 @@ export namespace Prisma {
 
   export type ChallengerCreateManyChallengerSchoolInput = {
     id?: string
+    umsbChallengerId?: string | null
     name: string
     nickname: string
     introduction?: string | null
@@ -16087,11 +16351,14 @@ export namespace Prisma {
     password: string
     part: $Enums.UserPartEnum
     role?: $Enums.UserRoleEnum
+    gender?: $Enums.GenderEnum | null
+    chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ChallengerUpdateWithoutChallengerSchoolInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16099,6 +16366,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
@@ -16107,6 +16376,7 @@ export namespace Prisma {
   }
 
   export type ChallengerUncheckedUpdateWithoutChallengerSchoolInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16114,6 +16384,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
@@ -16122,6 +16394,7 @@ export namespace Prisma {
   }
 
   export type ChallengerUncheckedUpdateManyWithoutChallengerSchoolInput = {
+    umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     introduction?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16129,6 +16402,8 @@ export namespace Prisma {
     password?: StringFieldUpdateOperationsInput | string
     part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
+    gender?: NullableEnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum | null
+    chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

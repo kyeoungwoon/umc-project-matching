@@ -115,6 +115,7 @@ Prisma.NullTypes = {
 
 exports.Prisma.ChallengerScalarFieldEnum = {
   id: 'id',
+  umsbChallengerId: 'umsbChallengerId',
   name: 'name',
   nickname: 'nickname',
   introduction: 'introduction',
@@ -123,6 +124,8 @@ exports.Prisma.ChallengerScalarFieldEnum = {
   password: 'password',
   part: 'part',
   role: 'role',
+  gender: 'gender',
+  chapter: 'chapter',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -227,6 +230,15 @@ exports.UserPartEnum = exports.$Enums.UserPartEnum = {
 exports.UserRoleEnum = exports.$Enums.UserRoleEnum = {
   USER: 'USER',
   ADMIN: 'ADMIN'
+};
+
+exports.GenderEnum = exports.$Enums.GenderEnum = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE'
+};
+
+exports.ChallengerChapterEnum = exports.$Enums.ChallengerChapterEnum = {
+  LEO_9TH: 'LEO_9TH'
 };
 
 exports.QuestionTypeEnum = exports.$Enums.QuestionTypeEnum = {

@@ -19,7 +19,7 @@ import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response
   path: 'projects/matching-round',
   version: '1',
 })
-@ApiTags(API_TAGS.PROJECT)
+@ApiTags(API_TAGS.MATCHING_ROUND)
 @ApiBearerAuth()
 export class MatchingRoundController {
   constructor(

@@ -1,17 +1,16 @@
-import { ApiProperty, OmitType, PartialType, PickType } from '@nestjs/swagger';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 
-import { Transform, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import {
-  IsDate,
+  ArrayNotEmpty,
+  IsArray,
   IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
 } from 'class-validator';
 
-import { IsBigInt } from '@common/decorators/is-bigint.decorator';
-import { TransformToBigint } from '@common/decorators/transform.decorator';
-import { UserPartEnum } from '@generated/prisma/mongodb';
+import { GenderEnum, UserPartEnum } from '@generated/prisma/mongodb';
 
 export class User {
   // User Table에 포함된 정보
@@ -40,6 +39,18 @@ export class User {
   @IsString()
   @IsOptional()
   @ApiProperty({
+    description: 'UMSB ID',
+  })
+  umsbChallengerId?: string;
+
+  // TODO: required로 바꾸어야 함
+  @IsEnum(GenderEnum)
+  @IsOptional()
+  gender?: GenderEnum;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({
     description: '사용자 한 줄 소개',
     example: '나는 말하는 감자입니다.',
   })
@@ -48,7 +59,7 @@ export class User {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: '학교명',
+    description: '학교 handle',
   })
   school!: string;
 
@@ -94,3 +105,11 @@ export class CreateUserRequestDto extends OmitType(User, [
   'createdAt',
   'updatedAt',
 ]) {}
+
+export class CreateBulkUserRequestDto {
+  @IsArray() // 배열임을 명시
+  @ArrayNotEmpty() // 빈 배열은 안 됨
+  // 각 요소가 dto와 일치하는지 확인
+  @Type(() => CreateUserRequestDto) // 변환을 위해 필요
+  users!: CreateUserRequestDto[];
+}

@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -28,6 +29,11 @@ import {
   ApiOkResponseCommon,
   ApiOkResponseCommonArray,
 } from '@common/decorators/response/api-ok-response-common.decorator';
+import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
+import {
+  CHALLENGER_ROLE,
+  CheckChallengerRole,
+} from '@common/decorators/challenger-role.decorator';
 
 @Controller({
   path: 'projects',
@@ -35,6 +41,7 @@ import {
 })
 @ApiTags(API_TAGS.PROJECT)
 @ApiBearerAuth()
+@UseGuards(ChallengerRoleGuard)
 export class ProjectsController {
   constructor(
     private readonly projectService: ProjectsService,
@@ -55,8 +62,9 @@ export class ProjectsController {
   @Post('')
   @ApiOperation({
     summary: '새로운 프로젝트 생성',
-    description: 'Plan 챌린저만 가능합니다.',
+    description: '관리자만 가능합니다.',
   })
+  @CheckChallengerRole(CHALLENGER_ROLE.ADMIN)
   @ApiOkResponseCommon(ProjectResponseDto)
   async createProject(@Body() body: CreateProjectRequestDto) {
     const userId = this.reqContext.getOrThrowUserId();
@@ -68,8 +76,9 @@ export class ProjectsController {
   @Post('')
   @ApiOperation({
     summary: '다수의 새로운 프로젝트 생성',
-    description: 'Plan 챌린저만 가능합니다.',
+    description: '관리자만 가능합니다.',
   })
+  @CheckChallengerRole(CHALLENGER_ROLE.PLAN)
   async createMultipleProject(@Body() body: CreateMultipleProjectRequestDto) {
     const userId = this.reqContext.getOrThrowUserId();
     await this.userService.throwIfNotPlanChallenger(userId);
@@ -88,10 +97,15 @@ export class ProjectsController {
   }
 
   @Patch(':projectId')
+  @ApiParam({
+    name: 'projectId',
+    required: true,
+  })
   @ApiOperation({
-    summary: '프로젝트 내용 수정',
+    summary: '[Plan Only] 프로젝트 내용 수정',
     description: '프로젝트 내용을 수정합니다.',
   })
+  @CheckChallengerRole(CHALLENGER_ROLE.PLAN)
   @ApiOkResponseCommon(ProjectResponseDto)
   async updateProject(
     @Param('projectId') projectId: string,
@@ -106,13 +120,13 @@ export class ProjectsController {
   @Delete(':projectId')
   @ApiParam({
     name: 'projectId',
-    description: '폼을 생성할 프로젝트의 ID',
     required: true,
   })
   @ApiOperation({
     summary: '프로젝트 삭제',
     description: '[ADMIN] 프로젝트를 삭제합니다.',
   })
+  @CheckChallengerRole(CHALLENGER_ROLE.ADMIN)
   @ApiOkResponseCommon(ProjectResponseDto)
   async deleteProject(@Param('projectId') projectId: string) {
     const userId = this.reqContext.getOrThrowUserId();

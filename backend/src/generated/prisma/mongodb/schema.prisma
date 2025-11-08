@@ -50,18 +50,30 @@ enum UserRoleEnum {
   ADMIN
 }
 
+enum GenderEnum {
+  MALE
+  FEMALE
+}
+
+enum ChallengerChapterEnum {
+  LEO_9TH
+}
+
 // --- Collections (MongoDB의 실제 컬렉션이 될 모델) ---
 
 model Challenger {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId
-  name         String
-  nickname     String
-  introduction String?
-  school       String // School 모델의 handle 참조
-  studentId    String
-  password     String
-  part         UserPartEnum
-  role         UserRoleEnum @default(USER)
+  id               String                 @id @default(auto()) @map("_id") @db.ObjectId
+  umsbChallengerId String? // UMSB 챌린저 아이디
+  name             String
+  nickname         String
+  introduction     String?
+  school           String // School 모델의 handle 참조
+  studentId        String
+  password         String
+  part             UserPartEnum
+  role             UserRoleEnum           @default(USER)
+  gender           GenderEnum?
+  chapter          ChallengerChapterEnum?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
