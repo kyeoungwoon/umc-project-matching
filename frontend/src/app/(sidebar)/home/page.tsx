@@ -9,8 +9,8 @@ const HomePage = () => {
     <>
       <div className={'flex w-full flex-col items-start justify-center gap-y-3 p-4'}>
         {/* 현재 차수가 보여야 함 */}
-        <NoticeCard />
         <MatchingRoundAnnouncementCard />
+        <NoticeCard />
       </div>
     </>
   );

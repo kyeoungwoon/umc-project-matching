@@ -30,7 +30,7 @@ WORKDIR /app
 
 # Builder 스테이지에서 프로덕션 의존성만 설치합니다.
 # 이렇게 하면 devDependencies가 제외되어 이미지가 가벼워집니다.
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN pnpm install --prod --frozen-lockfile
 
 # Builder 스테이지에서 빌드된 결과물(dist)만 복사합니다.
