@@ -1,5 +1,7 @@
-import { FormResponseDto } from '@api/axios/form/types';
+import { SchoolResponseDto } from '@api/axios/auth/types';
+import { FormQuestionDto, FormResponseDto } from '@api/axios/form/types';
 import { MatchingRoundResponseDto } from '@api/axios/matching-round/types';
+import { UserResponseDto } from '@api/axios/user/types';
 
 export interface AnswerDto {
   questionId: string;
@@ -33,9 +35,18 @@ export interface ApplicationResponseDto {
   applicantId: string;
   matchingRoundId: string;
   status: ApplicationStatus;
-  answers: AnswerResponseDto[];
   createdAt: string;
   updatedAt: string;
-  form?: FormResponseDto;
+  applicant: UserResponseDto;
+  form: FormResponseDto;
   matchingRound?: MatchingRoundResponseDto;
+  formAnswers?: FormAnswerResponseDto[];
+}
+
+export interface FormAnswerResponseDto {
+  id: string;
+  applicationId: string;
+  questionId: string;
+  question: FormQuestionDto;
+  value: string[];
 }

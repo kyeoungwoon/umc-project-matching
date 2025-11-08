@@ -165,6 +165,7 @@ exports.Prisma.FormQuestionScalarFieldEnum = {
   type: 'type',
   options: 'options',
   isRequired: 'isRequired',
+  isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -173,6 +174,15 @@ exports.Prisma.ProjectMemberScalarFieldEnum = {
   id: 'id',
   projectId: 'projectId',
   userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FormAnswerScalarFieldEnum = {
+  id: 'id',
+  applicationId: 'applicationId',
+  questionId: 'questionId',
+  value: 'value',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -239,6 +249,7 @@ exports.Prisma.ModelName = {
   Form: 'Form',
   FormQuestion: 'FormQuestion',
   ProjectMember: 'ProjectMember',
+  FormAnswer: 'FormAnswer',
   Application: 'Application',
   School: 'School'
 };

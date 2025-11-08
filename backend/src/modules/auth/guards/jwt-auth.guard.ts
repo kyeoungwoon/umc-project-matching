@@ -93,6 +93,7 @@ export class JwtAuthGuard extends AuthGuard(JWT_STRATEGY) {
 
     // 검증을 통과했다면, RequestContext에 userId를 설정
     this.requestContextService.setUserId(payload.userId);
+    console.log('User SET');
 
     // 모든 검증을 통과하면 user 객체를 반환
     return user;

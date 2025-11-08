@@ -15,6 +15,8 @@ import { useCreateFormMutation } from '@api/query/form';
 
 import { ROUTES } from '@common/constants/routes.constants';
 
+import RequiredStar from '@common/components/RequiredStar';
+
 const CreateProjectFormPage = () => {
   const params = useParams();
   const router = useRouter();
@@ -64,7 +66,10 @@ const CreateProjectFormPage = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className={'flex flex-col gap-y-2'}>
-            <Label htmlFor="form-title">폼 제목</Label>
+            <Label htmlFor="form-title">
+              폼 제목 (필수)
+              <RequiredStar />
+            </Label>
             <Input id="form-title" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
           <div className={'flex flex-col gap-y-2'}>

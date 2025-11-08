@@ -145,6 +145,22 @@ export class FormService {
               include: {
                 form: true,
                 matchingRound: true,
+                applicant: {
+                  select: {
+                    id: true,
+                    name: true,
+                    nickname: true,
+                    introduction: true,
+                    part: true,
+                    role: true,
+                    challengerSchool: true,
+                  },
+                },
+                formAnswers: {
+                  include: {
+                    question: true,
+                  },
+                },
               },
             }
           : false,

@@ -29,7 +29,7 @@ export class RequestContextService {
   getOrThrowUserId() {
     const contextUserId = this.getContext().getUserId();
     if (!contextUserId) {
-      throw new CustomException(CommonErrorCode.REQUEST_CONTEXT_ERROR);
+      throw new CustomException(CommonErrorCode.REQUEST_CONTEXT_NO_USER);
     }
 
     return contextUserId;

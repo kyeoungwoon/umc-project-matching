@@ -22,6 +22,7 @@ import { ResponseMessage } from '@common/decorators/response/response-message.de
 
 import { Public } from '@modules/auth/decorators/public.decorator';
 import { TokenAuthService } from '@modules/auth/services/token.auth.service';
+import { BypassResponseInterceptor } from '@common/decorators/bypass-response-interceptor.decorator';
 
 @Controller({
   version: VERSION_NEUTRAL,
@@ -62,9 +63,11 @@ export class AuthTestController {
     example: '1',
   })
   @Public()
+  @BypassResponseInterceptor()
   @Get('token')
   async getTestToken(@Query('userId') userId: string) {
-    return this.authService.generateTokens(userId);
+    const ret = await this.authService.generateTestToken(userId);
+    return ret.accessToken;
   }
 
   @ApiOperation({

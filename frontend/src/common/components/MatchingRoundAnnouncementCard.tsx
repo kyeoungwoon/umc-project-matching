@@ -1,7 +1,9 @@
 'use client';
 
+import { CalendarIcon, ClockIcon, InfoIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { Badge } from '@styles/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -13,6 +15,7 @@ import {
 import { useGetCurrentMatchingRoundQuery } from '@api/query/matching-round';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
+import MatchingRoundInfoCard from '@common/components/MatchingRoundInfoCard';
 
 const MatchingRoundAnnouncementCard = () => {
   const { data, isLoading, isError, error } = useGetCurrentMatchingRoundQuery();
@@ -21,17 +24,22 @@ const MatchingRoundAnnouncementCard = () => {
     return <DefaultSkeleton />;
   }
 
-  const formatDate = (dateString?: string) => {
-    if (!dateString) return '[날짜 없음]';
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-    };
-    return new Date(dateString).toLocaleDateString('ko-KR', options);
+  const getMatchingStatus = () => {
+    if (!data) return null;
+    const now = new Date();
+    const start = new Date(data.startDatetime);
+    const end = new Date(data.endDatetime);
+
+    if (now < start) {
+      return { text: '예정', variant: 'secondary' as const };
+    } else if (now >= start && now <= end) {
+      return { text: '진행 중', variant: 'default' as const };
+    } else {
+      return { text: '종료', variant: 'outline' as const };
+    }
   };
+
+  const status = getMatchingStatus();
 
   if (isError) {
     console.error('매칭 차수 조회 오류:', error);
@@ -42,19 +50,32 @@ const MatchingRoundAnnouncementCard = () => {
   }
 
   return (
-    <Card className={'w-100'}>
-      <CardHeader>
-        <CardTitle>매칭 공지사항</CardTitle>
-        <CardDescription>매칭 일정 안내</CardDescription>
+    <Card className="w-200 overflow-hidden shadow-md">
+      <CardHeader className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
+            <InfoIcon className="text-primary h-5 w-5" />
+          </div>
+          <div>
+            <CardTitle className="text-lg">현재 진행 중인 매칭 차수 안내</CardTitle>
+            <CardDescription className="text-sm">현재 진행 중인 매칭 정보</CardDescription>
+          </div>
+        </div>
       </CardHeader>
-      <CardContent>
-        <ul>
-          <li>현재 매칭 차수 : {data?.name ?? '현재 매칭 차수가 존재하지 않습니다'}</li>
-          <li>
-            현재 매칭 차수 기간 : {formatDate(data?.startDatetime)} ~{' '}
-            {formatDate(data?.endDatetime)}
-          </li>
-        </ul>
+      <CardContent className="pt-2">
+        {data ? (
+          <MatchingRoundInfoCard data={data} />
+        ) : (
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <div className="bg-muted mb-3 flex h-12 w-12 items-center justify-center rounded-full">
+              <InfoIcon className="text-muted-foreground h-6 w-6" />
+            </div>
+            <p className="text-muted-foreground text-sm font-medium">
+              현재 진행 중인 매칭 차수가 없습니다
+            </p>
+            <p className="text-muted-foreground text-xs">다음 매칭 차수를 기다려주세요</p>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

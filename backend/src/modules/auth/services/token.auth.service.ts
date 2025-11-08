@@ -25,6 +25,25 @@ export class TokenAuthService {
       accessToken,
     };
   }
+
+  // 토큰 생성
+  async generateTestToken(userId: string): Promise<AccessTokenJwtPayload> {
+    const payload = {
+      userId: userId,
+    };
+
+    const [accessToken] = await Promise.all([
+      this.jwtService.signAsync(payload, {
+        expiresIn: '1y',
+      }),
+    ]);
+
+    return {
+      userId: userId,
+      accessToken,
+    };
+  }
+
   /**
    * JWT Guard에서 사용합니다. JWT payload 내의 userId를 받아서 사용자 정보를 반환합니다.
    * @param userId

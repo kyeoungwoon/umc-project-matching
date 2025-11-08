@@ -13,6 +13,7 @@ import { Button } from '@styles/components/ui/button';
 import { ButtonGroup } from '@styles/components/ui/button-group';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@styles/components/ui/card';
 import { Input } from '@styles/components/ui/input';
+import { Separator } from '@styles/components/ui/separator';
 
 import { UpdateProjectRequestDto } from '@api/axios/project/types';
 import { useUpdateProjectMutation } from '@api/query/project';
@@ -92,20 +93,25 @@ const ProjectCard = (props: ProjectCardProps) => {
     <Card className="w-full rounded-xl p-4">
       <CardHeader>
         {mode === ProjectCardMode.VIEW ? (
-          <CardTitle className="text-xl font-bold">{name}</CardTitle>
-        ) : (
-          <Input
-            value={editedProject.title}
-            onChange={(e) => setEditedProject((prev) => ({ ...prev, title: e.target.value }))}
-            className="text-xl font-bold"
-          />
-        )}
-      </CardHeader>
-      <CardContent className="">
-        {mode === ProjectCardMode.VIEW ? (
-          <p className="text-muted-foreground mb-2 text-lg">{description}</p>
+          <div className={'flex flex-col gap-1'}>
+            <div className={'flex flex-row items-center justify-start gap-2'}>
+              <span className={'w-30'}>프로젝트명</span>
+              <Separator orientation={'vertical'} />
+              <CardTitle className="text-xl font-bold">{name}</CardTitle>
+            </div>
+            <div className={'flex flex-row items-center justify-start gap-2'}>
+              <span className={'w-30'}>한줄 설명</span>
+              <Separator orientation={'vertical'} />
+              <p className="text-muted-foreground mb-2 text-lg">{description}</p>
+            </div>
+          </div>
         ) : (
           <>
+            <Input
+              value={editedProject.title}
+              onChange={(e) => setEditedProject((prev) => ({ ...prev, title: e.target.value }))}
+              className="text-xl font-bold"
+            />
             <Input
               value={editedProject.description}
               onChange={(e) =>
@@ -120,8 +126,13 @@ const ProjectCard = (props: ProjectCardProps) => {
             />
           </>
         )}
-
-        <div className="text-muted-foreground mb-1 text-sm">형식 : (현재 지원자 수) TO</div>
+      </CardHeader>
+      <CardContent className="">
+        {/*TODO: 안내멘트, 삭제 필요*/}
+        <div className="text-muted-foreground mb-2 text-sm">
+          <span className={'text-black'}>파트별 TO | </span>
+          형식 : (현재 지원자 수) TO
+        </div>
 
         <div className="flex flex-wrap items-center gap-x-2">
           {partAndTo.map((partTo, index) => {
@@ -146,9 +157,16 @@ const ProjectCard = (props: ProjectCardProps) => {
           </Button>
         ) : (
           <ButtonGroup>
-            <Button hidden={!isPlan} size={'sm'} variant={'outline'} onClick={handleEditModeClick}>
-              프로젝트 정보 수정
-            </Button>
+            {isPlan && (
+              <Button
+                hidden={!isPlan}
+                size={'sm'}
+                variant={'outline'}
+                onClick={handleEditModeClick}
+              >
+                프로젝트 정보 수정
+              </Button>
+            )}
             <Button
               onClick={handleViewMoreClick}
               size={'sm'}

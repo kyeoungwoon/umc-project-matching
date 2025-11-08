@@ -28,6 +28,13 @@ export class ProjectsService {
     });
   }
 
+  async createMultipleProject(data: CreateProjectRequestDto[]) {
+    // data 배열을 그대로 전달합니다.
+    return this.mongo.project.createMany({
+      data: data,
+    });
+  }
+
   // 프로젝트 수정
   async updateProjectByProjectId(
     projectId: string,

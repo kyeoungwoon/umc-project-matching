@@ -3,7 +3,8 @@ import { registerAs } from '@nestjs/config';
 export const JWT_CONFIG = Symbol('JWT_CONFIG');
 
 export const JwtConfig = registerAs(JWT_CONFIG, () => {
-  const expiresIn = 60 * 60 * 24; // 24 hours, 하드코딩 아 짜증나
+  const expiresIn = 60 * 60 * 24;
+  // TODO: 하드코딩 해결, 24 hours, 하드코딩 아 짜증나
 
   return {
     secret: process.env.JWT_SECRET as string,

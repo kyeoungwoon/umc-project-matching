@@ -17,7 +17,7 @@ export type QuestionType = 'SINGLE_CHOICE' | 'MULTIPLE_CHOICE' | 'SUBJECTIVE';
 export interface CreateFormQuestionDto {
   questionNo: number;
   title: string;
-  description: string;
+  description?: string;
   type: QuestionType;
   isRequired: boolean;
   options: string[];
@@ -65,5 +65,5 @@ export interface FormQuestionDto {
 export interface FormWithDetailsResponseDto extends FormResponseDto {
   project: ProjectResponseDto;
   questions: FormQuestionDto[];
-  applications: ApplicationResponseDto[];
+  applications?: ApplicationResponseDto[];
 }

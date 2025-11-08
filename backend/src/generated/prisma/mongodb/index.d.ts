@@ -19,11 +19,6 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type ProjectTo = $Result.DefaultSelection<Prisma.$ProjectToPayload>
 /**
- * Model Answer
- * 
- */
-export type Answer = $Result.DefaultSelection<Prisma.$AnswerPayload>
-/**
  * Model Challenger
  * 
  */
@@ -53,6 +48,11 @@ export type FormQuestion = $Result.DefaultSelection<Prisma.$FormQuestionPayload>
  * 
  */
 export type ProjectMember = $Result.DefaultSelection<Prisma.$ProjectMemberPayload>
+/**
+ * Model FormAnswer
+ * 
+ */
+export type FormAnswer = $Result.DefaultSelection<Prisma.$FormAnswerPayload>
 /**
  * Model Application
  * 
@@ -291,6 +291,16 @@ export class PrismaClient<
     * ```
     */
   get projectMember(): Prisma.ProjectMemberDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.formAnswer`: Exposes CRUD operations for the **FormAnswer** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FormAnswers
+    * const formAnswers = await prisma.formAnswer.findMany()
+    * ```
+    */
+  get formAnswer(): Prisma.FormAnswerDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.application`: Exposes CRUD operations for the **Application** model.
@@ -757,6 +767,7 @@ export namespace Prisma {
     Form: 'Form',
     FormQuestion: 'FormQuestion',
     ProjectMember: 'ProjectMember',
+    FormAnswer: 'FormAnswer',
     Application: 'Application',
     School: 'School'
   };
@@ -777,7 +788,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "challenger" | "matchingRound" | "project" | "form" | "formQuestion" | "projectMember" | "application" | "school"
+      modelProps: "challenger" | "matchingRound" | "project" | "form" | "formQuestion" | "projectMember" | "formAnswer" | "application" | "school"
       txIsolationLevel: never
     }
     model: {
@@ -1225,6 +1236,80 @@ export namespace Prisma {
           }
         }
       }
+      FormAnswer: {
+        payload: Prisma.$FormAnswerPayload<ExtArgs>
+        fields: Prisma.FormAnswerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FormAnswerFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormAnswerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FormAnswerFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormAnswerPayload>
+          }
+          findFirst: {
+            args: Prisma.FormAnswerFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormAnswerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FormAnswerFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormAnswerPayload>
+          }
+          findMany: {
+            args: Prisma.FormAnswerFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormAnswerPayload>[]
+          }
+          create: {
+            args: Prisma.FormAnswerCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormAnswerPayload>
+          }
+          createMany: {
+            args: Prisma.FormAnswerCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.FormAnswerDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormAnswerPayload>
+          }
+          update: {
+            args: Prisma.FormAnswerUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormAnswerPayload>
+          }
+          deleteMany: {
+            args: Prisma.FormAnswerDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FormAnswerUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.FormAnswerUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FormAnswerPayload>
+          }
+          aggregate: {
+            args: Prisma.FormAnswerAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFormAnswer>
+          }
+          groupBy: {
+            args: Prisma.FormAnswerGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FormAnswerGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.FormAnswerFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.FormAnswerAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.FormAnswerCountArgs<ExtArgs>
+            result: $Utils.Optional<FormAnswerCountAggregateOutputType> | number
+          }
+        }
+      }
       Application: {
         payload: Prisma.$ApplicationPayload<ExtArgs>
         fields: Prisma.ApplicationFieldRefs
@@ -1458,6 +1543,7 @@ export namespace Prisma {
     form?: FormOmit
     formQuestion?: FormQuestionOmit
     projectMember?: ProjectMemberOmit
+    formAnswer?: FormAnswerOmit
     application?: ApplicationOmit
     school?: SchoolOmit
   }
@@ -1608,11 +1694,11 @@ export namespace Prisma {
    */
 
   export type MatchingRoundCountOutputType = {
-    Application: number
+    applicationsInRound: number
   }
 
   export type MatchingRoundCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Application?: boolean | MatchingRoundCountOutputTypeCountApplicationArgs
+    applicationsInRound?: boolean | MatchingRoundCountOutputTypeCountApplicationsInRoundArgs
   }
 
   // Custom InputTypes
@@ -1629,7 +1715,7 @@ export namespace Prisma {
   /**
    * MatchingRoundCountOutputType without action
    */
-  export type MatchingRoundCountOutputTypeCountApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRoundCountOutputTypeCountApplicationsInRoundArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ApplicationWhereInput
   }
 
@@ -1715,15 +1801,77 @@ export namespace Prisma {
 
 
   /**
+   * Count Type FormQuestionCountOutputType
+   */
+
+  export type FormQuestionCountOutputType = {
+    formAnswers: number
+  }
+
+  export type FormQuestionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    formAnswers?: boolean | FormQuestionCountOutputTypeCountFormAnswersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FormQuestionCountOutputType without action
+   */
+  export type FormQuestionCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormQuestionCountOutputType
+     */
+    select?: FormQuestionCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FormQuestionCountOutputType without action
+   */
+  export type FormQuestionCountOutputTypeCountFormAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FormAnswerWhereInput
+  }
+
+
+  /**
+   * Count Type ApplicationCountOutputType
+   */
+
+  export type ApplicationCountOutputType = {
+    formAnswers: number
+  }
+
+  export type ApplicationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    formAnswers?: boolean | ApplicationCountOutputTypeCountFormAnswersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ApplicationCountOutputType without action
+   */
+  export type ApplicationCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ApplicationCountOutputType
+     */
+    select?: ApplicationCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ApplicationCountOutputType without action
+   */
+  export type ApplicationCountOutputTypeCountFormAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FormAnswerWhereInput
+  }
+
+
+  /**
    * Count Type SchoolCountOutputType
    */
 
   export type SchoolCountOutputType = {
-    Challenger: number
+    challengers: number
   }
 
   export type SchoolCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Challenger?: boolean | SchoolCountOutputTypeCountChallengerArgs
+    challengers?: boolean | SchoolCountOutputTypeCountChallengersArgs
   }
 
   // Custom InputTypes
@@ -1740,7 +1888,7 @@ export namespace Prisma {
   /**
    * SchoolCountOutputType without action
    */
-  export type SchoolCountOutputTypeCountChallengerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type SchoolCountOutputTypeCountChallengersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ChallengerWhereInput
   }
 
@@ -1809,69 +1957,6 @@ export namespace Prisma {
      * Omit specific fields from the ProjectTo
      */
     omit?: ProjectToOmit<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Answer
-   */
-
-
-
-
-
-  export type AnswerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    questionId?: boolean
-    value?: boolean
-  }, ExtArgs["result"]["answer"]>
-
-
-
-  export type AnswerSelectScalar = {
-    questionId?: boolean
-    value?: boolean
-  }
-
-  export type AnswerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"questionId" | "value", ExtArgs["result"]["answer"]>
-
-  export type $AnswerPayload = {
-    name: "Answer"
-    objects: {}
-    scalars: {
-      questionId: string
-      value: string[]
-    }
-    composites: {}
-  }
-
-  type AnswerGetPayload<S extends boolean | null | undefined | AnswerDefaultArgs> = $Result.GetResult<Prisma.$AnswerPayload, S>
-
-
-
-
-
-  /**
-   * Fields of the Answer model
-   */
-  interface AnswerFieldRefs {
-    readonly questionId: FieldRef<"Answer", 'String'>
-    readonly value: FieldRef<"Answer", 'String[]'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Answer without action
-   */
-  export type AnswerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Answer
-     */
-    select?: AnswerSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Answer
-     */
-    omit?: AnswerOmit<ExtArgs> | null
   }
 
 
@@ -3178,7 +3263,7 @@ export namespace Prisma {
     endDatetime?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    Application?: boolean | MatchingRound$ApplicationArgs<ExtArgs>
+    applicationsInRound?: boolean | MatchingRound$applicationsInRoundArgs<ExtArgs>
     _count?: boolean | MatchingRoundCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["matchingRound"]>
 
@@ -3195,14 +3280,14 @@ export namespace Prisma {
 
   export type MatchingRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "startDatetime" | "endDatetime" | "createdAt" | "updatedAt", ExtArgs["result"]["matchingRound"]>
   export type MatchingRoundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Application?: boolean | MatchingRound$ApplicationArgs<ExtArgs>
+    applicationsInRound?: boolean | MatchingRound$applicationsInRoundArgs<ExtArgs>
     _count?: boolean | MatchingRoundCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $MatchingRoundPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "MatchingRound"
     objects: {
-      Application: Prisma.$ApplicationPayload<ExtArgs>[]
+      applicationsInRound: Prisma.$ApplicationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3574,7 +3659,7 @@ export namespace Prisma {
    */
   export interface Prisma__MatchingRoundClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Application<T extends MatchingRound$ApplicationArgs<ExtArgs> = {}>(args?: Subset<T, MatchingRound$ApplicationArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    applicationsInRound<T extends MatchingRound$applicationsInRoundArgs<ExtArgs> = {}>(args?: Subset<T, MatchingRound$applicationsInRoundArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3980,9 +4065,9 @@ export namespace Prisma {
   }
 
   /**
-   * MatchingRound.Application
+   * MatchingRound.applicationsInRound
    */
-  export type MatchingRound$ApplicationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type MatchingRound$applicationsInRoundArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Application
      */
@@ -4205,7 +4290,7 @@ export namespace Prisma {
     updatedAt?: boolean
     projectMember?: boolean | Project$projectMemberArgs<ExtArgs>
     projectForms?: boolean | Project$projectFormsArgs<ExtArgs>
-    plan?: boolean | ChallengerDefaultArgs<ExtArgs>
+    projectPlan?: boolean | ChallengerDefaultArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
@@ -4225,7 +4310,7 @@ export namespace Prisma {
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     projectMember?: boolean | Project$projectMemberArgs<ExtArgs>
     projectForms?: boolean | Project$projectFormsArgs<ExtArgs>
-    plan?: boolean | ChallengerDefaultArgs<ExtArgs>
+    projectPlan?: boolean | ChallengerDefaultArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -4234,7 +4319,7 @@ export namespace Prisma {
     objects: {
       projectMember: Prisma.$ProjectMemberPayload<ExtArgs>[]
       projectForms: Prisma.$FormPayload<ExtArgs>[]
-      plan: Prisma.$ChallengerPayload<ExtArgs>
+      projectPlan: Prisma.$ChallengerPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4611,7 +4696,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     projectMember<T extends Project$projectMemberArgs<ExtArgs> = {}>(args?: Subset<T, Project$projectMemberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     projectForms<T extends Project$projectFormsArgs<ExtArgs> = {}>(args?: Subset<T, Project$projectFormsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    plan<T extends ChallengerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChallengerDefaultArgs<ExtArgs>>): Prisma__ChallengerClient<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    projectPlan<T extends ChallengerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChallengerDefaultArgs<ExtArgs>>): Prisma__ChallengerClient<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6167,6 +6252,7 @@ export namespace Prisma {
     description: string | null
     type: $Enums.QuestionTypeEnum | null
     isRequired: boolean | null
+    isDeleted: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6179,6 +6265,7 @@ export namespace Prisma {
     description: string | null
     type: $Enums.QuestionTypeEnum | null
     isRequired: boolean | null
+    isDeleted: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6192,6 +6279,7 @@ export namespace Prisma {
     type: number
     options: number
     isRequired: number
+    isDeleted: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -6214,6 +6302,7 @@ export namespace Prisma {
     description?: true
     type?: true
     isRequired?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6226,6 +6315,7 @@ export namespace Prisma {
     description?: true
     type?: true
     isRequired?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6239,6 +6329,7 @@ export namespace Prisma {
     type?: true
     options?: true
     isRequired?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -6339,6 +6430,7 @@ export namespace Prisma {
     type: $Enums.QuestionTypeEnum
     options: string[]
     isRequired: boolean
+    isDeleted: boolean
     createdAt: Date
     updatedAt: Date
     _count: FormQuestionCountAggregateOutputType | null
@@ -6371,9 +6463,12 @@ export namespace Prisma {
     type?: boolean
     options?: boolean
     isRequired?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     form?: boolean | FormDefaultArgs<ExtArgs>
+    formAnswers?: boolean | FormQuestion$formAnswersArgs<ExtArgs>
+    _count?: boolean | FormQuestionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["formQuestion"]>
 
 
@@ -6387,19 +6482,23 @@ export namespace Prisma {
     type?: boolean
     options?: boolean
     isRequired?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type FormQuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "formId" | "questionNo" | "title" | "description" | "type" | "options" | "isRequired" | "createdAt" | "updatedAt", ExtArgs["result"]["formQuestion"]>
+  export type FormQuestionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "formId" | "questionNo" | "title" | "description" | "type" | "options" | "isRequired" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["formQuestion"]>
   export type FormQuestionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     form?: boolean | FormDefaultArgs<ExtArgs>
+    formAnswers?: boolean | FormQuestion$formAnswersArgs<ExtArgs>
+    _count?: boolean | FormQuestionCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $FormQuestionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "FormQuestion"
     objects: {
       form: Prisma.$FormPayload<ExtArgs>
+      formAnswers: Prisma.$FormAnswerPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6410,6 +6509,7 @@ export namespace Prisma {
       type: $Enums.QuestionTypeEnum
       options: string[]
       isRequired: boolean
+      isDeleted: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["formQuestion"]>
@@ -6776,6 +6876,7 @@ export namespace Prisma {
   export interface Prisma__FormQuestionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     form<T extends FormDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FormDefaultArgs<ExtArgs>>): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    formAnswers<T extends FormQuestion$formAnswersArgs<ExtArgs> = {}>(args?: Subset<T, FormQuestion$formAnswersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6813,6 +6914,7 @@ export namespace Prisma {
     readonly type: FieldRef<"FormQuestion", 'QuestionTypeEnum'>
     readonly options: FieldRef<"FormQuestion", 'String[]'>
     readonly isRequired: FieldRef<"FormQuestion", 'Boolean'>
+    readonly isDeleted: FieldRef<"FormQuestion", 'Boolean'>
     readonly createdAt: FieldRef<"FormQuestion", 'DateTime'>
     readonly updatedAt: FieldRef<"FormQuestion", 'DateTime'>
   }
@@ -7182,6 +7284,30 @@ export namespace Prisma {
      * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
      */
     options?: InputJsonValue
+  }
+
+  /**
+   * FormQuestion.formAnswers
+   */
+  export type FormQuestion$formAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+    where?: FormAnswerWhereInput
+    orderBy?: FormAnswerOrderByWithRelationInput | FormAnswerOrderByWithRelationInput[]
+    cursor?: FormAnswerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FormAnswerScalarFieldEnum | FormAnswerScalarFieldEnum[]
   }
 
   /**
@@ -8187,6 +8313,996 @@ export namespace Prisma {
 
 
   /**
+   * Model FormAnswer
+   */
+
+  export type AggregateFormAnswer = {
+    _count: FormAnswerCountAggregateOutputType | null
+    _min: FormAnswerMinAggregateOutputType | null
+    _max: FormAnswerMaxAggregateOutputType | null
+  }
+
+  export type FormAnswerMinAggregateOutputType = {
+    id: string | null
+    applicationId: string | null
+    questionId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FormAnswerMaxAggregateOutputType = {
+    id: string | null
+    applicationId: string | null
+    questionId: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type FormAnswerCountAggregateOutputType = {
+    id: number
+    applicationId: number
+    questionId: number
+    value: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type FormAnswerMinAggregateInputType = {
+    id?: true
+    applicationId?: true
+    questionId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FormAnswerMaxAggregateInputType = {
+    id?: true
+    applicationId?: true
+    questionId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type FormAnswerCountAggregateInputType = {
+    id?: true
+    applicationId?: true
+    questionId?: true
+    value?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type FormAnswerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FormAnswer to aggregate.
+     */
+    where?: FormAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FormAnswers to fetch.
+     */
+    orderBy?: FormAnswerOrderByWithRelationInput | FormAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FormAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FormAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FormAnswers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FormAnswers
+    **/
+    _count?: true | FormAnswerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FormAnswerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FormAnswerMaxAggregateInputType
+  }
+
+  export type GetFormAnswerAggregateType<T extends FormAnswerAggregateArgs> = {
+        [P in keyof T & keyof AggregateFormAnswer]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFormAnswer[P]>
+      : GetScalarType<T[P], AggregateFormAnswer[P]>
+  }
+
+
+
+
+  export type FormAnswerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FormAnswerWhereInput
+    orderBy?: FormAnswerOrderByWithAggregationInput | FormAnswerOrderByWithAggregationInput[]
+    by: FormAnswerScalarFieldEnum[] | FormAnswerScalarFieldEnum
+    having?: FormAnswerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FormAnswerCountAggregateInputType | true
+    _min?: FormAnswerMinAggregateInputType
+    _max?: FormAnswerMaxAggregateInputType
+  }
+
+  export type FormAnswerGroupByOutputType = {
+    id: string
+    applicationId: string
+    questionId: string
+    value: string[]
+    createdAt: Date
+    updatedAt: Date
+    _count: FormAnswerCountAggregateOutputType | null
+    _min: FormAnswerMinAggregateOutputType | null
+    _max: FormAnswerMaxAggregateOutputType | null
+  }
+
+  type GetFormAnswerGroupByPayload<T extends FormAnswerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FormAnswerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FormAnswerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FormAnswerGroupByOutputType[P]>
+            : GetScalarType<T[P], FormAnswerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FormAnswerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    applicationId?: boolean
+    questionId?: boolean
+    value?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    application?: boolean | ApplicationDefaultArgs<ExtArgs>
+    question?: boolean | FormQuestionDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["formAnswer"]>
+
+
+
+  export type FormAnswerSelectScalar = {
+    id?: boolean
+    applicationId?: boolean
+    questionId?: boolean
+    value?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type FormAnswerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicationId" | "questionId" | "value" | "createdAt" | "updatedAt", ExtArgs["result"]["formAnswer"]>
+  export type FormAnswerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    application?: boolean | ApplicationDefaultArgs<ExtArgs>
+    question?: boolean | FormQuestionDefaultArgs<ExtArgs>
+  }
+
+  export type $FormAnswerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FormAnswer"
+    objects: {
+      application: Prisma.$ApplicationPayload<ExtArgs>
+      question: Prisma.$FormQuestionPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      applicationId: string
+      questionId: string
+      value: string[]
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["formAnswer"]>
+    composites: {}
+  }
+
+  type FormAnswerGetPayload<S extends boolean | null | undefined | FormAnswerDefaultArgs> = $Result.GetResult<Prisma.$FormAnswerPayload, S>
+
+  type FormAnswerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FormAnswerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FormAnswerCountAggregateInputType | true
+    }
+
+  export interface FormAnswerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FormAnswer'], meta: { name: 'FormAnswer' } }
+    /**
+     * Find zero or one FormAnswer that matches the filter.
+     * @param {FormAnswerFindUniqueArgs} args - Arguments to find a FormAnswer
+     * @example
+     * // Get one FormAnswer
+     * const formAnswer = await prisma.formAnswer.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FormAnswerFindUniqueArgs>(args: SelectSubset<T, FormAnswerFindUniqueArgs<ExtArgs>>): Prisma__FormAnswerClient<$Result.GetResult<Prisma.$FormAnswerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FormAnswer that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FormAnswerFindUniqueOrThrowArgs} args - Arguments to find a FormAnswer
+     * @example
+     * // Get one FormAnswer
+     * const formAnswer = await prisma.formAnswer.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FormAnswerFindUniqueOrThrowArgs>(args: SelectSubset<T, FormAnswerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FormAnswerClient<$Result.GetResult<Prisma.$FormAnswerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FormAnswer that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormAnswerFindFirstArgs} args - Arguments to find a FormAnswer
+     * @example
+     * // Get one FormAnswer
+     * const formAnswer = await prisma.formAnswer.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FormAnswerFindFirstArgs>(args?: SelectSubset<T, FormAnswerFindFirstArgs<ExtArgs>>): Prisma__FormAnswerClient<$Result.GetResult<Prisma.$FormAnswerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FormAnswer that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormAnswerFindFirstOrThrowArgs} args - Arguments to find a FormAnswer
+     * @example
+     * // Get one FormAnswer
+     * const formAnswer = await prisma.formAnswer.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FormAnswerFindFirstOrThrowArgs>(args?: SelectSubset<T, FormAnswerFindFirstOrThrowArgs<ExtArgs>>): Prisma__FormAnswerClient<$Result.GetResult<Prisma.$FormAnswerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FormAnswers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormAnswerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FormAnswers
+     * const formAnswers = await prisma.formAnswer.findMany()
+     * 
+     * // Get first 10 FormAnswers
+     * const formAnswers = await prisma.formAnswer.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const formAnswerWithIdOnly = await prisma.formAnswer.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FormAnswerFindManyArgs>(args?: SelectSubset<T, FormAnswerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FormAnswer.
+     * @param {FormAnswerCreateArgs} args - Arguments to create a FormAnswer.
+     * @example
+     * // Create one FormAnswer
+     * const FormAnswer = await prisma.formAnswer.create({
+     *   data: {
+     *     // ... data to create a FormAnswer
+     *   }
+     * })
+     * 
+     */
+    create<T extends FormAnswerCreateArgs>(args: SelectSubset<T, FormAnswerCreateArgs<ExtArgs>>): Prisma__FormAnswerClient<$Result.GetResult<Prisma.$FormAnswerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FormAnswers.
+     * @param {FormAnswerCreateManyArgs} args - Arguments to create many FormAnswers.
+     * @example
+     * // Create many FormAnswers
+     * const formAnswer = await prisma.formAnswer.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FormAnswerCreateManyArgs>(args?: SelectSubset<T, FormAnswerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a FormAnswer.
+     * @param {FormAnswerDeleteArgs} args - Arguments to delete one FormAnswer.
+     * @example
+     * // Delete one FormAnswer
+     * const FormAnswer = await prisma.formAnswer.delete({
+     *   where: {
+     *     // ... filter to delete one FormAnswer
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FormAnswerDeleteArgs>(args: SelectSubset<T, FormAnswerDeleteArgs<ExtArgs>>): Prisma__FormAnswerClient<$Result.GetResult<Prisma.$FormAnswerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FormAnswer.
+     * @param {FormAnswerUpdateArgs} args - Arguments to update one FormAnswer.
+     * @example
+     * // Update one FormAnswer
+     * const formAnswer = await prisma.formAnswer.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FormAnswerUpdateArgs>(args: SelectSubset<T, FormAnswerUpdateArgs<ExtArgs>>): Prisma__FormAnswerClient<$Result.GetResult<Prisma.$FormAnswerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FormAnswers.
+     * @param {FormAnswerDeleteManyArgs} args - Arguments to filter FormAnswers to delete.
+     * @example
+     * // Delete a few FormAnswers
+     * const { count } = await prisma.formAnswer.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FormAnswerDeleteManyArgs>(args?: SelectSubset<T, FormAnswerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FormAnswers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormAnswerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FormAnswers
+     * const formAnswer = await prisma.formAnswer.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FormAnswerUpdateManyArgs>(args: SelectSubset<T, FormAnswerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one FormAnswer.
+     * @param {FormAnswerUpsertArgs} args - Arguments to update or create a FormAnswer.
+     * @example
+     * // Update or create a FormAnswer
+     * const formAnswer = await prisma.formAnswer.upsert({
+     *   create: {
+     *     // ... data to create a FormAnswer
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FormAnswer we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FormAnswerUpsertArgs>(args: SelectSubset<T, FormAnswerUpsertArgs<ExtArgs>>): Prisma__FormAnswerClient<$Result.GetResult<Prisma.$FormAnswerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FormAnswers that matches the filter.
+     * @param {FormAnswerFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const formAnswer = await prisma.formAnswer.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: FormAnswerFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a FormAnswer.
+     * @param {FormAnswerAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const formAnswer = await prisma.formAnswer.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: FormAnswerAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of FormAnswers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormAnswerCountArgs} args - Arguments to filter FormAnswers to count.
+     * @example
+     * // Count the number of FormAnswers
+     * const count = await prisma.formAnswer.count({
+     *   where: {
+     *     // ... the filter for the FormAnswers we want to count
+     *   }
+     * })
+    **/
+    count<T extends FormAnswerCountArgs>(
+      args?: Subset<T, FormAnswerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FormAnswerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FormAnswer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormAnswerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FormAnswerAggregateArgs>(args: Subset<T, FormAnswerAggregateArgs>): Prisma.PrismaPromise<GetFormAnswerAggregateType<T>>
+
+    /**
+     * Group by FormAnswer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FormAnswerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FormAnswerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FormAnswerGroupByArgs['orderBy'] }
+        : { orderBy?: FormAnswerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FormAnswerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFormAnswerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FormAnswer model
+   */
+  readonly fields: FormAnswerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FormAnswer.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FormAnswerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    application<T extends ApplicationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ApplicationDefaultArgs<ExtArgs>>): Prisma__ApplicationClient<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    question<T extends FormQuestionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FormQuestionDefaultArgs<ExtArgs>>): Prisma__FormQuestionClient<$Result.GetResult<Prisma.$FormQuestionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FormAnswer model
+   */
+  interface FormAnswerFieldRefs {
+    readonly id: FieldRef<"FormAnswer", 'String'>
+    readonly applicationId: FieldRef<"FormAnswer", 'String'>
+    readonly questionId: FieldRef<"FormAnswer", 'String'>
+    readonly value: FieldRef<"FormAnswer", 'String[]'>
+    readonly createdAt: FieldRef<"FormAnswer", 'DateTime'>
+    readonly updatedAt: FieldRef<"FormAnswer", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FormAnswer findUnique
+   */
+  export type FormAnswerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which FormAnswer to fetch.
+     */
+    where: FormAnswerWhereUniqueInput
+  }
+
+  /**
+   * FormAnswer findUniqueOrThrow
+   */
+  export type FormAnswerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which FormAnswer to fetch.
+     */
+    where: FormAnswerWhereUniqueInput
+  }
+
+  /**
+   * FormAnswer findFirst
+   */
+  export type FormAnswerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which FormAnswer to fetch.
+     */
+    where?: FormAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FormAnswers to fetch.
+     */
+    orderBy?: FormAnswerOrderByWithRelationInput | FormAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FormAnswers.
+     */
+    cursor?: FormAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FormAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FormAnswers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FormAnswers.
+     */
+    distinct?: FormAnswerScalarFieldEnum | FormAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * FormAnswer findFirstOrThrow
+   */
+  export type FormAnswerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which FormAnswer to fetch.
+     */
+    where?: FormAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FormAnswers to fetch.
+     */
+    orderBy?: FormAnswerOrderByWithRelationInput | FormAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FormAnswers.
+     */
+    cursor?: FormAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FormAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FormAnswers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FormAnswers.
+     */
+    distinct?: FormAnswerScalarFieldEnum | FormAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * FormAnswer findMany
+   */
+  export type FormAnswerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which FormAnswers to fetch.
+     */
+    where?: FormAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FormAnswers to fetch.
+     */
+    orderBy?: FormAnswerOrderByWithRelationInput | FormAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FormAnswers.
+     */
+    cursor?: FormAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FormAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FormAnswers.
+     */
+    skip?: number
+    distinct?: FormAnswerScalarFieldEnum | FormAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * FormAnswer create
+   */
+  export type FormAnswerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FormAnswer.
+     */
+    data: XOR<FormAnswerCreateInput, FormAnswerUncheckedCreateInput>
+  }
+
+  /**
+   * FormAnswer createMany
+   */
+  export type FormAnswerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FormAnswers.
+     */
+    data: FormAnswerCreateManyInput | FormAnswerCreateManyInput[]
+  }
+
+  /**
+   * FormAnswer update
+   */
+  export type FormAnswerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FormAnswer.
+     */
+    data: XOR<FormAnswerUpdateInput, FormAnswerUncheckedUpdateInput>
+    /**
+     * Choose, which FormAnswer to update.
+     */
+    where: FormAnswerWhereUniqueInput
+  }
+
+  /**
+   * FormAnswer updateMany
+   */
+  export type FormAnswerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FormAnswers.
+     */
+    data: XOR<FormAnswerUpdateManyMutationInput, FormAnswerUncheckedUpdateManyInput>
+    /**
+     * Filter which FormAnswers to update
+     */
+    where?: FormAnswerWhereInput
+    /**
+     * Limit how many FormAnswers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FormAnswer upsert
+   */
+  export type FormAnswerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FormAnswer to update in case it exists.
+     */
+    where: FormAnswerWhereUniqueInput
+    /**
+     * In case the FormAnswer found by the `where` argument doesn't exist, create a new FormAnswer with this data.
+     */
+    create: XOR<FormAnswerCreateInput, FormAnswerUncheckedCreateInput>
+    /**
+     * In case the FormAnswer was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FormAnswerUpdateInput, FormAnswerUncheckedUpdateInput>
+  }
+
+  /**
+   * FormAnswer delete
+   */
+  export type FormAnswerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+    /**
+     * Filter which FormAnswer to delete.
+     */
+    where: FormAnswerWhereUniqueInput
+  }
+
+  /**
+   * FormAnswer deleteMany
+   */
+  export type FormAnswerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FormAnswers to delete
+     */
+    where?: FormAnswerWhereInput
+    /**
+     * Limit how many FormAnswers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FormAnswer findRaw
+   */
+  export type FormAnswerFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * FormAnswer aggregateRaw
+   */
+  export type FormAnswerAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * FormAnswer without action
+   */
+  export type FormAnswerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Application
    */
 
@@ -8364,12 +9480,13 @@ export namespace Prisma {
     formId?: boolean
     status?: boolean
     matchingRoundId?: boolean
-    answers?: boolean | AnswerDefaultArgs<ExtArgs>
     createdAt?: boolean
     updatedAt?: boolean
     applicant?: boolean | ChallengerDefaultArgs<ExtArgs>
     form?: boolean | FormDefaultArgs<ExtArgs>
     matchingRound?: boolean | MatchingRoundDefaultArgs<ExtArgs>
+    formAnswers?: boolean | Application$formAnswersArgs<ExtArgs>
+    _count?: boolean | ApplicationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["application"]>
 
 
@@ -8384,11 +9501,13 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicantId" | "formId" | "status" | "matchingRoundId" | "answers" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
+  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicantId" | "formId" | "status" | "matchingRoundId" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
   export type ApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applicant?: boolean | ChallengerDefaultArgs<ExtArgs>
     form?: boolean | FormDefaultArgs<ExtArgs>
     matchingRound?: boolean | MatchingRoundDefaultArgs<ExtArgs>
+    formAnswers?: boolean | Application$formAnswersArgs<ExtArgs>
+    _count?: boolean | ApplicationCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $ApplicationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8397,6 +9516,7 @@ export namespace Prisma {
       applicant: Prisma.$ChallengerPayload<ExtArgs>
       form: Prisma.$FormPayload<ExtArgs>
       matchingRound: Prisma.$MatchingRoundPayload<ExtArgs>
+      formAnswers: Prisma.$FormAnswerPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -8407,9 +9527,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["application"]>
-    composites: {
-      answers: Prisma.$AnswerPayload[]
-    }
+    composites: {}
   }
 
   type ApplicationGetPayload<S extends boolean | null | undefined | ApplicationDefaultArgs> = $Result.GetResult<Prisma.$ApplicationPayload, S>
@@ -8774,6 +9892,7 @@ export namespace Prisma {
     applicant<T extends ChallengerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChallengerDefaultArgs<ExtArgs>>): Prisma__ChallengerClient<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     form<T extends FormDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FormDefaultArgs<ExtArgs>>): Prisma__FormClient<$Result.GetResult<Prisma.$FormPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     matchingRound<T extends MatchingRoundDefaultArgs<ExtArgs> = {}>(args?: Subset<T, MatchingRoundDefaultArgs<ExtArgs>>): Prisma__MatchingRoundClient<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    formAnswers<T extends Application$formAnswersArgs<ExtArgs> = {}>(args?: Subset<T, Application$formAnswersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FormAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9180,6 +10299,30 @@ export namespace Prisma {
   }
 
   /**
+   * Application.formAnswers
+   */
+  export type Application$formAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FormAnswer
+     */
+    select?: FormAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FormAnswer
+     */
+    omit?: FormAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FormAnswerInclude<ExtArgs> | null
+    where?: FormAnswerWhereInput
+    orderBy?: FormAnswerOrderByWithRelationInput | FormAnswerOrderByWithRelationInput[]
+    cursor?: FormAnswerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FormAnswerScalarFieldEnum | FormAnswerScalarFieldEnum[]
+  }
+
+  /**
    * Application without action
    */
   export type ApplicationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9354,7 +10497,7 @@ export namespace Prisma {
     name?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    Challenger?: boolean | School$ChallengerArgs<ExtArgs>
+    challengers?: boolean | School$challengersArgs<ExtArgs>
     _count?: boolean | SchoolCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["school"]>
 
@@ -9369,14 +10512,14 @@ export namespace Prisma {
 
   export type SchoolOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"handle" | "name" | "createdAt" | "updatedAt", ExtArgs["result"]["school"]>
   export type SchoolInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    Challenger?: boolean | School$ChallengerArgs<ExtArgs>
+    challengers?: boolean | School$challengersArgs<ExtArgs>
     _count?: boolean | SchoolCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $SchoolPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "School"
     objects: {
-      Challenger: Prisma.$ChallengerPayload<ExtArgs>[]
+      challengers: Prisma.$ChallengerPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       handle: string
@@ -9746,7 +10889,7 @@ export namespace Prisma {
    */
   export interface Prisma__SchoolClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    Challenger<T extends School$ChallengerArgs<ExtArgs> = {}>(args?: Subset<T, School$ChallengerArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    challengers<T extends School$challengersArgs<ExtArgs> = {}>(args?: Subset<T, School$challengersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10150,9 +11293,9 @@ export namespace Prisma {
   }
 
   /**
-   * School.Challenger
+   * School.challengers
    */
-  export type School$ChallengerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type School$challengersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Challenger
      */
@@ -10260,6 +11403,7 @@ export namespace Prisma {
     type: 'type',
     options: 'options',
     isRequired: 'isRequired',
+    isDeleted: 'isDeleted',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -10276,6 +11420,18 @@ export namespace Prisma {
   };
 
   export type ProjectMemberScalarFieldEnum = (typeof ProjectMemberScalarFieldEnum)[keyof typeof ProjectMemberScalarFieldEnum]
+
+
+  export const FormAnswerScalarFieldEnum: {
+    id: 'id',
+    applicationId: 'applicationId',
+    questionId: 'questionId',
+    value: 'value',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type FormAnswerScalarFieldEnum = (typeof FormAnswerScalarFieldEnum)[keyof typeof FormAnswerScalarFieldEnum]
 
 
   export const ApplicationScalarFieldEnum: {
@@ -10549,7 +11705,7 @@ export namespace Prisma {
     endDatetime?: DateTimeFilter<"MatchingRound"> | Date | string
     createdAt?: DateTimeFilter<"MatchingRound"> | Date | string
     updatedAt?: DateTimeFilter<"MatchingRound"> | Date | string
-    Application?: ApplicationListRelationFilter
+    applicationsInRound?: ApplicationListRelationFilter
   }
 
   export type MatchingRoundOrderByWithRelationInput = {
@@ -10559,7 +11715,7 @@ export namespace Prisma {
     endDatetime?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    Application?: ApplicationOrderByRelationAggregateInput
+    applicationsInRound?: ApplicationOrderByRelationAggregateInput
   }
 
   export type MatchingRoundWhereUniqueInput = Prisma.AtLeast<{
@@ -10572,7 +11728,7 @@ export namespace Prisma {
     endDatetime?: DateTimeFilter<"MatchingRound"> | Date | string
     createdAt?: DateTimeFilter<"MatchingRound"> | Date | string
     updatedAt?: DateTimeFilter<"MatchingRound"> | Date | string
-    Application?: ApplicationListRelationFilter
+    applicationsInRound?: ApplicationListRelationFilter
   }, "id">
 
   export type MatchingRoundOrderByWithAggregationInput = {
@@ -10613,7 +11769,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     projectMember?: ProjectMemberListRelationFilter
     projectForms?: FormListRelationFilter
-    plan?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
+    projectPlan?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
   }
 
   export type ProjectOrderByWithRelationInput = {
@@ -10627,7 +11783,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     projectMember?: ProjectMemberOrderByRelationAggregateInput
     projectForms?: FormOrderByRelationAggregateInput
-    plan?: ChallengerOrderByWithRelationInput
+    projectPlan?: ChallengerOrderByWithRelationInput
   }
 
   export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -10644,7 +11800,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     projectMember?: ProjectMemberListRelationFilter
     projectForms?: FormListRelationFilter
-    plan?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
+    projectPlan?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
   }, "id">
 
   export type ProjectOrderByWithAggregationInput = {
@@ -10756,9 +11912,11 @@ export namespace Prisma {
     type?: EnumQuestionTypeEnumFilter<"FormQuestion"> | $Enums.QuestionTypeEnum
     options?: StringNullableListFilter<"FormQuestion">
     isRequired?: BoolFilter<"FormQuestion"> | boolean
+    isDeleted?: BoolFilter<"FormQuestion"> | boolean
     createdAt?: DateTimeFilter<"FormQuestion"> | Date | string
     updatedAt?: DateTimeFilter<"FormQuestion"> | Date | string
     form?: XOR<FormScalarRelationFilter, FormWhereInput>
+    formAnswers?: FormAnswerListRelationFilter
   }
 
   export type FormQuestionOrderByWithRelationInput = {
@@ -10770,9 +11928,11 @@ export namespace Prisma {
     type?: SortOrder
     options?: SortOrder
     isRequired?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     form?: FormOrderByWithRelationInput
+    formAnswers?: FormAnswerOrderByRelationAggregateInput
   }
 
   export type FormQuestionWhereUniqueInput = Prisma.AtLeast<{
@@ -10787,9 +11947,11 @@ export namespace Prisma {
     type?: EnumQuestionTypeEnumFilter<"FormQuestion"> | $Enums.QuestionTypeEnum
     options?: StringNullableListFilter<"FormQuestion">
     isRequired?: BoolFilter<"FormQuestion"> | boolean
+    isDeleted?: BoolFilter<"FormQuestion"> | boolean
     createdAt?: DateTimeFilter<"FormQuestion"> | Date | string
     updatedAt?: DateTimeFilter<"FormQuestion"> | Date | string
     form?: XOR<FormScalarRelationFilter, FormWhereInput>
+    formAnswers?: FormAnswerListRelationFilter
   }, "id">
 
   export type FormQuestionOrderByWithAggregationInput = {
@@ -10801,6 +11963,7 @@ export namespace Prisma {
     type?: SortOrder
     options?: SortOrder
     isRequired?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: FormQuestionCountOrderByAggregateInput
@@ -10822,6 +11985,7 @@ export namespace Prisma {
     type?: EnumQuestionTypeEnumWithAggregatesFilter<"FormQuestion"> | $Enums.QuestionTypeEnum
     options?: StringNullableListFilter<"FormQuestion">
     isRequired?: BoolWithAggregatesFilter<"FormQuestion"> | boolean
+    isDeleted?: BoolWithAggregatesFilter<"FormQuestion"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"FormQuestion"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"FormQuestion"> | Date | string
   }
@@ -10885,6 +12049,69 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"ProjectMember"> | Date | string
   }
 
+  export type FormAnswerWhereInput = {
+    AND?: FormAnswerWhereInput | FormAnswerWhereInput[]
+    OR?: FormAnswerWhereInput[]
+    NOT?: FormAnswerWhereInput | FormAnswerWhereInput[]
+    id?: StringFilter<"FormAnswer"> | string
+    applicationId?: StringFilter<"FormAnswer"> | string
+    questionId?: StringFilter<"FormAnswer"> | string
+    value?: StringNullableListFilter<"FormAnswer">
+    createdAt?: DateTimeFilter<"FormAnswer"> | Date | string
+    updatedAt?: DateTimeFilter<"FormAnswer"> | Date | string
+    application?: XOR<ApplicationScalarRelationFilter, ApplicationWhereInput>
+    question?: XOR<FormQuestionScalarRelationFilter, FormQuestionWhereInput>
+  }
+
+  export type FormAnswerOrderByWithRelationInput = {
+    id?: SortOrder
+    applicationId?: SortOrder
+    questionId?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    application?: ApplicationOrderByWithRelationInput
+    question?: FormQuestionOrderByWithRelationInput
+  }
+
+  export type FormAnswerWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: FormAnswerWhereInput | FormAnswerWhereInput[]
+    OR?: FormAnswerWhereInput[]
+    NOT?: FormAnswerWhereInput | FormAnswerWhereInput[]
+    applicationId?: StringFilter<"FormAnswer"> | string
+    questionId?: StringFilter<"FormAnswer"> | string
+    value?: StringNullableListFilter<"FormAnswer">
+    createdAt?: DateTimeFilter<"FormAnswer"> | Date | string
+    updatedAt?: DateTimeFilter<"FormAnswer"> | Date | string
+    application?: XOR<ApplicationScalarRelationFilter, ApplicationWhereInput>
+    question?: XOR<FormQuestionScalarRelationFilter, FormQuestionWhereInput>
+  }, "id">
+
+  export type FormAnswerOrderByWithAggregationInput = {
+    id?: SortOrder
+    applicationId?: SortOrder
+    questionId?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: FormAnswerCountOrderByAggregateInput
+    _max?: FormAnswerMaxOrderByAggregateInput
+    _min?: FormAnswerMinOrderByAggregateInput
+  }
+
+  export type FormAnswerScalarWhereWithAggregatesInput = {
+    AND?: FormAnswerScalarWhereWithAggregatesInput | FormAnswerScalarWhereWithAggregatesInput[]
+    OR?: FormAnswerScalarWhereWithAggregatesInput[]
+    NOT?: FormAnswerScalarWhereWithAggregatesInput | FormAnswerScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FormAnswer"> | string
+    applicationId?: StringWithAggregatesFilter<"FormAnswer"> | string
+    questionId?: StringWithAggregatesFilter<"FormAnswer"> | string
+    value?: StringNullableListFilter<"FormAnswer">
+    createdAt?: DateTimeWithAggregatesFilter<"FormAnswer"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"FormAnswer"> | Date | string
+  }
+
   export type ApplicationWhereInput = {
     AND?: ApplicationWhereInput | ApplicationWhereInput[]
     OR?: ApplicationWhereInput[]
@@ -10894,12 +12121,12 @@ export namespace Prisma {
     formId?: StringFilter<"Application"> | string
     status?: EnumApplicationStatusEnumFilter<"Application"> | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFilter<"Application"> | string
-    answers?: AnswerCompositeListFilter | AnswerObjectEqualityInput[]
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     applicant?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
     form?: XOR<FormScalarRelationFilter, FormWhereInput>
     matchingRound?: XOR<MatchingRoundScalarRelationFilter, MatchingRoundWhereInput>
+    formAnswers?: FormAnswerListRelationFilter
   }
 
   export type ApplicationOrderByWithRelationInput = {
@@ -10908,12 +12135,12 @@ export namespace Prisma {
     formId?: SortOrder
     status?: SortOrder
     matchingRoundId?: SortOrder
-    answers?: AnswerOrderByCompositeAggregateInput
     createdAt?: SortOrder
     updatedAt?: SortOrder
     applicant?: ChallengerOrderByWithRelationInput
     form?: FormOrderByWithRelationInput
     matchingRound?: MatchingRoundOrderByWithRelationInput
+    formAnswers?: FormAnswerOrderByRelationAggregateInput
   }
 
   export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
@@ -10926,12 +12153,12 @@ export namespace Prisma {
     formId?: StringFilter<"Application"> | string
     status?: EnumApplicationStatusEnumFilter<"Application"> | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFilter<"Application"> | string
-    answers?: AnswerCompositeListFilter | AnswerObjectEqualityInput[]
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     applicant?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
     form?: XOR<FormScalarRelationFilter, FormWhereInput>
     matchingRound?: XOR<MatchingRoundScalarRelationFilter, MatchingRoundWhereInput>
+    formAnswers?: FormAnswerListRelationFilter
   }, "id" | "applicantId_formId_matchingRoundId">
 
   export type ApplicationOrderByWithAggregationInput = {
@@ -10968,7 +12195,7 @@ export namespace Prisma {
     name?: StringFilter<"School"> | string
     createdAt?: DateTimeFilter<"School"> | Date | string
     updatedAt?: DateTimeFilter<"School"> | Date | string
-    Challenger?: ChallengerListRelationFilter
+    challengers?: ChallengerListRelationFilter
   }
 
   export type SchoolOrderByWithRelationInput = {
@@ -10976,7 +12203,7 @@ export namespace Prisma {
     name?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    Challenger?: ChallengerOrderByRelationAggregateInput
+    challengers?: ChallengerOrderByRelationAggregateInput
   }
 
   export type SchoolWhereUniqueInput = Prisma.AtLeast<{
@@ -10988,7 +12215,7 @@ export namespace Prisma {
     name?: StringFilter<"School"> | string
     createdAt?: DateTimeFilter<"School"> | Date | string
     updatedAt?: DateTimeFilter<"School"> | Date | string
-    Challenger?: ChallengerListRelationFilter
+    challengers?: ChallengerListRelationFilter
   }, "handle" | "handle_name">
 
   export type SchoolOrderByWithAggregationInput = {
@@ -11023,9 +12250,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
-    projects?: ProjectCreateNestedManyWithoutPlanInput
+    projects?: ProjectCreateNestedManyWithoutProjectPlanInput
     ProjectMember?: ProjectMemberCreateNestedManyWithoutUserInput
-    challengerSchool: SchoolCreateNestedOneWithoutChallengerInput
+    challengerSchool: SchoolCreateNestedOneWithoutChallengersInput
   }
 
   export type ChallengerUncheckedCreateInput = {
@@ -11041,7 +12268,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutPlanInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
     ProjectMember?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -11056,9 +12283,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUpdateManyWithoutPlanNestedInput
+    projects?: ProjectUpdateManyWithoutProjectPlanNestedInput
     ProjectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
-    challengerSchool?: SchoolUpdateOneRequiredWithoutChallengerNestedInput
+    challengerSchool?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
   }
 
   export type ChallengerUncheckedUpdateInput = {
@@ -11073,7 +12300,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutPlanNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
     ProjectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -11123,7 +12350,7 @@ export namespace Prisma {
     endDatetime: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    Application?: ApplicationCreateNestedManyWithoutMatchingRoundInput
+    applicationsInRound?: ApplicationCreateNestedManyWithoutMatchingRoundInput
   }
 
   export type MatchingRoundUncheckedCreateInput = {
@@ -11133,7 +12360,7 @@ export namespace Prisma {
     endDatetime: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
-    Application?: ApplicationUncheckedCreateNestedManyWithoutMatchingRoundInput
+    applicationsInRound?: ApplicationUncheckedCreateNestedManyWithoutMatchingRoundInput
   }
 
   export type MatchingRoundUpdateInput = {
@@ -11142,7 +12369,7 @@ export namespace Prisma {
     endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Application?: ApplicationUpdateManyWithoutMatchingRoundNestedInput
+    applicationsInRound?: ApplicationUpdateManyWithoutMatchingRoundNestedInput
   }
 
   export type MatchingRoundUncheckedUpdateInput = {
@@ -11151,7 +12378,7 @@ export namespace Prisma {
     endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Application?: ApplicationUncheckedUpdateManyWithoutMatchingRoundNestedInput
+    applicationsInRound?: ApplicationUncheckedUpdateManyWithoutMatchingRoundNestedInput
   }
 
   export type MatchingRoundCreateManyInput = {
@@ -11189,7 +12416,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     projectMember?: ProjectMemberCreateNestedManyWithoutProjectInput
     projectForms?: FormCreateNestedManyWithoutProjectInput
-    plan: ChallengerCreateNestedOneWithoutProjectsInput
+    projectPlan: ChallengerCreateNestedOneWithoutProjectsInput
   }
 
   export type ProjectUncheckedCreateInput = {
@@ -11214,7 +12441,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMember?: ProjectMemberUpdateManyWithoutProjectNestedInput
     projectForms?: FormUpdateManyWithoutProjectNestedInput
-    plan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
+    projectPlan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
   }
 
   export type ProjectUncheckedUpdateInput = {
@@ -11340,9 +12567,11 @@ export namespace Prisma {
     type: $Enums.QuestionTypeEnum
     options?: FormQuestionCreateoptionsInput | string[]
     isRequired?: boolean
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     form: FormCreateNestedOneWithoutQuestionsInput
+    formAnswers?: FormAnswerCreateNestedManyWithoutQuestionInput
   }
 
   export type FormQuestionUncheckedCreateInput = {
@@ -11354,8 +12583,10 @@ export namespace Prisma {
     type: $Enums.QuestionTypeEnum
     options?: FormQuestionCreateoptionsInput | string[]
     isRequired?: boolean
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    formAnswers?: FormAnswerUncheckedCreateNestedManyWithoutQuestionInput
   }
 
   export type FormQuestionUpdateInput = {
@@ -11365,9 +12596,11 @@ export namespace Prisma {
     type?: EnumQuestionTypeEnumFieldUpdateOperationsInput | $Enums.QuestionTypeEnum
     options?: FormQuestionUpdateoptionsInput | string[]
     isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     form?: FormUpdateOneRequiredWithoutQuestionsNestedInput
+    formAnswers?: FormAnswerUpdateManyWithoutQuestionNestedInput
   }
 
   export type FormQuestionUncheckedUpdateInput = {
@@ -11378,8 +12611,10 @@ export namespace Prisma {
     type?: EnumQuestionTypeEnumFieldUpdateOperationsInput | $Enums.QuestionTypeEnum
     options?: FormQuestionUpdateoptionsInput | string[]
     isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    formAnswers?: FormAnswerUncheckedUpdateManyWithoutQuestionNestedInput
   }
 
   export type FormQuestionCreateManyInput = {
@@ -11391,6 +12626,7 @@ export namespace Prisma {
     type: $Enums.QuestionTypeEnum
     options?: FormQuestionCreateoptionsInput | string[]
     isRequired?: boolean
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11402,6 +12638,7 @@ export namespace Prisma {
     type?: EnumQuestionTypeEnumFieldUpdateOperationsInput | $Enums.QuestionTypeEnum
     options?: FormQuestionUpdateoptionsInput | string[]
     isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11414,6 +12651,7 @@ export namespace Prisma {
     type?: EnumQuestionTypeEnumFieldUpdateOperationsInput | $Enums.QuestionTypeEnum
     options?: FormQuestionUpdateoptionsInput | string[]
     isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11468,15 +12706,72 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type FormAnswerCreateInput = {
+    id?: string
+    value?: FormAnswerCreatevalueInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    application: ApplicationCreateNestedOneWithoutFormAnswersInput
+    question: FormQuestionCreateNestedOneWithoutFormAnswersInput
+  }
+
+  export type FormAnswerUncheckedCreateInput = {
+    id?: string
+    applicationId: string
+    questionId: string
+    value?: FormAnswerCreatevalueInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FormAnswerUpdateInput = {
+    value?: FormAnswerUpdatevalueInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    application?: ApplicationUpdateOneRequiredWithoutFormAnswersNestedInput
+    question?: FormQuestionUpdateOneRequiredWithoutFormAnswersNestedInput
+  }
+
+  export type FormAnswerUncheckedUpdateInput = {
+    applicationId?: StringFieldUpdateOperationsInput | string
+    questionId?: StringFieldUpdateOperationsInput | string
+    value?: FormAnswerUpdatevalueInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormAnswerCreateManyInput = {
+    id?: string
+    applicationId: string
+    questionId: string
+    value?: FormAnswerCreatevalueInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FormAnswerUpdateManyMutationInput = {
+    value?: FormAnswerUpdatevalueInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormAnswerUncheckedUpdateManyInput = {
+    applicationId?: StringFieldUpdateOperationsInput | string
+    questionId?: StringFieldUpdateOperationsInput | string
+    value?: FormAnswerUpdatevalueInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ApplicationCreateInput = {
     id?: string
     status?: $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     applicant: ChallengerCreateNestedOneWithoutApplicationsInput
     form: FormCreateNestedOneWithoutApplicationsInput
-    matchingRound: MatchingRoundCreateNestedOneWithoutApplicationInput
+    matchingRound: MatchingRoundCreateNestedOneWithoutApplicationsInRoundInput
+    formAnswers?: FormAnswerCreateNestedManyWithoutApplicationInput
   }
 
   export type ApplicationUncheckedCreateInput = {
@@ -11485,19 +12780,19 @@ export namespace Prisma {
     formId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    formAnswers?: FormAnswerUncheckedCreateNestedManyWithoutApplicationInput
   }
 
   export type ApplicationUpdateInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
     form?: FormUpdateOneRequiredWithoutApplicationsNestedInput
-    matchingRound?: MatchingRoundUpdateOneRequiredWithoutApplicationNestedInput
+    matchingRound?: MatchingRoundUpdateOneRequiredWithoutApplicationsInRoundNestedInput
+    formAnswers?: FormAnswerUpdateManyWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateInput = {
@@ -11505,9 +12800,9 @@ export namespace Prisma {
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    formAnswers?: FormAnswerUncheckedUpdateManyWithoutApplicationNestedInput
   }
 
   export type ApplicationCreateManyInput = {
@@ -11516,14 +12811,12 @@ export namespace Prisma {
     formId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ApplicationUpdateManyMutationInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11533,7 +12826,6 @@ export namespace Prisma {
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11543,7 +12835,7 @@ export namespace Prisma {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    Challenger?: ChallengerCreateNestedManyWithoutChallengerSchoolInput
+    challengers?: ChallengerCreateNestedManyWithoutChallengerSchoolInput
   }
 
   export type SchoolUncheckedCreateInput = {
@@ -11551,21 +12843,21 @@ export namespace Prisma {
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    Challenger?: ChallengerUncheckedCreateNestedManyWithoutChallengerSchoolInput
+    challengers?: ChallengerUncheckedCreateNestedManyWithoutChallengerSchoolInput
   }
 
   export type SchoolUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Challenger?: ChallengerUpdateManyWithoutChallengerSchoolNestedInput
+    challengers?: ChallengerUpdateManyWithoutChallengerSchoolNestedInput
   }
 
   export type SchoolUncheckedUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    Challenger?: ChallengerUncheckedUpdateManyWithoutChallengerSchoolNestedInput
+    challengers?: ChallengerUncheckedUpdateManyWithoutChallengerSchoolNestedInput
   }
 
   export type SchoolCreateManyInput = {
@@ -11965,6 +13257,16 @@ export namespace Prisma {
     isNot?: FormWhereInput
   }
 
+  export type FormAnswerListRelationFilter = {
+    every?: FormAnswerWhereInput
+    some?: FormAnswerWhereInput
+    none?: FormAnswerWhereInput
+  }
+
+  export type FormAnswerOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type FormQuestionCountOrderByAggregateInput = {
     id?: SortOrder
     formId?: SortOrder
@@ -11974,6 +13276,7 @@ export namespace Prisma {
     type?: SortOrder
     options?: SortOrder
     isRequired?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -11990,6 +13293,7 @@ export namespace Prisma {
     description?: SortOrder
     type?: SortOrder
     isRequired?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12002,6 +13306,7 @@ export namespace Prisma {
     description?: SortOrder
     type?: SortOrder
     isRequired?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12073,6 +13378,41 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type ApplicationScalarRelationFilter = {
+    is?: ApplicationWhereInput
+    isNot?: ApplicationWhereInput
+  }
+
+  export type FormQuestionScalarRelationFilter = {
+    is?: FormQuestionWhereInput
+    isNot?: FormQuestionWhereInput
+  }
+
+  export type FormAnswerCountOrderByAggregateInput = {
+    id?: SortOrder
+    applicationId?: SortOrder
+    questionId?: SortOrder
+    value?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FormAnswerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    applicationId?: SortOrder
+    questionId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type FormAnswerMinOrderByAggregateInput = {
+    id?: SortOrder
+    applicationId?: SortOrder
+    questionId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
   export type EnumApplicationStatusEnumFilter<$PrismaModel = never> = {
     equals?: $Enums.ApplicationStatusEnum | EnumApplicationStatusEnumFieldRefInput<$PrismaModel>
     in?: $Enums.ApplicationStatusEnum[] | ListEnumApplicationStatusEnumFieldRefInput<$PrismaModel>
@@ -12080,27 +13420,9 @@ export namespace Prisma {
     not?: NestedEnumApplicationStatusEnumFilter<$PrismaModel> | $Enums.ApplicationStatusEnum
   }
 
-  export type AnswerCompositeListFilter = {
-    equals?: AnswerObjectEqualityInput[]
-    every?: AnswerWhereInput
-    some?: AnswerWhereInput
-    none?: AnswerWhereInput
-    isEmpty?: boolean
-    isSet?: boolean
-  }
-
-  export type AnswerObjectEqualityInput = {
-    questionId: string
-    value?: string[]
-  }
-
   export type MatchingRoundScalarRelationFilter = {
     is?: MatchingRoundWhereInput
     isNot?: MatchingRoundWhereInput
-  }
-
-  export type AnswerOrderByCompositeAggregateInput = {
-    _count?: SortOrder
   }
 
   export type ApplicationApplicantIdFormIdMatchingRoundIdCompoundUniqueInput = {
@@ -12192,10 +13514,10 @@ export namespace Prisma {
     connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
   }
 
-  export type ProjectCreateNestedManyWithoutPlanInput = {
-    create?: XOR<ProjectCreateWithoutPlanInput, ProjectUncheckedCreateWithoutPlanInput> | ProjectCreateWithoutPlanInput[] | ProjectUncheckedCreateWithoutPlanInput[]
-    connectOrCreate?: ProjectCreateOrConnectWithoutPlanInput | ProjectCreateOrConnectWithoutPlanInput[]
-    createMany?: ProjectCreateManyPlanInputEnvelope
+  export type ProjectCreateNestedManyWithoutProjectPlanInput = {
+    create?: XOR<ProjectCreateWithoutProjectPlanInput, ProjectUncheckedCreateWithoutProjectPlanInput> | ProjectCreateWithoutProjectPlanInput[] | ProjectUncheckedCreateWithoutProjectPlanInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutProjectPlanInput | ProjectCreateOrConnectWithoutProjectPlanInput[]
+    createMany?: ProjectCreateManyProjectPlanInputEnvelope
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
   }
 
@@ -12206,9 +13528,9 @@ export namespace Prisma {
     connect?: ProjectMemberWhereUniqueInput | ProjectMemberWhereUniqueInput[]
   }
 
-  export type SchoolCreateNestedOneWithoutChallengerInput = {
-    create?: XOR<SchoolCreateWithoutChallengerInput, SchoolUncheckedCreateWithoutChallengerInput>
-    connectOrCreate?: SchoolCreateOrConnectWithoutChallengerInput
+  export type SchoolCreateNestedOneWithoutChallengersInput = {
+    create?: XOR<SchoolCreateWithoutChallengersInput, SchoolUncheckedCreateWithoutChallengersInput>
+    connectOrCreate?: SchoolCreateOrConnectWithoutChallengersInput
     connect?: SchoolWhereUniqueInput
   }
 
@@ -12219,10 +13541,10 @@ export namespace Prisma {
     connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
   }
 
-  export type ProjectUncheckedCreateNestedManyWithoutPlanInput = {
-    create?: XOR<ProjectCreateWithoutPlanInput, ProjectUncheckedCreateWithoutPlanInput> | ProjectCreateWithoutPlanInput[] | ProjectUncheckedCreateWithoutPlanInput[]
-    connectOrCreate?: ProjectCreateOrConnectWithoutPlanInput | ProjectCreateOrConnectWithoutPlanInput[]
-    createMany?: ProjectCreateManyPlanInputEnvelope
+  export type ProjectUncheckedCreateNestedManyWithoutProjectPlanInput = {
+    create?: XOR<ProjectCreateWithoutProjectPlanInput, ProjectUncheckedCreateWithoutProjectPlanInput> | ProjectCreateWithoutProjectPlanInput[] | ProjectUncheckedCreateWithoutProjectPlanInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutProjectPlanInput | ProjectCreateOrConnectWithoutProjectPlanInput[]
+    createMany?: ProjectCreateManyProjectPlanInputEnvelope
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
   }
 
@@ -12268,17 +13590,17 @@ export namespace Prisma {
     deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
   }
 
-  export type ProjectUpdateManyWithoutPlanNestedInput = {
-    create?: XOR<ProjectCreateWithoutPlanInput, ProjectUncheckedCreateWithoutPlanInput> | ProjectCreateWithoutPlanInput[] | ProjectUncheckedCreateWithoutPlanInput[]
-    connectOrCreate?: ProjectCreateOrConnectWithoutPlanInput | ProjectCreateOrConnectWithoutPlanInput[]
-    upsert?: ProjectUpsertWithWhereUniqueWithoutPlanInput | ProjectUpsertWithWhereUniqueWithoutPlanInput[]
-    createMany?: ProjectCreateManyPlanInputEnvelope
+  export type ProjectUpdateManyWithoutProjectPlanNestedInput = {
+    create?: XOR<ProjectCreateWithoutProjectPlanInput, ProjectUncheckedCreateWithoutProjectPlanInput> | ProjectCreateWithoutProjectPlanInput[] | ProjectUncheckedCreateWithoutProjectPlanInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutProjectPlanInput | ProjectCreateOrConnectWithoutProjectPlanInput[]
+    upsert?: ProjectUpsertWithWhereUniqueWithoutProjectPlanInput | ProjectUpsertWithWhereUniqueWithoutProjectPlanInput[]
+    createMany?: ProjectCreateManyProjectPlanInputEnvelope
     set?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     disconnect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     delete?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
-    update?: ProjectUpdateWithWhereUniqueWithoutPlanInput | ProjectUpdateWithWhereUniqueWithoutPlanInput[]
-    updateMany?: ProjectUpdateManyWithWhereWithoutPlanInput | ProjectUpdateManyWithWhereWithoutPlanInput[]
+    update?: ProjectUpdateWithWhereUniqueWithoutProjectPlanInput | ProjectUpdateWithWhereUniqueWithoutProjectPlanInput[]
+    updateMany?: ProjectUpdateManyWithWhereWithoutProjectPlanInput | ProjectUpdateManyWithWhereWithoutProjectPlanInput[]
     deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
   }
 
@@ -12296,12 +13618,12 @@ export namespace Prisma {
     deleteMany?: ProjectMemberScalarWhereInput | ProjectMemberScalarWhereInput[]
   }
 
-  export type SchoolUpdateOneRequiredWithoutChallengerNestedInput = {
-    create?: XOR<SchoolCreateWithoutChallengerInput, SchoolUncheckedCreateWithoutChallengerInput>
-    connectOrCreate?: SchoolCreateOrConnectWithoutChallengerInput
-    upsert?: SchoolUpsertWithoutChallengerInput
+  export type SchoolUpdateOneRequiredWithoutChallengersNestedInput = {
+    create?: XOR<SchoolCreateWithoutChallengersInput, SchoolUncheckedCreateWithoutChallengersInput>
+    connectOrCreate?: SchoolCreateOrConnectWithoutChallengersInput
+    upsert?: SchoolUpsertWithoutChallengersInput
     connect?: SchoolWhereUniqueInput
-    update?: XOR<XOR<SchoolUpdateToOneWithWhereWithoutChallengerInput, SchoolUpdateWithoutChallengerInput>, SchoolUncheckedUpdateWithoutChallengerInput>
+    update?: XOR<XOR<SchoolUpdateToOneWithWhereWithoutChallengersInput, SchoolUpdateWithoutChallengersInput>, SchoolUncheckedUpdateWithoutChallengersInput>
   }
 
   export type ApplicationUncheckedUpdateManyWithoutApplicantNestedInput = {
@@ -12318,17 +13640,17 @@ export namespace Prisma {
     deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
   }
 
-  export type ProjectUncheckedUpdateManyWithoutPlanNestedInput = {
-    create?: XOR<ProjectCreateWithoutPlanInput, ProjectUncheckedCreateWithoutPlanInput> | ProjectCreateWithoutPlanInput[] | ProjectUncheckedCreateWithoutPlanInput[]
-    connectOrCreate?: ProjectCreateOrConnectWithoutPlanInput | ProjectCreateOrConnectWithoutPlanInput[]
-    upsert?: ProjectUpsertWithWhereUniqueWithoutPlanInput | ProjectUpsertWithWhereUniqueWithoutPlanInput[]
-    createMany?: ProjectCreateManyPlanInputEnvelope
+  export type ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput = {
+    create?: XOR<ProjectCreateWithoutProjectPlanInput, ProjectUncheckedCreateWithoutProjectPlanInput> | ProjectCreateWithoutProjectPlanInput[] | ProjectUncheckedCreateWithoutProjectPlanInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutProjectPlanInput | ProjectCreateOrConnectWithoutProjectPlanInput[]
+    upsert?: ProjectUpsertWithWhereUniqueWithoutProjectPlanInput | ProjectUpsertWithWhereUniqueWithoutProjectPlanInput[]
+    createMany?: ProjectCreateManyProjectPlanInputEnvelope
     set?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     disconnect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     delete?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
-    update?: ProjectUpdateWithWhereUniqueWithoutPlanInput | ProjectUpdateWithWhereUniqueWithoutPlanInput[]
-    updateMany?: ProjectUpdateManyWithWhereWithoutPlanInput | ProjectUpdateManyWithWhereWithoutPlanInput[]
+    update?: ProjectUpdateWithWhereUniqueWithoutProjectPlanInput | ProjectUpdateWithWhereUniqueWithoutProjectPlanInput[]
+    updateMany?: ProjectUpdateManyWithWhereWithoutProjectPlanInput | ProjectUpdateManyWithWhereWithoutProjectPlanInput[]
     deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
   }
 
@@ -12619,6 +13941,20 @@ export namespace Prisma {
     connect?: FormWhereUniqueInput
   }
 
+  export type FormAnswerCreateNestedManyWithoutQuestionInput = {
+    create?: XOR<FormAnswerCreateWithoutQuestionInput, FormAnswerUncheckedCreateWithoutQuestionInput> | FormAnswerCreateWithoutQuestionInput[] | FormAnswerUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: FormAnswerCreateOrConnectWithoutQuestionInput | FormAnswerCreateOrConnectWithoutQuestionInput[]
+    createMany?: FormAnswerCreateManyQuestionInputEnvelope
+    connect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+  }
+
+  export type FormAnswerUncheckedCreateNestedManyWithoutQuestionInput = {
+    create?: XOR<FormAnswerCreateWithoutQuestionInput, FormAnswerUncheckedCreateWithoutQuestionInput> | FormAnswerCreateWithoutQuestionInput[] | FormAnswerUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: FormAnswerCreateOrConnectWithoutQuestionInput | FormAnswerCreateOrConnectWithoutQuestionInput[]
+    createMany?: FormAnswerCreateManyQuestionInputEnvelope
+    connect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+  }
+
   export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
@@ -12646,6 +13982,34 @@ export namespace Prisma {
     upsert?: FormUpsertWithoutQuestionsInput
     connect?: FormWhereUniqueInput
     update?: XOR<XOR<FormUpdateToOneWithWhereWithoutQuestionsInput, FormUpdateWithoutQuestionsInput>, FormUncheckedUpdateWithoutQuestionsInput>
+  }
+
+  export type FormAnswerUpdateManyWithoutQuestionNestedInput = {
+    create?: XOR<FormAnswerCreateWithoutQuestionInput, FormAnswerUncheckedCreateWithoutQuestionInput> | FormAnswerCreateWithoutQuestionInput[] | FormAnswerUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: FormAnswerCreateOrConnectWithoutQuestionInput | FormAnswerCreateOrConnectWithoutQuestionInput[]
+    upsert?: FormAnswerUpsertWithWhereUniqueWithoutQuestionInput | FormAnswerUpsertWithWhereUniqueWithoutQuestionInput[]
+    createMany?: FormAnswerCreateManyQuestionInputEnvelope
+    set?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    disconnect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    delete?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    connect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    update?: FormAnswerUpdateWithWhereUniqueWithoutQuestionInput | FormAnswerUpdateWithWhereUniqueWithoutQuestionInput[]
+    updateMany?: FormAnswerUpdateManyWithWhereWithoutQuestionInput | FormAnswerUpdateManyWithWhereWithoutQuestionInput[]
+    deleteMany?: FormAnswerScalarWhereInput | FormAnswerScalarWhereInput[]
+  }
+
+  export type FormAnswerUncheckedUpdateManyWithoutQuestionNestedInput = {
+    create?: XOR<FormAnswerCreateWithoutQuestionInput, FormAnswerUncheckedCreateWithoutQuestionInput> | FormAnswerCreateWithoutQuestionInput[] | FormAnswerUncheckedCreateWithoutQuestionInput[]
+    connectOrCreate?: FormAnswerCreateOrConnectWithoutQuestionInput | FormAnswerCreateOrConnectWithoutQuestionInput[]
+    upsert?: FormAnswerUpsertWithWhereUniqueWithoutQuestionInput | FormAnswerUpsertWithWhereUniqueWithoutQuestionInput[]
+    createMany?: FormAnswerCreateManyQuestionInputEnvelope
+    set?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    disconnect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    delete?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    connect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    update?: FormAnswerUpdateWithWhereUniqueWithoutQuestionInput | FormAnswerUpdateWithWhereUniqueWithoutQuestionInput[]
+    updateMany?: FormAnswerUpdateManyWithWhereWithoutQuestionInput | FormAnswerUpdateManyWithWhereWithoutQuestionInput[]
+    deleteMany?: FormAnswerScalarWhereInput | FormAnswerScalarWhereInput[]
   }
 
   export type ProjectCreateNestedOneWithoutProjectMemberInput = {
@@ -12676,13 +14040,41 @@ export namespace Prisma {
     update?: XOR<XOR<ChallengerUpdateToOneWithWhereWithoutProjectMemberInput, ChallengerUpdateWithoutProjectMemberInput>, ChallengerUncheckedUpdateWithoutProjectMemberInput>
   }
 
-  export type AnswerListCreateEnvelopeInput = {
-    set?: AnswerCreateInput | AnswerCreateInput[]
+  export type FormAnswerCreatevalueInput = {
+    set: string[]
   }
 
-  export type AnswerCreateInput = {
-    questionId: string
-    value?: AnswerCreatevalueInput | string[]
+  export type ApplicationCreateNestedOneWithoutFormAnswersInput = {
+    create?: XOR<ApplicationCreateWithoutFormAnswersInput, ApplicationUncheckedCreateWithoutFormAnswersInput>
+    connectOrCreate?: ApplicationCreateOrConnectWithoutFormAnswersInput
+    connect?: ApplicationWhereUniqueInput
+  }
+
+  export type FormQuestionCreateNestedOneWithoutFormAnswersInput = {
+    create?: XOR<FormQuestionCreateWithoutFormAnswersInput, FormQuestionUncheckedCreateWithoutFormAnswersInput>
+    connectOrCreate?: FormQuestionCreateOrConnectWithoutFormAnswersInput
+    connect?: FormQuestionWhereUniqueInput
+  }
+
+  export type FormAnswerUpdatevalueInput = {
+    set?: string[]
+    push?: string | string[]
+  }
+
+  export type ApplicationUpdateOneRequiredWithoutFormAnswersNestedInput = {
+    create?: XOR<ApplicationCreateWithoutFormAnswersInput, ApplicationUncheckedCreateWithoutFormAnswersInput>
+    connectOrCreate?: ApplicationCreateOrConnectWithoutFormAnswersInput
+    upsert?: ApplicationUpsertWithoutFormAnswersInput
+    connect?: ApplicationWhereUniqueInput
+    update?: XOR<XOR<ApplicationUpdateToOneWithWhereWithoutFormAnswersInput, ApplicationUpdateWithoutFormAnswersInput>, ApplicationUncheckedUpdateWithoutFormAnswersInput>
+  }
+
+  export type FormQuestionUpdateOneRequiredWithoutFormAnswersNestedInput = {
+    create?: XOR<FormQuestionCreateWithoutFormAnswersInput, FormQuestionUncheckedCreateWithoutFormAnswersInput>
+    connectOrCreate?: FormQuestionCreateOrConnectWithoutFormAnswersInput
+    upsert?: FormQuestionUpsertWithoutFormAnswersInput
+    connect?: FormQuestionWhereUniqueInput
+    update?: XOR<XOR<FormQuestionUpdateToOneWithWhereWithoutFormAnswersInput, FormQuestionUpdateWithoutFormAnswersInput>, FormQuestionUncheckedUpdateWithoutFormAnswersInput>
   }
 
   export type ChallengerCreateNestedOneWithoutApplicationsInput = {
@@ -12697,21 +14089,28 @@ export namespace Prisma {
     connect?: FormWhereUniqueInput
   }
 
-  export type MatchingRoundCreateNestedOneWithoutApplicationInput = {
-    create?: XOR<MatchingRoundCreateWithoutApplicationInput, MatchingRoundUncheckedCreateWithoutApplicationInput>
-    connectOrCreate?: MatchingRoundCreateOrConnectWithoutApplicationInput
+  export type MatchingRoundCreateNestedOneWithoutApplicationsInRoundInput = {
+    create?: XOR<MatchingRoundCreateWithoutApplicationsInRoundInput, MatchingRoundUncheckedCreateWithoutApplicationsInRoundInput>
+    connectOrCreate?: MatchingRoundCreateOrConnectWithoutApplicationsInRoundInput
     connect?: MatchingRoundWhereUniqueInput
+  }
+
+  export type FormAnswerCreateNestedManyWithoutApplicationInput = {
+    create?: XOR<FormAnswerCreateWithoutApplicationInput, FormAnswerUncheckedCreateWithoutApplicationInput> | FormAnswerCreateWithoutApplicationInput[] | FormAnswerUncheckedCreateWithoutApplicationInput[]
+    connectOrCreate?: FormAnswerCreateOrConnectWithoutApplicationInput | FormAnswerCreateOrConnectWithoutApplicationInput[]
+    createMany?: FormAnswerCreateManyApplicationInputEnvelope
+    connect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+  }
+
+  export type FormAnswerUncheckedCreateNestedManyWithoutApplicationInput = {
+    create?: XOR<FormAnswerCreateWithoutApplicationInput, FormAnswerUncheckedCreateWithoutApplicationInput> | FormAnswerCreateWithoutApplicationInput[] | FormAnswerUncheckedCreateWithoutApplicationInput[]
+    connectOrCreate?: FormAnswerCreateOrConnectWithoutApplicationInput | FormAnswerCreateOrConnectWithoutApplicationInput[]
+    createMany?: FormAnswerCreateManyApplicationInputEnvelope
+    connect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
   }
 
   export type EnumApplicationStatusEnumFieldUpdateOperationsInput = {
     set?: $Enums.ApplicationStatusEnum
-  }
-
-  export type AnswerListUpdateEnvelopeInput = {
-    set?: AnswerCreateInput | AnswerCreateInput[]
-    push?: AnswerCreateInput | AnswerCreateInput[]
-    updateMany?: AnswerUpdateManyInput
-    deleteMany?: AnswerDeleteManyInput
   }
 
   export type ChallengerUpdateOneRequiredWithoutApplicationsNestedInput = {
@@ -12730,12 +14129,40 @@ export namespace Prisma {
     update?: XOR<XOR<FormUpdateToOneWithWhereWithoutApplicationsInput, FormUpdateWithoutApplicationsInput>, FormUncheckedUpdateWithoutApplicationsInput>
   }
 
-  export type MatchingRoundUpdateOneRequiredWithoutApplicationNestedInput = {
-    create?: XOR<MatchingRoundCreateWithoutApplicationInput, MatchingRoundUncheckedCreateWithoutApplicationInput>
-    connectOrCreate?: MatchingRoundCreateOrConnectWithoutApplicationInput
-    upsert?: MatchingRoundUpsertWithoutApplicationInput
+  export type MatchingRoundUpdateOneRequiredWithoutApplicationsInRoundNestedInput = {
+    create?: XOR<MatchingRoundCreateWithoutApplicationsInRoundInput, MatchingRoundUncheckedCreateWithoutApplicationsInRoundInput>
+    connectOrCreate?: MatchingRoundCreateOrConnectWithoutApplicationsInRoundInput
+    upsert?: MatchingRoundUpsertWithoutApplicationsInRoundInput
     connect?: MatchingRoundWhereUniqueInput
-    update?: XOR<XOR<MatchingRoundUpdateToOneWithWhereWithoutApplicationInput, MatchingRoundUpdateWithoutApplicationInput>, MatchingRoundUncheckedUpdateWithoutApplicationInput>
+    update?: XOR<XOR<MatchingRoundUpdateToOneWithWhereWithoutApplicationsInRoundInput, MatchingRoundUpdateWithoutApplicationsInRoundInput>, MatchingRoundUncheckedUpdateWithoutApplicationsInRoundInput>
+  }
+
+  export type FormAnswerUpdateManyWithoutApplicationNestedInput = {
+    create?: XOR<FormAnswerCreateWithoutApplicationInput, FormAnswerUncheckedCreateWithoutApplicationInput> | FormAnswerCreateWithoutApplicationInput[] | FormAnswerUncheckedCreateWithoutApplicationInput[]
+    connectOrCreate?: FormAnswerCreateOrConnectWithoutApplicationInput | FormAnswerCreateOrConnectWithoutApplicationInput[]
+    upsert?: FormAnswerUpsertWithWhereUniqueWithoutApplicationInput | FormAnswerUpsertWithWhereUniqueWithoutApplicationInput[]
+    createMany?: FormAnswerCreateManyApplicationInputEnvelope
+    set?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    disconnect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    delete?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    connect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    update?: FormAnswerUpdateWithWhereUniqueWithoutApplicationInput | FormAnswerUpdateWithWhereUniqueWithoutApplicationInput[]
+    updateMany?: FormAnswerUpdateManyWithWhereWithoutApplicationInput | FormAnswerUpdateManyWithWhereWithoutApplicationInput[]
+    deleteMany?: FormAnswerScalarWhereInput | FormAnswerScalarWhereInput[]
+  }
+
+  export type FormAnswerUncheckedUpdateManyWithoutApplicationNestedInput = {
+    create?: XOR<FormAnswerCreateWithoutApplicationInput, FormAnswerUncheckedCreateWithoutApplicationInput> | FormAnswerCreateWithoutApplicationInput[] | FormAnswerUncheckedCreateWithoutApplicationInput[]
+    connectOrCreate?: FormAnswerCreateOrConnectWithoutApplicationInput | FormAnswerCreateOrConnectWithoutApplicationInput[]
+    upsert?: FormAnswerUpsertWithWhereUniqueWithoutApplicationInput | FormAnswerUpsertWithWhereUniqueWithoutApplicationInput[]
+    createMany?: FormAnswerCreateManyApplicationInputEnvelope
+    set?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    disconnect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    delete?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    connect?: FormAnswerWhereUniqueInput | FormAnswerWhereUniqueInput[]
+    update?: FormAnswerUpdateWithWhereUniqueWithoutApplicationInput | FormAnswerUpdateWithWhereUniqueWithoutApplicationInput[]
+    updateMany?: FormAnswerUpdateManyWithWhereWithoutApplicationInput | FormAnswerUpdateManyWithWhereWithoutApplicationInput[]
+    deleteMany?: FormAnswerScalarWhereInput | FormAnswerScalarWhereInput[]
   }
 
   export type ChallengerCreateNestedManyWithoutChallengerSchoolInput = {
@@ -12998,14 +14425,6 @@ export namespace Prisma {
     not?: NestedEnumApplicationStatusEnumFilter<$PrismaModel> | $Enums.ApplicationStatusEnum
   }
 
-  export type AnswerWhereInput = {
-    AND?: AnswerWhereInput | AnswerWhereInput[]
-    OR?: AnswerWhereInput[]
-    NOT?: AnswerWhereInput | AnswerWhereInput[]
-    questionId?: StringFilter<"Answer"> | string
-    value?: StringNullableListFilter<"Answer">
-  }
-
   export type NestedEnumApplicationStatusEnumWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.ApplicationStatusEnum | EnumApplicationStatusEnumFieldRefInput<$PrismaModel>
     in?: $Enums.ApplicationStatusEnum[] | ListEnumApplicationStatusEnumFieldRefInput<$PrismaModel>
@@ -13019,11 +14438,11 @@ export namespace Prisma {
   export type ApplicationCreateWithoutApplicantInput = {
     id?: string
     status?: $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     form: FormCreateNestedOneWithoutApplicationsInput
-    matchingRound: MatchingRoundCreateNestedOneWithoutApplicationInput
+    matchingRound: MatchingRoundCreateNestedOneWithoutApplicationsInRoundInput
+    formAnswers?: FormAnswerCreateNestedManyWithoutApplicationInput
   }
 
   export type ApplicationUncheckedCreateWithoutApplicantInput = {
@@ -13031,9 +14450,9 @@ export namespace Prisma {
     formId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    formAnswers?: FormAnswerUncheckedCreateNestedManyWithoutApplicationInput
   }
 
   export type ApplicationCreateOrConnectWithoutApplicantInput = {
@@ -13045,7 +14464,7 @@ export namespace Prisma {
     data: ApplicationCreateManyApplicantInput | ApplicationCreateManyApplicantInput[]
   }
 
-  export type ProjectCreateWithoutPlanInput = {
+  export type ProjectCreateWithoutProjectPlanInput = {
     id?: string
     title: string
     description: string
@@ -13057,7 +14476,7 @@ export namespace Prisma {
     projectForms?: FormCreateNestedManyWithoutProjectInput
   }
 
-  export type ProjectUncheckedCreateWithoutPlanInput = {
+  export type ProjectUncheckedCreateWithoutProjectPlanInput = {
     id?: string
     title: string
     description: string
@@ -13069,13 +14488,13 @@ export namespace Prisma {
     projectForms?: FormUncheckedCreateNestedManyWithoutProjectInput
   }
 
-  export type ProjectCreateOrConnectWithoutPlanInput = {
+  export type ProjectCreateOrConnectWithoutProjectPlanInput = {
     where: ProjectWhereUniqueInput
-    create: XOR<ProjectCreateWithoutPlanInput, ProjectUncheckedCreateWithoutPlanInput>
+    create: XOR<ProjectCreateWithoutProjectPlanInput, ProjectUncheckedCreateWithoutProjectPlanInput>
   }
 
-  export type ProjectCreateManyPlanInputEnvelope = {
-    data: ProjectCreateManyPlanInput | ProjectCreateManyPlanInput[]
+  export type ProjectCreateManyProjectPlanInputEnvelope = {
+    data: ProjectCreateManyProjectPlanInput | ProjectCreateManyProjectPlanInput[]
   }
 
   export type ProjectMemberCreateWithoutUserInput = {
@@ -13101,23 +14520,23 @@ export namespace Prisma {
     data: ProjectMemberCreateManyUserInput | ProjectMemberCreateManyUserInput[]
   }
 
-  export type SchoolCreateWithoutChallengerInput = {
+  export type SchoolCreateWithoutChallengersInput = {
     handle: string
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type SchoolUncheckedCreateWithoutChallengerInput = {
+  export type SchoolUncheckedCreateWithoutChallengersInput = {
     handle: string
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type SchoolCreateOrConnectWithoutChallengerInput = {
+  export type SchoolCreateOrConnectWithoutChallengersInput = {
     where: SchoolWhereUniqueInput
-    create: XOR<SchoolCreateWithoutChallengerInput, SchoolUncheckedCreateWithoutChallengerInput>
+    create: XOR<SchoolCreateWithoutChallengersInput, SchoolUncheckedCreateWithoutChallengersInput>
   }
 
   export type ApplicationUpsertWithWhereUniqueWithoutApplicantInput = {
@@ -13149,20 +14568,20 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Application"> | Date | string
   }
 
-  export type ProjectUpsertWithWhereUniqueWithoutPlanInput = {
+  export type ProjectUpsertWithWhereUniqueWithoutProjectPlanInput = {
     where: ProjectWhereUniqueInput
-    update: XOR<ProjectUpdateWithoutPlanInput, ProjectUncheckedUpdateWithoutPlanInput>
-    create: XOR<ProjectCreateWithoutPlanInput, ProjectUncheckedCreateWithoutPlanInput>
+    update: XOR<ProjectUpdateWithoutProjectPlanInput, ProjectUncheckedUpdateWithoutProjectPlanInput>
+    create: XOR<ProjectCreateWithoutProjectPlanInput, ProjectUncheckedCreateWithoutProjectPlanInput>
   }
 
-  export type ProjectUpdateWithWhereUniqueWithoutPlanInput = {
+  export type ProjectUpdateWithWhereUniqueWithoutProjectPlanInput = {
     where: ProjectWhereUniqueInput
-    data: XOR<ProjectUpdateWithoutPlanInput, ProjectUncheckedUpdateWithoutPlanInput>
+    data: XOR<ProjectUpdateWithoutProjectPlanInput, ProjectUncheckedUpdateWithoutProjectPlanInput>
   }
 
-  export type ProjectUpdateManyWithWhereWithoutPlanInput = {
+  export type ProjectUpdateManyWithWhereWithoutProjectPlanInput = {
     where: ProjectScalarWhereInput
-    data: XOR<ProjectUpdateManyMutationInput, ProjectUncheckedUpdateManyWithoutPlanInput>
+    data: XOR<ProjectUpdateManyMutationInput, ProjectUncheckedUpdateManyWithoutProjectPlanInput>
   }
 
   export type ProjectScalarWhereInput = {
@@ -13205,24 +14624,24 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ProjectMember"> | Date | string
   }
 
-  export type SchoolUpsertWithoutChallengerInput = {
-    update: XOR<SchoolUpdateWithoutChallengerInput, SchoolUncheckedUpdateWithoutChallengerInput>
-    create: XOR<SchoolCreateWithoutChallengerInput, SchoolUncheckedCreateWithoutChallengerInput>
+  export type SchoolUpsertWithoutChallengersInput = {
+    update: XOR<SchoolUpdateWithoutChallengersInput, SchoolUncheckedUpdateWithoutChallengersInput>
+    create: XOR<SchoolCreateWithoutChallengersInput, SchoolUncheckedCreateWithoutChallengersInput>
     where?: SchoolWhereInput
   }
 
-  export type SchoolUpdateToOneWithWhereWithoutChallengerInput = {
+  export type SchoolUpdateToOneWithWhereWithoutChallengersInput = {
     where?: SchoolWhereInput
-    data: XOR<SchoolUpdateWithoutChallengerInput, SchoolUncheckedUpdateWithoutChallengerInput>
+    data: XOR<SchoolUpdateWithoutChallengersInput, SchoolUncheckedUpdateWithoutChallengersInput>
   }
 
-  export type SchoolUpdateWithoutChallengerInput = {
+  export type SchoolUpdateWithoutChallengersInput = {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type SchoolUncheckedUpdateWithoutChallengerInput = {
+  export type SchoolUncheckedUpdateWithoutChallengersInput = {
     name?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13231,11 +14650,11 @@ export namespace Prisma {
   export type ApplicationCreateWithoutMatchingRoundInput = {
     id?: string
     status?: $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     applicant: ChallengerCreateNestedOneWithoutApplicationsInput
     form: FormCreateNestedOneWithoutApplicationsInput
+    formAnswers?: FormAnswerCreateNestedManyWithoutApplicationInput
   }
 
   export type ApplicationUncheckedCreateWithoutMatchingRoundInput = {
@@ -13243,9 +14662,9 @@ export namespace Prisma {
     applicantId: string
     formId: string
     status?: $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    formAnswers?: FormAnswerUncheckedCreateNestedManyWithoutApplicationInput
   }
 
   export type ApplicationCreateOrConnectWithoutMatchingRoundInput = {
@@ -13340,7 +14759,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
     ProjectMember?: ProjectMemberCreateNestedManyWithoutUserInput
-    challengerSchool: SchoolCreateNestedOneWithoutChallengerInput
+    challengerSchool: SchoolCreateNestedOneWithoutChallengersInput
   }
 
   export type ChallengerUncheckedCreateWithoutProjectsInput = {
@@ -13441,7 +14860,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
     ProjectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
-    challengerSchool?: SchoolUpdateOneRequiredWithoutChallengerNestedInput
+    challengerSchool?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
   }
 
   export type ChallengerUncheckedUpdateWithoutProjectsInput = {
@@ -13468,7 +14887,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     projectMember?: ProjectMemberCreateNestedManyWithoutProjectInput
-    plan: ChallengerCreateNestedOneWithoutProjectsInput
+    projectPlan: ChallengerCreateNestedOneWithoutProjectsInput
   }
 
   export type ProjectUncheckedCreateWithoutProjectFormsInput = {
@@ -13491,11 +14910,11 @@ export namespace Prisma {
   export type ApplicationCreateWithoutFormInput = {
     id?: string
     status?: $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
     applicant: ChallengerCreateNestedOneWithoutApplicationsInput
-    matchingRound: MatchingRoundCreateNestedOneWithoutApplicationInput
+    matchingRound: MatchingRoundCreateNestedOneWithoutApplicationsInRoundInput
+    formAnswers?: FormAnswerCreateNestedManyWithoutApplicationInput
   }
 
   export type ApplicationUncheckedCreateWithoutFormInput = {
@@ -13503,9 +14922,9 @@ export namespace Prisma {
     applicantId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    formAnswers?: FormAnswerUncheckedCreateNestedManyWithoutApplicationInput
   }
 
   export type ApplicationCreateOrConnectWithoutFormInput = {
@@ -13525,8 +14944,10 @@ export namespace Prisma {
     type: $Enums.QuestionTypeEnum
     options?: FormQuestionCreateoptionsInput | string[]
     isRequired?: boolean
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    formAnswers?: FormAnswerCreateNestedManyWithoutQuestionInput
   }
 
   export type FormQuestionUncheckedCreateWithoutFormInput = {
@@ -13537,8 +14958,10 @@ export namespace Prisma {
     type: $Enums.QuestionTypeEnum
     options?: FormQuestionCreateoptionsInput | string[]
     isRequired?: boolean
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
+    formAnswers?: FormAnswerUncheckedCreateNestedManyWithoutQuestionInput
   }
 
   export type FormQuestionCreateOrConnectWithoutFormInput = {
@@ -13569,7 +14992,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMember?: ProjectMemberUpdateManyWithoutProjectNestedInput
-    plan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
+    projectPlan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutProjectFormsInput = {
@@ -13627,6 +15050,7 @@ export namespace Prisma {
     type?: EnumQuestionTypeEnumFilter<"FormQuestion"> | $Enums.QuestionTypeEnum
     options?: StringNullableListFilter<"FormQuestion">
     isRequired?: BoolFilter<"FormQuestion"> | boolean
+    isDeleted?: BoolFilter<"FormQuestion"> | boolean
     createdAt?: DateTimeFilter<"FormQuestion"> | Date | string
     updatedAt?: DateTimeFilter<"FormQuestion"> | Date | string
   }
@@ -13656,6 +15080,31 @@ export namespace Prisma {
   export type FormCreateOrConnectWithoutQuestionsInput = {
     where: FormWhereUniqueInput
     create: XOR<FormCreateWithoutQuestionsInput, FormUncheckedCreateWithoutQuestionsInput>
+  }
+
+  export type FormAnswerCreateWithoutQuestionInput = {
+    id?: string
+    value?: FormAnswerCreatevalueInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    application: ApplicationCreateNestedOneWithoutFormAnswersInput
+  }
+
+  export type FormAnswerUncheckedCreateWithoutQuestionInput = {
+    id?: string
+    applicationId: string
+    value?: FormAnswerCreatevalueInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FormAnswerCreateOrConnectWithoutQuestionInput = {
+    where: FormAnswerWhereUniqueInput
+    create: XOR<FormAnswerCreateWithoutQuestionInput, FormAnswerUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type FormAnswerCreateManyQuestionInputEnvelope = {
+    data: FormAnswerCreateManyQuestionInput | FormAnswerCreateManyQuestionInput[]
   }
 
   export type FormUpsertWithoutQuestionsInput = {
@@ -13689,6 +15138,34 @@ export namespace Prisma {
     applications?: ApplicationUncheckedUpdateManyWithoutFormNestedInput
   }
 
+  export type FormAnswerUpsertWithWhereUniqueWithoutQuestionInput = {
+    where: FormAnswerWhereUniqueInput
+    update: XOR<FormAnswerUpdateWithoutQuestionInput, FormAnswerUncheckedUpdateWithoutQuestionInput>
+    create: XOR<FormAnswerCreateWithoutQuestionInput, FormAnswerUncheckedCreateWithoutQuestionInput>
+  }
+
+  export type FormAnswerUpdateWithWhereUniqueWithoutQuestionInput = {
+    where: FormAnswerWhereUniqueInput
+    data: XOR<FormAnswerUpdateWithoutQuestionInput, FormAnswerUncheckedUpdateWithoutQuestionInput>
+  }
+
+  export type FormAnswerUpdateManyWithWhereWithoutQuestionInput = {
+    where: FormAnswerScalarWhereInput
+    data: XOR<FormAnswerUpdateManyMutationInput, FormAnswerUncheckedUpdateManyWithoutQuestionInput>
+  }
+
+  export type FormAnswerScalarWhereInput = {
+    AND?: FormAnswerScalarWhereInput | FormAnswerScalarWhereInput[]
+    OR?: FormAnswerScalarWhereInput[]
+    NOT?: FormAnswerScalarWhereInput | FormAnswerScalarWhereInput[]
+    id?: StringFilter<"FormAnswer"> | string
+    applicationId?: StringFilter<"FormAnswer"> | string
+    questionId?: StringFilter<"FormAnswer"> | string
+    value?: StringNullableListFilter<"FormAnswer">
+    createdAt?: DateTimeFilter<"FormAnswer"> | Date | string
+    updatedAt?: DateTimeFilter<"FormAnswer"> | Date | string
+  }
+
   export type ProjectCreateWithoutProjectMemberInput = {
     id?: string
     title: string
@@ -13698,7 +15175,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     projectForms?: FormCreateNestedManyWithoutProjectInput
-    plan: ChallengerCreateNestedOneWithoutProjectsInput
+    projectPlan: ChallengerCreateNestedOneWithoutProjectsInput
   }
 
   export type ProjectUncheckedCreateWithoutProjectMemberInput = {
@@ -13730,8 +15207,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
-    projects?: ProjectCreateNestedManyWithoutPlanInput
-    challengerSchool: SchoolCreateNestedOneWithoutChallengerInput
+    projects?: ProjectCreateNestedManyWithoutProjectPlanInput
+    challengerSchool: SchoolCreateNestedOneWithoutChallengersInput
   }
 
   export type ChallengerUncheckedCreateWithoutProjectMemberInput = {
@@ -13747,7 +15224,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutPlanInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
   }
 
   export type ChallengerCreateOrConnectWithoutProjectMemberInput = {
@@ -13774,7 +15251,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectForms?: FormUpdateManyWithoutProjectNestedInput
-    plan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
+    projectPlan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutProjectMemberInput = {
@@ -13810,8 +15287,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUpdateManyWithoutPlanNestedInput
-    challengerSchool?: SchoolUpdateOneRequiredWithoutChallengerNestedInput
+    projects?: ProjectUpdateManyWithoutProjectPlanNestedInput
+    challengerSchool?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
   }
 
   export type ChallengerUncheckedUpdateWithoutProjectMemberInput = {
@@ -13826,11 +15303,131 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutPlanNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
   }
 
-  export type AnswerCreatevalueInput = {
-    set: string[]
+  export type ApplicationCreateWithoutFormAnswersInput = {
+    id?: string
+    status?: $Enums.ApplicationStatusEnum
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    applicant: ChallengerCreateNestedOneWithoutApplicationsInput
+    form: FormCreateNestedOneWithoutApplicationsInput
+    matchingRound: MatchingRoundCreateNestedOneWithoutApplicationsInRoundInput
+  }
+
+  export type ApplicationUncheckedCreateWithoutFormAnswersInput = {
+    id?: string
+    applicantId: string
+    formId: string
+    status?: $Enums.ApplicationStatusEnum
+    matchingRoundId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ApplicationCreateOrConnectWithoutFormAnswersInput = {
+    where: ApplicationWhereUniqueInput
+    create: XOR<ApplicationCreateWithoutFormAnswersInput, ApplicationUncheckedCreateWithoutFormAnswersInput>
+  }
+
+  export type FormQuestionCreateWithoutFormAnswersInput = {
+    id?: string
+    questionNo: number
+    title: string
+    description?: string | null
+    type: $Enums.QuestionTypeEnum
+    options?: FormQuestionCreateoptionsInput | string[]
+    isRequired?: boolean
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    form: FormCreateNestedOneWithoutQuestionsInput
+  }
+
+  export type FormQuestionUncheckedCreateWithoutFormAnswersInput = {
+    id?: string
+    formId: string
+    questionNo: number
+    title: string
+    description?: string | null
+    type: $Enums.QuestionTypeEnum
+    options?: FormQuestionCreateoptionsInput | string[]
+    isRequired?: boolean
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FormQuestionCreateOrConnectWithoutFormAnswersInput = {
+    where: FormQuestionWhereUniqueInput
+    create: XOR<FormQuestionCreateWithoutFormAnswersInput, FormQuestionUncheckedCreateWithoutFormAnswersInput>
+  }
+
+  export type ApplicationUpsertWithoutFormAnswersInput = {
+    update: XOR<ApplicationUpdateWithoutFormAnswersInput, ApplicationUncheckedUpdateWithoutFormAnswersInput>
+    create: XOR<ApplicationCreateWithoutFormAnswersInput, ApplicationUncheckedCreateWithoutFormAnswersInput>
+    where?: ApplicationWhereInput
+  }
+
+  export type ApplicationUpdateToOneWithWhereWithoutFormAnswersInput = {
+    where?: ApplicationWhereInput
+    data: XOR<ApplicationUpdateWithoutFormAnswersInput, ApplicationUncheckedUpdateWithoutFormAnswersInput>
+  }
+
+  export type ApplicationUpdateWithoutFormAnswersInput = {
+    status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
+    form?: FormUpdateOneRequiredWithoutApplicationsNestedInput
+    matchingRound?: MatchingRoundUpdateOneRequiredWithoutApplicationsInRoundNestedInput
+  }
+
+  export type ApplicationUncheckedUpdateWithoutFormAnswersInput = {
+    applicantId?: StringFieldUpdateOperationsInput | string
+    formId?: StringFieldUpdateOperationsInput | string
+    status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    matchingRoundId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormQuestionUpsertWithoutFormAnswersInput = {
+    update: XOR<FormQuestionUpdateWithoutFormAnswersInput, FormQuestionUncheckedUpdateWithoutFormAnswersInput>
+    create: XOR<FormQuestionCreateWithoutFormAnswersInput, FormQuestionUncheckedCreateWithoutFormAnswersInput>
+    where?: FormQuestionWhereInput
+  }
+
+  export type FormQuestionUpdateToOneWithWhereWithoutFormAnswersInput = {
+    where?: FormQuestionWhereInput
+    data: XOR<FormQuestionUpdateWithoutFormAnswersInput, FormQuestionUncheckedUpdateWithoutFormAnswersInput>
+  }
+
+  export type FormQuestionUpdateWithoutFormAnswersInput = {
+    questionNo?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumQuestionTypeEnumFieldUpdateOperationsInput | $Enums.QuestionTypeEnum
+    options?: FormQuestionUpdateoptionsInput | string[]
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    form?: FormUpdateOneRequiredWithoutQuestionsNestedInput
+  }
+
+  export type FormQuestionUncheckedUpdateWithoutFormAnswersInput = {
+    formId?: StringFieldUpdateOperationsInput | string
+    questionNo?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    type?: EnumQuestionTypeEnumFieldUpdateOperationsInput | $Enums.QuestionTypeEnum
+    options?: FormQuestionUpdateoptionsInput | string[]
+    isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ChallengerCreateWithoutApplicationsInput = {
@@ -13844,9 +15441,9 @@ export namespace Prisma {
     role?: $Enums.UserRoleEnum
     createdAt?: Date | string
     updatedAt?: Date | string
-    projects?: ProjectCreateNestedManyWithoutPlanInput
+    projects?: ProjectCreateNestedManyWithoutProjectPlanInput
     ProjectMember?: ProjectMemberCreateNestedManyWithoutUserInput
-    challengerSchool: SchoolCreateNestedOneWithoutChallengerInput
+    challengerSchool: SchoolCreateNestedOneWithoutChallengersInput
   }
 
   export type ChallengerUncheckedCreateWithoutApplicationsInput = {
@@ -13861,7 +15458,7 @@ export namespace Prisma {
     role?: $Enums.UserRoleEnum
     createdAt?: Date | string
     updatedAt?: Date | string
-    projects?: ProjectUncheckedCreateNestedManyWithoutPlanInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
     ProjectMember?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -13897,7 +15494,7 @@ export namespace Prisma {
     create: XOR<FormCreateWithoutApplicationsInput, FormUncheckedCreateWithoutApplicationsInput>
   }
 
-  export type MatchingRoundCreateWithoutApplicationInput = {
+  export type MatchingRoundCreateWithoutApplicationsInRoundInput = {
     id?: string
     name: string
     startDatetime: Date | string
@@ -13906,7 +15503,7 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type MatchingRoundUncheckedCreateWithoutApplicationInput = {
+  export type MatchingRoundUncheckedCreateWithoutApplicationsInRoundInput = {
     id?: string
     name: string
     startDatetime: Date | string
@@ -13915,18 +15512,34 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type MatchingRoundCreateOrConnectWithoutApplicationInput = {
+  export type MatchingRoundCreateOrConnectWithoutApplicationsInRoundInput = {
     where: MatchingRoundWhereUniqueInput
-    create: XOR<MatchingRoundCreateWithoutApplicationInput, MatchingRoundUncheckedCreateWithoutApplicationInput>
+    create: XOR<MatchingRoundCreateWithoutApplicationsInRoundInput, MatchingRoundUncheckedCreateWithoutApplicationsInRoundInput>
   }
 
-  export type AnswerUpdateManyInput = {
-    where: AnswerWhereInput
-    data: AnswerUpdateInput
+  export type FormAnswerCreateWithoutApplicationInput = {
+    id?: string
+    value?: FormAnswerCreatevalueInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    question: FormQuestionCreateNestedOneWithoutFormAnswersInput
   }
 
-  export type AnswerDeleteManyInput = {
-    where: AnswerWhereInput
+  export type FormAnswerUncheckedCreateWithoutApplicationInput = {
+    id?: string
+    questionId: string
+    value?: FormAnswerCreatevalueInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FormAnswerCreateOrConnectWithoutApplicationInput = {
+    where: FormAnswerWhereUniqueInput
+    create: XOR<FormAnswerCreateWithoutApplicationInput, FormAnswerUncheckedCreateWithoutApplicationInput>
+  }
+
+  export type FormAnswerCreateManyApplicationInputEnvelope = {
+    data: FormAnswerCreateManyApplicationInput | FormAnswerCreateManyApplicationInput[]
   }
 
   export type ChallengerUpsertWithoutApplicationsInput = {
@@ -13950,9 +15563,9 @@ export namespace Prisma {
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUpdateManyWithoutPlanNestedInput
+    projects?: ProjectUpdateManyWithoutProjectPlanNestedInput
     ProjectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
-    challengerSchool?: SchoolUpdateOneRequiredWithoutChallengerNestedInput
+    challengerSchool?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
   }
 
   export type ChallengerUncheckedUpdateWithoutApplicationsInput = {
@@ -13966,7 +15579,7 @@ export namespace Prisma {
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUncheckedUpdateManyWithoutPlanNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
     ProjectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -14001,18 +15614,18 @@ export namespace Prisma {
     questions?: FormQuestionUncheckedUpdateManyWithoutFormNestedInput
   }
 
-  export type MatchingRoundUpsertWithoutApplicationInput = {
-    update: XOR<MatchingRoundUpdateWithoutApplicationInput, MatchingRoundUncheckedUpdateWithoutApplicationInput>
-    create: XOR<MatchingRoundCreateWithoutApplicationInput, MatchingRoundUncheckedCreateWithoutApplicationInput>
+  export type MatchingRoundUpsertWithoutApplicationsInRoundInput = {
+    update: XOR<MatchingRoundUpdateWithoutApplicationsInRoundInput, MatchingRoundUncheckedUpdateWithoutApplicationsInRoundInput>
+    create: XOR<MatchingRoundCreateWithoutApplicationsInRoundInput, MatchingRoundUncheckedCreateWithoutApplicationsInRoundInput>
     where?: MatchingRoundWhereInput
   }
 
-  export type MatchingRoundUpdateToOneWithWhereWithoutApplicationInput = {
+  export type MatchingRoundUpdateToOneWithWhereWithoutApplicationsInRoundInput = {
     where?: MatchingRoundWhereInput
-    data: XOR<MatchingRoundUpdateWithoutApplicationInput, MatchingRoundUncheckedUpdateWithoutApplicationInput>
+    data: XOR<MatchingRoundUpdateWithoutApplicationsInRoundInput, MatchingRoundUncheckedUpdateWithoutApplicationsInRoundInput>
   }
 
-  export type MatchingRoundUpdateWithoutApplicationInput = {
+  export type MatchingRoundUpdateWithoutApplicationsInRoundInput = {
     name?: StringFieldUpdateOperationsInput | string
     startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -14020,12 +15633,28 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type MatchingRoundUncheckedUpdateWithoutApplicationInput = {
+  export type MatchingRoundUncheckedUpdateWithoutApplicationsInRoundInput = {
     name?: StringFieldUpdateOperationsInput | string
     startDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     endDatetime?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormAnswerUpsertWithWhereUniqueWithoutApplicationInput = {
+    where: FormAnswerWhereUniqueInput
+    update: XOR<FormAnswerUpdateWithoutApplicationInput, FormAnswerUncheckedUpdateWithoutApplicationInput>
+    create: XOR<FormAnswerCreateWithoutApplicationInput, FormAnswerUncheckedCreateWithoutApplicationInput>
+  }
+
+  export type FormAnswerUpdateWithWhereUniqueWithoutApplicationInput = {
+    where: FormAnswerWhereUniqueInput
+    data: XOR<FormAnswerUpdateWithoutApplicationInput, FormAnswerUncheckedUpdateWithoutApplicationInput>
+  }
+
+  export type FormAnswerUpdateManyWithWhereWithoutApplicationInput = {
+    where: FormAnswerScalarWhereInput
+    data: XOR<FormAnswerUpdateManyMutationInput, FormAnswerUncheckedUpdateManyWithoutApplicationInput>
   }
 
   export type ChallengerCreateWithoutChallengerSchoolInput = {
@@ -14040,7 +15669,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
-    projects?: ProjectCreateNestedManyWithoutPlanInput
+    projects?: ProjectCreateNestedManyWithoutProjectPlanInput
     ProjectMember?: ProjectMemberCreateNestedManyWithoutUserInput
   }
 
@@ -14056,7 +15685,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutPlanInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
     ProjectMember?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
@@ -14107,12 +15736,11 @@ export namespace Prisma {
     formId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type ProjectCreateManyPlanInput = {
+  export type ProjectCreateManyProjectPlanInput = {
     id?: string
     title: string
     description: string
@@ -14131,32 +15759,31 @@ export namespace Prisma {
 
   export type ApplicationUpdateWithoutApplicantInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     form?: FormUpdateOneRequiredWithoutApplicationsNestedInput
-    matchingRound?: MatchingRoundUpdateOneRequiredWithoutApplicationNestedInput
+    matchingRound?: MatchingRoundUpdateOneRequiredWithoutApplicationsInRoundNestedInput
+    formAnswers?: FormAnswerUpdateManyWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateWithoutApplicantInput = {
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    formAnswers?: FormAnswerUncheckedUpdateManyWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateManyWithoutApplicantInput = {
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProjectUpdateWithoutPlanInput = {
+  export type ProjectUpdateWithoutProjectPlanInput = {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
@@ -14167,7 +15794,7 @@ export namespace Prisma {
     projectForms?: FormUpdateManyWithoutProjectNestedInput
   }
 
-  export type ProjectUncheckedUpdateWithoutPlanInput = {
+  export type ProjectUncheckedUpdateWithoutProjectPlanInput = {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
@@ -14178,7 +15805,7 @@ export namespace Prisma {
     projectForms?: FormUncheckedUpdateManyWithoutProjectNestedInput
   }
 
-  export type ProjectUncheckedUpdateManyWithoutPlanInput = {
+  export type ProjectUncheckedUpdateManyWithoutProjectPlanInput = {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
@@ -14210,34 +15837,32 @@ export namespace Prisma {
     applicantId: string
     formId: string
     status?: $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ApplicationUpdateWithoutMatchingRoundInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
     form?: FormUpdateOneRequiredWithoutApplicationsNestedInput
+    formAnswers?: FormAnswerUpdateManyWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateWithoutMatchingRoundInput = {
     applicantId?: StringFieldUpdateOperationsInput | string
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    formAnswers?: FormAnswerUncheckedUpdateManyWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateManyWithoutMatchingRoundInput = {
     applicantId?: StringFieldUpdateOperationsInput | string
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14314,7 +15939,6 @@ export namespace Prisma {
     applicantId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
-    answers?: XOR<AnswerListCreateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14327,33 +15951,33 @@ export namespace Prisma {
     type: $Enums.QuestionTypeEnum
     options?: FormQuestionCreateoptionsInput | string[]
     isRequired?: boolean
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ApplicationUpdateWithoutFormInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
-    matchingRound?: MatchingRoundUpdateOneRequiredWithoutApplicationNestedInput
+    matchingRound?: MatchingRoundUpdateOneRequiredWithoutApplicationsInRoundNestedInput
+    formAnswers?: FormAnswerUpdateManyWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateWithoutFormInput = {
     applicantId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    formAnswers?: FormAnswerUncheckedUpdateManyWithoutApplicationNestedInput
   }
 
   export type ApplicationUncheckedUpdateManyWithoutFormInput = {
     applicantId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
-    answers?: XOR<AnswerListUpdateEnvelopeInput, AnswerCreateInput> | AnswerCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14365,8 +15989,10 @@ export namespace Prisma {
     type?: EnumQuestionTypeEnumFieldUpdateOperationsInput | $Enums.QuestionTypeEnum
     options?: FormQuestionUpdateoptionsInput | string[]
     isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    formAnswers?: FormAnswerUpdateManyWithoutQuestionNestedInput
   }
 
   export type FormQuestionUncheckedUpdateWithoutFormInput = {
@@ -14376,8 +16002,10 @@ export namespace Prisma {
     type?: EnumQuestionTypeEnumFieldUpdateOperationsInput | $Enums.QuestionTypeEnum
     options?: FormQuestionUpdateoptionsInput | string[]
     isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    formAnswers?: FormAnswerUncheckedUpdateManyWithoutQuestionNestedInput
   }
 
   export type FormQuestionUncheckedUpdateManyWithoutFormInput = {
@@ -14387,13 +16015,67 @@ export namespace Prisma {
     type?: EnumQuestionTypeEnumFieldUpdateOperationsInput | $Enums.QuestionTypeEnum
     options?: FormQuestionUpdateoptionsInput | string[]
     isRequired?: BoolFieldUpdateOperationsInput | boolean
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type AnswerUpdateInput = {
+  export type FormAnswerCreateManyQuestionInput = {
+    id?: string
+    applicationId: string
+    value?: FormAnswerCreatevalueInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FormAnswerUpdateWithoutQuestionInput = {
+    value?: FormAnswerUpdatevalueInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    application?: ApplicationUpdateOneRequiredWithoutFormAnswersNestedInput
+  }
+
+  export type FormAnswerUncheckedUpdateWithoutQuestionInput = {
+    applicationId?: StringFieldUpdateOperationsInput | string
+    value?: FormAnswerUpdatevalueInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormAnswerUncheckedUpdateManyWithoutQuestionInput = {
+    applicationId?: StringFieldUpdateOperationsInput | string
+    value?: FormAnswerUpdatevalueInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormAnswerCreateManyApplicationInput = {
+    id?: string
+    questionId: string
+    value?: FormAnswerCreatevalueInput | string[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type FormAnswerUpdateWithoutApplicationInput = {
+    value?: FormAnswerUpdatevalueInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    question?: FormQuestionUpdateOneRequiredWithoutFormAnswersNestedInput
+  }
+
+  export type FormAnswerUncheckedUpdateWithoutApplicationInput = {
     questionId?: StringFieldUpdateOperationsInput | string
-    value?: AnswerUpdatevalueInput | string[]
+    value?: FormAnswerUpdatevalueInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FormAnswerUncheckedUpdateManyWithoutApplicationInput = {
+    questionId?: StringFieldUpdateOperationsInput | string
+    value?: FormAnswerUpdatevalueInput | string[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ChallengerCreateManyChallengerSchoolInput = {
@@ -14420,7 +16102,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUpdateManyWithoutPlanNestedInput
+    projects?: ProjectUpdateManyWithoutProjectPlanNestedInput
     ProjectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
   }
 
@@ -14435,7 +16117,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutPlanNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
     ProjectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
@@ -14449,11 +16131,6 @@ export namespace Prisma {
     role?: EnumUserRoleEnumFieldUpdateOperationsInput | $Enums.UserRoleEnum
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type AnswerUpdatevalueInput = {
-    set?: string[]
-    push?: string | string[]
   }
 
 

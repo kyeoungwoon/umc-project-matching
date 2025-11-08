@@ -32,6 +32,7 @@ import { PrismaModule } from '@modules/prisma/prisma.module';
 import { TestModule } from '@modules/test/test.module';
 import { UsersModule } from '@modules/users/users.module';
 import { ProjectsModule } from '@modules/projects/projects.module';
+import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
 
 @Module({
   imports: [
@@ -98,6 +99,7 @@ import { ProjectsModule } from '@modules/projects/projects.module';
         // forbidNonWhitelisted: true,
       }),
     },
+    ChallengerRoleGuard,
   ],
 })
 export class AppModule implements NestModule {

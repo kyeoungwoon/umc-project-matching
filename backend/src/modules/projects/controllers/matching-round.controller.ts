@@ -48,7 +48,7 @@ export class MatchingRoundController {
       '이름, 시작 시간, 종료 시간을 기준으로 매칭 라운드를 생성합니다.',
   })
   @ApiOkResponseCommon(MatchingRoundResponseDto)
-  @Post('create')
+  @Post('')
   createMatchingRound(@Body() body: CreateMatchingRoundDto) {
     return this.matchingRoundService.createMatchingRound(body);
   }

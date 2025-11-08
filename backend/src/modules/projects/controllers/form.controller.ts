@@ -97,7 +97,6 @@ export class FormController {
     @Param('formId') formId: string,
   ) {
     const userId = this.reqContext.getOrThrowUserId();
-    await this.formService.throwIfUserNotPlanByFormId(userId, formId);
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
 
     const isPlanChallenger =
@@ -161,6 +160,32 @@ export class FormController {
     return this.formService.addFormQuestions(formId, body.questions);
   }
 
+  @ApiOperation({
+    summary: '폼 정보 (제목/설명) 수정',
+    description: '',
+  })
+  @ApiParam({
+    name: 'projectId',
+    required: true,
+  })
+  @ApiParam({
+    name: 'formId',
+    required: true,
+  })
+  @ApiOkResponseCommon(FormResponseDto)
+  @Patch('project/:projectId/form/:formId')
+  async editProjectApplicationForm(
+    @Param('formId') formId: string,
+    @Param('projectId') projectId: string,
+    @Body() body: UpdateFormRequestDto,
+  ) {
+    const userId = this.reqContext.getOrThrowUserId();
+    await this.formService.throwIfUserNotPlanByFormId(userId, formId);
+    await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
+
+    return this.formService.updateForm(formId, body);
+  }
+
   // // form 질문 수정
   // @ApiOperation({
   //   summary: 'form에 질문 수정',
@@ -180,31 +205,5 @@ export class FormController {
   //   // TODO: 현재 검증은 폼이 프로젝트에 속하는지만 함, 질문이 폼에 속하는지는 나중에!
   //
   //   return this.formService.updateFormQuestions(body.questions);
-  // }
-
-  // @ApiOperation({
-  //   summary: 'formId로 폼 수정',
-  //   description: '',
-  // })
-  // @ApiParam({
-  //   name: 'projectId',
-  //   required: true,
-  // })
-  // @ApiParam({
-  //   name: 'formId',
-  //   required: true,
-  // })
-  // @ApiOkResponseCommon(FormResponseDto)
-  // @Patch(':projectId/form/:formId')
-  // async editProjectApplicationForm(
-  //   @Param('formId') formId: string,
-  //   @Param('projectId') projectId: string,
-  //   @Body() body: UpdateFormRequestDto,
-  // ) {
-  //   const userId = this.reqContext.getOrThrowUserId();
-  //   await this.formService.throwIfUserNotPlanByFormId(userId, formId);
-  //   await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
-  //
-  //   return this.formService.updateForm(formId, body);
   // }
 }

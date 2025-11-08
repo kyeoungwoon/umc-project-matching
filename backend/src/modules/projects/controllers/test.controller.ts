@@ -9,6 +9,7 @@ import { RequestContextService } from '@modules/als/services/request-context.ser
 import { UsersService } from '@modules/users/services/users.service';
 import { TestCreateMatchingRoundResponseDto } from '@modules/projects/dto/ok-responses/test.ok-response.dto';
 import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
+import { leoProjects } from '@modules/projects/mock/leo-projects';
 
 @Controller({
   path: 'projects/test',
@@ -42,5 +43,13 @@ export class TestController {
       startDatetime,
       endDatetime,
     });
+  }
+
+  @Post('leo-projects')
+  @ApiOperation({
+    summary: '[테스트용] Leo 지부 내 프로젝트 INIT',
+  })
+  async createLeoProjects() {
+    return this.projectService.createMultipleProject(leoProjects);
   }
 }

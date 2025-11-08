@@ -26,7 +26,7 @@ export const useGetProjectDetailsQuery = (projectId: string) => {
 };
 
 export const useUpdateProjectMutation = (projectId: string) => {
-  console.log('useUpdateProjectMutation projectId:', projectId);
+  // console.log('useUpdateProjectMutation projectId:', projectId);
   return useMutation({
     mutationFn: (data: UpdateProjectRequestDto) => updateProject(projectId, data),
   });

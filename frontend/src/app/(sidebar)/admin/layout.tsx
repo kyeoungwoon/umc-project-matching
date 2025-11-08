@@ -4,9 +4,13 @@ import { ReactNode } from 'react';
 
 import { HEADER_SECTION } from '@common/constants/header-title-description.constants';
 
+import { useRedirectToHomeIfNotAdmin } from '@common/hooks/useGetChallengerPerms';
+
 import Header from '@common/components/Header';
 
 const AdminLayout = ({ children }: { children?: ReactNode }) => {
+  useRedirectToHomeIfNotAdmin();
+
   return (
     <div className={'flex flex-col gap-4'}>
       <Header section={HEADER_SECTION.ADMIN} />

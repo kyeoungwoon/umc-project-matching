@@ -39,6 +39,7 @@ api.interceptors.response.use(
   (err: AxiosError) => {
     if (err.response) {
       const { code, message, error } = err.response.data as any;
+      if (code.startsWith('JWT')) AuthStore.getState().actions.clearUser();
       return Promise.reject({
         code,
         message,

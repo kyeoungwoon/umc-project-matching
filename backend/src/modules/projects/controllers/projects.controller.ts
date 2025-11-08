@@ -18,6 +18,7 @@ import { ProjectsService } from '@modules/projects/services/projects.service';
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { UsersService } from '@modules/users/services/users.service';
 import {
+  CreateMultipleProjectRequestDto,
   CreateProjectRequestDto,
   UpdateProjectRequestDto,
 } from '@modules/projects/dto/project.dto';
@@ -62,6 +63,18 @@ export class ProjectsController {
     await this.userService.throwIfNotPlanChallenger(userId);
 
     return this.projectService.createProject(body);
+  }
+
+  @Post('')
+  @ApiOperation({
+    summary: '다수의 새로운 프로젝트 생성',
+    description: 'Plan 챌린저만 가능합니다.',
+  })
+  async createMultipleProject(@Body() body: CreateMultipleProjectRequestDto) {
+    const userId = this.reqContext.getOrThrowUserId();
+    await this.userService.throwIfNotPlanChallenger(userId);
+
+    return this.projectService.createMultipleProject(body.projects);
   }
 
   @Get(':projectId')

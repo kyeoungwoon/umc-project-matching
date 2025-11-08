@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@styles/components/ui/button';
 import {
   Card,
   CardContent,
@@ -13,6 +14,8 @@ import { RadioGroup, RadioGroupItem } from '@styles/components/ui/radio-group';
 
 import { FormQuestionDto } from '@api/axios/form/types';
 
+import RequiredStar from '@common/components/RequiredStar';
+
 interface ObjectiveQuestionProps {
   field: any;
   question: FormQuestionDto;
@@ -24,14 +27,20 @@ export const ObjectiveQuestion = ({ field, question }: ObjectiveQuestionProps) =
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{question.title}</CardTitle>
+        <CardTitle>
+          {question.title}
+          {question.isRequired && <RequiredStar />}
+        </CardTitle>
         <CardDescription>{question.description}</CardDescription>
       </CardHeader>
       <CardContent>
         {type === 'SINGLE_CHOICE' ? (
           <RadioGroup
-            value={field.state.value}
-            onValueChange={field.handleChange}
+            value={field.state.value[0]}
+            onValueChange={(val) => {
+              console.log('single choice clicked', val);
+              field.handleChange([val]);
+            }}
             onBlur={field.handleBlur}
           >
             {options.map((option) => (
@@ -40,6 +49,9 @@ export const ObjectiveQuestion = ({ field, question }: ObjectiveQuestionProps) =
                 <Label htmlFor={option}>{option}</Label>
               </div>
             ))}
+            <Button type={'button'} className={'h-8 w-20'} onClick={() => field.handleChange([''])}>
+              선택 해제
+            </Button>
           </RadioGroup>
         ) : (
           <div className="space-y-2">
@@ -49,12 +61,18 @@ export const ObjectiveQuestion = ({ field, question }: ObjectiveQuestionProps) =
                   id={option}
                   checked={field.state.value?.includes(option)}
                   onCheckedChange={(checked) => {
-                    const currentValues = field.state.value || [];
+                    let newValues = field.state.value || [];
+
                     if (checked) {
-                      field.handleChange([...currentValues, option]);
+                      newValues = [...newValues, option];
                     } else {
-                      field.handleChange(currentValues.filter((v: string) => v !== option));
+                      newValues = newValues.filter((v: string) => v !== option);
                     }
+
+                    newValues = newValues.filter((v: string) => v !== '');
+                    if (!newValues.length) newValues = [''];
+                    console.log(newValues);
+                    field.handleChange(newValues);
                   }}
                 />
                 <Label htmlFor={option}>{option}</Label>

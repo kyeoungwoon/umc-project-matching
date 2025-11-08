@@ -1,25 +1,22 @@
 'use client';
 
-import { Badge } from '@styles/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@styles/components/ui/card';
-import { Separator } from '@styles/components/ui/separator';
 
-import { AnswerResponseDto } from '@api/axios/application/types';
+import { FormAnswerResponseDto } from '@api/axios/application/types';
 
-const QuestionAnswer = ({ answer }: { answer: AnswerResponseDto }) => {
+const QuestionAnswer = ({ answer }: { answer: FormAnswerResponseDto }) => {
+  console.log(answer);
   return (
     <Card className="overflow-hidden transition-all hover:shadow-md">
       <CardHeader className="flex h-full flex-1 flex-row items-center justify-start space-x-1">
-        <Badge variant="outline" className="text-xs">
-          질문
-        </Badge>
-        <p className="text-sm leading-relaxed font-medium">{answer.questionTitle}</p>
+        {/*질문 배지 삭제 처리 하였음, 디자인 상 어떤게 더 좋을까?*/}
+        <p className="text-md leading-relaxed font-medium">{answer.question.title}</p>
       </CardHeader>
-      <Separator />
       <CardContent className="flex flex-col gap-y-4">
-        <Badge variant="outline" className="text-xs">
-          답변
-        </Badge>
+        <p className="text-muted-foreground text-sm">답변</p>
+        {/*<Badge variant="outline" className="text-xs">*/}
+        {/*  답변*/}
+        {/*</Badge>*/}
         <div className="flex items-start gap-3">
           <div className="flex-1">
             {answer.value.length > 0 ? (
@@ -27,7 +24,7 @@ const QuestionAnswer = ({ answer }: { answer: AnswerResponseDto }) => {
                 {answer.value.map((val, idx) => (
                   <div
                     key={idx}
-                    className="border-border bg-background rounded-md border p-3 text-sm leading-relaxed"
+                    className="bg-muted/50 border-border/50 rounded-lg border p-3 text-sm"
                   >
                     {val}
                   </div>
