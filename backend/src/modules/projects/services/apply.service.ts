@@ -1,6 +1,10 @@
 import {
+  BadRequestException,
+  ConflictException,
   ForbiddenException,
+  Inject,
   Injectable,
+  LoggerService,
   NotFoundException,
 } from '@nestjs/common';
 import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
@@ -8,6 +12,7 @@ import { ApplicationStatusEnum } from '@generated/prisma/mongodb';
 import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
 import { AnswerDto } from '@modules/projects/dto/apply.dto';
 import { ProjectsService } from '@modules/projects/services/projects.service';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Injectable()
 export class ApplyService {
@@ -15,6 +20,8 @@ export class ApplyService {
     private readonly mongo: MongoDBPrismaService,
     private readonly matching: MatchingRoundService,
     private readonly projectsService: ProjectsService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {}
 
   /**
@@ -31,15 +38,66 @@ export class ApplyService {
     const currentRoundId =
       await this.matching.getCurrentProjectMatchingRoundId();
 
-    return this.mongo.application.create({
-      data: {
-        formId,
-        applicantId: userId,
-        matchingRoundId: currentRoundId,
-        status: ApplicationStatusEnum.SUBMITTED,
-        answers,
+    // TODO: 필수 응답 Form은 모두 입력하여야 합니다.
+    const questions = await this.mongo.formQuestion.findMany({
+      where: {
+        id: { in: answers.map((ans) => ans.questionId) },
       },
     });
+
+    for (const question of questions) {
+      // 필수질문인 경우
+      if (question.isRequired) {
+        // ans.value 배열에 빈 문자열이 아닌 값이 하나라도 있는 경우
+        // 즉, 응답을 한 경우
+        const answered = answers.find(
+          (ans) =>
+            ans.questionId === question.id &&
+            ans.value.filter((v) => v !== '').length > 0,
+        );
+        // 그러한 객체가 존재하지 않을 경우
+        if (!answered) {
+          throw new BadRequestException(
+            `필수 질문 "${question.title}"에 대한 응답이 누락되었습니다.`,
+          );
+        }
+      }
+    }
+
+    try {
+      await this.mongo.$transaction(async (tx) => {
+        const createdApplication = await tx.application.create({
+          data: {
+            formId,
+            applicantId: userId,
+            matchingRoundId: currentRoundId,
+            status: ApplicationStatusEnum.SUBMITTED,
+          },
+        });
+
+        return tx.formAnswer.createMany({
+          data: answers.map((ans) => ({
+            applicationId: createdApplication.id,
+            questionId: ans.questionId,
+            value: ans.value,
+          })),
+        });
+      });
+    } catch (err: any) {
+      this.logger.error(err);
+      if (err.code === 'P2002') {
+        // 중복 지원 에러
+        throw new ConflictException(
+          '동일 차수 내 중복 지원은 허용되지 않습니다.',
+        );
+      }
+
+      throw new BadRequestException(
+        '지원서 제출 과정에서 오류가 발생하였습니다. 관리자에게 문의하세요.',
+      );
+    }
+
+    return;
   }
 
   /**
@@ -73,6 +131,7 @@ export class ApplyService {
       include: {
         applicant: true,
         form: true,
+        formAnswers: true,
       },
     });
 
@@ -108,6 +167,7 @@ export class ApplyService {
     applicationId: string,
     status: ApplicationStatusEnum,
   ) {
+    // 승인하는 경우 팀원에 추가하기
     if (status === ApplicationStatusEnum.CONFIRMED) {
       // 팀원에도 추가해야함
       const { projectId, userId } =
@@ -121,6 +181,7 @@ export class ApplyService {
     });
   }
 
+  // applicationId에 해당하는 project와 userId를 반환합니다.
   async getProjectAndUserIdByApplicationId(applicationId: string) {
     const application = await this.getApplication(applicationId);
     return {
@@ -132,7 +193,7 @@ export class ApplyService {
   /**
    * 지원서 상태가 SUBMITTED가 아니면 에러를 발생합니다.
    *
-   * 의도치 않은 지원서 상태 변경을 막아줍니다.
+   * Plan 챌린저가 지원서 상태를 변경함에 있어, 다른 상태로 바꿀 수 없도록 제한하는 역할입니다.
    */
   async throwIfApplicationStatusNotSubmitted(applicationId: string) {
     const application = await this.getApplication(applicationId);
@@ -141,32 +202,23 @@ export class ApplyService {
     }
   }
 
+  /**
+   * 사용자가 제출한 모든 지원서 목록을 반환합니다.
+   */
   async getMyApplications(userId: string) {
     const applications = await this.mongo.application.findMany({
       where: { applicantId: userId },
       include: {
-        form: true,
+        form: true, // TODO: 이건 왜 필요한걸까?
+        formAnswers: {
+          include: {
+            question: true,
+          },
+        },
         matchingRound: true,
       },
     });
 
-    // 각 answer에 question의 title만 추가
-    return await Promise.all(
-      applications.map(async (app) => {
-        // map으로 생성된 Promise 배열 모두 처리
-        const answersWithTitle = await Promise.all(
-          // 지원서마다, answer를 돌고, 그 answer의 questionId를 mongo에 때려서 가져옴.
-          app.answers.map(async (ans) => {
-            const question = await this.mongo.formQuestion.findUnique({
-              where: { id: ans.questionId },
-              select: { title: true },
-            });
-            return { ...ans, questionTitle: question?.title };
-          }),
-        );
-        // 큰 map return
-        return { ...app, answers: answersWithTitle };
-      }),
-    );
+    return applications;
   }
 }

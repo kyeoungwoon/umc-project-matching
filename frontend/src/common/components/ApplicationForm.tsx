@@ -33,11 +33,19 @@ export const ApplicationForm = ({
       answers: formData.questions.map(
         (q): AnswerDto => ({
           questionId: q.id,
-          value: [],
+          value: [''],
         }),
       ),
     },
     onSubmit: ({ value }) => {
+      // const newValue = value.answers.map((ans) => {
+      //   if (ans === 0) {
+      //     return {
+      //       ...ans,
+      //       value: [''],
+      //     };
+      //   } else return ans;
+      // });
       apply(value, {
         onSuccess: () => {
           toast.success('지원이 완료되었습니다.', {

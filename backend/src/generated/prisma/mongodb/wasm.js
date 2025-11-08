@@ -115,6 +115,7 @@ Prisma.NullTypes = {
 
 exports.Prisma.ChallengerScalarFieldEnum = {
   id: 'id',
+  umsbChallengerId: 'umsbChallengerId',
   name: 'name',
   nickname: 'nickname',
   introduction: 'introduction',
@@ -123,6 +124,8 @@ exports.Prisma.ChallengerScalarFieldEnum = {
   password: 'password',
   part: 'part',
   role: 'role',
+  gender: 'gender',
+  chapter: 'chapter',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -165,6 +168,7 @@ exports.Prisma.FormQuestionScalarFieldEnum = {
   type: 'type',
   options: 'options',
   isRequired: 'isRequired',
+  isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -173,6 +177,15 @@ exports.Prisma.ProjectMemberScalarFieldEnum = {
   id: 'id',
   projectId: 'projectId',
   userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.FormAnswerScalarFieldEnum = {
+  id: 'id',
+  applicationId: 'applicationId',
+  questionId: 'questionId',
+  value: 'value',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -219,6 +232,15 @@ exports.UserRoleEnum = exports.$Enums.UserRoleEnum = {
   ADMIN: 'ADMIN'
 };
 
+exports.GenderEnum = exports.$Enums.GenderEnum = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE'
+};
+
+exports.ChallengerChapterEnum = exports.$Enums.ChallengerChapterEnum = {
+  LEO_9TH: 'LEO_9TH'
+};
+
 exports.QuestionTypeEnum = exports.$Enums.QuestionTypeEnum = {
   SINGLE_CHOICE: 'SINGLE_CHOICE',
   MULTIPLE_CHOICE: 'MULTIPLE_CHOICE',
@@ -239,6 +261,7 @@ exports.Prisma.ModelName = {
   Form: 'Form',
   FormQuestion: 'FormQuestion',
   ProjectMember: 'ProjectMember',
+  FormAnswer: 'FormAnswer',
   Application: 'Application',
   School: 'School'
 };

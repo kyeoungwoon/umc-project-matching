@@ -19,7 +19,7 @@ const formSchema = z.object({
     z.object({
       questionNo: z.number(),
       title: z.string().min(1, '질문 제목을 입력해주세요.'),
-      description: z.string().min(1, '질문에 대한 설명을 입력해주세요.'),
+      description: z.string().optional(),
       type: z.enum(['SINGLE_CHOICE', 'MULTIPLE_CHOICE', 'SUBJECTIVE']),
       isRequired: z.boolean(),
       options: z.array(z.string().min(1, '선택지를 입력해주세요.')),

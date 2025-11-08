@@ -23,7 +23,7 @@ import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response
   path: 'projects/applications',
   version: '1',
 })
-@ApiTags(API_TAGS.PROJECT)
+@ApiTags(API_TAGS.APPLY)
 @ApiBearerAuth()
 export class ApplyController {
   constructor(
@@ -60,7 +60,7 @@ export class ApplyController {
     required: true,
   })
   @ApiOkResponseCommon(ApplicationResponseDto)
-  @Post(':projectId/form/:formId/apply')
+  @Post('project/:projectId/form/:formId/apply')
   async applyToProject(
     @Param('projectId') projectId: string,
     @Param('formId') formId: string,

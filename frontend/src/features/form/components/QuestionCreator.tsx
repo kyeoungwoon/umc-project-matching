@@ -18,7 +18,7 @@ import { Switch } from '@styles/components/ui/switch';
 
 import { QuestionType } from '@api/axios/form/types';
 
-import FormField from '@common/components/FormField';
+import InputFormField from '@common/components/InputFormField';
 
 interface QuestionCreatorProps {
   tanstackForm: any;
@@ -83,14 +83,14 @@ export default function QuestionCreator({ tanstackForm, index, remove }: Questio
       {/* 보기 문항 내용들 */}
       <CardContent className="space-y-4">
         {/* 질문 제목 부분 */}
-        <FormField
+        <InputFormField
           tanstackForm={tanstackForm}
           name={`questions[${index}].title`}
           label={'질문 제목'}
         />
 
         {/* 질문 설명 부분 */}
-        <FormField
+        <InputFormField
           tanstackForm={tanstackForm}
           name={`questions[${index}].description`}
           label={'질문 설명'}
@@ -121,7 +121,7 @@ export default function QuestionCreator({ tanstackForm, index, remove }: Questio
                           {field.state.value.map((_, i) => (
                             <div className={'flex flex-col gap-1'} key={i}>
                               <div className="flex items-center gap-2">
-                                <FormField
+                                <InputFormField
                                   tanstackForm={tanstackForm}
                                   name={`questions[${index}].options[${i}]`}
                                 />

@@ -1,6 +1,8 @@
 import {
+  Body,
   Controller,
   Get,
+  Post,
   Query,
   Req,
   UseGuards,
@@ -22,6 +24,12 @@ import { ResponseMessage } from '@common/decorators/response/response-message.de
 
 import { Public } from '@modules/auth/decorators/public.decorator';
 import { TokenAuthService } from '@modules/auth/services/token.auth.service';
+import { BypassResponseInterceptor } from '@common/decorators/bypass-response-interceptor.decorator';
+import { AuthService } from '@modules/auth/services/auth.service';
+import {
+  CreateBulkUserRequestDto,
+  CreateUserRequestDto,
+} from '@modules/users/dto/user.dto';
 
 @Controller({
   version: VERSION_NEUTRAL,
@@ -31,7 +39,8 @@ import { TokenAuthService } from '@modules/auth/services/token.auth.service';
 @ApiBearerAuth()
 export class AuthTestController {
   constructor(
-    private readonly authService: TokenAuthService,
+    private readonly authService: AuthService,
+    private readonly tokenAuthService: TokenAuthService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -41,7 +50,7 @@ export class AuthTestController {
   })
   @Get('protected')
   @ResponseMessage('JWT Guard를 Pass 했습니다.')
-  async tokenCheck(@Req() req) {
+  async tokenCheck(@Req() req: any) {
     const { userId, name, nickname } = req.user;
 
     return {
@@ -49,6 +58,15 @@ export class AuthTestController {
       name,
       nickname,
     };
+  }
+
+  @ApiOperation({
+    summary: '[TEST] Leo user bulk create',
+    description: '명단은 제공해야 합니다.',
+  })
+  @Post('register/bulk')
+  async createBulkUser(@Body() body: CreateBulkUserRequestDto) {
+    return this.authService.registerBulk(body.users);
   }
 
   @ApiOperation({
@@ -62,9 +80,11 @@ export class AuthTestController {
     example: '1',
   })
   @Public()
+  @BypassResponseInterceptor()
   @Get('token')
   async getTestToken(@Query('userId') userId: string) {
-    return this.authService.generateTokens(userId);
+    const ret = await this.tokenAuthService.generateTestToken(userId);
+    return ret.accessToken;
   }
 
   @ApiOperation({

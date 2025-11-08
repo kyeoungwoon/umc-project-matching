@@ -11,3 +11,4 @@ onlyBuiltDependencies:
   - argon2
   - lefthook
   - prisma
+  - puppeteer

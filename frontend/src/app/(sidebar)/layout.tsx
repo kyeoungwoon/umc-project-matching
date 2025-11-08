@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
 import { SidebarProvider } from '@styles/components/ui/sidebar';
-import { Toaster } from '@styles/components/ui/sonner';
 
 import { ROUTES } from '@common/constants/routes.constants';
 
@@ -51,7 +50,6 @@ const UpmsHomeLayout = ({ children }: { children?: ReactNode }) => {
       <SidebarProvider>
         <UpmsSideBar />
         <main className={'w-full'}>{children}</main>
-        <Toaster />
       </SidebarProvider>
     </>
   );

@@ -16,7 +16,6 @@ import { AuthService } from '@modules/auth/services/auth.service';
 import { Public } from '@modules/auth/decorators/public.decorator';
 import { CreateUserRequestDto } from '@modules/users/dto/user.dto';
 import { RequestContextService } from '@modules/als/services/request-context.service';
-import { UsersService } from '@modules/users/services/users.service';
 import { TokenAuthService } from '@modules/auth/services/token.auth.service';
 
 @Controller({
@@ -148,6 +147,7 @@ export class AuthV1Controller {
   @ApiOperation({
     summary: '[TEST] 유령 박경운 생성',
   })
+  @Public()
   async createSampleUser() {
     return await this.auth.register({
       name: '박경운',

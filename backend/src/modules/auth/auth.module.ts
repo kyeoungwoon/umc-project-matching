@@ -22,6 +22,6 @@ import { AuthService } from '@modules/auth/services/auth.service';
     // Guards
     JwtAuthGuard,
   ],
-  exports: [TokenAuthService],
+  exports: [TokenAuthService, AuthService],
 })
 export class AuthModule {}

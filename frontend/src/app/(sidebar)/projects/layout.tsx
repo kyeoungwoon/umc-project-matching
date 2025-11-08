@@ -8,7 +8,7 @@ import Header from '@common/components/Header';
 
 const ProjectListLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className={'flex flex-col gap-y-3'}>
+    <div className={'flex w-full flex-col gap-y-3'}>
       <Header section={HEADER_SECTION.PROJECT} />
       {children}
     </div>

@@ -48,42 +48,23 @@ const getStatusText = (status: string) => {
 const ApplicationInfoCard = ({ application }: { application: ApplicationResponseDto }) => {
   return (
     <Card key={application.id} className="transition-shadow hover:shadow-md">
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            {application?.form ? (
-              <>
-                <CardTitle>{application.form.title}</CardTitle>
-                <CardDescription>{application.form.description || '설명 없음'}</CardDescription>
-              </>
-            ) : (
-              <CardTitle>폼 정보를 불러올 수 없습니다.</CardTitle>
-            )}
-          </div>
-          <div className={'flex flex-row gap-x-2'}>
-            <Badge variant={'secondary'}>
-              {new Date(application.createdAt).toLocaleString('ko-KR')}
-            </Badge>
-            <Badge variant={getStatusBadgeVariant(application.status)}>
-              {getStatusText(application.status)}
-            </Badge>
-          </div>
-        </div>
-      </CardHeader>
+      {/*본문은 매칭 라운드 + 답변 배열로 나열*/}
       <CardContent>
         <div className="grid gap-3 text-sm">
           <div className="flex items-center gap-2">
             {application?.matchingRound ? (
-              <MatchingRoundInfoCard matchingRound={application.matchingRound} />
+              <MatchingRoundInfoCard data={application.matchingRound} />
             ) : (
               <span>매칭 라운드 정보가 없습니다.</span>
             )}
           </div>
 
-          {application.answers &&
-            application.answers.length > 0 &&
+          {application.formAnswers &&
+            application.formAnswers.length > 0 &&
             // 답변 배열이 존재하고, 그 길이가 0보다 클 때만 렌더링
-            application.answers.map((answer, idx) => <QuestionAnswer key={idx} answer={answer} />)}
+            application.formAnswers.map((answer, idx) => (
+              <QuestionAnswer key={idx} answer={answer} />
+            ))}
         </div>
       </CardContent>
     </Card>

@@ -19,7 +19,7 @@ import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response
   path: 'projects/matching-round',
   version: '1',
 })
-@ApiTags(API_TAGS.PROJECT)
+@ApiTags(API_TAGS.MATCHING_ROUND)
 @ApiBearerAuth()
 export class MatchingRoundController {
   constructor(
@@ -48,7 +48,7 @@ export class MatchingRoundController {
       '이름, 시작 시간, 종료 시간을 기준으로 매칭 라운드를 생성합니다.',
   })
   @ApiOkResponseCommon(MatchingRoundResponseDto)
-  @Post('create')
+  @Post('')
   createMatchingRound(@Body() body: CreateMatchingRoundDto) {
     return this.matchingRoundService.createMatchingRound(body);
   }

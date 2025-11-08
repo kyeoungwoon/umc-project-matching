@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 
 import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
-import { $Enums } from '@generated/prisma/mongodb';
+import { $Enums, UserRoleEnum } from '@generated/prisma/mongodb';
 import UserPartEnum = $Enums.UserPartEnum;
 
 @Injectable()
@@ -43,7 +43,7 @@ export class UsersService {
 
   async isAdminChallenger(userId: string): Promise<boolean> {
     const user = await this.getUserByUserId(userId);
-    return user.part === UserPartEnum.ADMIN;
+    return user.role === UserRoleEnum.ADMIN;
   }
 
   async throwIfNotAdminChallenger(userId: string) {

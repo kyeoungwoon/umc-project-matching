@@ -5,7 +5,7 @@ import { ApplicationStatus } from '@api/axios/application/types';
 export const getStatusBadgeVariant = (status: ApplicationStatus) => {
   switch (status) {
     case 'SUBMITTED':
-      return 'default';
+      return 'outline';
     case 'CONFIRMED':
       return 'default';
     case 'REJECTED':

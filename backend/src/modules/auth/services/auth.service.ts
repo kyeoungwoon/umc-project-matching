@@ -60,6 +60,19 @@ export class AuthService {
     });
   }
 
+  async registerBulk(data: CreateUserRequestDto[]) {
+    const bulkData = await Promise.all(
+      data.map(async (d) => {
+        const hashedPassword = await argon2.hash(d.password);
+        return { ...d, password: hashedPassword };
+      }),
+    );
+
+    return this.mongo.challenger.createMany({
+      data: bulkData,
+    });
+  }
+
   // userId와 password를 검증합니다.
   async verifyPasswordWithUserId(
     userId: string,
@@ -124,7 +137,19 @@ export class AuthService {
   }
 
   async dropAllChallengers() {
-    return this.mongo.challenger.deleteMany({});
+    // 690f19aada32967df0425b61 빼고 다 지우기
+    await this.mongo.challenger.deleteMany({
+      where: {
+        id: {
+          not: '690f19aada32967df0425b61',
+        },
+      },
+    });
+    // return this.mongo.challenger.deleteMany({});
+  }
+
+  async dropAllProjects() {
+    await this.mongo.project.deleteMany({});
   }
 
   async dropAllData() {

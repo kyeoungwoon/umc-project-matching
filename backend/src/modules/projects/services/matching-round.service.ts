@@ -42,12 +42,8 @@ export class MatchingRoundService {
   ) {
     return this.mongo.matchingRound.findMany({
       where: {
-        startDatetime: {
-          gte: startDatetime,
-        },
-        endDatetime: {
-          lte: endDatetime,
-        },
+        startDatetime: { lt: endDatetime }, // 매칭라운드 시작시간이 조회 종료시간보다 이전
+        endDatetime: { gt: startDatetime }, // 매칭라운드 종료시간이 조회 시작시간보다 이후
       },
       orderBy: {
         startDatetime: 'desc',

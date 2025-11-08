@@ -12,6 +12,10 @@ import { ROUTES } from '@common/constants/routes.constants';
 
 import { projectResponseToCardProps } from '@common/utils/project-response-card';
 
+import {
+  useIsPlanChallenger,
+  useRedirectToHomeIfNotPlan,
+} from '@common/hooks/useGetChallengerPerms';
 import { useRedirectToLogin } from '@common/hooks/useRedirectToLogin';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
@@ -45,7 +49,7 @@ const MyProjectsPage = () => {
         <div className="mb-4 flex flex-row items-center justify-between gap-x-2">
           <span className={'flex flex-row items-center gap-x-1 text-sm text-gray-700'}>
             <InfoIcon className={'w-5'} />
-            지원자는 폼 별로 확인하실 수 있습니다.
+            지원자는 폼 별로 [지원 가능한 폼 보기 &gt; 지원자 보기] 에서 확인하실 수 있습니다.
           </span>
           <Link href={ROUTES.PROJECTS.CREATE}>
             <Button>새 프로젝트 생성</Button>

@@ -2,15 +2,20 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { toast } from 'sonner';
+
 import { Button } from '@styles/components/ui/button';
 import { ButtonGroup } from '@styles/components/ui/button-group';
 import { Card, CardContent, CardHeader, CardTitle } from '@styles/components/ui/card';
 import { Input } from '@styles/components/ui/input';
+import { Separator } from '@styles/components/ui/separator';
 
 import { FormResponseDto, UpdateFormRequestDto } from '@api/axios/form/types';
 import { useEditFormMutation } from '@api/query/form';
 
 import { ROUTES } from '@common/constants/routes.constants';
+
+import { useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
 
 interface FormCardProps {
   form: FormResponseDto;
@@ -26,6 +31,8 @@ export const FormCard = ({ form }: FormCardProps) => {
   const { mutate: editForm } = useEditFormMutation(projectId, formId);
 
   const router = useRouter();
+
+  const isPlan = useIsPlanChallenger();
 
   const [mode, setMode] = useState<FormCardMode>(FormCardMode.NORMAL);
   const [editedForm, setEditedForm] = useState<UpdateFormRequestDto>({
@@ -43,7 +50,16 @@ export const FormCard = ({ form }: FormCardProps) => {
     setMode((prevMode) => {
       if (prevMode === FormCardMode.EDIT) {
         // Save changes
-        editForm(editedForm);
+        editForm(editedForm, {
+          onSuccess: () => {
+            toast.success('폼 제목과 설명을 수정했습니다.');
+          },
+          onError: (err) => {
+            toast.error('Form 정보 수정에 실패하였습니다.', {
+              description: err.message,
+            });
+          },
+        });
       }
 
       return prevMode === FormCardMode.NORMAL ? FormCardMode.EDIT : FormCardMode.NORMAL;
@@ -57,38 +73,55 @@ export const FormCard = ({ form }: FormCardProps) => {
     <Card>
       <CardHeader>
         {mode === FormCardMode.NORMAL ? (
-          <CardTitle>{form.title}</CardTitle>
+          <>
+            <div className={'flex flex-col gap-1'}>
+              <div className={'flex flex-row items-center justify-start gap-2'}>
+                <span className={'w-30'}>지원 폼 이름</span>
+                <Separator orientation={'vertical'} />
+                <CardTitle className="text-xl font-semibold">{form.title}</CardTitle>
+              </div>
+              <div className={'flex flex-row items-center justify-start gap-2'}>
+                <span className={'w-30'}>폼에 대한 설명</span>
+                <Separator orientation={'vertical'} />
+                <p className="text-muted-foreground mb-2 text-lg">
+                  {form.description || '설명 없음'}
+                </p>
+              </div>
+            </div>
+          </>
         ) : (
-          <Input
-            value={editedForm.title}
-            onChange={(e) => setEditedForm({ ...editedForm, title: e.target.value })}
-          />
+          <>
+            <Input
+              value={editedForm.title}
+              onChange={(e) => setEditedForm({ ...editedForm, title: e.target.value })}
+            />
+            <Input
+              value={editedForm.description}
+              onChange={(e) => setEditedForm({ ...editedForm, description: e.target.value })}
+            />
+          </>
         )}
       </CardHeader>
       <CardContent>
-        {mode === FormCardMode.NORMAL ? (
-          <p>{form.description}</p>
-        ) : (
-          <Input
-            value={editedForm.description}
-            onChange={(e) => setEditedForm({ ...editedForm, description: e.target.value })}
-          />
-        )}
-
         {/* TODO: Plan 챌린저에 대한 권한 처리 필요 */}
         <ButtonGroup className="mt-4 flex w-full flex-row justify-end">
-          <Button onClick={handleViewApplicants} variant="outline">
-            지원자 보기
-          </Button>
-          <Button onClick={handleToggleMode} variant="outline">
-            {mode === FormCardMode.NORMAL ? '제목/설명 수정' : '저장하기'}
-          </Button>
-          <Button onClick={handleManageForm} variant="outline">
-            질문 수정
-          </Button>
-          <Button onClick={handleApplyToForm} variant="default">
-            지원하기
-          </Button>
+          {isPlan ? (
+            <>
+              <Button onClick={handleViewApplicants} variant="outline">
+                지원자 보기
+              </Button>
+              <Button onClick={handleToggleMode} variant="outline">
+                {mode === FormCardMode.NORMAL ? '제목/설명 수정' : '저장하기'}
+              </Button>
+              <Button onClick={handleManageForm} variant="outline">
+                질문 수정하기
+              </Button>
+            </>
+          ) : (
+            <Button onClick={handleApplyToForm} variant="default">
+              지원하기
+            </Button>
+          )}
         </ButtonGroup>
       </CardContent>
     </Card>

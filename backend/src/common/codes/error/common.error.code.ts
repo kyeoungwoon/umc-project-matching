@@ -33,4 +33,10 @@ export class CommonErrorCode {
     status: HttpStatus.BAD_REQUEST,
     message: 'NestJS default HttpException Error.',
   };
+
+  public static readonly REQUEST_CONTEXT_NO_USER: CustomErrorCode = {
+    code: 'ERR0006',
+    status: HttpStatus.UNAUTHORIZED,
+    message: 'RequestContext에서 사용자 정보를 찾을 수 없습니다.',
+  };
 }

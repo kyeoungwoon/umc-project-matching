@@ -47,6 +47,7 @@ const LoginComboBox = ({ value, onValueChange }: LoginComboBoxProps) => {
           role="combobox"
           aria-expanded={open}
           className="w-full justify-between"
+          type="button"
         >
           {value.name ? value.name : '학교를 선택하세요.'}
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />

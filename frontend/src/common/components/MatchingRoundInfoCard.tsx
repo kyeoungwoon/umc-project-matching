@@ -8,14 +8,16 @@ import { Separator } from '@styles/components/ui/separator';
 
 import { MatchingRoundResponseDto } from '@api/axios/matching-round/types';
 
-const MatchingRoundInfoCard = ({ matchingRound }: { matchingRound: MatchingRoundResponseDto }) => {
-  const startDate = new Date(matchingRound.startDatetime);
-  const endDate = new Date(matchingRound.endDatetime);
-  const now = new Date();
+import { formatDate } from '@common/utils/format-dates';
 
-  const isActive = now >= startDate && now <= endDate;
-  const isUpcoming = now < startDate;
-  const isEnded = now > endDate;
+const MatchingRoundInfoCard = ({ data }: { data: MatchingRoundResponseDto }) => {
+  const now = new Date();
+  const startDate = formatDate(data?.startDatetime);
+  const endDate = formatDate(data?.endDatetime);
+
+  const isActive = now >= new Date(data.startDatetime) && now <= new Date(data.endDatetime);
+  const isUpcoming = now < new Date(data.startDatetime);
+  const isEnded = now > new Date(data.endDatetime);
 
   const getStatusBadge = () => {
     if (isActive) return <Badge className="bg-green-500">진행 중</Badge>;
@@ -25,72 +27,47 @@ const MatchingRoundInfoCard = ({ matchingRound }: { matchingRound: MatchingRound
   };
 
   return (
-    <Card className="overflow-hidden">
-      <CardHeader className="">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <CalendarIcon className="text-primary h-5 w-5" />
-            <CardTitle className="text-base">매칭 정보</CardTitle>
-          </div>
-          {getStatusBadge()}
+    <Card className="flex w-full flex-row items-center justify-between gap-x-4 overflow-hidden px-5">
+      {/* 라운드 이름 */}
+      <div className="bg-muted/50 flex w-60 items-center gap-3 rounded-lg p-3">
+        <div className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-full">
+          <ClockIcon className="text-primary h-4 w-4" />
         </div>
-      </CardHeader>
-      <Separator />
-      <CardContent className="pt-4">
-        <div className="space-y-3">
-          <div className="border-border/50 flex items-center gap-3 rounded-md border p-2">
-            <div className="bg-primary/10 flex h-8 w-8 items-center justify-center rounded-full">
-              <ClockIcon className="text-primary h-4 w-4" />
-            </div>
+        <div className="flex-1">
+          <p className="text-muted-foreground text-xs">매칭 차수 이름</p>
+          <p className="text-foreground font-semibold">{data.name}</p>
+        </div>
+        {getStatusBadge()}
+      </div>
+
+      {/* 기간 정보 */}
+      <div className="space-y-2">
+        <div className="flex flex-row gap-x-2">
+          {/* 시작일 */}
+          <div className="border-border/50 bg-background flex items-center gap-3 rounded-md border p-3">
+            <CalendarIcon className="h-4 w-4 text-green-600" />
             <div className="flex-1">
-              <p className="text-muted-foreground text-xs">매칭 차수</p>
-              <p className="font-medium">{matchingRound.name}</p>
+              <p className="text-muted-foreground text-xs">시작 시간</p>
+              <div className="flex items-baseline gap-2">
+                <p className="text-sm font-medium">{startDate.date}</p>
+                <p className="text-muted-foreground text-xs">{startDate.time}</p>
+              </div>
             </div>
           </div>
 
-          <div className="grid gap-2">
-            <div className="border-border/50 flex items-center gap-3 rounded-md border p-2">
-              <PlayCircleIcon className="h-4 w-4 text-green-600" />
-              <div className="flex-1">
-                <p className="text-muted-foreground text-xs">매칭 시작</p>
-                <p className="text-sm font-medium">
-                  {startDate.toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}{' '}
-                  <span className="text-muted-foreground">
-                    {startDate.toLocaleTimeString('ko-KR', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </span>
-                </p>
-              </div>
-            </div>
-
-            <div className="border-border/50 flex items-center gap-3 rounded-md border p-2">
-              <StopCircleIcon className="h-4 w-4 text-red-600" />
-              <div className="flex-1">
-                <p className="text-muted-foreground text-xs">매칭 종료</p>
-                <p className="text-sm font-medium">
-                  {endDate.toLocaleDateString('ko-KR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}{' '}
-                  <span className="text-muted-foreground">
-                    {endDate.toLocaleTimeString('ko-KR', {
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </span>
-                </p>
+          {/* 종료일 */}
+          <div className="border-border/50 bg-background flex items-center gap-3 rounded-md border p-3">
+            <CalendarIcon className="h-4 w-4 text-red-600" />
+            <div className="flex-1">
+              <p className="text-muted-foreground text-xs">종료 시간</p>
+              <div className="flex items-baseline gap-2">
+                <p className="text-sm font-medium">{endDate.date}</p>
+                <p className="text-muted-foreground text-xs">{endDate.time}</p>
               </div>
             </div>
           </div>
         </div>
-      </CardContent>
+      </div>
     </Card>
   );
 };

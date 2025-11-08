@@ -8,6 +8,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import clsx from 'clsx';
 
+import { Toaster } from '@styles/components/ui/sonner';
 import '@styles/globals.css';
 
 import QueryClientProviders from '@app/query-client-providers';
@@ -34,6 +35,7 @@ const RootLayout = ({
       <body className={clsx('flex min-h-screen flex-col', pretendard.variable)}>
         <QueryClientProviders>
           <SpeedInsights />
+          <Toaster />
           {children}
         </QueryClientProviders>
       </body>

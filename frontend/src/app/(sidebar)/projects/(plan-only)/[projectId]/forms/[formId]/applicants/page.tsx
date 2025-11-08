@@ -41,18 +41,21 @@ const ApplicantsPage = () => {
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'ALL'>('ALL');
 
   const { data: form, isLoading } = useGetFormQuery(projectId, formId);
+  // console.log(form);
 
   if (isLoading || !form) {
     return <DefaultSkeleton />;
   }
 
   // 필터링된 지원서 목록
-  const filteredApplications = form.applications.filter((app) => {
+  const filteredApplications = form?.applications?.filter((app) => {
     const matchesSearch =
       searchQuery === '' ||
       app.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.applicantId.toLowerCase().includes(searchQuery.toLowerCase());
-
+      app.applicantId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      app.applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      app.applicant.challengerSchool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      app.applicant.part.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'ALL' || app.status === statusFilter;
 
     return matchesSearch && matchesStatus;
@@ -60,14 +63,14 @@ const ApplicantsPage = () => {
 
   // 상태별 카운트
   const statusCounts = {
-    SUBMITTED: form.applications.filter((a) => a.status === 'SUBMITTED').length,
-    CONFIRMED: form.applications.filter((a) => a.status === 'CONFIRMED').length,
-    REJECTED: form.applications.filter((a) => a.status === 'REJECTED').length,
-    DRAFT: form.applications.filter((a) => a.status === 'DRAFT').length,
+    SUBMITTED: form?.applications?.filter((a) => a.status === 'SUBMITTED').length ?? 0,
+    CONFIRMED: form?.applications?.filter((a) => a.status === 'CONFIRMED').length ?? 0,
+    REJECTED: form?.applications?.filter((a) => a.status === 'REJECTED').length ?? 0,
+    DRAFT: form?.applications?.filter((a) => a.status === 'DRAFT').length ?? 0,
   };
 
   return (
-    <div className="container mx-auto max-w-7xl space-y-6 p-6">
+    <div className="container mx-auto w-full max-w-7xl space-y-6 p-6">
       {/* Header Section */}
       <div className="space-y-4">
         <div className="flex items-start justify-between">
@@ -79,29 +82,25 @@ const ApplicantsPage = () => {
             <p className="text-muted-foreground text-lg">지원자 관리</p>
           </div>
           <Badge variant="secondary" className="text-sm">
-            총 {form.applications.length}명
+            총 {form?.applications?.length}명
           </Badge>
         </div>
         <Separator />
       </div>
 
       {/* 지원 상태별 카드 */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-3 md:grid-cols-3">
         <ApplicationStatusCard
           status={ApplicationStatusEnum.SUBMITTED}
-          statusCount={statusCounts.CONFIRMED}
+          statusCount={statusCounts.SUBMITTED}
         />
         <ApplicationStatusCard
           status={ApplicationStatusEnum.CONFIRMED}
-          statusCount={statusCounts.SUBMITTED}
+          statusCount={statusCounts.CONFIRMED}
         />
         <ApplicationStatusCard
           status={ApplicationStatusEnum.REJECTED}
           statusCount={statusCounts.REJECTED}
-        />
-        <ApplicationStatusCard
-          status={ApplicationStatusEnum.DRAFT}
-          statusCount={statusCounts.DRAFT}
         />
       </div>
 
@@ -115,7 +114,7 @@ const ApplicantsPage = () => {
             <div className="relative flex-1">
               <SearchIcon className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
               <Input
-                placeholder="지원자 ID 또는 지원서 ID로 검색..."
+                placeholder="지원자 이름, 학교, 파트로 검색"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"
@@ -131,9 +130,8 @@ const ApplicantsPage = () => {
               <SelectContent>
                 <SelectItem value="ALL">전체</SelectItem>
                 <SelectItem value="SUBMITTED">제출됨</SelectItem>
-                <SelectItem value="CONFIRMED">승인됨</SelectItem>
-                <SelectItem value="REJECTED">거절됨</SelectItem>
-                <SelectItem value="DRAFT">임시저장</SelectItem>
+                <SelectItem value="CONFIRMED">합격</SelectItem>
+                <SelectItem value="REJECTED">불합격</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -143,18 +141,21 @@ const ApplicantsPage = () => {
       {/* Applications List */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold">지원서 목록 ({filteredApplications.length}개)</h2>
+          <h2 className="text-xl font-semibold">지원서 목록 ({filteredApplications?.length}개)</h2>
         </div>
 
-        {filteredApplications.length > 0 ? (
-          <div className="grid gap-4">
-            {filteredApplications.map((application) => (
-              <ApplicantApplicationCard
-                key={application.id}
-                application={application}
-                projectId={projectId}
-              />
-            ))}
+        {(filteredApplications?.length ?? 0) > 0 ? (
+          <div className="flex w-full flex-col gap-y-4">
+            {filteredApplications?.map(
+              (application) =>
+                application && (
+                  <ApplicantApplicationCard
+                    key={application.id}
+                    application={application}
+                    projectId={projectId}
+                  />
+                ),
+            )}
           </div>
         ) : (
           <Card className="border-dashed">

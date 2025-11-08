@@ -29,7 +29,8 @@ import {
 import { Part } from '@api/axios/auth/types';
 import { useCreateProjectMutation } from '@api/query/project';
 
-import FormField from '@common/components/FormField';
+import DoubleCheckDialog from '@common/components/DoubleCheckDialog';
+import InputFormField from '@common/components/InputFormField';
 
 import { useGetUser } from '@features/auth/hooks/useAuthStore';
 
@@ -114,22 +115,9 @@ const CreateProjectPage = () => {
             <CardTitle className="font-medium">프로젝트 정보</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <FormField tanstackForm={form} name="title" label="프로젝트 이름" />
-            <form.Field
-              name="description"
-              children={(field) => (
-                <Field>
-                  <FieldLabel>프로젝트 설명</FieldLabel>
-                  <Input
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  <FieldError errors={field.state.meta.errors} />
-                </Field>
-              )}
-            />
-            <FormField tanstackForm={form} name={'link'} label="기획안 링크 (Notion 등)" />
+            <InputFormField tanstackForm={form} name="title" label="프로젝트 이름" />
+            <InputFormField tanstackForm={form} name={'description'} />
+            <InputFormField tanstackForm={form} name={'link'} label="기획안 링크 (Notion 등)" />
             <FieldGroup>
               <FieldLabel>모집 파트 및 인원</FieldLabel>
               <form.Field
@@ -201,6 +189,7 @@ const CreateProjectPage = () => {
           </CardFooter>
         </Card>
       </form>
+      {/*프로젝트 생성할 것을 confirm하는 dialog*/}
       <Dialog open={isConfirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
         <DialogContent>
           <DialogHeader>
@@ -217,6 +206,7 @@ const CreateProjectPage = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      {/*프로젝트 생성되었을 때 알림*/}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent>
           <DialogHeader>

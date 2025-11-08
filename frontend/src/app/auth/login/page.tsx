@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import { useForm } from '@tanstack/react-form';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
 import { Button } from '@styles/components/ui/button';
@@ -13,7 +14,7 @@ import { useLoginMutation } from '@api/query/auth';
 import { ROUTES } from '@common/constants/routes.constants';
 
 import LoginComboBox from '@common/components/Combobox';
-import FormField from '@common/components/FormField';
+import InputFormField from '@common/components/InputFormField';
 
 import { useSetUser } from '@features/auth/hooks/useAuthStore';
 
@@ -62,8 +63,11 @@ export default function LoginForm() {
             // 성공 시 처리 (예: 페이지 이동)
           },
           onError: (error) => {
-            console.error('로그인 실패:', error);
+            // console.error('로그인 실패:', error);
             // 에러 처리
+            toast.error('로그인에 실패했습니다. 다시 시도해주세요.', {
+              description: error.message,
+            });
           },
         },
       );
@@ -71,7 +75,7 @@ export default function LoginForm() {
     validators: {
       onSubmit: loginSchema,
       onChange: loginSchema,
-      onBlur: loginSchema,
+      // onChange, onBlur 제거 - 자동완성 시 문제 방지
     },
   });
 
@@ -80,6 +84,7 @@ export default function LoginForm() {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
+          e.stopPropagation();
           await form.handleSubmit();
         }}
         className="min-w-md"
@@ -90,23 +95,25 @@ export default function LoginForm() {
           <form.Field
             name={'school'}
             children={(field) => {
-              const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+              console.log('school field state:', field.state.meta.isTouched);
               return (
                 <Field className={'w-full'}>
                   <FieldLabel htmlFor={field.name}>학교</FieldLabel>
                   <LoginComboBox value={field.state.value} onValueChange={field.handleChange} />
-                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                  {field.state.meta.isTouched && !field.state.value.handle && (
+                    <FieldError errors={[{ message: '학교를 선택해 주세요.' }]} />
+                  )}
                 </Field>
               );
             }}
           />
-          <FormField
+          <InputFormField
             tanstackForm={form}
             name="studentId"
             label="학번"
             placeholder="학번을 입력해주세요."
           />
-          <FormField
+          <InputFormField
             tanstackForm={form}
             name="password"
             label="비밀번호"

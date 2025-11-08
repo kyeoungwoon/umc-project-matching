@@ -32,6 +32,9 @@ import { PrismaModule } from '@modules/prisma/prisma.module';
 import { TestModule } from '@modules/test/test.module';
 import { UsersModule } from '@modules/users/users.module';
 import { ProjectsModule } from '@modules/projects/projects.module';
+import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
+import { CacheModule } from '@nestjs/cache-manager';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -49,6 +52,7 @@ import { ProjectsModule } from '@modules/projects/projects.module';
       // validate,
     }),
     WinstonModule.forRoot(winstonLoggerOptions),
+    CacheModule.register({ isGlobal: true }),
     // SentryModule.forRoot(),
     AlsModule,
     PassportModule,
@@ -98,6 +102,7 @@ import { ProjectsModule } from '@modules/projects/projects.module';
         // forbidNonWhitelisted: true,
       }),
     },
+    ChallengerRoleGuard,
   ],
 })
 export class AppModule implements NestModule {

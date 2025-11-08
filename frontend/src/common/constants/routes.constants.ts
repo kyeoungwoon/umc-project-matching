@@ -23,6 +23,7 @@ export const ROUTES = {
     INFO: '/my/info',
     SETTINGS: '/my/settings',
     APPLICATIONS: '/my/applications',
+    CHANGE_PASSWORD: '/my/change-password',
   },
   ADMIN: {
     DASHBOARD: '/admin/dashboard',
