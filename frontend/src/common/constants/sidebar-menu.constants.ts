@@ -98,7 +98,7 @@ export const myMenu: menuItem[] = [
 ];
 
 const GOOGLE_FORM_URL = 'https://forms.gle/KNamMGSzk6r166mg6';
-const LEO_TEAM_MATCHING_MASTERSHEET_URL =
+const LEO_TEAM_MATCHING_MASTER_SHEET_URL =
   'https://docs.google.com/spreadsheets/d/1L6tEzM3KVizPdI_e7tIlEDsXpLOuZtispyfJCQzXeiM/edit?gid=445694956#gid=445694956';
 
 const allMenus: SidebarMenus[] = [
@@ -118,7 +118,6 @@ const allMenus: SidebarMenus[] = [
   {
     label: '운영진',
     items: adminMenu,
-    part: 'ADMIN',
     role: 'ADMIN',
   },
   {
@@ -136,16 +135,24 @@ const allMenus: SidebarMenus[] = [
       {
         title: '팀 매칭 마스터시트',
         icon: SheetIcon,
-        url: LEO_TEAM_MATCHING_MASTERSHEET_URL,
+        url: LEO_TEAM_MATCHING_MASTER_SHEET_URL,
       },
     ],
   },
 ];
 
-// TODO: 조금 더 깔끔한 로직을 필요로 함
-export const getMenusByPart = (part?: Part, role: 'USER' | 'ADMIN' = 'USER'): SidebarMenus[] => {
-  // part가 undefined면 공용, 명시되어 있으면 특정 역할 용임
-  return allMenus.filter(
-    (menu) => menu.part === part || menu.part === undefined || menu.role === role,
-  );
+export const getMenusByPart = (
+  part: Part | undefined,
+  role: 'USER' | 'ADMIN' = 'USER',
+): SidebarMenus[] => {
+  return allMenus.filter((menu) => {
+    // 둘 다 undefined면 공용
+    if (menu.part === undefined && menu.role === undefined) return true;
+
+    // part 또는 role이 일치하면 표시
+    if (menu.part === part || menu.role === role) return true;
+
+    // 그외 나머지는 제외
+    return false;
+  });
 };

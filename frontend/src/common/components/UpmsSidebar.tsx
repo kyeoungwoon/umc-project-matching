@@ -24,18 +24,13 @@ import UpmsLogo from '@common/components/UpmsLogo';
 
 import { useGetUser } from '@features/auth/hooks/useAuthStore';
 
-// utils/openNewWindow.ts
-export function openInNewWindow(url: string) {
-  window.open(url, '_blank');
-}
-
 const UpmsSideBar = () => {
   const user = useGetUser();
   const part = user?.info?.part;
   const role = user?.info?.role;
 
   const pathname = usePathname();
-  console.log('path: ', pathname);
+  // console.log('path: ', pathname);
 
   return (
     <Sidebar>
@@ -52,7 +47,7 @@ const UpmsSideBar = () => {
                   {menu.items.map((item) => {
                     // NOTE: 현재 경로와 메뉴의 url이 일치하는지 확인합니다.
                     const isSelected = pathname == item.url;
-                    console.log('isSelected: ', isSelected);
+                    // console.log('isSelected: ', isSelected);
                     return (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton asChild>

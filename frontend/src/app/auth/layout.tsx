@@ -14,7 +14,7 @@ const AuthLayout = ({ children }: { children: ReactNode }) => {
     redirectTo: ROUTES.HOME,
     toast: {
       type: 'success',
-      title: '  이미 로그인되어 있습니다.',
+      title: '로그인되었습니다.',
       description: '메인 화면으로 이동합니다.',
     },
   });

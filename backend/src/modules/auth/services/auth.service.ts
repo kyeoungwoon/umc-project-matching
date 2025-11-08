@@ -137,7 +137,15 @@ export class AuthService {
   }
 
   async dropAllChallengers() {
-    return this.mongo.challenger.deleteMany({});
+    // 690f19aada32967df0425b61 빼고 다 지우기
+    await this.mongo.challenger.deleteMany({
+      where: {
+        id: {
+          not: '690f19aada32967df0425b61',
+        },
+      },
+    });
+    // return this.mongo.challenger.deleteMany({});
   }
 
   async dropAllData() {
