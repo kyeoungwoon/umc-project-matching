@@ -33,6 +33,8 @@ import { TestModule } from '@modules/test/test.module';
 import { UsersModule } from '@modules/users/users.module';
 import { ProjectsModule } from '@modules/projects/projects.module';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
+import { CacheModule } from '@nestjs/cache-manager';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -50,6 +52,7 @@ import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
       // validate,
     }),
     WinstonModule.forRoot(winstonLoggerOptions),
+    CacheModule.register({ isGlobal: true }),
     // SentryModule.forRoot(),
     AlsModule,
     PassportModule,

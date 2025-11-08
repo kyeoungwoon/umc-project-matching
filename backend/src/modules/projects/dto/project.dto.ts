@@ -62,3 +62,27 @@ export class UpdateProjectRequestDto extends PartialType(
   // @IsString()
   // projectId!: string;
 }
+
+export class LinkPreviewResponseDto {
+  @ApiProperty({ description: '원본 URL', example: 'https://www.notion.so/' })
+  url?: string;
+
+  @ApiProperty({
+    description: '페이지 제목',
+    example: 'Notion | Your wiki, docs, & projects. Together.',
+  })
+  title?: string;
+
+  @ApiProperty({
+    description: '페이지 설명',
+    example:
+      'Notion is the connected workspace where better, faster work happens. Now with AI',
+  })
+  description?: string;
+
+  @ApiProperty({
+    description: '미리보기 이미지 URL',
+    example: 'https://www.notion.so/images/meta/default.png',
+  })
+  imageUrl?: string;
+}

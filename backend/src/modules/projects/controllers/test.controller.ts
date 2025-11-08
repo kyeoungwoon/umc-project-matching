@@ -10,6 +10,7 @@ import { UsersService } from '@modules/users/services/users.service';
 import { TestCreateMatchingRoundResponseDto } from '@modules/projects/dto/ok-responses/test.ok-response.dto';
 import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
 import { leoProjects } from '@modules/projects/mock/leo-projects';
+import { AuthService } from '@modules/auth/services/auth.service';
 
 @Controller({
   path: 'projects/test',
@@ -17,7 +18,7 @@ import { leoProjects } from '@modules/projects/mock/leo-projects';
 })
 @ApiTags(API_TAGS.TEST)
 @ApiBearerAuth()
-export class TestController {
+export class ProjectTestController {
   constructor(
     private readonly projectService: ProjectsService,
     private readonly formService: FormService,
@@ -25,6 +26,7 @@ export class TestController {
     private readonly applyService: ApplyService,
     private readonly reqContext: RequestContextService,
     private readonly userService: UsersService,
+    private readonly authService: AuthService,
   ) {}
 
   @Post('matching-round')
@@ -50,6 +52,7 @@ export class TestController {
     summary: '[테스트용] Leo 지부 내 프로젝트 INIT',
   })
   async createLeoProjects() {
+    await this.authService.dropAllProjects();
     return this.projectService.createMultipleProject(leoProjects);
   }
 }

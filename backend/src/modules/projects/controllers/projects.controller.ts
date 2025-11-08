@@ -7,6 +7,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -80,9 +81,6 @@ export class ProjectsController {
   })
   @CheckChallengerRole(CHALLENGER_ROLE.PLAN)
   async createMultipleProject(@Body() body: CreateMultipleProjectRequestDto) {
-    const userId = this.reqContext.getOrThrowUserId();
-    await this.userService.throwIfNotPlanChallenger(userId);
-
     return this.projectService.createMultipleProject(body.projects);
   }
 
@@ -133,5 +131,19 @@ export class ProjectsController {
     await this.userService.throwIfNotAdminChallenger(userId);
 
     return this.projectService.deleteProjectByProjectId(projectId);
+  }
+
+  @Get('link/preview')
+  @ApiOperation({
+    summary: '프로젝트 삭제',
+    description: '[ADMIN] 프로젝트를 삭제합니다.',
+  })
+  async getProjectPreview(@Query('url') url: string) {
+    // const project = await this.projectService.getProjectById(projectId);
+    // if (!project) {
+    //   throw new BadRequestException('프로젝트를 찾을 수 없습니다.');
+    // }
+
+    return this.projectService.getLinkPreview(url);
   }
 }

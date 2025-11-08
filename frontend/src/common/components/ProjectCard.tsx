@@ -22,6 +22,8 @@ import { ROUTES } from '@common/constants/routes.constants';
 
 import { useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
 
+import LinkPreviewCard from '@common/components/LinkPreviewCard';
+
 export interface ProjectCardProps {
   id: string;
   name: string;
@@ -93,18 +95,16 @@ const ProjectCard = (props: ProjectCardProps) => {
     <Card className="w-full rounded-xl p-4">
       <CardHeader>
         {mode === ProjectCardMode.VIEW ? (
-          <div className={'flex flex-col gap-1'}>
-            <div className={'flex flex-row items-center justify-start gap-2'}>
-              <span className={'w-30'}>프로젝트명</span>
-              <Separator orientation={'vertical'} />
+          <>
+            <div className="grid grid-cols-[8rem_1fr] gap-x-4 gap-y-2">
+              <span className="font-semibold">프로젝트명</span>
               <CardTitle className="text-xl font-bold">{name}</CardTitle>
+
+              <span className="font-semibold">한줄 설명</span>
+              <p className="text-muted-foreground text-md">{description}</p>
             </div>
-            <div className={'flex flex-row items-center justify-start gap-2'}>
-              <span className={'w-30'}>한줄 설명</span>
-              <Separator orientation={'vertical'} />
-              <p className="text-muted-foreground mb-2 text-lg">{description}</p>
-            </div>
-          </div>
+            {/*<LinkPreviewCard url={link || '#'} />*/}
+          </>
         ) : (
           <>
             <Input

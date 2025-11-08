@@ -92,11 +92,11 @@ const ApplicantsPage = () => {
       <div className="grid gap-3 md:grid-cols-3">
         <ApplicationStatusCard
           status={ApplicationStatusEnum.SUBMITTED}
-          statusCount={statusCounts.CONFIRMED}
+          statusCount={statusCounts.SUBMITTED}
         />
         <ApplicationStatusCard
           status={ApplicationStatusEnum.CONFIRMED}
-          statusCount={statusCounts.SUBMITTED}
+          statusCount={statusCounts.CONFIRMED}
         />
         <ApplicationStatusCard
           status={ApplicationStatusEnum.REJECTED}

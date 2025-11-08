@@ -148,6 +148,10 @@ export class AuthService {
     // return this.mongo.challenger.deleteMany({});
   }
 
+  async dropAllProjects() {
+    await this.mongo.project.deleteMany({});
+  }
+
   async dropAllData() {
     await this.mongo.challenger.deleteMany({});
     await this.mongo.matchingRound.deleteMany({});
