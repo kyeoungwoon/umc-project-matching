@@ -3,7 +3,7 @@ import { clsx } from 'clsx';
 import { Field, FieldError, FieldLabel } from '@styles/components/ui/field';
 import { Input } from '@styles/components/ui/input';
 
-const FormField = ({
+const InputFormField = ({
   tanstackForm,
   name,
   label,
@@ -42,4 +42,4 @@ const FormField = ({
   );
 };
 
-export default FormField;
+export default InputFormField;

@@ -37,7 +37,7 @@ const partOptions: Part[] = ['PLAN', 'DESIGN', 'WEB', 'ANDROID', 'IOS', 'SPRINGB
 
 const projectSchema = z.object({
   title: z.string().min(1, '프로젝트 이름을 입력해주세요.'),
-  description: z.string().min(1, '프로젝트 설명을 입력해주세요.'),
+  description: z.string().min(0, '프로젝트 설명을 입력해주세요.'),
   link: z.url('올바른 URL을 입력해주세요.'),
   partTo: z
     .array(
@@ -115,20 +115,7 @@ const CreateProjectPage = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField tanstackForm={form} name="title" label="프로젝트 이름" />
-            <form.Field
-              name="description"
-              children={(field) => (
-                <Field>
-                  <FieldLabel>프로젝트 설명</FieldLabel>
-                  <Input
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={(e) => field.handleChange(e.target.value)}
-                  />
-                  <FieldError errors={field.state.meta.errors} />
-                </Field>
-              )}
-            />
+            <FormField tanstackForm={form} name={"description"}/>
             <FormField tanstackForm={form} name={'link'} label="기획안 링크 (Notion 등)" />
             <FieldGroup>
               <FieldLabel>모집 파트 및 인원</FieldLabel>
