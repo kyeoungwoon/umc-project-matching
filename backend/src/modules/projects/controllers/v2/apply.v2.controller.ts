@@ -59,6 +59,7 @@ export class ApplyControllerV2 {
 
     this.logger.log(
       `USER_ID_${userId}_V2_PROJECT_APPLY_PROJECT_ID_${projectId}_FORM_ID_${formId}`,
+      body.answers,
     );
 
     return;

@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  LoggerService,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -19,6 +28,7 @@ import {
 } from '@modules/projects/dto/apply.dto';
 import { MatchingRoundResponseDto } from '@modules/projects/dto/ok-responses/matching-round.ok-response.dto';
 import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Controller({
   path: 'projects/matching-round',
@@ -34,6 +44,8 @@ export class MatchingRoundController {
     private readonly applyService: ApplyService,
     private readonly reqContext: RequestContextService,
     private readonly userService: UsersService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {}
 
   @ApiOperation({
@@ -55,6 +67,7 @@ export class MatchingRoundController {
   @ApiOkResponseCommon(MatchingRoundResponseDto)
   @Post('')
   createMatchingRound(@Body() body: CreateMatchingRoundDto) {
+    this.logger.log(`CREATE_MATCHING_ROUND_REQUEST`, body);
     return this.matchingRoundService.createMatchingRound(body);
   }
 

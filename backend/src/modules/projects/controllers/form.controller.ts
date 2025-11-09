@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
+  LoggerService,
   Param,
   Patch,
   Post,
@@ -43,6 +45,7 @@ import {
   CHALLENGER_ROLE,
   CheckChallengerRole,
 } from '@common/decorators/challenger-role.decorator';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Controller({
   path: 'projects/form',
@@ -59,6 +62,8 @@ export class FormController {
     private readonly applyService: ApplyService,
     private readonly reqContext: RequestContextService,
     private readonly userService: UsersService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {}
 
   @ApiOperation({
@@ -82,6 +87,10 @@ export class FormController {
   ) {
     const userId = this.reqContext.getOrThrowUserId();
     await this.projectService.throwIfUserNotPlanByProjectId(userId, projectId);
+
+    this.logger.log(
+      `USER_ID_${userId}_CREATE_FORM_FOR_PROJECT_ID_${projectId}`,
+    );
 
     return this.formService.createForm(projectId, body);
   }
@@ -130,6 +139,7 @@ export class FormController {
   })
   @ApiOkResponseCommon(FormResponseDto)
   @Delete('project/:projectId/form/:formId')
+  @CheckChallengerRole(CHALLENGER_ROLE.PLAN)
   async deleteProjectApplicationForm(
     @Param('formId') formId: string,
     @Param('projectId') projectId: string,
@@ -138,6 +148,10 @@ export class FormController {
     await this.formService.throwIfUserNotPlanByFormId(userId, formId);
 
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
+
+    this.logger.warn(
+      `USER_ID_${userId}_DELETE_FORM_ID_${formId}_FROM_PROJECT_ID_${projectId}`,
+    );
 
     return this.formService.deleteForm(formId);
   }
@@ -167,6 +181,11 @@ export class FormController {
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
 
     await this.formService.softDeleteAllQuestionsInForm(formId);
+
+    this.logger.log(
+      `USER_ID_${userId}_ADD_QUESTIONS_TO_FORM_ID_${formId}_IN_PROJECT_ID_${projectId}`,
+    );
+
     return this.formService.addFormQuestions(formId, body.questions);
   }
 
@@ -192,6 +211,12 @@ export class FormController {
     const userId = this.reqContext.getOrThrowUserId();
     await this.formService.throwIfUserNotPlanByFormId(userId, formId);
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
+
+    this.logger.log(
+      `USER_ID_${userId}_UPDATE_FORM_ID_${formId}_IN_PROJECT_ID_${projectId}`,
+      body.title,
+      body.description,
+    );
 
     return this.formService.updateForm(formId, body);
   }

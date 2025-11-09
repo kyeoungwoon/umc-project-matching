@@ -111,7 +111,8 @@ export class ApplyController {
     // }
 
     this.logger.log(
-      `USER_ID_${userId}_PROJECT_APPLY_PROJECT_ID_${projectId}_FORM_ID_${formId}`,
+      `USER_ID_${userId}_PROJECT_APPLY_V1_PROJECT_ID_${projectId}_FORM_ID_${formId}`,
+      body.answers,
     );
 
     return this.applyService.applyToProjectByFormId(
