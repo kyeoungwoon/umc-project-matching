@@ -149,8 +149,26 @@ export class FormService {
     });
 
     if (!form) throw new NotFoundException('존재하지 않는 폼 입니다.');
-
     return form;
+  }
+
+  async getFormWithAvailableMatchingRounds(
+    formId: string,
+    isPlanChallenger: boolean = false,
+  ) {
+    const form = await this.getOrThrowFormByFormId(formId, isPlanChallenger);
+
+    const availableMatchingRounds = await this.mongo.matchingRound.findMany({
+      where: {
+        id: {
+          in: form.availableMatchingRounds,
+        },
+      },
+    });
+
+    console.log('availableMatchingRounds:', availableMatchingRounds);
+
+    return { ...form, availableMatchingRounds };
   }
 
   async isQuestionBelongsToForm(

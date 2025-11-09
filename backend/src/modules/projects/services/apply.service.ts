@@ -205,10 +205,14 @@ export class ApplyService {
    * 사용자가 제출한 모든 지원서 목록을 반환합니다.
    */
   async getMyApplications(userId: string) {
-    const applications = await this.mongo.application.findMany({
+    return this.mongo.application.findMany({
       where: { applicantId: userId },
       include: {
-        form: true, // TODO: 이건 왜 필요한걸까?
+        form: {
+          include: {
+            project: true,
+          },
+        }, // TODO: 이건 왜 필요한걸까?
         formAnswers: {
           include: {
             question: true,
@@ -217,7 +221,5 @@ export class ApplyService {
         matchingRound: true,
       },
     });
-
-    return applications;
   }
 }

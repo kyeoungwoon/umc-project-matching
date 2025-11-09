@@ -12,6 +12,7 @@ import { Separator } from '@styles/components/ui/separator';
 
 import { FormResponseDto, UpdateFormRequestDto } from '@api/axios/form/types';
 import { useEditFormMutation } from '@api/query/form';
+import { useGetAllMatchingRoundQuery, useGetMatchingRound } from '@api/query/matching-round';
 
 import { ROUTES } from '@common/constants/routes.constants';
 
@@ -26,9 +27,14 @@ enum FormCardMode {
   NORMAL = 'normal',
 }
 
-export const FormCard = ({ form }: FormCardProps) => {
-  const { id: formId, projectId } = form;
+export const FormInfoCard = ({ form }: FormCardProps) => {
+  const { id: formId, projectId, availableMatchingRounds } = form;
+
   const { mutate: editForm } = useEditFormMutation(projectId, formId);
+
+  // TODO: 각각 가져오도록 변경
+  const { data: matchingRound, isLoading: isMatchingRoundInfoLoading } =
+    useGetAllMatchingRoundQuery();
 
   const router = useRouter();
 
@@ -77,15 +83,26 @@ export const FormCard = ({ form }: FormCardProps) => {
             <div className={'flex flex-col gap-1'}>
               <div className={'flex flex-row items-center justify-start gap-2'}>
                 <span className={'w-30'}>지원 폼 이름</span>
-                <Separator orientation={'vertical'} />
                 <CardTitle className="text-xl font-semibold">{form.title}</CardTitle>
               </div>
               <div className={'flex flex-row items-center justify-start gap-2'}>
                 <span className={'w-30'}>폼에 대한 설명</span>
-                <Separator orientation={'vertical'} />
                 <p className="text-muted-foreground mb-2 text-lg">
                   {form.description || '설명 없음'}
                 </p>
+              </div>
+
+              <div className={'flex flex-row items-center gap-x-2 text-lg'}>
+                <span>지원 가능한 매칭 라운드 : </span>
+                {availableMatchingRounds.map((roundId, idx) => {
+                  const round = matchingRound?.find((mr) => mr.id === roundId);
+                  if (!round) return null;
+                  return (
+                    <span key={roundId} className="text-muted-foreground text-lg">
+                      {isMatchingRoundInfoLoading ? '로딩 중...' : round.name}{' '}
+                    </span>
+                  );
+                })}
               </div>
             </div>
           </>
@@ -107,14 +124,14 @@ export const FormCard = ({ form }: FormCardProps) => {
         <ButtonGroup className="mt-4 flex w-full flex-row justify-end">
           {isPlan ? (
             <>
-              <Button onClick={handleViewApplicants} variant="outline">
-                지원자 보기
-              </Button>
               <Button onClick={handleToggleMode} variant="outline">
                 {mode === FormCardMode.NORMAL ? '제목/설명 수정' : '저장하기'}
               </Button>
               <Button onClick={handleManageForm} variant="outline">
                 질문 수정하기
+              </Button>
+              <Button onClick={handleViewApplicants} variant="outline">
+                지원자 보기
               </Button>
             </>
           ) : (

@@ -5,7 +5,7 @@ import { useGetProjectListQuery } from '@api/query/project';
 import { projectResponseToCardProps } from '@common/utils/project-response-card';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
-import ProjectCard from '@common/components/ProjectCard';
+import ProjectInfoCard from '@common/components/ProjectInfoCard';
 
 const ProjectListPage = () => {
   const { data, isLoading } = useGetProjectListQuery();
@@ -19,7 +19,7 @@ const ProjectListPage = () => {
   return (
     <div className="grid w-full grid-cols-1 gap-6 p-10 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((proj, idx) => (
-        <ProjectCard key={idx} {...proj} />
+        <ProjectInfoCard key={idx} {...proj} />
       ))}
     </div>
   );

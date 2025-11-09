@@ -22,6 +22,7 @@ import { useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
 
 export interface ProjectCardProps {
   id: string;
+  planId: string;
   name: string;
   description: string;
   partAndTo: ProjectPartAndTo[];
@@ -39,9 +40,9 @@ export enum ProjectCardMode {
   VIEW = 'view',
 }
 
-const ProjectCard = (props: ProjectCardProps) => {
-  const { id, name, description, link, partAndTo } = props;
-  const isPlan = useIsPlanChallenger();
+const ProjectInfoCard = (props: ProjectCardProps) => {
+  const { id, name, description, link, partAndTo, planId } = props;
+  const isPlan = useIsPlanChallenger(planId);
 
   const [mode, setMode] = useState<ProjectCardMode>(ProjectCardMode.VIEW);
   const [editedProject, setEditedProject] = useState<UpdateProjectRequestDto>({
@@ -113,7 +114,7 @@ const ProjectCard = (props: ProjectCardProps) => {
   }
 
   return (
-    <div className="rounded-22pxr flex w-full min-w-80 max-w-100 flex-col justify-between border border-gray-200 bg-white">
+    <div className="rounded-22pxr flex w-full max-w-100 min-w-80 flex-col justify-between border border-gray-200 bg-white">
       {/*상단 이미지 영역*/}
       <Image
         src={'https://placehold.co/600x400'}
@@ -123,22 +124,23 @@ const ProjectCard = (props: ProjectCardProps) => {
         className={'rounded-t-22pxr h-48 w-full bg-gray-200 object-cover'}
       />
 
-      <div className={'flex flex-col items-start gap-y-4 p-6'}>
+      <div className={'flex h-full flex-col items-start gap-y-3 p-6'}>
         <p className="text-2xl font-semibold">{name}</p>
         <p className="text-muted-foreground text-md">{description}</p>
-      </div>
-      <div className="">
+
         {/*TODO: 안내멘트, 삭제 필요*/}
         {/*<div className="text-muted-foreground mb-2 text-sm">*/}
         {/*  <span className={'text-black'}>파트별 TO | </span>*/}
         {/*  형식 : (현재 지원자 수) TO*/}
         {/*</div>*/}
 
-        <div className="flex w-full flex-col items-center gap-y-2">
+        <div className={'flex-1'} />
+
+        <div className="mt-2 mb-5 flex w-full flex-col items-center gap-y-1">
           {partAndTo.map((partTo, index) => {
             const { part, currentTo, maxTo } = partTo;
             return (
-              <div key={index} className="flex w-full flex-row items-center justify-between px-5">
+              <div key={index} className="flex w-full flex-row items-center justify-between">
                 <div className={'flex flex-row items-center text-sm text-gray-800'}>
                   <span className="min-w-25">{part}</span>
                   <span className={'tracking-wide'}>
@@ -154,30 +156,35 @@ const ProjectCard = (props: ProjectCardProps) => {
             );
           })}
         </div>
-      </div>
-      <div className="my-5 flex h-12 w-full flex-row gap-x-2 px-4">
+
         {isPlan && (
           <Button
             variant={'outline'}
             onClick={handleEditModeClick}
-            className={'text-md h-full flex-1'}
+            className={'text-md h-10 w-full px-4'}
           >
             프로젝트 정보 수정
           </Button>
         )}
-        <Button
-          onClick={handleViewMoreClick}
-          variant={'default'}
-          className={'text-md h-full flex-1'}
-        >
-          기획안 자세히 보기
-        </Button>
-        <Button onClick={handleApplyClick} variant={'outline'} className={'text-md h-full flex-1'}>
-          지원하기
-        </Button>
+        <div className="flex h-12 w-full flex-row gap-x-2">
+          <Button
+            onClick={handleViewMoreClick}
+            variant={'default'}
+            className={'text-md h-full flex-1'}
+          >
+            기획안 자세히 보기
+          </Button>
+          <Button
+            onClick={handleApplyClick}
+            variant={'outline'}
+            className={'text-md h-full flex-1'}
+          >
+            {isPlan ? '지원자 보기' : '지원하기'}
+          </Button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default ProjectCard;
+export default ProjectInfoCard;

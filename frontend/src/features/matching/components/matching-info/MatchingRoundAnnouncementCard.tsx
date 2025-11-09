@@ -1,23 +1,13 @@
 'use client';
 
-import { CalendarIcon, ClockIcon, InfoIcon } from 'lucide-react';
+import { InfoIcon } from 'lucide-react';
 import { toast } from 'sonner';
-
-import { Badge } from '@styles/components/ui/badge';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@styles/components/ui/card';
 
 import { useGetCurrentMatchingRoundQuery } from '@api/query/matching-round';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
-import MatchingRoundInfoCard from '@features/matching/components/MatchingRoundInfoCard';
-import JeewonMatchingInfoCard from '@features/projects/components/JeewonMatchingInfoCard';
+import MatchingRoundInfoCard from '@features/matching/components/matching-info/MatchingRoundInfoCard';
 
 const MatchingRoundAnnouncementCard = () => {
   const { data, isLoading, isError, error } = useGetCurrentMatchingRoundQuery();
@@ -54,14 +44,14 @@ const MatchingRoundAnnouncementCard = () => {
   return (
     <>
       {data ? (
-        <JeewonMatchingInfoCard data={data} />
+        <MatchingRoundInfoCard data={data} />
       ) : (
         <div className="flex flex-col items-center justify-center py-8 text-center">
           <div className="bg-muted mb-3 flex h-12 w-12 items-center justify-center rounded-full">
             <InfoIcon className="text-muted-foreground h-6 w-6" />
           </div>
           <p className="text-muted-foreground text-sm font-medium">
-            현재 진행 중인 매칭 차수가 없습니다
+            현재 진행 중인 매칭 차수가 없습니다.
           </p>
           <p className="text-muted-foreground text-xs">다음 매칭 차수를 기다려주세요</p>
         </div>

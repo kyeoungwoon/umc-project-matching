@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -98,5 +98,18 @@ export class MatchingRoundController {
   @Get('all')
   getAllMatchingRounds() {
     return this.matchingRoundService.getAllMatchingRounds();
+  }
+
+  // TODO: 여러개 가져올 수 있도록 변경, 그리고 그 전에 Join으로 가져올 수 있도록 테이블 변경
+  @Get(':matchingRoundId')
+  @ApiOperation({
+    summary: '매칭 라운드 ID로 매칭 라운드 조회',
+    description: '매칭 라운드 ID로 매칭 라운드를 조회합니다.',
+  })
+  @ApiOkResponseCommon(MatchingRoundResponseDto)
+  async getMatchingRoundById(
+    @Param('matchingRoundId') matchingRoundId: string,
+  ) {
+    return this.matchingRoundService.getOrThrowMatchingRound(matchingRoundId);
   }
 }

@@ -1,18 +1,24 @@
 'use client';
 
+import Link from 'next/link';
+
 import { InboxIcon } from 'lucide-react';
 
-import { Card, CardContent } from '@styles/components/ui/card';
+import { Button } from '@styles/components/ui/button';
+
+import { ROUTES } from '@common/constants/routes.constants';
 
 const NoAppliedProject = () => {
   return (
-    <Card className="border-dashed">
-      <CardContent className="flex flex-col items-center justify-center py-16">
-        <InboxIcon className="text-muted-foreground mb-4 h-12 w-12" />
-        <p className="text-muted-foreground text-lg font-medium">아직 지원한 프로젝트가 없습니다</p>
-        <p className="text-muted-foreground text-sm">프로젝트에 지원해보세요!</p>
-      </CardContent>
-    </Card>
+    <div className="flex flex-col items-center justify-center py-16">
+      <InboxIcon className="text-muted-foreground mb-4 h-12 w-12" />
+      <p className="mb-1 text-xl font-semibold text-black">아직 지원한 프로젝트가 없습니다</p>
+      <p className="text-muted-foreground text-md mb-10">프로젝트에 지원해보세요!</p>
+
+      <Link href={ROUTES.PROJECTS.LIST}>
+        <Button variant={'outline'}>프로젝트 목록 보러 가기</Button>
+      </Link>
+    </div>
   );
 };
 

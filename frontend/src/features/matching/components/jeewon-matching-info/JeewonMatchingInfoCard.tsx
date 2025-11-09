@@ -9,7 +9,7 @@ import { MatchingRoundResponseDto } from '@api/axios/matching-round/types';
 
 import { formatDate } from '@common/utils/format-dates';
 
-import JeewonMatchingTimeCard from '@features/projects/components/JeewonMatchingTimeCard';
+import JeewonMatchingTimeCard from '@features/matching/components/jeewon-matching-info/JeewonMatchingTimeCard';
 
 const JeewonMatchingInfoCard = ({ data }: { data: MatchingRoundResponseDto }) => {
   const now = new Date();

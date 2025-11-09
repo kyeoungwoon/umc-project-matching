@@ -11,8 +11,10 @@ import {
   Settings,
   SheetIcon,
   ShieldUserIcon,
+  SparklesIcon,
   SquarePenIcon,
   SquarePlusIcon,
+  StarIcon,
 } from 'lucide-react';
 
 import { Part } from '@api/axios/auth/types';
@@ -96,6 +98,8 @@ export const myMenu: menuItem[] = [
 const GOOGLE_FORM_URL = 'https://forms.gle/KNamMGSzk6r166mg6';
 const LEO_TEAM_MATCHING_MASTER_SHEET_URL =
   'https://docs.google.com/spreadsheets/d/1L6tEzM3KVizPdI_e7tIlEDsXpLOuZtispyfJCQzXeiM/edit?gid=445694956#gid=445694956';
+const LEO_9TH_IDEAS =
+  'https://makeus-challenge.notion.site/9th-UMC-Leo-IDEAS-25ab57f4596b810fb951c6b370db4cf7';
 
 const allMenus: SidebarMenus[] = [
   {
@@ -115,10 +119,10 @@ const allMenus: SidebarMenus[] = [
     items: myMenu,
   },
   {
-    label: '건의사항 및 문의사항',
+    label: '외부 링크',
     items: [
       {
-        title: '구글 폼 작성',
+        title: '문의 및 건의사항 구글 폼',
         icon: FilePenIcon,
         url: GOOGLE_FORM_URL,
       },
@@ -126,6 +130,11 @@ const allMenus: SidebarMenus[] = [
         title: '팀 매칭 마스터시트',
         icon: SheetIcon,
         url: LEO_TEAM_MATCHING_MASTER_SHEET_URL,
+      },
+      {
+        title: '9th Leo IDEAS',
+        icon: SparklesIcon,
+        url: LEO_9TH_IDEAS,
       },
     ],
   },

@@ -1,6 +1,6 @@
 import { ProjectResponseDto } from '@api/axios/project/types';
 
-import { ProjectCardProps, ProjectPartAndTo } from '@common/components/ProjectCard';
+import { ProjectCardProps, ProjectPartAndTo } from '@common/components/ProjectInfoCard';
 
 export const projectResponseToCardProps = (project: ProjectResponseDto): ProjectCardProps => {
   const partAndTo: ProjectPartAndTo[] = project.partTo.map((p) => {
@@ -14,6 +14,7 @@ export const projectResponseToCardProps = (project: ProjectResponseDto): Project
 
   return {
     id: project.id,
+    planId: project.planId,
     name: project.title,
     description: project.description,
     link: project.link,

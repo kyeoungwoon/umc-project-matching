@@ -37,10 +37,12 @@ import { getMenusByPart } from '@common/constants/sidebar-menu.constants';
 
 import { parsePart } from '@common/utils/parse-userinfo';
 
+import SchoolLogo from '@common/components/SchoolImage';
 import UpmsLogo from '@common/components/upms/UpmsLogo';
 
 import { useClearUser, useGetUser, useSetUserInfo } from '@features/auth/hooks/useAuthStore';
 
+import PartIcon from '@features/auth/components/PartIcon';
 import HeaderSkeleton from '@features/home/components/HeaderSkeleton';
 
 const UpmsSideBar = () => {
@@ -104,16 +106,16 @@ const UpmsSideBar = () => {
       <SidebarFooter className={'mb-5 px-4'}>
         <DropdownMenu>
           <DropdownMenuTrigger>
-            <div className={'gap-8pxr flex w-full flex-row items-center'}>
-              <div className={'flex w-full flex-col justify-between'}>
-                <Label className="text-md">
-                  {data.challengerSchool.name} {parsePart(data.part)}
-                </Label>
-                <Label className="text-md text-[#6A7282]">
+            <div className={'gap-8pxr flex w-full flex-row items-center px-3 py-2'}>
+              <SchoolLogo schoolName={data.challengerSchool.handle} width={50} height={50} />
+              <div className={'ml-2 flex w-full flex-col justify-between'}>
+                <Label className="text-xl text-black">
                   {data.nickname}/{data.name}
                 </Label>
+                <Label className="text-md text-gray-700">
+                  {data.challengerSchool.name} <PartIcon className={'h-4 w-4'} part={data.part} />
+                </Label>
               </div>
-              <ChevronsUpDownIcon />
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent

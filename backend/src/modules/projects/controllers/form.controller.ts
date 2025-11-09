@@ -110,7 +110,10 @@ export class FormController {
     const isPlanChallenger =
       await this.projectService.isUserProjectPlanByProjectId(userId, projectId);
 
-    return this.formService.getOrThrowFormByFormId(formId, isPlanChallenger);
+    return this.formService.getFormWithAvailableMatchingRounds(
+      formId,
+      isPlanChallenger,
+    );
   }
 
   @ApiOperation({

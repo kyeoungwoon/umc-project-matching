@@ -2,12 +2,18 @@ import { ApiResponse, api } from '@api/axios';
 import {
   CreateMatchingRoundRequestDto,
   MatchingRoundResponseDto,
-  TestCreateMatchingRoundResponseDto,
 } from '@api/axios/matching-round/types';
 
 export const getCurrentMatchingRound = async () => {
   const res = await api.get<ApiResponse<MatchingRoundResponseDto>>(
     '/v1/projects/matching-round/current',
+  );
+  return res.data.result;
+};
+
+export const getMatchingRound = async (roundId: string) => {
+  const res = await api.get<ApiResponse<MatchingRoundResponseDto>>(
+    `/v1/projects/matching-round/${roundId}`,
   );
   return res.data.result;
 };

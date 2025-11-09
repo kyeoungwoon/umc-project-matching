@@ -3,7 +3,15 @@
 // Application Card Component
 import { useState } from 'react';
 
-import { CheckCircle2Icon, ClockIcon, FileTextIcon, XCircleIcon } from 'lucide-react';
+import { clsx } from 'clsx';
+import {
+  CheckCircle2Icon,
+  ClockIcon,
+  CrossIcon,
+  FileTextIcon,
+  XCircleIcon,
+  XIcon,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Badge } from '@styles/components/ui/badge';
@@ -16,12 +24,15 @@ import {
   CardHeader,
   CardTitle,
 } from '@styles/components/ui/card';
+import { ScrollArea } from '@styles/components/ui/scroll-area';
 import { Separator } from '@styles/components/ui/separator';
 
 import { ApplicationResponseDto, ApplicationStatus } from '@api/axios/application/types';
 import { useChangeApplicationStatusMutation } from '@api/query/application';
 
-import ChallengerInfoBadge from '@common/components/ChallengerInfoBadge';
+import { parsePart } from '@common/utils/parse-userinfo';
+
+import ApplicantChallengerInfo from '@common/components/ApplicantChallengerInfo';
 
 import {
   getStatusBadgeVariant,
@@ -29,9 +40,12 @@ import {
   getStatusText,
 } from '@features/projects/utils/get-by-application-status';
 
+import ApplicationStatusBadge from '@features/matching/components/ApplicationStatusBadge';
+import MatchingRoundBadge from '@features/matching/components/matching-info/MatchingRoundBadge';
 import ConfirmDialog from '@features/projects/components/ConfirmDialog';
 
-import ApplicationInfoCard from '@features/applications/ApplicationInfoCard';
+import ApplicationAnswerList from '@features/applications/ApplicationAnswerList';
+import ApplicationInfo from '@features/applications/ApplicationInfo';
 
 const ApplicantApplicationCard = ({
   application,
@@ -86,70 +100,51 @@ const ApplicantApplicationCard = ({
         pendingAction={selectedStatus}
       />
       {/*카드 본문 내용*/}
-      <Card className="w-full">
+      <div className="rounded-20pxr flex w-full flex-col gap-y-2 border border-gray-400 px-6 py-7">
+        {/*최상단 : 상태 뱃지 + 매칭 info justify-between*/}
+        <div className={'flex w-full flex-row items-center justify-between'}>
+          <ApplicationStatusBadge status={application.status} />
+          <MatchingRoundBadge roundName={application.matchingRound?.name} />
+        </div>
+
+        {/*중간 정보 : 학교 이름/닉네임, 다음에 지원서 ID랑 제출일*/}
+
+        <ApplicantChallengerInfo
+          school={application.applicant.challengerSchool.name}
+          part={application.applicant.part}
+          name={application.applicant.name}
+          nickname={application.applicant.nickname}
+        />
+
+        <ApplicationInfo id={application.id} createdAt={application.createdAt} />
+
         {/*카드 헤더: 폼 제목과 설명, 합불 여부를 표시함*/}
-        <CardHeader className="flex w-full flex-col">
-          {/*폼 설명 + 합불 뱃지*/}
-          <CardTitle className={'flex w-full flex-row items-center justify-between'}>
-            <span className={'flex flex-row items-center gap-x-2 text-lg font-semibold'}>
-              {getStatusIcon(application.status)}
-              <ChallengerInfoBadge
-                school={application.applicant.challengerSchool.name}
-                part={application.applicant.part}
-                name={application.applicant.name}
-                nickname={application.applicant.nickname}
-              />
-            </span>
-            <span className={'flex flex-row items-center gap-x-2'}>
-              <Badge variant={getStatusBadgeVariant(application.status)}>
-                {getStatusText(application.status)}
-              </Badge>
-            </span>
-          </CardTitle>
-          {/*폼 설명*/}
-          <CardDescription className={'flex w-full flex-col items-start justify-center gap-y-1'}>
-            {/*부가 정보: 지원서 ID 및 지원한 챌린저 정보*/}
-            <span className="text-sm">지원서 ID: {application.id}</span>
-            <span className="text-muted-foreground font-medium">
-              제출일: {new Date(application.createdAt).toLocaleString('ko-KR')}{' '}
-            </span>
-            {/*제출일과 수정일이 다를 경우 (그럴 이유가 있나?)*/}
-            {application.createdAt !== application.updatedAt && (
-              <span className="text-muted-foreground font-medium">
-                최종 수정일: {new Date(application.updatedAt).toLocaleString('ko-KR')}
-              </span>
-            )}
-            {/*제출 상태일 경우 합불 처리 가능하도록 버튼 배치*/}
-            {application.status === 'SUBMITTED' && (
-              <ButtonGroup>
-                <Button
-                  size={'sm'}
-                  variant={'destructive'}
-                  onClick={() => handleButtonClick('REJECTED')}
-                >
-                  <CheckCircle2Icon className="mr-1 h-4 w-4" />
-                  불합격
-                </Button>
-                <Button
-                  size={'sm'}
-                  variant={'default'}
-                  onClick={() => handleButtonClick('CONFIRMED')}
-                >
-                  <CheckCircle2Icon className="mr-1 h-4 w-4" />
-                  합격
-                </Button>
-              </ButtonGroup>
-            )}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between gap-2"></div>
+        <ScrollArea className={'h-100'}>
+          <ApplicationAnswerList application={application} />
+        </ScrollArea>
 
-          <Separator />
-
-          <ApplicationInfoCard application={application} />
-        </CardContent>
-      </Card>
+        {/*제출 상태일 경우 합불 처리 가능하도록 버튼 배치*/}
+        {application.status === 'SUBMITTED' && (
+          <div className={'mt-5 flex w-full flex-row items-center gap-x-2'}>
+            <Button
+              className={'h-15 flex-1 px-10 py-3 text-2xl'}
+              variant={'destructive'}
+              onClick={() => handleButtonClick('REJECTED')}
+            >
+              <XIcon className="mr-1 h-10 w-10" />
+              불합격
+            </Button>
+            <Button
+              className={'h-15 flex-1 bg-green-500 px-10 py-3 text-2xl'}
+              variant={'default'}
+              onClick={() => handleButtonClick('CONFIRMED')}
+            >
+              <CheckCircle2Icon className="mr-1 h-10 w-10" />
+              합격
+            </Button>
+          </div>
+        )}
+      </div>
     </>
   );
 };

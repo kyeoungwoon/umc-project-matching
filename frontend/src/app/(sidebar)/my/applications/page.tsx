@@ -1,13 +1,19 @@
 'use client';
 
 import { Badge } from '@styles/components/ui/badge';
+import { Label } from '@styles/components/ui/label';
 import { Separator } from '@styles/components/ui/separator';
 
 import { useGetMyApplicationsQuery } from '@api/query/application';
 
+import ApplicantChallengerInfo from '@common/components/ApplicantChallengerInfo';
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
-import ApplicationInfoCard from '@features/applications/ApplicationInfoCard';
+import ApplicationStatusBadge from '@features/matching/components/ApplicationStatusBadge';
+import MatchingRoundBadge from '@features/matching/components/matching-info/MatchingRoundBadge';
+
+import ApplicationAnswerList from '@features/applications/ApplicationAnswerList';
+import ApplicationInfo from '@features/applications/ApplicationInfo';
 import NoAppliedProject from '@features/applications/NoAppliedProject';
 
 const MyApplicationsPage = () => {
@@ -18,32 +24,47 @@ const MyApplicationsPage = () => {
   }
 
   return (
-    <div className="container mx-auto max-w-6xl space-y-8 p-6">
-      {/* 평범~한 헤더 */}
+    <div className={'flex w-full flex-col space-y-6 p-6'}>
       <div className="space-y-4">
         <div className="flex items-start justify-between">
-          {/*<div className="space-y-2">*/}
-          {/*  <div className="flex items-center gap-3">*/}
-          {/*    <FileTextIcon className="text-primary h-8 w-8" />*/}
-          {/*    <h1 className="text-3xl font-bold tracking-tight">내 지원서</h1>*/}
-          {/*  </div>*/}
-          {/*  <p className="text-muted-foreground text-lg">내가 지원한 프로젝트 목록입니다</p>*/}
-          {/*</div>*/}
-          <Badge variant="secondary" className="text-sm">
-            총 {applications?.length || 0}개의 지원서
-          </Badge>
+          <div className="space-y-2">
+            <div className="flex items-end gap-3 text-3xl">
+              <span className={'font-bold tracking-tight'}>나의 지원서 목록</span>
+              <span>|</span>
+              <h1 className="text-2xl tracking-tight text-gray-600">
+                {applications?.length || 0}개의 지원서를 확인하세요
+              </h1>
+              {/*<p className="text-muted-foreground text-lg">{form.description}</p>*/}
+            </div>
+          </div>
         </div>
-        <Separator />
       </div>
+      <Separator />
 
       {/* 내가 지원한 지원서 목록 */}
-      <div className="space-y-4">
+      <div className="flex flex-col gap-y-4">
         {applications && applications.length > 0 ? (
-          <div className="flex flex-col gap-2">
+          <>
             {applications.map((application, idx) => (
-              <ApplicationInfoCard application={application} key={idx} />
+              <div
+                key={idx}
+                className="rounded-20pxr flex w-full flex-col gap-y-4 border border-gray-400 px-6 py-7"
+              >
+                <div className={'flex w-full flex-row items-center justify-between'}>
+                  <ApplicationStatusBadge status={application.status} />
+                  <MatchingRoundBadge roundName={application.matchingRound?.name} />
+                </div>
+                <div className={'flex flex-row items-end gap-2'}>
+                  <span className={'text-3xl font-semibold'}>
+                    {application.form.project?.title}
+                  </span>
+                  <span className={'text-xl text-gray-700'}>지원서</span>
+                </div>
+                <ApplicationInfo id={application.id} createdAt={application.createdAt} />
+                <ApplicationAnswerList application={application} key={idx} />
+              </div>
             ))}
-          </div>
+          </>
         ) : (
           <NoAppliedProject />
         )}

@@ -18,9 +18,9 @@ import { projectResponseToCardProps } from '@common/utils/project-response-card'
 import { useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
-import ProjectCard from '@common/components/ProjectCard';
+import ProjectInfoCard from '@common/components/ProjectInfoCard';
 
-import { FormCard } from '@features/projects/components/FormCard';
+import { FormInfoCard } from '@features/projects/components/FormInfoCard';
 
 const ProjectFormsPage = () => {
   const params = useParams();
@@ -96,7 +96,7 @@ const ProjectFormsPage = () => {
         {project.projectForms.length > 0 ? (
           <div className="grid gap-4">
             {project.projectForms.map((form) => (
-              <FormCard key={form.id} form={form} />
+              <FormInfoCard key={form.id} form={form} />
             ))}
           </div>
         ) : (

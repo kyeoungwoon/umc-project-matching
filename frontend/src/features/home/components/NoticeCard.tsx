@@ -2,13 +2,22 @@
 
 import Link from 'next/link';
 
-import { TerminalIcon } from 'lucide-react';
+import { GithubIcon, MegaphoneIcon } from 'lucide-react';
 
 import { Alert, AlertDescription, AlertTitle } from '@styles/components/ui/alert';
+import { Item, ItemDescription, ItemFooter, ItemTitle } from '@styles/components/ui/item';
+
+import GitHubIcon from '@icons/GitHub';
+
+import NoticeContent from '@features/home/components/NoticeContent';
+import NoticeTitle from '@features/home/components/NoticeTitle';
+
+import { notice } from '@features/home/docs/notice';
 
 const NoticeCard = () => {
   const PROJECT_GUIDE_PAGE =
     'https://makeus-challenge.notion.site/Project-Guideline-2a0b57f4596b8085b536cfec845c3e2b';
+  const GITHUB_LINK = 'https://github.com/kyeoungwoon/umc-project-matching';
 
   const HANEUL_LINK = 'https://github.com/kyeoungwoon';
   const BONNY_LINK = 'https://github.com/Bowoon1216';
@@ -16,80 +25,49 @@ const NoticeCard = () => {
   const MATTY_LINK = 'https://avanturation.com/';
 
   return (
-    <Alert className={'p-5'}>
-      <AlertTitle className={'mb-4 flex flex-row items-center gap-x-2 text-2xl'}>
-        <TerminalIcon />
+    <Item className={'flex flex-col items-start p-5'}>
+      <ItemTitle className={'mb-4 flex flex-row items-center gap-x-2 text-3xl font-bold'}>
+        <MegaphoneIcon className={'h-8 w-8'} />
         공지사항
-      </AlertTitle>
-      <AlertDescription className={'text-17pxr'}>
-        <ul className="list-disc space-y-2 pl-5 text-gray-600">
-          <li>
-            <span className="font-semibold text-gray-800">Plan: </span>지원서는 내 프로젝트 관리
-            &gt; 지원서 폼 확인 &gt; 지원자 보기 에서 확인 가능합니다.
-          </li>
-          <li>
-            <span className="font-semibold text-gray-800">Design: </span>
-          </li>
-          <li className={'pl-5'}>
-            프로젝트 목록 및 지원 메뉴에서 각 프로젝트 내용 확인 및 기획안 (Notion Link) 확인 후에,
-            원하시는 곳에 지원하시면 됩니다.
-          </li>
-          <li>
-            <span className="font-semibold text-gray-800">개발 파트: </span>지금은 기획-디자인 매칭
-            기간입니다. 기획-개발자 매칭 기간에 지원해주세요.
-          </li>
-          <li>
-            <span className="font-semibold text-gray-800">매칭 차수 관련 안내</span>
-          </li>
-          <li className={'pl-5'}>
-            매칭 차수는 1,2,3차 총 3회로 구성되어 있으며, 각 차수에 반드시 지원할 필요는 없습니다.
-          </li>
-          <li className={'pl-5'}>
-            이전 차수에 합격하지 못한 팀에 TO가 남아있다면, 다음 차수에 다시 지원하셔도 무관합니다.
-          </li>
-          <li className={'pl-5'}>
-            사유와 무관하게 3차까지 팀이 매칭되지 못한 경우, TO가 남아있는 팀에 랜덤으로 배정됩니다.
-          </li>
-          <li className={'pl-5'}>
-            매칭에 관한 보다 자세한 사항은 중앙운영사무국{' '}
-            <Link className={'text-green-600'} href={PROJECT_GUIDE_PAGE}>
-              Project Guideline
-            </Link>{' '}
-            를 참고해주세요.
-          </li>
-          <li>
-            <span className="font-semibold text-gray-800">문의사항 및 건의사항 관련 안내: </span>
-          </li>
-          <li className={'pl-5'}>
-            현재 사용하고 계시는 UPMS, UMC Project Matching Service는 Leo 지부 프로젝트 매칭 현황을
-            관리하고자 제작되었습니다.
-          </li>
-          <li className={'pl-5'}>Chrome 기반 브라우저에 맞게 개발되었습니다.</li>
-          <li className={'pl-5'}>
-            사용 중 문의 및 건의사항, 버그 등을 발견하였을 때에는 메뉴 하단의 구글 폼 및 Discord
-            DM을 통해 중앙대학교 회장 하늘/박경운 에게 문의 부탁드립니다.
-          </li>
-          <li className={'pl-5'}>
-            제작 및 도움을 준 사람 :{' '}
-            <Link className={'text-blue-600'} href={HANEUL_LINK}>
-              중앙대학교 회장 하늘/박경운
-            </Link>
-            {', '}
-            <Link className={'text-violet-600'} href={BONNY_LINK}>
-              부회장 보니/정보운
-            </Link>
-            {', '}
-            <Link className={'text-[#E65787]'} href={BELLA_LINK}>
-              Plan 파트장 벨라/황지원
-            </Link>{' '}
-            {', '}
-            <Link className={'text-[#808080]'} href={MATTY_LINK}>
-              숭실대학교 Design 파트장 매티/조현우
-            </Link>
-          </li>
-        </ul>
-      </AlertDescription>
-    </Alert>
+      </ItemTitle>
+      {/*ItemDescription은 내부적으로 p 태그를 사용하고 있어 hydration error 발생*/}
+      <div className={'text-17pxr'}>
+        {notice.map((content, idx) => {
+          return (
+            <div className={'mb-4 flex flex-col gap-y-2'} key={idx}>
+              <NoticeTitle text={content.title} />
+              {content.content.map((c, i) => {
+                return <NoticeContent text={c} key={i} />;
+              })}
+            </div>
+          );
+        })}
+        {/*구분선*/}
+      </div>
+      <ItemFooter className={'text-18pxr mt-2 flex flex-col items-start gap-y-2'}>
+        <span className={'text-2xl font-bold text-gray-800'}>UPMS 제작 및 도움을 준 사람들</span>
+        <div className={'grid grid-cols-2 gap-x-4 gap-y-1'}>
+          <Link className={'text-blue-600'} href={HANEUL_LINK}>
+            중앙대학교 회장 하늘/박경운
+          </Link>
+          <Link className={'text-violet-600'} href={BONNY_LINK}>
+            중앙대학교 부회장 보니/정보운
+          </Link>
+          <Link className={'text-[#E65787]'} href={BELLA_LINK}>
+            중앙대학교 Plan 파트장 벨라/황지원
+          </Link>
+          <Link className={'text-[#808080]'} href={MATTY_LINK}>
+            숭실대학교 Design 파트장 매티/조현우
+          </Link>
+        </div>
+        <Link
+          href={GITHUB_LINK}
+          className={'text-md mt-3 flex flex-row items-center gap-x-2 font-semibold text-black'}
+        >
+          <GitHubIcon /> UPMS Source Code
+        </Link>
+      </ItemFooter>
+    </Item>
   );
 };
 

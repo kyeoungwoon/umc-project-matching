@@ -11,6 +11,20 @@ import { CreateMatchingRoundDto } from '@modules/projects/dto/apply.dto';
 export class MatchingRoundService {
   constructor(private readonly mongo: MongoDBPrismaService) {}
 
+  async getOrThrowMatchingRound(roundId: string) {
+    const round = await this.mongo.matchingRound.findUnique({
+      where: {
+        id: roundId,
+      },
+    });
+
+    if (!round) {
+      throw new NotFoundException('해당하는 매칭 차수를 찾을 수 없습니다.');
+    }
+
+    return round;
+  }
+
   /**
    * start ~ end 사이에 있는 프로젝트 매칭 차수를 하나만 반환합니다.
    */
