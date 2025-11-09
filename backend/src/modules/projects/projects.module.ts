@@ -11,6 +11,8 @@ import { ProjectTestController } from '@modules/projects/controllers/test.contro
 import { MatchingRoundController } from '@modules/projects/controllers/matching-round.controller';
 import { HttpModule } from '@nestjs/axios';
 import { AuthModule } from '@modules/auth/auth.module';
+import { FormServiceV2 } from '@modules/projects/services/v2/form.v2.service';
+import { FormControllerV2 } from '@modules/projects/controllers/v2/form.v2.controller';
 
 @Module({
   // TODO: AuthModule 나중에 지우기
@@ -21,8 +23,15 @@ import { AuthModule } from '@modules/auth/auth.module';
     ApplyController,
     ProjectTestController,
     MatchingRoundController,
+    FormControllerV2,
   ],
-  providers: [ProjectsService, FormService, MatchingRoundService, ApplyService],
+  providers: [
+    ProjectsService,
+    FormService,
+    MatchingRoundService,
+    ApplyService,
+    FormServiceV2,
+  ],
   exports: [],
 })
 export class ProjectsModule {}

@@ -8,8 +8,13 @@ import { ROUTES } from '@common/constants/routes.constants';
 
 import { useGetUser } from '@features/auth/hooks/useAuthStore';
 
-export const useIsPlanChallenger = () => {
+export const useIsPlanChallenger = (planId?: string) => {
   const user = useGetUser();
+
+  if (planId) {
+    return user?.info?.part === 'PLAN' && user?.info?.id === planId;
+  }
+
   return user?.info?.part === 'PLAN';
 };
 

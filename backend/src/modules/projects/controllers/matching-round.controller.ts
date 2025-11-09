@@ -1,5 +1,10 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { API_TAGS } from '@common/constants/api-tags.constants';
 import { ProjectsService } from '@modules/projects/services/projects.service';
 import { FormService } from '@modules/projects/services/form.service';
@@ -60,6 +65,16 @@ export class MatchingRoundController {
       'Body로 제공된 start ~ end 사이의 matching round를 반환합니다.',
   })
   @ApiOkResponseCommon(MatchingRoundResponseDto)
+  @ApiQuery({
+    name: 'start',
+    description: '조회할 매칭 라운드의 시작 날짜 (ISO 8601 형식)',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'end',
+    description: '조회할 매칭 라운드의 종료 날짜 (ISO 8601 형식)',
+    required: true,
+  })
   @Get('query')
   getMatchingRoundByStartEndDatetime(@Query() query: QueryMatchingRoundsDto) {
     const startDate = new Date(query.start);
@@ -72,5 +87,29 @@ export class MatchingRoundController {
       startDate,
       endDate,
     );
+  }
+
+  // get all matching rounds
+  @ApiOperation({
+    summary: '모든 매칭 라운드 조회',
+    description: '모든 매칭 라운드를 조회합니다.',
+  })
+  @ApiOkResponseCommon(MatchingRoundResponseDto)
+  @Get('all')
+  getAllMatchingRounds() {
+    return this.matchingRoundService.getAllMatchingRounds();
+  }
+
+  // TODO: 여러개 가져올 수 있도록 변경, 그리고 그 전에 Join으로 가져올 수 있도록 테이블 변경
+  @Get(':matchingRoundId')
+  @ApiOperation({
+    summary: '매칭 라운드 ID로 매칭 라운드 조회',
+    description: '매칭 라운드 ID로 매칭 라운드를 조회합니다.',
+  })
+  @ApiOkResponseCommon(MatchingRoundResponseDto)
+  async getMatchingRoundById(
+    @Param('matchingRoundId') matchingRoundId: string,
+  ) {
+    return this.matchingRoundService.getOrThrowMatchingRound(matchingRoundId);
   }
 }

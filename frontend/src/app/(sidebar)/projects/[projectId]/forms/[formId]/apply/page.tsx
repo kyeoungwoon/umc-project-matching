@@ -4,8 +4,9 @@ import { useParams } from 'next/navigation';
 
 import { useGetFormQuery } from '@api/query/form';
 
-import { ApplicationForm } from '@common/components/ApplicationForm';
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
+
+import { ApplicationForm } from '@features/projects/components/forms/ApplicationForm';
 
 const ApplyPage = () => {
   const params = useParams();

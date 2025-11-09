@@ -19,7 +19,7 @@ import {
 import { useRedirectToLogin } from '@common/hooks/useRedirectToLogin';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
-import ProjectCard from '@common/components/ProjectCard';
+import ProjectInfoCard from '@common/components/ProjectInfoCard';
 
 import { useGetUser } from '@features/auth/hooks/useAuthStore';
 
@@ -57,7 +57,7 @@ const MyProjectsPage = () => {
         </div>
         <div className="space-y-4">
           {projectCards.length > 0 ? (
-            projectCards.map((proj, idx) => <ProjectCard key={idx} {...proj} />)
+            projectCards.map((proj, idx) => <ProjectInfoCard key={idx} {...proj} />)
           ) : (
             <div className="text-center text-gray-500">
               <p>아직 생성한 프로젝트가 없습니다.</p>

@@ -30,9 +30,10 @@ import { Part } from '@api/axios/auth/types';
 import { useCreateProjectMutation } from '@api/query/project';
 
 import DoubleCheckDialog from '@common/components/DoubleCheckDialog';
-import InputFormField from '@common/components/InputFormField';
 
 import { useGetUser } from '@features/auth/hooks/useAuthStore';
+
+import InputFormField from '@features/projects/components/forms/InputFormField';
 
 const partOptions: Part[] = ['PLAN', 'DESIGN', 'WEB', 'ANDROID', 'IOS', 'SPRINGBOOT', 'NODEJS'];
 
@@ -107,7 +108,7 @@ const CreateProjectPage = () => {
         onSubmit={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          // form.handleSubmit(); // This is now called from the confirmation dialog
+          // projects.handleSubmit(); // This is now called from the confirmation dialog
         }}
       >
         <Card className={'min-w-700pxr max-w-1000pxr mt-5 flex flex-col justify-center p-5'}>

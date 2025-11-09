@@ -29,8 +29,8 @@ import { useGetFormQuery } from '@api/query/form';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
-import ApplicantApplicationCard from '@features/form/components/ApplicantApplicationCard';
-import ApplicationStatusCard from '@features/form/components/StatusCard';
+import ApplicantApplicationCard from '@features/projects/components/ApplicantApplicationCard';
+import ApplicationStatusCard from '@features/projects/components/StatusCard';
 
 const ApplicantsPage = () => {
   const params = useParams();
@@ -41,7 +41,7 @@ const ApplicantsPage = () => {
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'ALL'>('ALL');
 
   const { data: form, isLoading } = useGetFormQuery(projectId, formId);
-  // console.log(form);
+  // console.log(projects);
 
   if (isLoading || !form) {
     return <DefaultSkeleton />;
@@ -54,6 +54,7 @@ const ApplicantsPage = () => {
       app.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.applicantId.toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.applicant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      app.applicant.nickname.toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.applicant.challengerSchool.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.applicant.part.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === 'ALL' || app.status === statusFilter;
@@ -71,22 +72,20 @@ const ApplicantsPage = () => {
 
   return (
     <div className="container mx-auto w-full max-w-7xl space-y-6 p-6">
-      {/* Header Section */}
+      {/* 헤더 부분, 폼 제목과 설명 */}
       <div className="space-y-4">
         <div className="flex items-start justify-between">
           <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <FileTextIcon className="text-primary h-8 w-8" />
+            <div className="flex items-end gap-3 text-3xl">
+              <span className={'tracking-tight text-gray-600'}>지원자 확인</span>
+              <span>|</span>
               <h1 className="text-3xl font-bold tracking-tight">{form.title}</h1>
+              {/*<p className="text-muted-foreground text-lg">{form.description}</p>*/}
             </div>
-            <p className="text-muted-foreground text-lg">지원자 관리</p>
           </div>
-          <Badge variant="secondary" className="text-sm">
-            총 {form?.applications?.length}명
-          </Badge>
         </div>
-        <Separator />
       </div>
+      <Separator />
 
       {/* 지원 상태별 카드 */}
       <div className="grid gap-3 md:grid-cols-3">

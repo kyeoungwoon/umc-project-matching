@@ -2,13 +2,26 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import {
   createMatchingRound,
+  getAllMatchingRound,
   getCurrentMatchingRound,
+  getMatchingRound,
   getMatchingRoundsByStartEndDatetime,
 } from '@api/axios/matching-round';
 import { CreateMatchingRoundRequestDto } from '@api/axios/matching-round/types';
 
 export const useGetCurrentMatchingRoundQuery = () => {
   return useQuery({ queryKey: ['matching-round', 'current'], queryFn: getCurrentMatchingRound });
+};
+
+export const useGetAllMatchingRoundQuery = () => {
+  return useQuery({ queryKey: ['matching-round', 'all'], queryFn: getAllMatchingRound });
+};
+
+export const useGetMatchingRound = (roundId: string) => {
+  return useQuery({
+    queryKey: ['matching-round', 'roundId', roundId],
+    queryFn: () => getMatchingRound(roundId),
+  });
 };
 
 export const useCreateMatchingRoundMutation = () => {

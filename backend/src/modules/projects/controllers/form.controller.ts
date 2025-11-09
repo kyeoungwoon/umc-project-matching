@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -37,6 +38,11 @@ import {
   ApiOkResponseCommon,
   ApiOkResponseCommonArray,
 } from '@common/decorators/response/api-ok-response-common.decorator';
+import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
+import {
+  CHALLENGER_ROLE,
+  CheckChallengerRole,
+} from '@common/decorators/challenger-role.decorator';
 
 @Controller({
   path: 'projects/form',
@@ -44,6 +50,7 @@ import {
 })
 @ApiTags(API_TAGS.FORM)
 @ApiBearerAuth()
+@UseGuards(ChallengerRoleGuard)
 export class FormController {
   constructor(
     private readonly projectService: ProjectsService,
@@ -67,6 +74,7 @@ export class FormController {
     required: true,
   })
   @ApiOkResponseCommon(FormResponseDto)
+  @CheckChallengerRole(CHALLENGER_ROLE.PLAN)
   @Post('project/:projectId/form')
   async createProjectApplicationForm(
     @Param('projectId') projectId: string,
@@ -102,7 +110,10 @@ export class FormController {
     const isPlanChallenger =
       await this.projectService.isUserProjectPlanByProjectId(userId, projectId);
 
-    return this.formService.getFormByFormId(formId, isPlanChallenger);
+    return this.formService.getFormWithAvailableMatchingRounds(
+      formId,
+      isPlanChallenger,
+    );
   }
 
   @ApiOperation({
@@ -156,7 +167,7 @@ export class FormController {
 
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
 
-    await this.formService.deleteAllQuestionsInForm(formId);
+    await this.formService.softDeleteAllQuestionsInForm(formId);
     return this.formService.addFormQuestions(formId, body.questions);
   }
 

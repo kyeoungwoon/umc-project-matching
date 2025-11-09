@@ -1,5 +1,11 @@
 import { OmitType, PartialType } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  ArrayNotEmpty,
+  IsArray,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateFormRequestDto {
   // @IsNotEmpty()
@@ -21,4 +27,19 @@ export class UpdateFormRequestDto extends PartialType(
   // @IsNotEmpty()
   // @IsString()
   // formId!: string;
+}
+
+export class CreateFormRequestV2Dto {
+  @IsNotEmpty()
+  @IsString()
+  title!: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  availableMatchingRounds!: string[];
 }

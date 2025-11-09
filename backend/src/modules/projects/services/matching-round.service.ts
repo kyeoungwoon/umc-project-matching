@@ -11,6 +11,20 @@ import { CreateMatchingRoundDto } from '@modules/projects/dto/apply.dto';
 export class MatchingRoundService {
   constructor(private readonly mongo: MongoDBPrismaService) {}
 
+  async getOrThrowMatchingRound(roundId: string) {
+    const round = await this.mongo.matchingRound.findUnique({
+      where: {
+        id: roundId,
+      },
+    });
+
+    if (!round) {
+      throw new NotFoundException('해당하는 매칭 차수를 찾을 수 없습니다.');
+    }
+
+    return round;
+  }
+
   /**
    * start ~ end 사이에 있는 프로젝트 매칭 차수를 하나만 반환합니다.
    */
@@ -111,5 +125,43 @@ export class MatchingRoundService {
         endDatetime,
       },
     });
+  }
+
+  // TODO: 성능 개선
+  /**
+   * 모든 매칭 차수의 기본 정보(id, name, startDatetime, endDatetime)를 반환합니다.
+   */
+  async getAllMatchingRounds() {
+    return this.mongo.matchingRound.findMany({
+      orderBy: {
+        startDatetime: 'desc',
+      },
+      select: {
+        id: true,
+        name: true,
+        startDatetime: true,
+        endDatetime: true,
+      },
+    });
+  }
+
+  async isValidMatchingRoundIds(roundIds: string[]): Promise<boolean> {
+    const matchingRounds = await this.getAllMatchingRounds();
+    const matchingRoundIds = matchingRounds.map((round) => round.id);
+
+    for (const id of roundIds) {
+      if (!matchingRoundIds.includes(id)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  async throwIfNotValidMatchingRoundIds(roundIds: string[]) {
+    const isIn = await this.isValidMatchingRoundIds(roundIds);
+    if (!isIn) {
+      throw new ForbiddenException('유효하지 않은 매칭 차수 ID 입니다.');
+    }
   }
 }

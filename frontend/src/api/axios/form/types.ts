@@ -49,6 +49,7 @@ export interface FormResponseDto {
   createdAt: string;
   updatedAt: string;
   availableMatchingRounds: string[];
+  project?: ProjectResponseDto;
 }
 
 export interface FormQuestionDto {

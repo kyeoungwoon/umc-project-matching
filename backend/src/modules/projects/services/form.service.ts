@@ -13,7 +13,6 @@ import {
   CreateFormQuestionDto,
   UpdateFormQuestionDto,
 } from '@modules/projects/dto/form-question.dto';
-import string from 'zod/src/v3/benchmarks/string';
 
 @Injectable()
 export class FormService {
@@ -62,10 +61,16 @@ export class FormService {
     });
   }
 
-  async deleteAllQuestionsInForm(formId: string) {
-    return this.mongo.formQuestion.deleteMany({
+  /**
+   * 폼에 속한 모든 질문들을 Soft Delete 합니다.
+   */
+  async softDeleteAllQuestionsInForm(formId: string) {
+    return this.mongo.formQuestion.updateMany({
       where: {
         formId,
+      },
+      data: {
+        isDeleted: true,
       },
     });
   }
@@ -93,39 +98,15 @@ export class FormService {
   }
 
   /**
-   * questionId를 기준으로, 질문을 수정합니다.
-   *
-   * 현재는 질문 type은 변경 불가능합니다.
-   * @param questions
-   */
-  async updateFormQuestions(questions: UpdateFormQuestionDto[]) {
-    return this.mongo.$transaction(
-      questions.map((question) => {
-        const { id, title, description, questionNo, options, isRequired } =
-          question;
-        return this.mongo.formQuestion.update({
-          where: {
-            id,
-          },
-          data: {
-            questionNo,
-            title,
-            description,
-            options,
-            isRequired,
-          },
-        });
-      }),
-    );
-  }
-
-  /**
    * formId로 form 정보와 질문들을 가져옵니다.
    *
    * 지원자의 경우, Plan 챌린저만 받아올 수 있으며 임시 저장 상태인 지원서는 제외됩니다.
    */
-  async getFormByFormId(formId: string, includeApplications: boolean = false) {
-    return this.mongo.form.findUnique({
+  async getOrThrowFormByFormId(
+    formId: string,
+    includeApplications: boolean = false,
+  ) {
+    const form = await this.mongo.form.findUnique({
       where: {
         id: formId,
       },
@@ -166,6 +147,28 @@ export class FormService {
           : false,
       },
     });
+
+    if (!form) throw new NotFoundException('존재하지 않는 폼 입니다.');
+    return form;
+  }
+
+  async getFormWithAvailableMatchingRounds(
+    formId: string,
+    isPlanChallenger: boolean = false,
+  ) {
+    const form = await this.getOrThrowFormByFormId(formId, isPlanChallenger);
+
+    const availableMatchingRounds = await this.mongo.matchingRound.findMany({
+      where: {
+        id: {
+          in: form.availableMatchingRounds,
+        },
+      },
+    });
+
+    console.log('availableMatchingRounds:', availableMatchingRounds);
+
+    return { ...form, availableMatchingRounds };
   }
 
   async isQuestionBelongsToForm(

@@ -6,14 +6,14 @@ import { HEADER_SECTION } from '@common/constants/header-title-description.const
 
 import { useRedirectToHomeIfNotAdmin } from '@common/hooks/useGetChallengerPerms';
 
-import Header from '@common/components/Header';
+import UpmsHeader from '@common/components/upms/UpmsHeader';
 
 const AdminLayout = ({ children }: { children?: ReactNode }) => {
   useRedirectToHomeIfNotAdmin();
 
   return (
     <div className={'flex flex-col gap-4'}>
-      <Header section={HEADER_SECTION.ADMIN} />
+      <UpmsHeader section={HEADER_SECTION.ADMIN} />
       <div className={'p-4'}>{children}</div>
     </div>
   );

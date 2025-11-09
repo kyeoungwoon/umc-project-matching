@@ -26,8 +26,6 @@ export class ApplyService {
 
   /**
    * 프로젝트에 생성된 지원 form에 맞는 형식의 지원서를 제출합니다.
-   *
-   * TODO: form과 형식이 일치하는지 확인 및 isRequired 질문에 대한 필수 제출 반영
    */
   async applyToProjectByFormId(
     formId: string,
@@ -38,7 +36,7 @@ export class ApplyService {
     const currentRoundId =
       await this.matching.getCurrentProjectMatchingRoundId();
 
-    // TODO: 필수 응답 Form은 모두 입력하여야 합니다.
+    // 필수 질문이 모두 응답되었는지 확인하기 위해 formQuestions 조회
     const questions = await this.mongo.formQuestion.findMany({
       where: {
         id: { in: answers.map((ans) => ans.questionId) },
@@ -65,6 +63,7 @@ export class ApplyService {
     }
 
     try {
+      // transaction으로 application, formAnswer를 생성함
       await this.mongo.$transaction(async (tx) => {
         const createdApplication = await tx.application.create({
           data: {
@@ -103,7 +102,7 @@ export class ApplyService {
   /**
    * 지원서를 삭제합니다. 현재 차수에 작성한 지원서만 삭제가 가능합니다.
    */
-  async deleteApplicationByApplicationId(applicationId: string) {
+  async deleteApplication(applicationId: string) {
     const currentRoundId =
       await this.matching.getCurrentProjectMatchingRoundId();
 
@@ -206,10 +205,14 @@ export class ApplyService {
    * 사용자가 제출한 모든 지원서 목록을 반환합니다.
    */
   async getMyApplications(userId: string) {
-    const applications = await this.mongo.application.findMany({
+    return this.mongo.application.findMany({
       where: { applicantId: userId },
       include: {
-        form: true, // TODO: 이건 왜 필요한걸까?
+        form: {
+          include: {
+            project: true,
+          },
+        }, // TODO: 이건 왜 필요한걸까?
         formAnswers: {
           include: {
             question: true,
@@ -218,7 +221,5 @@ export class ApplyService {
         matchingRound: true,
       },
     });
-
-    return applications;
   }
 }
