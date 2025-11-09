@@ -18,7 +18,7 @@ import { Switch } from '@styles/components/ui/switch';
 
 import { QuestionType } from '@api/axios/form/types';
 
-import InputFormField from '@common/components/InputFormField';
+import InputFormField from '@features/projects/components/forms/InputFormField';
 
 interface QuestionCreatorProps {
   tanstackForm: any;
@@ -26,9 +26,10 @@ interface QuestionCreatorProps {
   remove: (index: number) => void;
 }
 
-const questionTypes: QuestionType[] = ['SINGLE_CHOICE', 'MULTIPLE_CHOICE', 'SUBJECTIVE'];
-
 export default function QuestionCreator({ tanstackForm, index, remove }: QuestionCreatorProps) {
+  const questionTypes: QuestionType[] = ['SINGLE_CHOICE', 'MULTIPLE_CHOICE', 'SUBJECTIVE'];
+  const questionLabel = ['객관식(단일 선택)', '객관식(복수 선택)', '주관식'];
+
   return (
     <Card className="space-y-4 p-4">
       {/* Header: 질문 index랑 삭제 버튼 */}
@@ -65,13 +66,13 @@ export default function QuestionCreator({ tanstackForm, index, remove }: Questio
               value={field.state.value}
             >
               {/* 질문 유형 선택 드롭다운 */}
-              <SelectTrigger className="w-[200px]">
+              <SelectTrigger className="w-40">
                 <SelectValue placeholder="질문 유형" />
               </SelectTrigger>
               <SelectContent>
-                {questionTypes.map((type) => (
+                {questionTypes.map((type, idx) => (
                   <SelectItem key={type} value={type}>
-                    {type}
+                    {questionLabel[idx]}
                   </SelectItem>
                 ))}
               </SelectContent>

@@ -14,7 +14,7 @@ import { useClearUser, useSetUserInfo } from '@features/auth/hooks/useAuthStore'
 
 import HeaderSkeleton from '@features/home/components/HeaderSkeleton';
 
-const Header = ({ section }: { section: { title: string; description: string } }) => {
+const UpmsHeader = ({ section }: { section: { title: string; description: string } }) => {
   const { data, isLoading } = useGetMyInfoQuery();
   const router = useRouter();
   const clearUser = useClearUser();
@@ -66,4 +66,4 @@ const Header = ({ section }: { section: { title: string; description: string } }
   );
 };
 
-export default Header;
+export default UpmsHeader;

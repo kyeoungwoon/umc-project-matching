@@ -1,6 +1,6 @@
 'use client';
 
-// Inner component to handle the form logic after data is fetched
+// Inner component to handle the projects logic after data is fetched
 import { useRouter } from 'next/navigation';
 
 import { useForm } from '@tanstack/react-form';
@@ -14,7 +14,7 @@ import { useApplyToProjectMutation } from '@api/query/application';
 
 import { ROUTES } from '@common/constants/routes.constants';
 
-import { QuestionField } from '@features/form/components/QuestionField';
+import { QuestionField } from '@features/projects/components/QuestionField';
 
 export const ApplicationForm = ({
   form: formData,

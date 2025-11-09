@@ -7,7 +7,7 @@ import { Button } from '@styles/components/ui/button';
 
 import { CreateFormQuestionDto, CreateQuestionRequestDto } from '@api/axios/form/types';
 
-import QuestionCreator from '@features/form/components/QuestionCreator';
+import QuestionCreator from '@features/projects/components/QuestionCreator';
 
 interface QuestionFormBuilderProps {
   onSubmit: (data: CreateQuestionRequestDto) => void;

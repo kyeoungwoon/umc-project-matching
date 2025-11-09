@@ -100,7 +100,7 @@ model MatchingRound {
 
   applicationsInRound Application[]
 
-  @@map("matching_round")
+  @@map("matching_rounds")
 }
 
 type ProjectTo {
@@ -168,6 +168,8 @@ model FormQuestion {
   // --- 관계 ---
   form        Form         @relation(fields: [formId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   formAnswers FormAnswer[]
+
+  @@map("form_questions")
 }
 
 model ProjectMember {
@@ -201,6 +203,8 @@ model FormAnswer {
   // --- 관계 ---
   application Application  @relation(fields: [applicationId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   question    FormQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("form_answers")
 }
 
 model Application {

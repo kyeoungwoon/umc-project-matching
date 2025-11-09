@@ -13,10 +13,10 @@ import { useLoginMutation } from '@api/query/auth';
 
 import { ROUTES } from '@common/constants/routes.constants';
 
-import LoginComboBox from '@common/components/Combobox';
-import InputFormField from '@common/components/InputFormField';
-
 import { useSetUser } from '@features/auth/hooks/useAuthStore';
+
+import LoginComboBox from '@features/auth/components/LoginComboBox';
+import InputFormField from '@features/projects/components/forms/InputFormField';
 
 const loginSchema = z.object({
   school: z.object({

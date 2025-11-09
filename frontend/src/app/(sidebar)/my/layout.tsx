@@ -4,12 +4,12 @@ import { ReactNode } from 'react';
 
 import { HEADER_SECTION } from '@common/constants/header-title-description.constants';
 
-import Header from '@common/components/Header';
+import UpmsHeader from '@common/components/upms/UpmsHeader';
 
 const MyLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className={'flex flex-col gap-y-3'}>
-      <Header section={HEADER_SECTION.MY_INFO} />
+      <UpmsHeader section={HEADER_SECTION.MY_INFO} />
       {children}
     </div>
   );

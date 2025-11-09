@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOperation,
@@ -18,6 +29,11 @@ import {
 } from '@modules/projects/dto/apply.dto';
 import { ApplicationResponseDto } from '@modules/projects/dto/ok-responses/apply.ok-response.dto';
 import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
+import {
+  CHALLENGER_ROLE,
+  CheckChallengerRole,
+} from '@common/decorators/challenger-role.decorator';
+import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
 
 @Controller({
   path: 'projects/applications',
@@ -25,6 +41,7 @@ import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response
 })
 @ApiTags(API_TAGS.APPLY)
 @ApiBearerAuth()
+@UseGuards(ChallengerRoleGuard)
 export class ApplyController {
   constructor(
     private readonly projectService: ProjectsService,
@@ -69,6 +86,20 @@ export class ApplyController {
     const userId = this.reqContext.getOrThrowUserId();
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
 
+    // 현재 차수가 지원서의 지원 가능 차수에 해당하는지 확인
+    const currentRound =
+      await this.matchingRoundService.getOrThrowCurrentProjectMatchingRound();
+
+    // 폼 정보를 가져옵니다, 없으면 throw error!
+    const form = await this.formService.getOrThrowFormByFormId(formId);
+
+    // 현재 매칭 차수가 폼의 지원 가능 차수에 포함되어 있는지 확인
+    if (form.availableMatchingRounds.includes(currentRound.id)) {
+      throw new ForbiddenException(
+        '현재 매칭 차수에서는 해당 지원서로 지원할 수 없습니다.',
+      );
+    }
+
     return this.applyService.applyToProjectByFormId(
       formId,
       userId,
@@ -101,7 +132,7 @@ export class ApplyController {
   }
 
   @ApiOperation({
-    summary: 'applicationId로 지원서 삭제하기',
+    summary: '지원서 삭제',
     description: '',
   })
   @ApiParam({
@@ -121,17 +152,25 @@ export class ApplyController {
       applicationId,
     );
 
-    return this.applyService.deleteApplicationByApplicationId(applicationId);
+    return this.applyService.deleteApplication(applicationId);
   }
 
-  // Plan 전용, 지원서 상태 변경
+  // ========== Plan Only ==========
+
   @ApiOkResponseCommon(ApplicationResponseDto)
   @Post('project/:projectId/apply/:applicationId/status')
+  @CheckChallengerRole(CHALLENGER_ROLE.PLAN)
+  @ApiOperation({
+    summary: '[Plan Only] 지원서 상태 변경',
+    description:
+      '지원서 상태를 변경합니다. (합격 / 불합격) 이미 합격/불합격된 지원서는 변경할 수 없습니다.',
+  })
   async changeApplicationStatus(
     @Param('projectId') projectId: string,
     @Param('applicationId') applicationId: string,
     @Body() body: ChangeApplicationStatus,
   ) {
+    // 해당 프로젝트의 Plan이 아닌 경우 거부합니다.
     const userId = this.reqContext.getOrThrowUserId();
     await this.projectService.throwIfUserNotPlanByProjectId(userId, projectId);
 

@@ -4,14 +4,14 @@ import { ReactNode } from 'react';
 
 import { HEADER_SECTION } from '@common/constants/header-title-description.constants';
 
-import Header from '@common/components/Header';
+import UpmsHeader from '@common/components/upms/UpmsHeader';
 
 const HomeLayout = ({ children }: { children?: ReactNode }) => {
   return (
-    <div>
-      <Header section={HEADER_SECTION.MAIN} />
+    <>
+      {/*<Header section={HEADER_SECTION.MAIN} />*/}
       {children}
-    </div>
+    </>
   );
 };
 

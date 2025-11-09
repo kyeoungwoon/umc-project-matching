@@ -20,7 +20,7 @@ import { useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 import ProjectCard from '@common/components/ProjectCard';
 
-import { FormCard } from '@features/form/components/FormCard';
+import { FormCard } from '@features/projects/components/FormCard';
 
 const ProjectFormsPage = () => {
   const params = useParams();

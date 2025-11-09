@@ -12,8 +12,8 @@ import { useGetMatchingRoundByStartEndDatetime } from '@api/query/matching-round
 import DatetimePicker from '@common/components/DatetimePicker';
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
-import CreateMatchingRoundCard from '@features/form/components/CreateMatchingRoundCard';
-import JeewonMatchingInfoCard from '@features/form/components/JeewonMatchingInfoCard';
+import CreateMatchingRoundCard from '@features/projects/components/CreateMatchingRoundCard';
+import JeewonMatchingInfoCard from '@features/projects/components/JeewonMatchingInfoCard';
 
 const MatchingRounds = () => {
   const yesterday = new Date();

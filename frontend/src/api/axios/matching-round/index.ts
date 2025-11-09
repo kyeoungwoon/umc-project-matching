@@ -29,3 +29,10 @@ export const getMatchingRoundsByStartEndDatetime = async (startDate: Date, endDa
   );
   return res.data.result;
 };
+
+export const getAllMatchingRound = async () => {
+  const res = await api.get<ApiResponse<MatchingRoundResponseDto[]>>(
+    '/v1/projects/matching-round/all',
+  );
+  return res.data.result;
+};

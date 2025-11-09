@@ -11,9 +11,8 @@ import {
 
 import { ApplicationResponseDto } from '@api/axios/application/types';
 
-import MatchingRoundInfoCard from '@common/components/MatchingRoundInfoCard';
-
-import QuestionAnswer from '@features/form/components/QuestionAnswer';
+import MatchingRoundInfoCard from '@features/matching/components/MatchingRoundInfoCard';
+import QuestionAnswer from '@features/projects/components/QuestionAnswer';
 
 const getStatusBadgeVariant = (status: string) => {
   switch (status) {
@@ -47,7 +46,7 @@ const getStatusText = (status: string) => {
 
 const ApplicationInfoCard = ({ application }: { application: ApplicationResponseDto }) => {
   return (
-    <Card key={application.id} className="transition-shadow hover:shadow-md">
+    <Card key={application.id} className="">
       {/*내 지원서에도 쓰이는 관계로 합/불 여부 표시*/}
       <CardHeader>
         <div className="flex items-center justify-between gap-2">

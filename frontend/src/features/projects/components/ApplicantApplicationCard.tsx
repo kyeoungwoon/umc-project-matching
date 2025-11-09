@@ -27,9 +27,9 @@ import {
   getStatusBadgeVariant,
   getStatusIcon,
   getStatusText,
-} from '@features/form/utils/get-by-application-status';
+} from '@features/projects/utils/get-by-application-status';
 
-import ConfirmDialog from '@features/form/components/ConfirmDialog';
+import ConfirmDialog from '@features/projects/components/ConfirmDialog';
 
 import ApplicationInfoCard from '@features/applications/ApplicationInfoCard';
 
@@ -86,7 +86,7 @@ const ApplicantApplicationCard = ({
         pendingAction={selectedStatus}
       />
       {/*카드 본문 내용*/}
-      <Card className="w-full transition-shadow hover:shadow-md">
+      <Card className="w-full">
         {/*카드 헤더: 폼 제목과 설명, 합불 여부를 표시함*/}
         <CardHeader className="flex w-full flex-col">
           {/*폼 설명 + 합불 뱃지*/}

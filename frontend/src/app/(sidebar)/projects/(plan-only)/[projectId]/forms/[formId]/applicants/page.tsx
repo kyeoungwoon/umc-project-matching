@@ -29,8 +29,8 @@ import { useGetFormQuery } from '@api/query/form';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
-import ApplicantApplicationCard from '@features/form/components/ApplicantApplicationCard';
-import ApplicationStatusCard from '@features/form/components/StatusCard';
+import ApplicantApplicationCard from '@features/projects/components/ApplicantApplicationCard';
+import ApplicationStatusCard from '@features/projects/components/StatusCard';
 
 const ApplicantsPage = () => {
   const params = useParams();
@@ -41,7 +41,7 @@ const ApplicantsPage = () => {
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'ALL'>('ALL');
 
   const { data: form, isLoading } = useGetFormQuery(projectId, formId);
-  // console.log(form);
+  // console.log(projects);
 
   if (isLoading || !form) {
     return <DefaultSkeleton />;

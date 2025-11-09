@@ -10,8 +10,8 @@ import {
   CardTitle,
 } from '@styles/components/ui/card';
 
-import Header from '@common/components/Header';
 import QuestionCard from '@common/components/QuestionCard';
+import UpmsHeader from '@common/components/upms/UpmsHeader';
 
 const CreateApplicationPage = () => {
   return (

@@ -11,7 +11,7 @@ import { ROUTES } from '@common/constants/routes.constants';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
-import { QuestionFormBuilder } from '@features/form/components/QuestionFormBuilder';
+import { QuestionFormBuilder } from '@features/projects/components/QuestionFormBuilder';
 
 const EditProjectFormPage = () => {
   const params = useParams();

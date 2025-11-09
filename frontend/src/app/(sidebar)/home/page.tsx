@@ -1,8 +1,7 @@
 'use client';
 
-import MatchingRoundAnnouncementCard from '@common/components/MatchingRoundAnnouncementCard';
-
 import NoticeCard from '@features/home/components/NoticeCard';
+import MatchingRoundAnnouncementCard from '@features/matching/components/MatchingRoundAnnouncementCard';
 
 const HomePage = () => {
   return (

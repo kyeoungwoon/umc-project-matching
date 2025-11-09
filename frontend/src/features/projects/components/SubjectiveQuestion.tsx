@@ -11,7 +11,7 @@ import { Textarea } from '@styles/components/ui/textarea';
 
 import { FormQuestionDto } from '@api/axios/form/types';
 
-import RequiredStar from '@common/components/RequiredStar';
+import RequiredStar from '@features/projects/components/forms/RequiredStar';
 
 interface SubjectiveQuestionProps {
   field: any;

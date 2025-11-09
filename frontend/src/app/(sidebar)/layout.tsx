@@ -11,7 +11,7 @@ import { SidebarProvider } from '@styles/components/ui/sidebar';
 import { ROUTES } from '@common/constants/routes.constants';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
-import UpmsSideBar from '@common/components/UpmsSidebar';
+import UpmsSideBar from '@common/components/upms/UpmsSidebar';
 
 import { useGetUser } from '@features/auth/hooks/useAuthStore';
 

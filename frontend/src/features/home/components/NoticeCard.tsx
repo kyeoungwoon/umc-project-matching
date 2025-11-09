@@ -13,6 +13,7 @@ const NoticeCard = () => {
   const HANEUL_LINK = 'https://github.com/kyeoungwoon';
   const BONNY_LINK = 'https://github.com/Bowoon1216';
   const BELLA_LINK = 'https://github.com/hwangjeewon';
+  const MATTY_LINK = 'https://avanturation.com/';
 
   return (
     <Alert className={'p-5'}>
@@ -80,6 +81,10 @@ const NoticeCard = () => {
             {', '}
             <Link className={'text-[#E65787]'} href={BELLA_LINK}>
               Plan 파트장 벨라/황지원
+            </Link>{' '}
+            {', '}
+            <Link className={'text-[#808080]'} href={MATTY_LINK}>
+              숭실대학교 Design 파트장 매티/조현우
             </Link>
           </li>
         </ul>

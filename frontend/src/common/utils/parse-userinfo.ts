@@ -1,5 +1,9 @@
 export const parsePart = (part: string) => {
   switch (part) {
+    case 'PLAN':
+      return 'Plan';
+    case 'DESIGN':
+      return 'Design';
     case 'SPRINGBOOT':
       return 'SpringBoot';
     case 'WEB':

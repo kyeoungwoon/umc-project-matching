@@ -14,7 +14,7 @@ interface QuestionFieldProps {
 export const QuestionField = ({ tanstackForm, question, index }: QuestionFieldProps) => {
   // This component is designed for the 'answering' mode.
   // For 'creation' mode, we would need a different set of components
-  // to build the FormQuestionDto object itself, likely using a dynamic form for questions and options.
+  // to build the FormQuestionDto object itself, likely using a dynamic projects for questions and options.
 
   return (
     <tanstackForm.Field

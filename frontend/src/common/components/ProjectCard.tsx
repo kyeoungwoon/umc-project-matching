@@ -13,7 +13,6 @@ import { Button } from '@styles/components/ui/button';
 import { ButtonGroup } from '@styles/components/ui/button-group';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@styles/components/ui/card';
 import { Input } from '@styles/components/ui/input';
-import { Separator } from '@styles/components/ui/separator';
 
 import { UpdateProjectRequestDto } from '@api/axios/project/types';
 import { useUpdateProjectMutation } from '@api/query/project';
@@ -21,8 +20,6 @@ import { useUpdateProjectMutation } from '@api/query/project';
 import { ROUTES } from '@common/constants/routes.constants';
 
 import { useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
-
-import LinkPreviewCard from '@common/components/LinkPreviewCard';
 
 export interface ProjectCardProps {
   id: string;
@@ -103,7 +100,6 @@ const ProjectCard = (props: ProjectCardProps) => {
               <span className="font-semibold">한줄 설명</span>
               <p className="text-muted-foreground text-md">{description}</p>
             </div>
-            {/*<LinkPreviewCard url={link || '#'} />*/}
           </>
         ) : (
           <>

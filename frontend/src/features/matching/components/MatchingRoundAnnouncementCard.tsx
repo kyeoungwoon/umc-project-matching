@@ -15,9 +15,9 @@ import {
 import { useGetCurrentMatchingRoundQuery } from '@api/query/matching-round';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
-import MatchingRoundInfoCard from '@common/components/MatchingRoundInfoCard';
 
-import JeewonMatchingInfoCard from '@features/form/components/JeewonMatchingInfoCard';
+import MatchingRoundInfoCard from '@features/matching/components/MatchingRoundInfoCard';
+import JeewonMatchingInfoCard from '@features/projects/components/JeewonMatchingInfoCard';
 
 const MatchingRoundAnnouncementCard = () => {
   const { data, isLoading, isError, error } = useGetCurrentMatchingRoundQuery();
@@ -52,34 +52,21 @@ const MatchingRoundAnnouncementCard = () => {
   }
 
   return (
-    <Card className="w-full overflow-hidden shadow-md">
-      <CardHeader className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-full">
-            <InfoIcon className="text-primary h-5 w-5" />
+    <>
+      {data ? (
+        <JeewonMatchingInfoCard data={data} />
+      ) : (
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="bg-muted mb-3 flex h-12 w-12 items-center justify-center rounded-full">
+            <InfoIcon className="text-muted-foreground h-6 w-6" />
           </div>
-          <div>
-            <CardTitle className="text-lg">현재 진행 중인 매칭 차수 안내</CardTitle>
-            <CardDescription className="text-sm">현재 진행 중인 매칭 정보</CardDescription>
-          </div>
+          <p className="text-muted-foreground text-sm font-medium">
+            현재 진행 중인 매칭 차수가 없습니다
+          </p>
+          <p className="text-muted-foreground text-xs">다음 매칭 차수를 기다려주세요</p>
         </div>
-      </CardHeader>
-      <CardContent className="pt-2">
-        {data ? (
-          <JeewonMatchingInfoCard data={data} />
-        ) : (
-          <div className="flex flex-col items-center justify-center py-8 text-center">
-            <div className="bg-muted mb-3 flex h-12 w-12 items-center justify-center rounded-full">
-              <InfoIcon className="text-muted-foreground h-6 w-6" />
-            </div>
-            <p className="text-muted-foreground text-sm font-medium">
-              현재 진행 중인 매칭 차수가 없습니다
-            </p>
-            <p className="text-muted-foreground text-xs">다음 매칭 차수를 기다려주세요</p>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+      )}
+    </>
   );
 };
 

@@ -14,7 +14,7 @@ import { RadioGroup, RadioGroupItem } from '@styles/components/ui/radio-group';
 
 import { FormQuestionDto } from '@api/axios/form/types';
 
-import RequiredStar from '@common/components/RequiredStar';
+import RequiredStar from '@features/projects/components/forms/RequiredStar';
 
 interface ObjectiveQuestionProps {
   field: any;
