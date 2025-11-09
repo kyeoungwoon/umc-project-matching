@@ -19,6 +19,7 @@ import {
   CHALLENGER_ROLE,
   CheckChallengerRole,
 } from '@common/decorators/challenger-role.decorator';
+import { EnvGuard } from '@common/guards/env.guard';
 
 @Controller({
   version: VERSION_NEUTRAL,
@@ -26,7 +27,7 @@ import {
 })
 @ApiTags(API_TAGS.TEST)
 @ApiBearerAuth()
-@UseGuards(ChallengerRoleGuard)
+@UseGuards(ChallengerRoleGuard, EnvGuard)
 export class BasicTestController {
   constructor(private readonly requestContextService: RequestContextService) {}
 

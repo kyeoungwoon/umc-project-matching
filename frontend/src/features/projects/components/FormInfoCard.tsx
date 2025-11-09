@@ -16,7 +16,7 @@ import { useGetAllMatchingRoundQuery, useGetMatchingRound } from '@api/query/mat
 
 import { ROUTES } from '@common/constants/routes.constants';
 
-import { useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
+import { useIsAdminChallenger, useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
 
 interface FormCardProps {
   form: FormResponseDto;
@@ -39,6 +39,9 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
   const router = useRouter();
 
   const isPlan = useIsPlanChallenger();
+  const isAdmin = useIsAdminChallenger();
+
+  // console.log(isPlan, isAdmin, isAdmin || isPlan, '!!!!!!!!!!');
 
   const [mode, setMode] = useState<FormCardMode>(FormCardMode.NORMAL);
   const [editedForm, setEditedForm] = useState<UpdateFormRequestDto>({
@@ -80,14 +83,14 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
       <CardHeader>
         {mode === FormCardMode.NORMAL ? (
           <>
-            <div className={'flex flex-col gap-1'}>
+            <div className={'flex flex-col gap-y-5'}>
               <div className={'flex flex-row items-center justify-start gap-2'}>
                 <span className={'w-30'}>지원 폼 이름</span>
                 <CardTitle className="text-xl font-semibold">{form.title}</CardTitle>
               </div>
-              <div className={'flex flex-row items-center justify-start gap-2'}>
+              <div className={'flex flex-row items-start justify-start gap-2'}>
                 <span className={'w-30'}>폼에 대한 설명</span>
-                <p className="text-muted-foreground mb-2 text-lg">
+                <p className="mb-2 text-lg whitespace-pre-line text-gray-800">
                   {form.description || '설명 없음'}
                 </p>
               </div>
@@ -122,7 +125,7 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
       <CardContent>
         {/* TODO: Plan 챌린저에 대한 권한 처리 필요 */}
         <ButtonGroup className="mt-4 flex w-full flex-row justify-end">
-          {isPlan ? (
+          {(isPlan || isAdmin) && (
             <>
               <Button onClick={handleToggleMode} variant="outline">
                 {mode === FormCardMode.NORMAL ? '제목/설명 수정' : '저장하기'}
@@ -134,11 +137,11 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
                 지원자 보기
               </Button>
             </>
-          ) : (
-            <Button onClick={handleApplyToForm} variant="default">
-              지원하기
-            </Button>
           )}
+
+          <Button onClick={handleApplyToForm} variant="default">
+            지원하기
+          </Button>
         </ButtonGroup>
       </CardContent>
     </Card>

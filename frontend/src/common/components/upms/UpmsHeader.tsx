@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import HeaderSkeleton from '@skeletons/components/HeaderSkeleton';
+
 import { Button } from '@styles/components/ui/button';
 
 import { useGetMyInfoQuery } from '@api/query/user';
@@ -11,8 +13,6 @@ import { useGetMyInfoQuery } from '@api/query/user';
 import { ROUTES } from '@common/constants/routes.constants';
 
 import { useClearUser, useSetUserInfo } from '@features/auth/hooks/useAuthStore';
-
-import HeaderSkeleton from '@features/home/components/HeaderSkeleton';
 
 const UpmsHeader = ({ section }: { section: { title: string; description: string } }) => {
   const { data, isLoading } = useGetMyInfoQuery();
@@ -35,7 +35,7 @@ const UpmsHeader = ({ section }: { section: { title: string; description: string
   const isLoggedIn = !!data;
 
   if (isLoading) {
-    return <HeaderSkeleton section={section} />;
+    return <HeaderSkeleton />;
   }
 
   return (

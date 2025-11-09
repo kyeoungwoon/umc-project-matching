@@ -3,6 +3,7 @@
 import { useState } from 'react';
 
 import { useForm } from '@tanstack/react-form';
+import { clsx } from 'clsx';
 import { z } from 'zod';
 
 import { Button } from '@styles/components/ui/button';
@@ -25,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@styles/components/ui/select';
+import { Textarea } from '@styles/components/ui/textarea';
 
 import { Part } from '@api/axios/auth/types';
 import { useCreateProjectMutation } from '@api/query/project';
@@ -117,7 +119,26 @@ const CreateProjectPage = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <InputFormField tanstackForm={form} name="title" label="프로젝트 이름" />
-            <InputFormField tanstackForm={form} name={'description'} />
+            <form.Field
+              name={'description'}
+              children={(field: any) => {
+                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
+                return (
+                  <Field>
+                    <FieldLabel htmlFor={field.name}>{'프로젝트 설명'}</FieldLabel>
+                    <Textarea
+                      id={field.name}
+                      name={field.name}
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      className={clsx(isInvalid && 'border-red-500')}
+                    />
+                    {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                  </Field>
+                );
+              }}
+            />
             <InputFormField tanstackForm={form} name={'link'} label="기획안 링크 (Notion 등)" />
             <FieldGroup>
               <FieldLabel>모집 파트 및 인원</FieldLabel>

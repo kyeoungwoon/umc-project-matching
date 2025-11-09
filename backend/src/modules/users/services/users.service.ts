@@ -35,10 +35,11 @@ export class UsersService {
 
   async throwIfNotPlanChallenger(userId: string) {
     const isPlanChallenger = await this.isPlanChallenger(userId);
-    if (!isPlanChallenger)
-      throw new ForbiddenException(
-        'Plan 챌린저만 프로젝트를 생성할 수 있습니다.',
-      );
+    const isAdminChallenger = await this.isAdminChallenger(userId);
+    if (!isPlanChallenger) if (isAdminChallenger) return;
+    throw new ForbiddenException(
+      'Plan 챌린저나 운영진만 프로젝트를 생성할 수 있습니다.',
+    );
   }
 
   async isAdminChallenger(userId: string): Promise<boolean> {

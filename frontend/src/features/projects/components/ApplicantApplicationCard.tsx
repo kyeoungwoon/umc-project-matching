@@ -3,34 +3,19 @@
 // Application Card Component
 import { useState } from 'react';
 
-import { clsx } from 'clsx';
-import {
-  CheckCircle2Icon,
-  ClockIcon,
-  CrossIcon,
-  FileTextIcon,
-  XCircleIcon,
-  XIcon,
-} from 'lucide-react';
+import { CheckCircle2Icon, CheckIcon, ChevronDownIcon, ChevronUpIcon, XIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { Badge } from '@styles/components/ui/badge';
 import { Button } from '@styles/components/ui/button';
-import { ButtonGroup } from '@styles/components/ui/button-group';
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@styles/components/ui/card';
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@styles/components/ui/collapsible';
 import { ScrollArea } from '@styles/components/ui/scroll-area';
-import { Separator } from '@styles/components/ui/separator';
 
 import { ApplicationResponseDto, ApplicationStatus } from '@api/axios/application/types';
 import { useChangeApplicationStatusMutation } from '@api/query/application';
-
-import { parsePart } from '@common/utils/parse-userinfo';
 
 import ApplicantChallengerInfo from '@common/components/ApplicantChallengerInfo';
 
@@ -61,6 +46,7 @@ const ApplicantApplicationCard = ({
     application.status,
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false);
 
   const { mutate: changeStatus } = useChangeApplicationStatusMutation(projectId, application.id);
 
@@ -118,10 +104,20 @@ const ApplicantApplicationCard = ({
 
         <ApplicationInfo id={application.id} createdAt={application.createdAt} />
 
-        {/*카드 헤더: 폼 제목과 설명, 합불 여부를 표시함*/}
-        <ScrollArea className={'h-100'}>
-          <ApplicationAnswerList application={application} />
-        </ScrollArea>
+        <Collapsible open={isCollapsibleOpen} onOpenChange={setIsCollapsibleOpen}>
+          <CollapsibleTrigger asChild>
+            <Button variant={'outline'} className={'my-3 h-13 w-full text-xl font-semibold'}>
+              {isCollapsibleOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              {isCollapsibleOpen ? '응답 숨기기' : '응답 보기'}
+            </Button>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            {/*카드 헤더: 폼 제목과 설명, 합불 여부를 표시함*/}
+            <ScrollArea className={'h-100'}>
+              <ApplicationAnswerList application={application} />
+            </ScrollArea>
+          </CollapsibleContent>
+        </Collapsible>
 
         {/*제출 상태일 경우 합불 처리 가능하도록 버튼 배치*/}
         {application.status === 'SUBMITTED' && (
@@ -139,7 +135,7 @@ const ApplicantApplicationCard = ({
               variant={'default'}
               onClick={() => handleButtonClick('CONFIRMED')}
             >
-              <CheckCircle2Icon className="mr-1 h-10 w-10" />
+              <CheckIcon className="mr-1 h-10 w-10" />
               합격
             </Button>
           </div>

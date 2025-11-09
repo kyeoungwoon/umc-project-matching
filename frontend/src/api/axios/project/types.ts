@@ -34,6 +34,7 @@ export interface ProjectResponseDto {
   title: string;
   description: string;
   link: string;
+  bannerImage?: string;
   planId: string;
   partTo: ProjectToDto[];
   projectForms: FormResponseDto[];

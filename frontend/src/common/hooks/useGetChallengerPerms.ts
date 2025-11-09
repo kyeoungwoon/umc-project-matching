@@ -34,9 +34,11 @@ export const useIsAdminChallenger = () => {
 export const useRedirectToHomeIfNotPlan = () => {
   const router = useRouter();
   const isPlanChallenger = useIsPlanChallenger();
+  const isAdminChallenger = useIsAdminChallenger();
 
   useEffect(() => {
     if (!isPlanChallenger) {
+      if (isAdminChallenger) return;
       toast.error('접근 권한이 없습니다.', {
         description: 'Plan 파트만 접근할 수 있습니다.',
       });

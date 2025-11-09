@@ -143,9 +143,8 @@ export class FormController {
   }
 
   @ApiOperation({
-    summary: 'Form에 질문을 생성합니다. 기존 질문들은 모두 삭제 처리됩니다.',
-    description:
-      '기존 질문들에 대한 응답은 어떻게 될지 고민을 해봐야 해요. 난 몰?루',
+    summary: 'Form에 질문을 생성합니다. 기존 질문들은 Soft Delete 처리됩니다.',
+    description: '기존 질문들은 이제 어떡하지? 난 몰?루',
   })
   @ApiParam({
     name: 'projectId',

@@ -19,6 +19,7 @@ import { ALS, AlsInstance } from '@modules/als/constants/als.constants';
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { Public } from '@modules/auth/decorators/public.decorator';
 import { ErrorType, ErrorTypeDto } from '@modules/test/dto/error.dto';
+import { EnvGuard } from '@common/guards/env.guard';
 
 @Controller({
   version: VERSION_NEUTRAL,
@@ -27,6 +28,7 @@ import { ErrorType, ErrorTypeDto } from '@modules/test/dto/error.dto';
 @Public()
 @ApiTags(API_TAGS.TEST)
 @ApiBearerAuth()
+@UseGuards(EnvGuard)
 export class ErrorTestController {
   constructor() {}
 

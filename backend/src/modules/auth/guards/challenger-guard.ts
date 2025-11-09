@@ -47,6 +47,10 @@ export class ChallengerRoleGuard implements CanActivate {
       hasPermission = await this.userService.isAdminChallenger(userId);
     } else if (requiredRole === CHALLENGER_ROLE.PLAN) {
       hasPermission = await this.userService.isPlanChallenger(userId);
+      if (!hasPermission) {
+        // ADMIN 권한도 함께 체크
+        hasPermission = await this.userService.isAdminChallenger(userId);
+      }
     }
 
     // 6. 권한이 없으면 접근 거부(403) 에러를 발생시킵니다.

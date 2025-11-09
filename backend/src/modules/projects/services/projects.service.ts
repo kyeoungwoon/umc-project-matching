@@ -73,6 +73,47 @@ export class ProjectsService {
     });
   }
 
+  async createBulkProjectWithCreatedEntity(data: CreateProjectRequestDto[]) {
+    // data 안의 planId는 challenger table에서 umsbChallengerId 확인 후에 그거로 바꿔치기 해야 함.
+    const updatedData = await Promise.all(
+      data.map(async (project) => {
+        const { planId } = project;
+        const challenger = await this.mongo.challenger.findFirst({
+          where: {
+            umsbChallengerId: planId,
+          },
+        });
+
+        if (!challenger) {
+          throw new NotFoundException(
+            `챌린저 아이디 ${planId}에 해당하는 챌린저가 존재하지 않습니다.`,
+          );
+        }
+
+        return {
+          ...project,
+          planId: challenger.id,
+        };
+      }),
+    );
+
+    const ret: any[] = [];
+
+    for (const proj of updatedData) {
+      const createdProject = await this.mongo.project.create({
+        data: proj,
+      });
+
+      ret.push(createdProject);
+    }
+
+    return ret;
+
+    // return this.mongo.project.createMany({
+    //   data: updatedData,
+    // });
+  }
+
   // 프로젝트 수정
   async updateProjectByProjectId(
     projectId: string,

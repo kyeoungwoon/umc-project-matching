@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
+import SidebarSkeleton from '@skeletons/components/SidebarSkeleton';
 import { clsx } from 'clsx';
 import { ChevronsUpDownIcon, LogOutIcon } from 'lucide-react';
 
@@ -35,15 +36,12 @@ import { useGetMyInfoQuery } from '@api/query/user';
 import { ROUTES } from '@common/constants/routes.constants';
 import { getMenusByPart } from '@common/constants/sidebar-menu.constants';
 
-import { parsePart } from '@common/utils/parse-userinfo';
-
 import SchoolLogo from '@common/components/SchoolImage';
 import UpmsLogo from '@common/components/upms/UpmsLogo';
 
 import { useClearUser, useGetUser, useSetUserInfo } from '@features/auth/hooks/useAuthStore';
 
 import PartIcon from '@features/auth/components/PartIcon';
-import HeaderSkeleton from '@features/home/components/HeaderSkeleton';
 
 const UpmsSideBar = () => {
   const { data, isLoading } = useGetMyInfoQuery();
@@ -67,7 +65,7 @@ const UpmsSideBar = () => {
   };
 
   if (isLoading || !data) {
-    return <Skeleton />;
+    return <SidebarSkeleton />;
   }
 
   return (

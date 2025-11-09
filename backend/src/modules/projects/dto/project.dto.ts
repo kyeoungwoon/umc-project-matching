@@ -1,14 +1,21 @@
 import {
   ArrayNotEmpty,
+  IsArray,
   IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
 import { UserPartEnum } from '@generated/prisma/mongodb';
 import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
+import { CreateFormRequestDto } from '@modules/projects/dto/form.dto';
+import {
+  CreateFormQuestionDto,
+  CreateQuestionRequestDto,
+} from '@modules/projects/dto/form-question.dto';
 
 export class ProjectToDto {
   @IsNotEmpty()
@@ -35,6 +42,10 @@ export class CreateProjectRequestDto {
   @IsNotEmpty()
   @IsString()
   link!: string;
+
+  @IsOptional()
+  @IsString()
+  bannerImage?: string;
 
   @IsNotEmpty()
   @IsString()
@@ -85,4 +96,24 @@ export class LinkPreviewResponseDto {
     example: 'https://www.notion.so/images/meta/default.png',
   })
   imageUrl?: string;
+}
+
+export class BulkCreateLeoProjectFormsRequestDto {
+  @IsArray()
+  @ArrayNotEmpty()
+  @Type(() => CreateProjectRequestDto)
+  @ValidateNested({ each: true })
+  projects!: CreateProjectRequestDto[];
+
+  @IsArray()
+  @ArrayNotEmpty()
+  @Type(() => CreateFormRequestDto)
+  @ValidateNested({ each: true })
+  forms!: CreateFormRequestDto[];
+
+  @IsArray()
+  @ArrayNotEmpty()
+  @Type(() => CreateQuestionRequestDto)
+  @ValidateNested({ each: true })
+  questions!: CreateQuestionRequestDto[];
 }

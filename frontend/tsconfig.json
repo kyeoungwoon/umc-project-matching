@@ -43,6 +43,7 @@
       "@common/*": ["common/*"],
       // features 계층
       "@features/*": ["features/*"],
+      "@skeletons/*": ["skeletons/*"],
       // 앱 엔트리 계층
       "@app/*": ["app/*"],
       "@/*": ["*"]

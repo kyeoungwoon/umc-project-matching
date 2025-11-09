@@ -113,6 +113,7 @@ model Project {
   title       String
   description String
   link        String // Notion 등 상세 기획 링크
+  bannerImage String?     @map("banner_image") // 배너 이미지 URL
   planId      String      @map("plan_id") @db.ObjectId // ProjectPlan 모델 참조
   partTo      ProjectTo[] @map("part_to") // 각 파트별 목표 인원
 

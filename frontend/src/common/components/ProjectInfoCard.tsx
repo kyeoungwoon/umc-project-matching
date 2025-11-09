@@ -18,13 +18,14 @@ import { useUpdateProjectMutation } from '@api/query/project';
 
 import { ROUTES } from '@common/constants/routes.constants';
 
-import { useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
+import { useIsAdminChallenger, useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
 
 export interface ProjectCardProps {
   id: string;
   planId: string;
   name: string;
   description: string;
+  bannerImage?: string;
   partAndTo: ProjectPartAndTo[];
   link?: string;
 }
@@ -41,8 +42,9 @@ export enum ProjectCardMode {
 }
 
 const ProjectInfoCard = (props: ProjectCardProps) => {
-  const { id, name, description, link, partAndTo, planId } = props;
+  const { id, name, description, link, partAndTo, planId, bannerImage } = props;
   const isPlan = useIsPlanChallenger(planId);
+  const isAdmin = useIsAdminChallenger();
 
   const [mode, setMode] = useState<ProjectCardMode>(ProjectCardMode.VIEW);
   const [editedProject, setEditedProject] = useState<UpdateProjectRequestDto>({
@@ -117,7 +119,7 @@ const ProjectInfoCard = (props: ProjectCardProps) => {
     <div className="rounded-22pxr flex w-full max-w-100 min-w-80 flex-col justify-between border border-gray-200 bg-white">
       {/*상단 이미지 영역*/}
       <Image
-        src={'https://placehold.co/600x400'}
+        src={bannerImage || 'https://placehold.co/600x400'}
         alt={'프로젝트 로고'}
         width={800}
         height={200}
@@ -157,7 +159,7 @@ const ProjectInfoCard = (props: ProjectCardProps) => {
           })}
         </div>
 
-        {isPlan && (
+        {(isPlan || isAdmin) && (
           <Button
             variant={'outline'}
             onClick={handleEditModeClick}

@@ -19,5 +19,6 @@ export const projectResponseToCardProps = (project: ProjectResponseDto): Project
     description: project.description,
     link: project.link,
     partAndTo: partAndTo,
+    bannerImage: project.bannerImage || undefined,
   };
 };

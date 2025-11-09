@@ -15,7 +15,7 @@ import { ROUTES } from '@common/constants/routes.constants';
 
 import { projectResponseToCardProps } from '@common/utils/project-response-card';
 
-import { useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
+import { useIsAdminChallenger, useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 import ProjectInfoCard from '@common/components/ProjectInfoCard';
@@ -27,6 +27,9 @@ const ProjectFormsPage = () => {
   const projectId = params.projectId as string;
   const { data: project, isLoading } = useGetProjectDetailsQuery(projectId);
   const isPlanChallenger = useIsPlanChallenger();
+  const isAdminChallenger = useIsAdminChallenger();
+
+  const hasPerms = isPlanChallenger || isAdminChallenger;
 
   const router = useRouter();
   const handleCreateFormClick = () => {
@@ -54,7 +57,7 @@ const ProjectFormsPage = () => {
           </div>
         </div>
         <>
-          {isPlanChallenger && (
+          {hasPerms && (
             <Button className={'mt-4'} onClick={handleCreateFormClick}>
               지원용 폼 생성하기
             </Button>
@@ -107,7 +110,7 @@ const ProjectFormsPage = () => {
                 이 프로젝트에 제출 가능한 폼이 존재하지 않습니다.
               </p>
               <p className="text-muted-foreground text-sm">
-                {isPlanChallenger
+                {hasPerms
                   ? '폼을 생성해서 지원자를 모집해 보세요.'
                   : 'Plan 챌린저에게 폼 생성을 요구해주세요.'}
               </p>

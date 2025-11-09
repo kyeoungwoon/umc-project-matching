@@ -11,6 +11,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@styles/co
 import { Checkbox } from '@styles/components/ui/checkbox';
 import { Input } from '@styles/components/ui/input';
 import { Label } from '@styles/components/ui/label';
+import { Textarea } from '@styles/components/ui/textarea';
 
 import { useCreateFormMutation } from '@api/query/form';
 import { useGetAllMatchingRoundQuery } from '@api/query/matching-round';
@@ -83,7 +84,7 @@ const CreateProjectFormPage = () => {
           </div>
           <div className={'flex flex-col gap-y-2'}>
             <Label htmlFor="form-description">폼 설명</Label>
-            <Input
+            <Textarea
               id="form-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}

@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   Req,
@@ -13,6 +14,7 @@ import {
   ApiBearerAuth,
   ApiCookieAuth,
   ApiOperation,
+  ApiParam,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
@@ -30,6 +32,7 @@ import {
   CreateBulkUserRequestDto,
   CreateUserRequestDto,
 } from '@modules/users/dto/user.dto';
+import { EnvGuard } from '@common/guards/env.guard';
 
 @Controller({
   version: VERSION_NEUTRAL,
@@ -37,12 +40,28 @@ import {
 })
 @ApiTags(API_TAGS.TEST)
 @ApiBearerAuth()
+@UseGuards(EnvGuard)
 export class AuthTestController {
   constructor(
     private readonly authService: AuthService,
     private readonly tokenAuthService: TokenAuthService,
     private readonly configService: ConfigService,
   ) {}
+
+  @ApiTags(API_TAGS.TEST)
+  @Post('drop/:type')
+  @ApiParam({
+    name: 'type',
+    description: '삭제할 데이터 타입',
+    enum: ['school', 'challenger', 'all'],
+  })
+  @ApiOperation({
+    summary: '[TEST] 모든 데이터 삭제',
+  })
+  @Public()
+  dropAll(@Param() params: { type: string }) {
+    return this.authService.dropTableByType(params.type);
+  }
 
   @ApiOperation({
     summary: '[TEST] 토큰 검증 API',
@@ -60,10 +79,49 @@ export class AuthTestController {
     };
   }
 
+  @ApiTags(API_TAGS.TEST)
+  @Post('test/school/init')
+  @ApiOperation({
+    summary: '[TEST] 9th Leo 지부 학교 추가',
+    description: '기존 학교는 모두 drop 처리합니다.',
+  })
+  @Public()
+  async initSchool() {
+    await this.authService.dropTableByType('school');
+
+    const res = Promise.all([
+      this.authService.createSchool('중앙대학교', 'cau'),
+      this.authService.createSchool('동덕여자대학교', 'dongduk'),
+      this.authService.createSchool('한국외국어대학교', 'hufs'),
+      this.authService.createSchool('이화여자대학교', 'ewha'),
+      this.authService.createSchool('단국대학교', 'danguk'),
+    ]);
+
+    return res;
+  }
+
+  @ApiTags(API_TAGS.TEST)
+  @Post('test/user/init')
+  @ApiOperation({
+    summary: '[TEST] 유령 박경운 생성',
+  })
+  @Public()
+  async createSampleUser() {
+    return await this.authService.register({
+      name: '박경운',
+      nickname: '하늘',
+      school: 'cau',
+      studentId: crypto.randomUUID().slice(0, 8),
+      password: 'password123',
+      part: 'ADMIN',
+    });
+  }
+
   @ApiOperation({
     summary: '[TEST] Leo user bulk create',
     description: '명단은 제공해야 합니다.',
   })
+  @Public()
   @Post('register/bulk')
   async createBulkUser(@Body() body: CreateBulkUserRequestDto) {
     return this.authService.registerBulk(body.users);

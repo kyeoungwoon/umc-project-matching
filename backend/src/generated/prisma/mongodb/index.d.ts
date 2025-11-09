@@ -4178,6 +4178,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     link: string | null
+    bannerImage: string | null
     planId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4188,6 +4189,7 @@ export namespace Prisma {
     title: string | null
     description: string | null
     link: string | null
+    bannerImage: string | null
     planId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -4198,6 +4200,7 @@ export namespace Prisma {
     title: number
     description: number
     link: number
+    bannerImage: number
     planId: number
     createdAt: number
     updatedAt: number
@@ -4210,6 +4213,7 @@ export namespace Prisma {
     title?: true
     description?: true
     link?: true
+    bannerImage?: true
     planId?: true
     createdAt?: true
     updatedAt?: true
@@ -4220,6 +4224,7 @@ export namespace Prisma {
     title?: true
     description?: true
     link?: true
+    bannerImage?: true
     planId?: true
     createdAt?: true
     updatedAt?: true
@@ -4230,6 +4235,7 @@ export namespace Prisma {
     title?: true
     description?: true
     link?: true
+    bannerImage?: true
     planId?: true
     createdAt?: true
     updatedAt?: true
@@ -4313,6 +4319,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    bannerImage: string | null
     planId: string
     createdAt: Date
     updatedAt: Date
@@ -4340,6 +4347,7 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     link?: boolean
+    bannerImage?: boolean
     planId?: boolean
     partTo?: boolean | ProjectToDefaultArgs<ExtArgs>
     createdAt?: boolean
@@ -4357,12 +4365,13 @@ export namespace Prisma {
     title?: boolean
     description?: boolean
     link?: boolean
+    bannerImage?: boolean
     planId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "link" | "planId" | "partTo" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "description" | "link" | "bannerImage" | "planId" | "partTo" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     projectMember?: boolean | Project$projectMemberArgs<ExtArgs>
     projectForms?: boolean | Project$projectFormsArgs<ExtArgs>
@@ -4382,6 +4391,7 @@ export namespace Prisma {
       title: string
       description: string
       link: string
+      bannerImage: string | null
       planId: string
       createdAt: Date
       updatedAt: Date
@@ -4786,6 +4796,7 @@ export namespace Prisma {
     readonly title: FieldRef<"Project", 'String'>
     readonly description: FieldRef<"Project", 'String'>
     readonly link: FieldRef<"Project", 'String'>
+    readonly bannerImage: FieldRef<"Project", 'String'>
     readonly planId: FieldRef<"Project", 'String'>
     readonly createdAt: FieldRef<"Project", 'DateTime'>
     readonly updatedAt: FieldRef<"Project", 'DateTime'>
@@ -11432,6 +11443,7 @@ export namespace Prisma {
     title: 'title',
     description: 'description',
     link: 'link',
+    bannerImage: 'bannerImage',
     planId: 'planId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -11865,6 +11877,7 @@ export namespace Prisma {
     title?: StringFilter<"Project"> | string
     description?: StringFilter<"Project"> | string
     link?: StringFilter<"Project"> | string
+    bannerImage?: StringNullableFilter<"Project"> | string | null
     planId?: StringFilter<"Project"> | string
     partTo?: ProjectToCompositeListFilter | ProjectToObjectEqualityInput[]
     createdAt?: DateTimeFilter<"Project"> | Date | string
@@ -11879,6 +11892,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     link?: SortOrder
+    bannerImage?: SortOrder
     planId?: SortOrder
     partTo?: ProjectToOrderByCompositeAggregateInput
     createdAt?: SortOrder
@@ -11896,6 +11910,7 @@ export namespace Prisma {
     title?: StringFilter<"Project"> | string
     description?: StringFilter<"Project"> | string
     link?: StringFilter<"Project"> | string
+    bannerImage?: StringNullableFilter<"Project"> | string | null
     planId?: StringFilter<"Project"> | string
     partTo?: ProjectToCompositeListFilter | ProjectToObjectEqualityInput[]
     createdAt?: DateTimeFilter<"Project"> | Date | string
@@ -11910,6 +11925,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     link?: SortOrder
+    bannerImage?: SortOrder
     planId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11926,6 +11942,7 @@ export namespace Prisma {
     title?: StringWithAggregatesFilter<"Project"> | string
     description?: StringWithAggregatesFilter<"Project"> | string
     link?: StringWithAggregatesFilter<"Project"> | string
+    bannerImage?: StringNullableWithAggregatesFilter<"Project"> | string | null
     planId?: StringWithAggregatesFilter<"Project"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
@@ -12534,6 +12551,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    bannerImage?: string | null
     partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -12547,6 +12565,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    bannerImage?: string | null
     planId: string
     partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
@@ -12559,6 +12578,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    bannerImage?: NullableStringFieldUpdateOperationsInput | string | null
     partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12571,6 +12591,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    bannerImage?: NullableStringFieldUpdateOperationsInput | string | null
     planId?: StringFieldUpdateOperationsInput | string
     partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12584,6 +12605,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    bannerImage?: string | null
     planId: string
     partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
@@ -12594,6 +12616,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    bannerImage?: NullableStringFieldUpdateOperationsInput | string | null
     partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12603,6 +12626,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    bannerImage?: NullableStringFieldUpdateOperationsInput | string | null
     planId?: StringFieldUpdateOperationsInput | string
     partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -13323,6 +13347,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     link?: SortOrder
+    bannerImage?: SortOrder
     planId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13333,6 +13358,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     link?: SortOrder
+    bannerImage?: SortOrder
     planId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -13343,6 +13369,7 @@ export namespace Prisma {
     title?: SortOrder
     description?: SortOrder
     link?: SortOrder
+    bannerImage?: SortOrder
     planId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -14687,6 +14714,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    bannerImage?: string | null
     partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14699,6 +14727,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    bannerImage?: string | null
     partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -14810,6 +14839,7 @@ export namespace Prisma {
     title?: StringFilter<"Project"> | string
     description?: StringFilter<"Project"> | string
     link?: StringFilter<"Project"> | string
+    bannerImage?: StringNullableFilter<"Project"> | string | null
     planId?: StringFilter<"Project"> | string
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
@@ -15113,6 +15143,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    bannerImage?: string | null
     partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15125,6 +15156,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    bannerImage?: string | null
     planId: string
     partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
@@ -15218,6 +15250,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    bannerImage?: NullableStringFieldUpdateOperationsInput | string | null
     partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15229,6 +15262,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    bannerImage?: NullableStringFieldUpdateOperationsInput | string | null
     planId?: StringFieldUpdateOperationsInput | string
     partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15401,6 +15435,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    bannerImage?: string | null
     partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -15413,6 +15448,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    bannerImage?: string | null
     planId: string
     partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
@@ -15483,6 +15519,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    bannerImage?: NullableStringFieldUpdateOperationsInput | string | null
     partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -15494,6 +15531,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    bannerImage?: NullableStringFieldUpdateOperationsInput | string | null
     planId?: StringFieldUpdateOperationsInput | string
     partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16008,6 +16046,7 @@ export namespace Prisma {
     title: string
     description: string
     link: string
+    bannerImage?: string | null
     partTo?: XOR<ProjectToListCreateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -16050,6 +16089,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    bannerImage?: NullableStringFieldUpdateOperationsInput | string | null
     partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16061,6 +16101,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    bannerImage?: NullableStringFieldUpdateOperationsInput | string | null
     partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -16072,6 +16113,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     link?: StringFieldUpdateOperationsInput | string
+    bannerImage?: NullableStringFieldUpdateOperationsInput | string | null
     partTo?: XOR<ProjectToListUpdateEnvelopeInput, ProjectToCreateInput> | ProjectToCreateInput[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

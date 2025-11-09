@@ -1,19 +1,18 @@
 'use client';
 
-import { InfoIcon } from 'lucide-react';
+import HeaderSkeleton from '@skeletons/components/HeaderSkeleton';
 import { toast } from 'sonner';
 
 import { useGetCurrentMatchingRoundQuery } from '@api/query/matching-round';
 
-import DefaultSkeleton from '@common/components/DefaultSkeleton';
-
 import MatchingRoundInfoCard from '@features/matching/components/matching-info/MatchingRoundInfoCard';
+import NoCurrentMatchingRound from '@features/matching/components/matching-info/NoCurrentMatchingRound';
 
 const MatchingRoundAnnouncementCard = () => {
   const { data, isLoading, isError, error } = useGetCurrentMatchingRoundQuery();
 
   if (isLoading) {
-    return <DefaultSkeleton />;
+    return <HeaderSkeleton />;
   }
 
   const getMatchingStatus = () => {
@@ -34,30 +33,14 @@ const MatchingRoundAnnouncementCard = () => {
   const status = getMatchingStatus();
 
   if (isError) {
-    console.error('매칭 차수 조회 오류:', error);
+    // console.error('매칭 차수 조회 오류:', error);
     toast.error('현재 매칭 차수를 불러오지 못했습니다.', {
       richColors: true,
       description: '무언가 잘못되었어요 ...',
     });
   }
 
-  return (
-    <>
-      {data ? (
-        <MatchingRoundInfoCard data={data} />
-      ) : (
-        <div className="flex flex-col items-center justify-center py-8 text-center">
-          <div className="bg-muted mb-3 flex h-12 w-12 items-center justify-center rounded-full">
-            <InfoIcon className="text-muted-foreground h-6 w-6" />
-          </div>
-          <p className="text-muted-foreground text-sm font-medium">
-            현재 진행 중인 매칭 차수가 없습니다.
-          </p>
-          <p className="text-muted-foreground text-xs">다음 매칭 차수를 기다려주세요</p>
-        </div>
-      )}
-    </>
-  );
+  return <>{data ? <MatchingRoundInfoCard data={data} /> : <NoCurrentMatchingRound />}</>;
 };
 
 export default MatchingRoundAnnouncementCard;
