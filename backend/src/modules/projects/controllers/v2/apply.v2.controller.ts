@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  LoggerService,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { API_TAGS } from '@common/constants/api-tags.constants';
 import { ProjectsService } from '@modules/projects/services/projects.service';
@@ -8,6 +17,7 @@ import { ApplyService } from '@modules/projects/services/apply.service';
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { UsersService } from '@modules/users/services/users.service';
 import { ApplyToProjectRequestDto } from '@modules/projects/dto/apply.dto';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Controller({
   path: 'projects',
@@ -23,14 +33,19 @@ export class ApplyControllerV2 {
     private readonly applyService: ApplyService,
     private readonly reqContext: RequestContextService,
     private readonly userService: UsersService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {}
 
   @Get('applications/my')
-  async getApplicationsV2(@Query('userId') userId: string) {}
+  async getApplicationsV2(@Query('userId') userId: string) {
+    return;
+  }
 
   @Get('application/:applicationId')
   async getApplicationV2() {
     // Implementation goes here
+    return;
   }
 
   @Post(':projectId/form/:formId/apply')
@@ -41,5 +56,11 @@ export class ApplyControllerV2 {
   ) {
     const userId = this.reqContext.getOrThrowUserId();
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
+
+    this.logger.log(
+      `USER_ID_${userId}_V2_PROJECT_APPLY_PROJECT_ID_${projectId}_FORM_ID_${formId}`,
+    );
+
+    return;
   }
 }

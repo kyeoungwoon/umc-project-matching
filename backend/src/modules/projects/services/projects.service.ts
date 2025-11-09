@@ -18,6 +18,7 @@ import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import string from 'zod/src/v3/benchmarks/string';
 
 @Injectable()
 export class ProjectsService {
@@ -138,7 +139,30 @@ export class ProjectsService {
     return this.mongo.project.findMany({
       include: {
         projectForms: true,
-        projectMember: true,
+        projectMember: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                nickname: true,
+                introduction: true,
+                part: true,
+                challengerSchool: true,
+              },
+            },
+          },
+        },
+        projectPlan: {
+          select: {
+            id: true,
+            name: true,
+            nickname: true,
+            introduction: true,
+            part: true,
+            challengerSchool: true,
+          },
+        },
       },
     });
   }
@@ -159,7 +183,20 @@ export class ProjectsService {
       },
       include: {
         projectForms: true,
-        projectMember: true,
+        projectMember: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                nickname: true,
+                introduction: true,
+                part: true,
+                challengerSchool: true,
+              },
+            },
+          },
+        },
       },
     });
 

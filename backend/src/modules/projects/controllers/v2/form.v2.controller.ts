@@ -1,4 +1,11 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Inject,
+  LoggerService,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { API_TAGS } from '@common/constants/api-tags.constants';
 import { ProjectsService } from '@modules/projects/services/projects.service';
@@ -10,6 +17,7 @@ import { CreateFormRequestV2Dto } from '@modules/projects/dto/form.dto';
 import { FormServiceV2 } from '@modules/projects/services/v2/form.v2.service';
 import { plainToInstance } from 'class-transformer';
 import { FormCreateResponseDto } from '@modules/projects/dto/v2/form-create-response.dto';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Controller({
   path: 'projects',
@@ -25,6 +33,8 @@ export class FormControllerV2 {
     private readonly applyService: ApplyService,
     private readonly reqContext: RequestContextService,
     private readonly userService: UsersService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {}
 
   @ApiOperation({
@@ -45,6 +55,11 @@ export class FormControllerV2 {
     );
 
     const newForm = await this.formV2.createForm(projectId, body);
+
+    this.logger.log(
+      `USER_ID_${userId}_V2_CREATE_FORM_ID_${newForm.id}_PROJECT_ID_${projectId}`,
+    );
+
     return plainToInstance(FormCreateResponseDto, newForm, {
       excludeExtraneousValues: true,
     });

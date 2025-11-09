@@ -35,8 +35,8 @@ import {
 import { EnvGuard } from '@common/guards/env.guard';
 
 @Controller({
-  version: VERSION_NEUTRAL,
-  path: 'auth/test',
+  version: '1',
+  path: 'test/auth',
 })
 @ApiTags(API_TAGS.TEST)
 @ApiBearerAuth()

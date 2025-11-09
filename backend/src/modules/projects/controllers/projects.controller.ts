@@ -79,7 +79,7 @@ export class ProjectsController {
     summary: '다수의 새로운 프로젝트 생성',
     description: '관리자만 가능합니다.',
   })
-  @CheckChallengerRole(CHALLENGER_ROLE.PLAN)
+  @CheckChallengerRole(CHALLENGER_ROLE.ADMIN)
   async createMultipleProject(@Body() body: CreateMultipleProjectRequestDto) {
     return this.projectService.createMultipleProject(body.projects);
   }

@@ -160,6 +160,7 @@ export class FormService {
     isPlanChallenger: boolean = false,
   ) {
     const form = await this.getOrThrowFormByFormId(formId, isPlanChallenger);
+    // console.log('form:', form);
 
     const availableMatchingRounds = await this.mongo.matchingRound.findMany({
       where: {
@@ -169,7 +170,7 @@ export class FormService {
       },
     });
 
-    console.log('availableMatchingRounds:', availableMatchingRounds);
+    // console.log('availableMatchingRounds:', availableMatchingRounds);
 
     return { ...form, availableMatchingRounds };
   }

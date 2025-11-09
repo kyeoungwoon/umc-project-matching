@@ -12264,7 +12264,7 @@ export namespace Prisma {
 
   export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    applicantId_formId_matchingRoundId?: ApplicationApplicantIdFormIdMatchingRoundIdCompoundUniqueInput
+    applicantId_matchingRoundId?: ApplicationApplicantIdMatchingRoundIdCompoundUniqueInput
     AND?: ApplicationWhereInput | ApplicationWhereInput[]
     OR?: ApplicationWhereInput[]
     NOT?: ApplicationWhereInput | ApplicationWhereInput[]
@@ -12278,7 +12278,7 @@ export namespace Prisma {
     form?: XOR<FormScalarRelationFilter, FormWhereInput>
     matchingRound?: XOR<MatchingRoundScalarRelationFilter, MatchingRoundWhereInput>
     formAnswers?: FormAnswerListRelationFilter
-  }, "id" | "applicantId_formId_matchingRoundId">
+  }, "id" | "applicantId_matchingRoundId">
 
   export type ApplicationOrderByWithAggregationInput = {
     id?: SortOrder
@@ -13622,9 +13622,8 @@ export namespace Prisma {
     isNot?: MatchingRoundWhereInput
   }
 
-  export type ApplicationApplicantIdFormIdMatchingRoundIdCompoundUniqueInput = {
+  export type ApplicationApplicantIdMatchingRoundIdCompoundUniqueInput = {
     applicantId: string
-    formId: string
     matchingRoundId: string
   }
 

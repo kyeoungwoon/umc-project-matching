@@ -13,7 +13,7 @@ import { Button } from '@styles/components/ui/button';
 import { Input } from '@styles/components/ui/input';
 import { Label } from '@styles/components/ui/label';
 
-import { UpdateProjectRequestDto } from '@api/axios/project/types';
+import { FilteredUserInfoDto, UpdateProjectRequestDto } from '@api/axios/project/types';
 import { useUpdateProjectMutation } from '@api/query/project';
 
 import { ROUTES } from '@common/constants/routes.constants';
@@ -23,6 +23,7 @@ import { useIsAdminChallenger, useIsPlanChallenger } from '@common/hooks/useGetC
 export interface ProjectCardProps {
   id: string;
   planId: string;
+  projectPlan?: FilteredUserInfoDto;
   name: string;
   description: string;
   bannerImage?: string;
@@ -42,7 +43,7 @@ export enum ProjectCardMode {
 }
 
 const ProjectInfoCard = (props: ProjectCardProps) => {
-  const { id, name, description, link, partAndTo, planId, bannerImage } = props;
+  const { id, name, description, link, partAndTo, planId, bannerImage, projectPlan } = props;
   const isPlan = useIsPlanChallenger(planId);
   const isAdmin = useIsAdminChallenger();
 
@@ -127,7 +128,12 @@ const ProjectInfoCard = (props: ProjectCardProps) => {
       />
 
       <div className={'flex h-full flex-col items-start gap-y-3 p-6'}>
-        <p className="text-2xl font-semibold">{name}</p>
+        <div className={'flex w-full flex-row items-end justify-between'}>
+          <p className="text-3xl font-semibold">{name}</p>
+          <div className={'text-15pxr flex flex-row gap-x-2 text-gray-700'}>
+            {projectPlan?.challengerSchool.name} {projectPlan?.nickname}/{projectPlan?.name}
+          </div>
+        </div>
         <p className="text-muted-foreground text-md">{description}</p>
 
         {/*TODO: 안내멘트, 삭제 필요*/}

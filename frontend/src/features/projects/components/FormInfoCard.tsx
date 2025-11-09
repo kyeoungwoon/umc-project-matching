@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { Badge } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@styles/components/ui/button';
@@ -17,6 +18,8 @@ import { useGetAllMatchingRoundQuery, useGetMatchingRound } from '@api/query/mat
 import { ROUTES } from '@common/constants/routes.constants';
 
 import { useIsAdminChallenger, useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
+
+import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
 interface FormCardProps {
   form: FormResponseDto;
@@ -78,35 +81,35 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
     router.push(ROUTES.PROJECTS.VIEW_APPLICANTS(projectId, formId));
   };
 
+  if (isMatchingRoundInfoLoading) {
+    return <DefaultSkeleton />;
+  }
+
+  console.log(availableMatchingRounds);
+
   return (
-    <Card>
-      <CardHeader>
+    <div className={'flex flex-col gap-y-4 rounded-lg border border-gray-200 px-8 py-6'}>
+      <div>
         {mode === FormCardMode.NORMAL ? (
           <>
             <div className={'flex flex-col gap-y-5'}>
-              <div className={'flex flex-row items-center justify-start gap-2'}>
-                <span className={'w-30'}>지원 폼 이름</span>
-                <CardTitle className="text-xl font-semibold">{form.title}</CardTitle>
-              </div>
-              <div className={'flex flex-row items-start justify-start gap-2'}>
-                <span className={'w-30'}>폼에 대한 설명</span>
-                <p className="mb-2 text-lg whitespace-pre-line text-gray-800">
-                  {form.description || '설명 없음'}
-                </p>
-              </div>
+              <p className="text-4xl font-bold">{form.title}</p>
+              <p className="mb-2 text-xl whitespace-pre-line text-gray-900">
+                {form.description || '설명 없음'}
+              </p>
 
-              <div className={'flex flex-row items-center gap-x-2 text-lg'}>
-                <span>지원 가능한 매칭 라운드 : </span>
-                {availableMatchingRounds.map((roundId, idx) => {
-                  const round = matchingRound?.find((mr) => mr.id === roundId);
-                  if (!round) return null;
-                  return (
-                    <span key={roundId} className="text-muted-foreground text-lg">
-                      {isMatchingRoundInfoLoading ? '로딩 중...' : round.name}{' '}
-                    </span>
-                  );
-                })}
-              </div>
+              {/*<div className={'flex flex-row items-center gap-x-2 text-lg'}>*/}
+              {/*  <span>지원 가능한 매칭 라운드 : </span>*/}
+              {/*  {availableMatchingRounds.map((roundId, idx) => {*/}
+              {/*    const round = matchingRound?.find((mr) => mr.id === roundId);*/}
+              {/*    if (!round) return null;*/}
+              {/*    return (*/}
+              {/*      <Badge key={roundId} className="text-muted-foreground text-lg">*/}
+              {/*        {isMatchingRoundInfoLoading ? '로딩 중...' : round.name}{' '}*/}
+              {/*      </Badge>*/}
+              {/*    );*/}
+              {/*  })}*/}
+              {/*</div>*/}
             </div>
           </>
         ) : (
@@ -121,29 +124,47 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
             />
           </>
         )}
-      </CardHeader>
-      <CardContent>
-        {/* TODO: Plan 챌린저에 대한 권한 처리 필요 */}
-        <ButtonGroup className="mt-4 flex w-full flex-row justify-end">
-          {(isPlan || isAdmin) && (
-            <>
-              <Button onClick={handleToggleMode} variant="outline">
+      </div>
+      <div className="mt-4 flex w-full flex-col justify-between">
+        {/*Plan이거나 관리자일 땐 질문 수정 및 지원자 보기 버튼 활성화 (관리자는 아직 TODO)*/}
+        {(isPlan || isAdmin) && (
+          <>
+            <ButtonGroup className={'w-full'}>
+              <Button
+                className={'mt-4 h-14 flex-grow-1 py-4 text-2xl'}
+                onClick={handleToggleMode}
+                variant="outline"
+              >
                 {mode === FormCardMode.NORMAL ? '제목/설명 수정' : '저장하기'}
               </Button>
-              <Button onClick={handleManageForm} variant="outline">
+              <Button
+                className={'mt-4 h-14 flex-grow-1 py-4 text-2xl'}
+                onClick={handleManageForm}
+                variant="outline"
+              >
                 질문 수정하기
               </Button>
-              <Button onClick={handleViewApplicants} variant="outline">
-                지원자 보기
-              </Button>
-            </>
-          )}
-
-          <Button onClick={handleApplyToForm} variant="default">
+            </ButtonGroup>
+            <Button
+              className={'mt-4 h-14 flex-grow-1 py-4 text-2xl'}
+              onClick={handleViewApplicants}
+              variant="default"
+            >
+              지원자 보기
+            </Button>
+          </>
+        )}
+        {/*일반 사용자는 무조건 지원하기만 가능*/}
+        {!isPlan && (
+          <Button
+            onClick={handleApplyToForm}
+            className={'mt-4 h-14 w-full py-4 text-2xl'}
+            variant="default"
+          >
             지원하기
           </Button>
-        </ButtonGroup>
-      </CardContent>
-    </Card>
+        )}
+      </div>
+    </div>
   );
 };

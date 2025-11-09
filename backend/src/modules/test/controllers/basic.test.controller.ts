@@ -22,7 +22,7 @@ import {
 import { EnvGuard } from '@common/guards/env.guard';
 
 @Controller({
-  version: VERSION_NEUTRAL,
+  version: '1',
   path: 'test/basic',
 })
 @ApiTags(API_TAGS.TEST)

@@ -49,7 +49,7 @@ export class TokenAuthService {
    * @param userId
    */
   async validateJwtUser(userId: string) {
-    console.log('Validating JWT user with ID:', userId);
+    // console.log('Validating JWT user with ID:', userId);
     const user = await this.userService.getUserByUserId(userId);
 
     return {

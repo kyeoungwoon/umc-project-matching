@@ -1,4 +1,4 @@
-import { Part } from '@api/axios/auth/types';
+import { Part, SchoolInfo, SchoolResponseDto } from '@api/axios/auth/types';
 import { FormResponseDto } from '@api/axios/form/types';
 
 // Request DTOs
@@ -25,8 +25,16 @@ export interface UpdateProjectRequestDto {
 // Response DTOs
 export interface ProjectMemberInProjectResponseDto {
   id: string;
-  userId: string;
-  part: Part;
+  user?: FilteredUserInfoDto;
+}
+
+export interface FilteredUserInfoDto {
+  id: string;
+  name: string;
+  nickname: string;
+  introduction: string;
+  challengerSchool: SchoolInfo;
+  part?: Part;
 }
 
 export interface ProjectResponseDto {
@@ -39,6 +47,7 @@ export interface ProjectResponseDto {
   partTo: ProjectToDto[];
   projectForms: FormResponseDto[];
   projectMember: ProjectMemberInProjectResponseDto[];
+  projectPlan?: FilteredUserInfoDto;
   createdAt: string;
   updatedAt: string;
 }

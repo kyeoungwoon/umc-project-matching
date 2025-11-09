@@ -22,7 +22,7 @@ import { ErrorType, ErrorTypeDto } from '@modules/test/dto/error.dto';
 import { EnvGuard } from '@common/guards/env.guard';
 
 @Controller({
-  version: VERSION_NEUTRAL,
+  version: '1',
   path: 'test/error',
 })
 @Public()

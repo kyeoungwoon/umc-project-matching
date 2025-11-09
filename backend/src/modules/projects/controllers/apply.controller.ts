@@ -5,6 +5,8 @@ import {
   Delete,
   ForbiddenException,
   Get,
+  Inject,
+  LoggerService,
   NotFoundException,
   Param,
   Post,
@@ -34,6 +36,7 @@ import {
   CheckChallengerRole,
 } from '@common/decorators/challenger-role.decorator';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Controller({
   path: 'projects/applications',
@@ -50,6 +53,8 @@ export class ApplyController {
     private readonly applyService: ApplyService,
     private readonly reqContext: RequestContextService,
     private readonly userService: UsersService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
   ) {}
 
   // 내가 작성한 지원서 모두 보기
@@ -61,6 +66,7 @@ export class ApplyController {
   async getMyApplications() {
     const userId = this.reqContext.getOrThrowUserId();
 
+    this.logger.log(`USER_ID_${userId}_GET_MY_APPLICATIONS`);
     return this.applyService.getMyApplications(userId);
   }
 
@@ -94,11 +100,19 @@ export class ApplyController {
     const form = await this.formService.getOrThrowFormByFormId(formId);
 
     // 현재 매칭 차수가 폼의 지원 가능 차수에 포함되어 있는지 확인
-    if (form.availableMatchingRounds.includes(currentRound.id)) {
-      throw new ForbiddenException(
-        '현재 매칭 차수에서는 해당 지원서로 지원할 수 없습니다.',
-      );
-    }
+    // TODO: 추후 적용
+    // if (!form.availableMatchingRounds.includes(currentRound.id)) {
+    //   this.logger.warn(
+    //     `USER_ID_${userId}_FORBIDDEN_APPLY_INVALID_MATCHING_ROUND_TO_PROJECT_ID_${projectId}_FORM_ID_${formId}_CURRENT_ROUND_ID_${currentRound.id}`,
+    //   );
+    //   throw new ForbiddenException(
+    //     '현재 매칭 차수에서는 해당 지원서로 지원할 수 없습니다.',
+    //   );
+    // }
+
+    this.logger.log(
+      `USER_ID_${userId}_PROJECT_APPLY_PROJECT_ID_${projectId}_FORM_ID_${formId}`,
+    );
 
     return this.applyService.applyToProjectByFormId(
       formId,
@@ -152,6 +166,10 @@ export class ApplyController {
       applicationId,
     );
 
+    this.logger.warn(
+      `USER_ID_${userId}_DELETE_APPLICATION_ID_${applicationId}`,
+    );
+
     return this.applyService.deleteApplication(applicationId);
   }
 
@@ -176,6 +194,10 @@ export class ApplyController {
 
     // 지원서가 제출 상태인 경우에만 변경 가능, 이미 합격/불합격된 지원서는 변경 불가
     await this.applyService.throwIfApplicationStatusNotSubmitted(applicationId);
+
+    this.logger.warn(
+      `USER_ID_${userId}_CHANGE_APPLICATION_STATUS_APPLICATION_ID_${applicationId}_NEW_STATUS_${body.status}`,
+    );
 
     return this.applyService.changeApplicationStatus(
       applicationId,

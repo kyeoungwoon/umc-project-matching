@@ -23,6 +23,12 @@ import { BulkCreateLeoProjectFormsRequestDto } from '@modules/projects/dto/proje
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Public } from '@modules/auth/decorators/public.decorator';
 import { EnvGuard } from '@common/guards/env.guard';
+import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
+import {
+  CHALLENGER_ROLE,
+  CheckChallengerRole,
+} from '@common/decorators/challenger-role.decorator';
+import { CreateBulkMatchingRoundsDto } from '@modules/projects/dto/apply.dto';
 
 @Controller({
   path: 'test/projects',
@@ -30,7 +36,8 @@ import { EnvGuard } from '@common/guards/env.guard';
 })
 @ApiTags(API_TAGS.TEST)
 @ApiBearerAuth()
-@UseGuards(EnvGuard)
+@UseGuards(ChallengerRoleGuard, EnvGuard)
+@CheckChallengerRole(CHALLENGER_ROLE.ADMIN)
 export class ProjectTestController {
   constructor(
     private readonly projectService: ProjectsService,
@@ -49,7 +56,7 @@ export class ProjectTestController {
     description:
       '여러 Leo 지부 프로젝트와 각 프로젝트에 해당하는 폼 및 질문들을 일괄 생성합니다.',
   })
-  @Post('bulk-projects')
+  @Post('init/bulk')
   async bulkCreateSampleProjects(
     @Body() body: BulkCreateLeoProjectFormsRequestDto,
   ) {
@@ -75,15 +82,14 @@ export class ProjectTestController {
           `Creating form and questions for project ID: ${prj.id}`,
         );
 
-        const createdPrj = await this.projectService.createProject(prj);
-        this.logger.log(`Created project ID: ${createdPrj.id}`);
+        this.logger.log(`Created project ID: ${prj.id}`);
 
         const formForPrj = await this.formService.createForm(
-          createdPrj.id,
+          prj.id,
           forms[idx],
         );
         this.logger.log(
-          `Created form ID: ${formForPrj.id} for project ID: ${createdPrj.id}`,
+          `Created form ID: ${formForPrj.id} for project ID: ${prj.id}`,
         );
 
         await this.formService.addFormQuestions(
@@ -91,7 +97,7 @@ export class ProjectTestController {
           questions[idx].questions,
         );
         this.logger.log(
-          `Added questions to form ID: ${formForPrj.id} for project ID: ${createdPrj.id}`,
+          `Added questions to form ID: ${formForPrj.id} for project ID: ${prj.id}`,
         );
       }),
     );
@@ -99,7 +105,17 @@ export class ProjectTestController {
     return 'Bulk creation of projects, forms, and questions completed.';
   }
 
-  @Post('matching-round')
+  @Post('init/leo')
+  @ApiOperation({
+    summary: '[테스트용] Leo 지부 내 프로젝트 INIT',
+  })
+  @Public()
+  async createLeoProjects() {
+    await this.authService.dropAllProjects();
+    return this.projectService.createMultipleProject(leoProjects);
+  }
+
+  @Post('matching-round/sample')
   @ApiOperation({
     summary: '[테스트용] 매칭 라운드 생성',
     description:
@@ -117,13 +133,15 @@ export class ProjectTestController {
     });
   }
 
-  @Post('leo-projects')
   @ApiOperation({
-    summary: '[테스트용] Leo 지부 내 프로젝트 INIT',
+    summary: '[테스트용] 매칭 라운드 일괄 생성',
   })
-  @Public()
-  async createLeoProjects() {
-    await this.authService.dropAllProjects();
-    return this.projectService.createMultipleProject(leoProjects);
+  @Post('matching-rounds/bulk')
+  async createBulkMatchingRounds(@Body() body: CreateBulkMatchingRoundsDto) {
+    for (const round of body.matchingRounds) {
+      const createdRound =
+        await this.matchingRoundService.createMatchingRound(round);
+      this.logger.log(`MATCHING_ROUND_BULK_CREATE_${createdRound.id}`);
+    }
   }
 }

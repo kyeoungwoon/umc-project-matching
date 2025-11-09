@@ -70,6 +70,18 @@ export class CreateMatchingRoundDto extends OmitType(MatchingRoundDto, [
   'id',
 ]) {}
 
+export class CreateBulkMatchingRoundsDto {
+  @ArrayNotEmpty()
+  @ValidateNested({ each: true })
+  @Type(() => CreateMatchingRoundDto)
+  @ApiProperty({
+    description: '생성할 매칭 라운드들의 배열',
+    type: [CreateMatchingRoundDto],
+    required: true,
+  })
+  matchingRounds!: CreateMatchingRoundDto[];
+}
+
 export class ChangeApplicationStatus {
   @IsNotEmpty()
   @IsEnum(ApplicationStatusEnum)
