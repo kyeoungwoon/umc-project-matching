@@ -17,12 +17,10 @@ const ProjectListPage = () => {
   const projects = data.map(projectResponseToCardProps);
 
   return (
-    <div className="flex w-full flex-col items-center justify-center">
-      <div className={'min-w-700pxr max-w-1000pxr flex flex-col justify-center gap-y-4 pt-5'}>
-        {projects.map((proj, idx) => (
-          <ProjectCard key={idx} {...proj} />
-        ))}
-      </div>
+    <div className="grid w-full grid-cols-1 gap-6 p-10 md:grid-cols-2 lg:grid-cols-3">
+      {projects.map((proj, idx) => (
+        <ProjectCard key={idx} {...proj} />
+      ))}
     </div>
   );
 };

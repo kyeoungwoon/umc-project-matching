@@ -2,17 +2,16 @@
 
 import { useState } from 'react';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 import { useQueryClient } from '@tanstack/react-query';
 
 import { toast } from 'sonner';
 
-import { Badge } from '@styles/components/ui/badge';
 import { Button } from '@styles/components/ui/button';
-import { ButtonGroup } from '@styles/components/ui/button-group';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@styles/components/ui/card';
 import { Input } from '@styles/components/ui/input';
+import { Label } from '@styles/components/ui/label';
 
 import { UpdateProjectRequestDto } from '@api/axios/project/types';
 import { useUpdateProjectMutation } from '@api/query/project';
@@ -88,101 +87,96 @@ const ProjectCard = (props: ProjectCardProps) => {
     });
   };
 
+  if (mode === ProjectCardMode.EDIT) {
+    return (
+      <>
+        <Input
+          value={editedProject.title}
+          onChange={(e) => setEditedProject((prev) => ({ ...prev, title: e.target.value }))}
+          className="text-xl font-bold"
+        />
+        <Input
+          value={editedProject.description}
+          onChange={(e) => setEditedProject((prev) => ({ ...prev, description: e.target.value }))}
+          className="text-muted-foreground mb-2 text-lg"
+        />
+        <Input
+          value={editedProject.link}
+          onChange={(e) => setEditedProject((prev) => ({ ...prev, link: e.target.value }))}
+          className="text-muted-foreground mb-2 text-lg"
+        />
+        <Button size={'sm'} variant={'outline'} onClick={handleSaveClick}>
+          수정 완료
+        </Button>
+      </>
+    );
+  }
+
   return (
-    <Card className="w-full rounded-xl p-4">
-      <CardHeader>
-        {mode === ProjectCardMode.VIEW ? (
-          <>
-            <div className="grid grid-cols-[8rem_1fr] gap-x-4 gap-y-2">
-              <span className="font-semibold">프로젝트명</span>
-              <CardTitle className="text-xl font-bold">{name}</CardTitle>
+    <div className="rounded-22pxr flex w-full min-w-80 max-w-100 flex-col justify-between border border-gray-200 bg-white">
+      {/*상단 이미지 영역*/}
+      <Image
+        src={'https://placehold.co/600x400'}
+        alt={'프로젝트 로고'}
+        width={800}
+        height={200}
+        className={'rounded-t-22pxr h-48 w-full bg-gray-200 object-cover'}
+      />
 
-              <span className="font-semibold">한줄 설명</span>
-              <p className="text-muted-foreground text-md">{description}</p>
-            </div>
-          </>
-        ) : (
-          <>
-            <Input
-              value={editedProject.title}
-              onChange={(e) => setEditedProject((prev) => ({ ...prev, title: e.target.value }))}
-              className="text-xl font-bold"
-            />
-            <Input
-              value={editedProject.description}
-              onChange={(e) =>
-                setEditedProject((prev) => ({ ...prev, description: e.target.value }))
-              }
-              className="text-muted-foreground mb-2 text-lg"
-            />
-            <Input
-              value={editedProject.link}
-              onChange={(e) => setEditedProject((prev) => ({ ...prev, link: e.target.value }))}
-              className="text-muted-foreground mb-2 text-lg"
-            />
-          </>
-        )}
-      </CardHeader>
-      <CardContent className="">
+      <div className={'flex flex-col items-start gap-y-4 p-6'}>
+        <p className="text-2xl font-semibold">{name}</p>
+        <p className="text-muted-foreground text-md">{description}</p>
+      </div>
+      <div className="">
         {/*TODO: 안내멘트, 삭제 필요*/}
-        <div className="text-muted-foreground mb-2 text-sm">
-          <span className={'text-black'}>파트별 TO | </span>
-          형식 : (현재 지원자 수) TO
-        </div>
+        {/*<div className="text-muted-foreground mb-2 text-sm">*/}
+        {/*  <span className={'text-black'}>파트별 TO | </span>*/}
+        {/*  형식 : (현재 지원자 수) TO*/}
+        {/*</div>*/}
 
-        <div className="flex flex-wrap items-center gap-x-2">
+        <div className="flex w-full flex-col items-center gap-y-2">
           {partAndTo.map((partTo, index) => {
             const { part, currentTo, maxTo } = partTo;
             return (
-              <div key={index} className="flex items-center gap-2">
-                <Badge variant="outline" className="text-gray-700">
-                  {part}
-                </Badge>
-                <span className="text-muted-foreground tracking-wide">
-                  ({currentTo}){maxTo}
-                </span>
+              <div key={index} className="flex w-full flex-row items-center justify-between px-5">
+                <div className={'flex flex-row items-center text-sm text-gray-800'}>
+                  <span className="min-w-25">{part}</span>
+                  <span className={'tracking-wide'}>
+                    {currentTo}/{maxTo}
+                  </span>
+                </div>
+                <Label
+                  className={`font-semibold tracking-wide ${currentTo >= maxTo ? 'text-red-500' : 'text-green-600'}`}
+                >
+                  {currentTo >= maxTo ? '모집 완료' : '모집 중'}
+                </Label>
               </div>
             );
           })}
         </div>
-      </CardContent>
-      <CardFooter className="flex justify-end">
-        {mode === ProjectCardMode.EDIT ? (
-          <Button size={'sm'} variant={'outline'} onClick={handleSaveClick}>
-            수정 완료
+      </div>
+      <div className="my-5 flex h-12 w-full flex-row gap-x-2 px-4">
+        {isPlan && (
+          <Button
+            variant={'outline'}
+            onClick={handleEditModeClick}
+            className={'text-md h-full flex-1'}
+          >
+            프로젝트 정보 수정
           </Button>
-        ) : (
-          <ButtonGroup>
-            {isPlan && (
-              <Button
-                hidden={!isPlan}
-                size={'sm'}
-                variant={'outline'}
-                onClick={handleEditModeClick}
-              >
-                프로젝트 정보 수정
-              </Button>
-            )}
-            <Button
-              onClick={handleViewMoreClick}
-              size={'sm'}
-              variant={'outline'}
-              className={'text-semibold text-sm'}
-            >
-              기획안 보러가기
-            </Button>
-            <Button
-              onClick={handleApplyClick}
-              size={'sm'}
-              variant={'outline'}
-              className={'text-semibold text-sm'}
-            >
-              지원 가능한 폼 보기
-            </Button>
-          </ButtonGroup>
         )}
-      </CardFooter>
-    </Card>
+        <Button
+          onClick={handleViewMoreClick}
+          variant={'default'}
+          className={'text-md h-full flex-1'}
+        >
+          기획안 자세히 보기
+        </Button>
+        <Button onClick={handleApplyClick} variant={'outline'} className={'text-md h-full flex-1'}>
+          지원하기
+        </Button>
+      </div>
+    </div>
   );
 };
 
