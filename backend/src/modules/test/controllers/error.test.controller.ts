@@ -3,23 +3,19 @@ import {
   Controller,
   Get,
   Inject,
+  LoggerService,
   Query,
   UseGuards,
-  VERSION_NEUTRAL,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { CustomException } from '@common/codes/custom.exception';
 import { CommonErrorCode } from '@common/codes/error/common.error.code';
-import { CommonSuccessCode } from '@common/codes/success/common.success.code';
 import { API_TAGS } from '@common/constants/api-tags.constants';
-import { CustomResponse } from '@common/decorators/response/custom-response.decorator';
-
-import { ALS, AlsInstance } from '@modules/als/constants/als.constants';
-import { RequestContextService } from '@modules/als/services/request-context.service';
 import { Public } from '@modules/auth/decorators/public.decorator';
 import { ErrorType, ErrorTypeDto } from '@modules/test/dto/error.dto';
 import { EnvGuard } from '@common/guards/env.guard';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Controller({
   version: '1',
@@ -30,7 +26,10 @@ import { EnvGuard } from '@common/guards/env.guard';
 @ApiBearerAuth()
 @UseGuards(EnvGuard)
 export class ErrorTestController {
-  constructor() {}
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
+  ) {}
 
   @Get('exception')
   @ApiOperation({
@@ -49,5 +48,21 @@ export class ErrorTestController {
     } else {
       return 'type 쿼리를 normal, custom, http 중 하나로 설정해주세요.';
     }
+  }
+
+  @Get('logger-test')
+  @ApiOperation({
+    summary: 'Logger 테스트 API',
+  })
+  loggerTest() {
+    this.logger.log('This is a log message', 'LogContext');
+    this.logger.warn('This is a warning message', 'WarnContext');
+    this.logger.error(
+      '에러가 발생했습니다',
+      new Error('This is an error message'),
+      'ErrorContext',
+    );
+
+    return;
   }
 }

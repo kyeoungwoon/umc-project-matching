@@ -37,27 +37,46 @@ const consoleTransport = new winston.transports.Console({
 });
 
 // 파일 로그(Daily Rotate) 전송기 설정
-
 const dailyRotateFileTransport = new DailyRotateFile({
-  level: 'info',
+  level: 'silly',
   dirname: 'logs',
   filename: '%DATE%.log',
   datePattern: 'YYYY-MM-DD',
   zippedArchive: true,
-  maxSize: '20m',
-  maxFiles: '14d',
+  // 로그 파일 최대 크기 및 보관 기간은 우선 설정하지 않습니다.
+  // maxSize: '20m',
+  // maxFiles: '14d',
+  // 과거 설정
+  // format: winston.format.combine(
+  //   winston.format.timestamp(),
+  //   formatMessage(),
+  //   winston.format.json(),
+  // ),
   format: winston.format.combine(
+    // 1. 에러 로깅 시 스택 트레이스 자동 포함
+    winston.format.errors({ stack: true }),
+
+    // 2. 타임스탬프 추가
     winston.format.timestamp(),
-    formatMessage(),
+
+    // 3. NestJS Context 등 메타데이터를 최상위 필드로 추출
+    // (this.logger.log('메시지', '컨텍스트') 에서 '컨텍스트'를 분리)
+    winston.format.metadata({
+      fillExcept: ['message', 'level', 'timestamp', 'stack'],
+    }),
+
+    // 4. (강력 추천) 'timestamp' 필드명을 '@timestamp'로 변경 (ELK 표준)
+    winston.format((info) => {
+      info['@timestamp'] = info.timestamp; // ELK 기본 타임스탬프 필드명
+      delete info.timestamp; // 기존 'timestamp' 필드 제거
+      return info;
+    })(),
+
+    // 5. 최종적으로 모든 것을 JSON으로 직렬화
     winston.format.json(),
   ),
 });
 
-// nest-winston에서 사용할 설정 객체
 export const winstonLoggerOptions: winston.LoggerOptions = {
-  transports: [
-    consoleTransport,
-    // 프로덕션 환경일 때만 파일 로그를 추가합니다.
-    dailyRotateFileTransport,
-  ],
+  transports: [consoleTransport, dailyRotateFileTransport],
 };
