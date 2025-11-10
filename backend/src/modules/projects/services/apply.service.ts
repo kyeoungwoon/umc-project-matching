@@ -122,7 +122,7 @@ export class ApplyService {
   }
 
   /**
-   * applicationId로 지원서를 조회합니다.
+   * 지원서를 조회합니다.
    */
   async getApplication(applicationId: string) {
     const application = await this.mongo.application.findUnique({
@@ -142,7 +142,7 @@ export class ApplyService {
   }
 
   /**
-   * applicationId로 지원서를 조회하고, 해당 지원서의 소유자가 userId와 일치하는지 확인.
+   * 지원서를 조회하고, 해당 지원서의 소유자가 제공된 userId와 일치하는지 확인합니다.
    */
   async isUserApplicationOwner(
     userId: string,
@@ -160,7 +160,7 @@ export class ApplyService {
   }
 
   /**
-   * 내부용, applicationId를 받아서 상태를 변경합니다.
+   * [내부용] 지원서 상태를 변경합니다. Validation이 존재하지 않습니다.
    */
   async changeApplicationStatus(
     applicationId: string,

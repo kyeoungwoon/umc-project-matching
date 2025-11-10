@@ -96,7 +96,7 @@ export class FormController {
   }
 
   @ApiOperation({
-    summary: 'formId에 해당하는 form의 정보를 조회',
+    summary: '폼 정보를 가져옵니다.',
     description: '',
   })
   @ApiParam({
@@ -118,16 +118,19 @@ export class FormController {
 
     const isPlanChallenger =
       await this.projectService.isUserProjectPlanByProjectId(userId, projectId);
+    const isAdminChallenger = await this.userService.isAdminChallenger(userId);
+
+    const GET_APPLICATIONS = isPlanChallenger || isAdminChallenger;
 
     return this.formService.getFormWithAvailableMatchingRounds(
       formId,
-      isPlanChallenger,
+      GET_APPLICATIONS,
     );
   }
 
   @ApiOperation({
-    summary: 'formId로 폼을 삭제',
-    description: '',
+    summary: '[ADMIN] 폼을 삭제합니다.',
+    description: 'Soft Delete로 개선하기 전까지 ADMIN 전용입니다..',
   })
   @ApiParam({
     name: 'projectId',
@@ -139,7 +142,7 @@ export class FormController {
   })
   @ApiOkResponseCommon(FormResponseDto)
   @Delete('project/:projectId/form/:formId')
-  @CheckChallengerRole(CHALLENGER_ROLE.PLAN)
+  @CheckChallengerRole(CHALLENGER_ROLE.ADMIN)
   async deleteProjectApplicationForm(
     @Param('formId') formId: string,
     @Param('projectId') projectId: string,

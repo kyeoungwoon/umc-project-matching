@@ -57,9 +57,8 @@ export class ApplyController {
     private readonly logger: LoggerService,
   ) {}
 
-  // 내가 작성한 지원서 모두 보기
   @ApiOperation({
-    summary: '내가 작성한 지원서 모두 보기',
+    summary: '로그인한 사용자가 작성한 모든 지원서를 조회합니다.',
     description: '',
   })
   @Get('/me')
@@ -71,7 +70,7 @@ export class ApplyController {
   }
 
   @ApiOperation({
-    summary: '프로젝트 지원하기',
+    summary: '폼을 제출합니다. (프로젝트에 지원합니다)',
     description: '',
   })
   @ApiParam({
@@ -92,15 +91,14 @@ export class ApplyController {
     const userId = this.reqContext.getOrThrowUserId();
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
 
-    // 현재 차수가 지원서의 지원 가능 차수에 해당하는지 확인
-    const currentRound =
-      await this.matchingRoundService.getOrThrowCurrentProjectMatchingRound();
+    // TODO: 현재 차수가 지원서의 지원 가능 차수에 해당하는지 확인
+    // const currentRound =
+    //   await this.matchingRoundService.getOrThrowCurrentProjectMatchingRound();
 
     // 폼 정보를 가져옵니다, 없으면 throw error!
     const form = await this.formService.getOrThrowFormByFormId(formId);
 
-    // 현재 매칭 차수가 폼의 지원 가능 차수에 포함되어 있는지 확인
-    // TODO: 추후 적용
+    // TODO: 폼에 지원 가능한 차수가, 현재 차수와 일치하는지 확인합니다.
     // if (!form.availableMatchingRounds.includes(currentRound.id)) {
     //   this.logger.warn(
     //     `USER_ID_${userId}_FORBIDDEN_APPLY_INVALID_MATCHING_ROUND_TO_PROJECT_ID_${projectId}_FORM_ID_${formId}_CURRENT_ROUND_ID_${currentRound.id}`,
@@ -110,16 +108,54 @@ export class ApplyController {
     //   );
     // }
 
+    // 지원하고자 하는 프로젝트에 본인의 TO가 남아있는지 확인합니다.
+    const { part } = await this.userService.getUserByUserId(userId);
+    // 프로젝트의 TO를 가져옵니다.
+    const { partTo, projectMember } =
+      await this.projectService.getProjectById(projectId);
+
+    // 사용자의 파트에 대한 TO를 확인합니다. TO 정보가 없거나, 0 이하인 경우 에러
+    const currentPartTo = partTo.find((pt) => pt.part === part);
+
+    if (!currentPartTo || currentPartTo.to <= 0) {
+      this.logger.warn(
+        `USER_ID_${userId}_FORBIDDEN_APPLY_NO_TO_LEFT_PROJECT_ID_${projectId}_FORM_ID_${formId}_PART_${part}`,
+      );
+      throw new BadRequestException(
+        `해당 프로젝트에 ${part} 파트의 TO가 남아있지 않습니다.`,
+      );
+    }
+
+    // 현재 프로젝트 멤버들의 파트를 확인해서 해당 파트의 멤버 현황을 확인합니다.
+    const currentPartMemberCount = projectMember.filter(
+      (pm) => pm.user.part === part,
+    ).length;
+
+    // 사용자의 파트와 일치하는, 프로젝트 멤버가 TO와 같거나 많으면 지원할 수 없습니다.
+    if (currentPartMemberCount >= currentPartTo.to) {
+      this.logger.warn(
+        `USER_ID_${userId}_FORBIDDEN_APPLY_TO_FULL_PROJECT_ID_${projectId}_FORM_ID_${formId}_PART_${part}`,
+      );
+      throw new BadRequestException(
+        `해당 프로젝트의 ${part} 파트의 TO가 모두 찼습니다.`,
+      );
+    }
+
+    // DB의 Unique 제약으로 동일 차수 내 중복지원을 핸들링합니다.
+    await this.applyService.applyToProjectByFormId(
+      formId,
+      userId,
+      body.answers,
+    );
+
+    // unique만 통과하면 됩니다.
     this.logger.log(
       `USER_ID_${userId}_PROJECT_APPLY_V1_PROJECT_ID_${projectId}_FORM_ID_${formId}`,
       body.answers,
     );
 
-    return this.applyService.applyToProjectByFormId(
-      formId,
-      userId,
-      body.answers,
-    );
+    // 사용자가 동일 차수에 지원했는지 여부는 DB에서 unique 제약으로 확인합니다.
+    return;
   }
 
   @ApiOperation({
@@ -195,6 +231,8 @@ export class ApplyController {
 
     // 지원서가 제출 상태인 경우에만 변경 가능, 이미 합격/불합격된 지원서는 변경 불가
     await this.applyService.throwIfApplicationStatusNotSubmitted(applicationId);
+
+    // TODO: 프로젝트에, 상태를 변경하고자 하는 지원자의 파트에 대한 TO가 있는지 확인합니다.
 
     this.logger.warn(
       `USER_ID_${userId}_CHANGE_APPLICATION_STATUS_APPLICATION_ID_${applicationId}_NEW_STATUS_${body.status}`,
