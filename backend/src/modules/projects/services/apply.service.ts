@@ -223,6 +223,19 @@ export class ApplyService {
     });
   }
 
+  async getApplicationByUserAndMatchingRound(
+    userId: string,
+    matchingRoundId: string,
+  ) {
+    return this.mongo.application.findMany({
+      where: {
+        applicantId: userId,
+        matchingRoundId,
+      },
+      select: { id: true },
+    });
+  }
+
   async adminGetAllApplications() {
     return this.mongo.application.findMany({
       include: {

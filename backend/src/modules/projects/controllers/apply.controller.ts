@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Body,
+  ConflictException,
   Controller,
   Delete,
   ForbiddenException,
@@ -46,6 +47,8 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 @ApiBearerAuth()
 @UseGuards(ChallengerRoleGuard)
 export class ApplyController {
+  private LOG_CONTEXT = 'ApplyController';
+
   constructor(
     private readonly projectService: ProjectsService,
     private readonly formService: FormService,
@@ -65,7 +68,10 @@ export class ApplyController {
   async getMyApplications() {
     const userId = this.reqContext.getOrThrowUserId();
 
-    this.logger.log(`USER_ID_${userId}_GET_MY_APPLICATIONS`);
+    this.logger.log(
+      `본인이 작성한 지원서를 조회하였습니다. 챌린저 ${userId}`,
+      this.LOG_CONTEXT,
+    );
     return this.applyService.getMyApplications(userId);
   }
 
@@ -92,8 +98,25 @@ export class ApplyController {
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
 
     // TODO: 현재 차수가 지원서의 지원 가능 차수에 해당하는지 확인
-    // const currentRound =
-    //   await this.matchingRoundService.getOrThrowCurrentProjectMatchingRound();
+    const currentRound =
+      await this.matchingRoundService.getOrThrowCurrentProjectMatchingRound();
+
+    const currentRoundApplications =
+      await this.applyService.getApplicationByUserAndMatchingRound(
+        userId,
+        currentRound.id,
+      );
+
+    if (currentRoundApplications.length > 0) {
+      this.logger.warn(
+        `중복 지원 시도, 챌린저 ${userId} 프로젝트 ${projectId} 폼 ${formId} 현재 매칭 차수 ${currentRound.id}`,
+        this.LOG_CONTEXT,
+      );
+
+      throw new ConflictException(
+        '동일 차수 내 중복 지원은 허용되지 않습니다.',
+      );
+    }
 
     // 폼 정보를 가져옵니다, 없으면 throw error!
     const form = await this.formService.getOrThrowFormByFormId(formId);
@@ -119,7 +142,8 @@ export class ApplyController {
 
     if (!currentPartTo || currentPartTo.to <= 0) {
       this.logger.warn(
-        `USER_ID_${userId}_FORBIDDEN_APPLY_NO_TO_LEFT_PROJECT_ID_${projectId}_FORM_ID_${formId}_PART_${part}`,
+        `사용자의 파트가 프로젝트에 존재하지 않거나, 배정된 TO가 0 이하인 파트로 지원서를 제출하였습니다. 챌린저 ${userId} 프로젝트 ${projectId} 폼 ${formId} 지원 파트 ${part}`,
+        this.LOG_CONTEXT,
       );
       throw new BadRequestException(
         `해당 프로젝트에 ${part} 파트의 TO가 남아있지 않습니다.`,
@@ -134,24 +158,24 @@ export class ApplyController {
     // 사용자의 파트와 일치하는, 프로젝트 멤버가 TO와 같거나 많으면 지원할 수 없습니다.
     if (currentPartMemberCount >= currentPartTo.to) {
       this.logger.warn(
-        `USER_ID_${userId}_FORBIDDEN_APPLY_TO_FULL_PROJECT_ID_${projectId}_FORM_ID_${formId}_PART_${part}`,
+        `프로젝트의 TO가 가득 찬 프로젝트에 대한 지원 요청입니다. 챌린저 ${userId} 프로젝트 ${projectId} 폼 ${formId} 지원 파트 ${part}`,
+        this.LOG_CONTEXT,
       );
       throw new BadRequestException(
         `해당 프로젝트의 ${part} 파트의 TO가 모두 찼습니다.`,
       );
     }
 
-    // DB의 Unique 제약으로 동일 차수 내 중복지원을 핸들링합니다.
+    // DB 상에도 Unique Constraint를 적용하여 이중으로 확인합니다.
     await this.applyService.applyToProjectByFormId(
       formId,
       userId,
       body.answers,
     );
 
-    // unique만 통과하면 됩니다.
     this.logger.log(
-      `USER_ID_${userId}_PROJECT_APPLY_V1_PROJECT_ID_${projectId}_FORM_ID_${formId}`,
-      body.answers,
+      `프로젝트 지원 성공, 챌린저 ${userId} 프로젝트 ${projectId} 폼 ${formId} 폼 응답 ${JSON.stringify(body.answers)}`,
+      this.LOG_CONTEXT,
     );
 
     // 사용자가 동일 차수에 지원했는지 여부는 DB에서 unique 제약으로 확인합니다.
@@ -204,7 +228,7 @@ export class ApplyController {
     );
 
     this.logger.warn(
-      `USER_ID_${userId}_DELETE_APPLICATION_ID_${applicationId}`,
+      `지원서를 삭제하였습니다. 챌린저 ${userId} 삭제된 지원서 ${applicationId}`,
     );
 
     return this.applyService.deleteApplication(applicationId);
@@ -235,7 +259,7 @@ export class ApplyController {
     // TODO: 프로젝트에, 상태를 변경하고자 하는 지원자의 파트에 대한 TO가 있는지 확인합니다.
 
     this.logger.warn(
-      `USER_ID_${userId}_CHANGE_APPLICATION_STATUS_APPLICATION_ID_${applicationId}_NEW_STATUS_${body.status}`,
+      `지원서의 상태를 ${body.status} 로 변경합니다. 챌린저 ${userId} 지원서 ${applicationId}`,
     );
 
     return this.applyService.changeApplicationStatus(
