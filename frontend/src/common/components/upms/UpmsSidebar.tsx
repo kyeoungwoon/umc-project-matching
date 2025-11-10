@@ -87,10 +87,22 @@ const UpmsSideBar = () => {
                     return (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton asChild>
-                          <Link href={item.url} className={clsx(isSelected && 'bg-primary/5')}>
-                            <item.icon />
-                            <span>{item.title}</span>
-                          </Link>
+                          {item.isExternal ? ( // 외부 링크인 경우 a 태그로 처리
+                            <a
+                              href={item.url}
+                              className={clsx(isSelected && 'bg-primary/5')}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <item.icon />
+                              <span>{item.title}</span>
+                            </a>
+                          ) : (
+                            <Link href={item.url} className={clsx(isSelected && 'bg-primary/5')}>
+                              <item.icon />
+                              <span>{item.title}</span>
+                            </Link>
+                          )}
                         </SidebarMenuButton>
                       </SidebarMenuItem>
                     );
@@ -107,10 +119,10 @@ const UpmsSideBar = () => {
             <div className={'gap-8pxr flex w-full flex-row items-center px-3 py-2'}>
               <SchoolLogo schoolName={data.challengerSchool.handle} width={50} height={50} />
               <div className={'ml-2 flex w-full flex-col justify-between'}>
-                <Label className="text-xl text-black">
+                <Label className="whitespace-nowrap text-xl text-black">
                   {data.nickname}/{data.name}
                 </Label>
-                <Label className="text-md text-gray-700">
+                <Label className="whitespace-nowrap text-md text-gray-700">
                   {data.challengerSchool.name} <PartIcon className={'h-4 w-4'} part={data.part} />
                 </Label>
               </div>

@@ -27,6 +27,7 @@ export interface menuItem {
   icon: any;
   part?: Part;
   role?: 'USER' | 'ADMIN';
+  isExternal?: boolean; // 외부 링크 여부
 }
 
 export interface SidebarMenus {
@@ -125,16 +126,19 @@ const allMenus: SidebarMenus[] = [
         title: '문의 및 건의사항 구글 폼',
         icon: FilePenIcon,
         url: GOOGLE_FORM_URL,
+        isExternal: true,
       },
       {
         title: '팀 매칭 마스터시트',
         icon: SheetIcon,
         url: LEO_TEAM_MATCHING_MASTER_SHEET_URL,
+        isExternal: true,
       },
       {
         title: '9th Leo IDEAS',
         icon: SparklesIcon,
         url: LEO_9TH_IDEAS,
+        isExternal: true,
       },
     ],
   },
