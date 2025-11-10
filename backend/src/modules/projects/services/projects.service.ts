@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Inject,
   Injectable,
@@ -18,11 +19,12 @@ import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import string from 'zod/src/v3/benchmarks/string';
+import { UsersService } from '@modules/users/services/users.service';
 
 @Injectable()
 export class ProjectsService {
   constructor(
+    private readonly user: UsersService,
     private readonly mongo: MongoDBPrismaService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly httpService: HttpService,
@@ -207,6 +209,34 @@ export class ProjectsService {
     return project;
   }
 
+  async getCurrentAndMaxToByPartInProject(projectId: string, part: string) {
+    const project = await this.getProjectById(projectId);
+
+    // 사용자의 파트에 대한 TO를 확인합니다. TO 정보가 없으면 에러
+    const partToInfo = project.partTo.find((p) => p.part === part);
+    if (!partToInfo) {
+      throw new NotFoundException(
+        `프로젝트에 ${part} 파트가 존재하지 않습니다.`,
+      );
+    }
+
+    // 현재 프로젝트 멤버들의 파트를 확인해서 해당 파트의 멤버 현황을 확인합니다.
+    const currentTo = project.projectMember.filter(
+      (pm) => pm.user.part === part,
+    ).length;
+
+    if (currentTo >= partToInfo.to) {
+      throw new BadRequestException(
+        `해당 프로젝트의 ${part} 파트의 TO가 모두 찼습니다.`,
+      );
+    }
+
+    return {
+      currentTo,
+      maxTo: partToInfo.to,
+    };
+  }
+
   async isFormBelongsToProject(
     formId: string,
     projectId: string,
@@ -243,6 +273,8 @@ export class ProjectsService {
   async throwIfUserNotPlanByProjectId(userId: string, projectId: string) {
     const isPlan = await this.isUserProjectPlanByProjectId(userId, projectId);
     if (!isPlan) {
+      const isAdmin = await this.user.isAdminChallenger(userId);
+      if (isAdmin) return;
       throw new ForbiddenException('해당 프로젝트에 대한 권한이 없습니다.');
     }
   }

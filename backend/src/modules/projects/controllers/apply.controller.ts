@@ -1,14 +1,11 @@
 import {
-  BadRequestException,
   Body,
   ConflictException,
   Controller,
   Delete,
-  ForbiddenException,
   Get,
   Inject,
   LoggerService,
-  NotFoundException,
   Param,
   Post,
   UseGuards,
@@ -119,7 +116,7 @@ export class ApplyController {
     }
 
     // 폼 정보를 가져옵니다, 없으면 throw error!
-    const form = await this.formService.getOrThrowFormByFormId(formId);
+    // const form = await this.formService.getOrThrowFormByFormId(formId);
 
     // TODO: 폼에 지원 가능한 차수가, 현재 차수와 일치하는지 확인합니다.
     // if (!form.availableMatchingRounds.includes(currentRound.id)) {
@@ -133,38 +130,10 @@ export class ApplyController {
 
     // 지원하고자 하는 프로젝트에 본인의 TO가 남아있는지 확인합니다.
     const { part } = await this.userService.getUserByUserId(userId);
-    // 프로젝트의 TO를 가져옵니다.
-    const { partTo, projectMember } =
-      await this.projectService.getProjectById(projectId);
-
-    // 사용자의 파트에 대한 TO를 확인합니다. TO 정보가 없거나, 0 이하인 경우 에러
-    const currentPartTo = partTo.find((pt) => pt.part === part);
-
-    if (!currentPartTo || currentPartTo.to <= 0) {
-      this.logger.warn(
-        `사용자의 파트가 프로젝트에 존재하지 않거나, 배정된 TO가 0 이하인 파트로 지원서를 제출하였습니다. 챌린저 ${userId} 프로젝트 ${projectId} 폼 ${formId} 지원 파트 ${part}`,
-        this.LOG_CONTEXT,
-      );
-      throw new BadRequestException(
-        `해당 프로젝트에 ${part} 파트의 TO가 남아있지 않습니다.`,
-      );
-    }
-
-    // 현재 프로젝트 멤버들의 파트를 확인해서 해당 파트의 멤버 현황을 확인합니다.
-    const currentPartMemberCount = projectMember.filter(
-      (pm) => pm.user.part === part,
-    ).length;
-
-    // 사용자의 파트와 일치하는, 프로젝트 멤버가 TO와 같거나 많으면 지원할 수 없습니다.
-    if (currentPartMemberCount >= currentPartTo.to) {
-      this.logger.warn(
-        `프로젝트의 TO가 가득 찬 프로젝트에 대한 지원 요청입니다. 챌린저 ${userId} 프로젝트 ${projectId} 폼 ${formId} 지원 파트 ${part}`,
-        this.LOG_CONTEXT,
-      );
-      throw new BadRequestException(
-        `해당 프로젝트의 ${part} 파트의 TO가 모두 찼습니다.`,
-      );
-    }
+    await this.projectService.getCurrentAndMaxToByPartInProject(
+      projectId,
+      part,
+    );
 
     // DB 상에도 Unique Constraint를 적용하여 이중으로 확인합니다.
     await this.applyService.applyToProjectByFormId(
@@ -256,7 +225,14 @@ export class ApplyController {
     // 지원서가 제출 상태인 경우에만 변경 가능, 이미 합격/불합격된 지원서는 변경 불가
     await this.applyService.throwIfApplicationStatusNotSubmitted(applicationId);
 
-    // TODO: 프로젝트에, 상태를 변경하고자 하는 지원자의 파트에 대한 TO가 있는지 확인합니다.
+    // 프로젝트에, 상태를 변경하고자 하는 지원자의 파트에 대한 TO가 있는지 확인합니다.
+    // 지원 시점에도 확인하지만, 지원서 상태 변경 시에도 중복 확인 처리합니다.
+    // Zero Trust!
+    const application = await this.applyService.getApplication(applicationId);
+    await this.projectService.getCurrentAndMaxToByPartInProject(
+      projectId,
+      application.applicant.part,
+    );
 
     this.logger.warn(
       `지원서의 상태를 ${body.status} 로 변경합니다. 챌린저 ${userId} 지원서 ${applicationId}`,
