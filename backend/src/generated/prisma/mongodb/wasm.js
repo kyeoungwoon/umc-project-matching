@@ -197,6 +197,7 @@ exports.Prisma.ApplicationScalarFieldEnum = {
   formId: 'formId',
   status: 'status',
   matchingRoundId: 'matchingRoundId',
+  isDeleted: 'isDeleted',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
