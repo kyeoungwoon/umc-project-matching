@@ -222,4 +222,37 @@ export class ApplyService {
       },
     });
   }
+
+  async adminGetAllApplications() {
+    return this.mongo.application.findMany({
+      include: {
+        applicant: {
+          select: {
+            umsbChallengerId: true,
+            name: true,
+            nickname: true,
+            school: true,
+          },
+        },
+        form: {
+          select: {
+            title: true,
+            project: {
+              select: {
+                title: true,
+                projectPlan: {
+                  select: {
+                    umsbChallengerId: true,
+                    name: true,
+                    nickname: true,
+                    school: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 }
