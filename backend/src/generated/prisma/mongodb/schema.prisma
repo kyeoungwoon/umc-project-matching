@@ -233,7 +233,6 @@ model Application {
   formAnswers   FormAnswer[]
 
   // 하나의 프로젝트, 하나의 폼에는 차수별로 한 번만 지원 가능함
-  // 여러 개의 프로젝트에 지원서를 저장해도 ㄱㅊ긴 함
   @@unique([applicantId, matchingRoundId])
   @@map("applications")
 }
