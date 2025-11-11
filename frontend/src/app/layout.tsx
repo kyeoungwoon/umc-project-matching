@@ -20,7 +20,7 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'UPMS',
+  title: process.env.NODE_ENV === 'production' ? 'UPMS' : '[DEV] UPMS',
   description: 'UMC Project Matching Service',
 };
 

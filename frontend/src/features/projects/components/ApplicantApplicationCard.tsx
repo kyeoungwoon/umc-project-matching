@@ -3,6 +3,8 @@
 // Application Card Component
 import { useState } from 'react';
 
+import { useQueryClient } from '@tanstack/react-query';
+
 import { CheckCircle2Icon, CheckIcon, ChevronDownIcon, ChevronUpIcon, XIcon } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -18,12 +20,6 @@ import { ApplicationResponseDto, ApplicationStatus } from '@api/axios/applicatio
 import { useChangeApplicationStatusMutation } from '@api/query/application';
 
 import ApplicantChallengerInfo from '@common/components/ApplicantChallengerInfo';
-
-import {
-  getStatusBadgeVariant,
-  getStatusIcon,
-  getStatusText,
-} from '@features/projects/utils/get-by-application-status';
 
 import ApplicationStatusBadge from '@features/matching/components/ApplicationStatusBadge';
 import MatchingRoundBadge from '@features/matching/components/matching-info/MatchingRoundBadge';
@@ -49,6 +45,7 @@ const ApplicantApplicationCard = ({
   const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(false);
 
   const { mutate: changeStatus } = useChangeApplicationStatusMutation(projectId, application.id);
+  const queryClient = useQueryClient();
 
   const handleButtonClick = (newStatus: ApplicationStatus) => {
     setSelectedStatus(newStatus);
@@ -57,18 +54,27 @@ const ApplicantApplicationCard = ({
 
   const handleStatusChange = (newStatus: ApplicationStatus | null) => {
     if (!newStatus) throw new Error('pending 상태값이 null 입니다.');
+    const toKoreanStatus =
+      selectedStatus === 'CONFIRMED'
+        ? '합격'
+        : selectedStatus === 'REJECTED'
+          ? '불합격'
+          : '(알 수 없음)';
 
     changeStatus(
       { status: newStatus },
       {
-        onSuccess: () => {
-          toast.success(`지원서 ${selectedStatus} 처리에 성공하였습니다.`, {});
+        onSuccess: async () => {
+          toast.success(`지원서 ${toKoreanStatus} 처리에 성공하였습니다.`, {});
           setIsDialogOpen(false);
           setSelectedStatus(null);
+          await queryClient.invalidateQueries({
+            queryKey: ['form', projectId, application.formId],
+          });
         },
         onError: (err) => {
           setIsDialogOpen(false);
-          toast.error(`지원서 ${selectedStatus} 처리에 실패하였습니다.`, {
+          toast.error(`지원서 ${toKoreanStatus} 처리에 실패하였습니다.`, {
             description: err.message,
           });
         },

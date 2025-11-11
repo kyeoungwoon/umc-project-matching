@@ -69,44 +69,46 @@ jobs:
               fi
             fi
 
-            echo "=============================="
-            echo "📦 최신 Docker 이미지 Pull 시작"
-            echo "=============================="
-
-            docker pull ${{secrets.DOCKER_IMAGE_NAME_WITH_TAG}}
 
             echo "✅ Docker 이미지 Pull 완료"
 
             echo "=============================="
-            echo "🧹 기존 컨테이너 정리 시작"
-            echo "=============================="
-            docker stop ${{secrets.SERVER_DOCKER_CONATINER_NAME}} || true
-            docker rm ${{secrets.SERVER_DOCKER_CONATINER_NAME}} || true
-            echo "✅ 기존 컨테이너 정리 완료"
-
-            echo "=============================="
             echo "💪 env 파일 path로 이동"
             echo "=============================="
+
             echo "🫶 이동 전 디렉토리: $(pwd)"
             cd ${{ secrets.SERVER_APP_DIRECTORY }}
             echo "✅ 현재 디렉토리: $(pwd)"
 
             echo "💪 Creating .env files"
-            echo "${{ secrets.DOTENV_DEFAULT }}" | awk 'NF' >> .env
+            echo "${{ secrets.DOTENV_DEFAULT }}" | awk 'NF' > .env
             echo "✅ .env files created"
 
             echo "=============================="
             echo "🚀 새 컨테이너 실행 시작"
             echo "=============================="
-            docker run \
-              -d \
-              -p ${{secrets.SERVER_APP_PORT}}:9999 \
-              --name ${{secrets.SERVER_DOCKER_CONATINER_NAME}} \
-              --restart always \
-              --env-file .env \
-              ${{secrets.DOCKER_IMAGE_NAME_WITH_TAG}}
 
-            echo "✅ 새 컨테이너 실행 완료"
+            echo "📁 Compose 파일 경로: ${{ secrets.SERVER_DOCKER_COMPOSE_PATH }}"
+            if [ ! -f "${{ secrets.SERVER_DOCKER_COMPOSE_PATH }}" ]; then
+              echo "❌ Compose 파일을 찾을 수 없습니다: ${{ secrets.SERVER_DOCKER_COMPOSE_PATH }}"
+              exit 1
+            fi
+
+            echo "=============================="
+            echo "📦 최신 Docker 이미지 Pull 시작"
+            echo "=============================="
+
+            docker compose -f "${{ secrets.SERVER_DOCKER_COMPOSE_PATH }}" pull --ignore-pull-failures
+
+            echo "=============================="
+            echo "🔁 Docker Compose UP 시작"
+            echo "=============================="
+
+            docker compose -f "${{ secrets.SERVER_DOCKER_COMPOSE_PATH }}" up -d --remove-orphans
+
+            echo "=============================="
+            echo "✅ Docker Compose 실행 완료"
+            echo "=============================="
 
             docker logs ${{secrets.SERVER_DOCKER_CONATINER_NAME}} --timestamps --tail 100
 

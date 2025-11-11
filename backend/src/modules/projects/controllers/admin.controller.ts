@@ -3,7 +3,6 @@ import {
   Get,
   Inject,
   LoggerService,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
@@ -42,8 +41,11 @@ export class AdminController {
   ) {}
 
   // 지원 현황 - 시간 순, 프로젝트별, 인원 별, 최종합격 인원
-  @Get('/application/status')
-  async getApplicationStatus(@Query() query: any) {}
+  // TODO: 임시로 확인을 위해 모든 지원서를 가져옵니다.
+  @Get('/application/all')
+  async getAllApplications() {
+    return this.applyService.adminGetAllApplications();
+  }
 
   // 남는 자리 랜덤매칭 기능
   @Get('/projects/random-match')

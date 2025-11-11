@@ -11,9 +11,9 @@ const ApplicationStatusBadge = ({ status }: { status: string }) => {
     <div
       className={clsx(
         'rounded-md px-3 py-1 text-lg font-semibold',
-        status === 'REJECTED' && 'bg-red-300 text-gray-800',
-        status === 'CONFIRMED' && 'bg-green-400 text-white',
-        status === 'SUBMITTED' && 'bg-blue-400 text-white',
+        status === 'REJECTED' && 'bg-red-500 text-white',
+        status === 'CONFIRMED' && 'bg-green-500 text-white',
+        status === 'SUBMITTED' && 'bg-blue-500 text-white',
       )}
     >
       {getStatusText(status as ApplicationStatus)}

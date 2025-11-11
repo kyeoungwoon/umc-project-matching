@@ -9385,6 +9385,7 @@ export namespace Prisma {
     formId: string | null
     status: $Enums.ApplicationStatusEnum | null
     matchingRoundId: string | null
+    isDeleted: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9395,6 +9396,7 @@ export namespace Prisma {
     formId: string | null
     status: $Enums.ApplicationStatusEnum | null
     matchingRoundId: string | null
+    isDeleted: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9405,6 +9407,7 @@ export namespace Prisma {
     formId: number
     status: number
     matchingRoundId: number
+    isDeleted: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9417,6 +9420,7 @@ export namespace Prisma {
     formId?: true
     status?: true
     matchingRoundId?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9427,6 +9431,7 @@ export namespace Prisma {
     formId?: true
     status?: true
     matchingRoundId?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9437,6 +9442,7 @@ export namespace Prisma {
     formId?: true
     status?: true
     matchingRoundId?: true
+    isDeleted?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9520,6 +9526,7 @@ export namespace Prisma {
     formId: string
     status: $Enums.ApplicationStatusEnum
     matchingRoundId: string
+    isDeleted: boolean
     createdAt: Date
     updatedAt: Date
     _count: ApplicationCountAggregateOutputType | null
@@ -9547,6 +9554,7 @@ export namespace Prisma {
     formId?: boolean
     status?: boolean
     matchingRoundId?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     applicant?: boolean | ChallengerDefaultArgs<ExtArgs>
@@ -9564,11 +9572,12 @@ export namespace Prisma {
     formId?: boolean
     status?: boolean
     matchingRoundId?: boolean
+    isDeleted?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicantId" | "formId" | "status" | "matchingRoundId" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
+  export type ApplicationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "applicantId" | "formId" | "status" | "matchingRoundId" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["application"]>
   export type ApplicationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applicant?: boolean | ChallengerDefaultArgs<ExtArgs>
     form?: boolean | FormDefaultArgs<ExtArgs>
@@ -9591,6 +9600,7 @@ export namespace Prisma {
       formId: string
       status: $Enums.ApplicationStatusEnum
       matchingRoundId: string
+      isDeleted: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["application"]>
@@ -9994,6 +10004,7 @@ export namespace Prisma {
     readonly formId: FieldRef<"Application", 'String'>
     readonly status: FieldRef<"Application", 'ApplicationStatusEnum'>
     readonly matchingRoundId: FieldRef<"Application", 'String'>
+    readonly isDeleted: FieldRef<"Application", 'Boolean'>
     readonly createdAt: FieldRef<"Application", 'DateTime'>
     readonly updatedAt: FieldRef<"Application", 'DateTime'>
   }
@@ -11511,6 +11522,7 @@ export namespace Prisma {
     formId: 'formId',
     status: 'status',
     matchingRoundId: 'matchingRoundId',
+    isDeleted: 'isDeleted',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -12240,6 +12252,7 @@ export namespace Prisma {
     formId?: StringFilter<"Application"> | string
     status?: EnumApplicationStatusEnumFilter<"Application"> | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFilter<"Application"> | string
+    isDeleted?: BoolFilter<"Application"> | boolean
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     applicant?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
@@ -12254,6 +12267,7 @@ export namespace Prisma {
     formId?: SortOrder
     status?: SortOrder
     matchingRoundId?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     applicant?: ChallengerOrderByWithRelationInput
@@ -12272,6 +12286,7 @@ export namespace Prisma {
     formId?: StringFilter<"Application"> | string
     status?: EnumApplicationStatusEnumFilter<"Application"> | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFilter<"Application"> | string
+    isDeleted?: BoolFilter<"Application"> | boolean
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
     applicant?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
@@ -12286,6 +12301,7 @@ export namespace Prisma {
     formId?: SortOrder
     status?: SortOrder
     matchingRoundId?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ApplicationCountOrderByAggregateInput
@@ -12302,6 +12318,7 @@ export namespace Prisma {
     formId?: StringWithAggregatesFilter<"Application"> | string
     status?: EnumApplicationStatusEnumWithAggregatesFilter<"Application"> | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringWithAggregatesFilter<"Application"> | string
+    isDeleted?: BoolWithAggregatesFilter<"Application"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Application"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Application"> | Date | string
   }
@@ -12913,6 +12930,7 @@ export namespace Prisma {
   export type ApplicationCreateInput = {
     id?: string
     status?: $Enums.ApplicationStatusEnum
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     applicant: ChallengerCreateNestedOneWithoutApplicationsInput
@@ -12927,6 +12945,7 @@ export namespace Prisma {
     formId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     formAnswers?: FormAnswerUncheckedCreateNestedManyWithoutApplicationInput
@@ -12934,6 +12953,7 @@ export namespace Prisma {
 
   export type ApplicationUpdateInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
@@ -12947,6 +12967,7 @@ export namespace Prisma {
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     formAnswers?: FormAnswerUncheckedUpdateManyWithoutApplicationNestedInput
@@ -12958,12 +12979,14 @@ export namespace Prisma {
     formId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ApplicationUpdateManyMutationInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12973,6 +12996,7 @@ export namespace Prisma {
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -13633,6 +13657,7 @@ export namespace Prisma {
     formId?: SortOrder
     status?: SortOrder
     matchingRoundId?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13643,6 +13668,7 @@ export namespace Prisma {
     formId?: SortOrder
     status?: SortOrder
     matchingRoundId?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13653,6 +13679,7 @@ export namespace Prisma {
     formId?: SortOrder
     status?: SortOrder
     matchingRoundId?: SortOrder
+    isDeleted?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14682,6 +14709,7 @@ export namespace Prisma {
   export type ApplicationCreateWithoutApplicantInput = {
     id?: string
     status?: $Enums.ApplicationStatusEnum
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     form: FormCreateNestedOneWithoutApplicationsInput
@@ -14694,6 +14722,7 @@ export namespace Prisma {
     formId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     formAnswers?: FormAnswerUncheckedCreateNestedManyWithoutApplicationInput
@@ -14810,6 +14839,7 @@ export namespace Prisma {
     formId?: StringFilter<"Application"> | string
     status?: EnumApplicationStatusEnumFilter<"Application"> | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFilter<"Application"> | string
+    isDeleted?: BoolFilter<"Application"> | boolean
     createdAt?: DateTimeFilter<"Application"> | Date | string
     updatedAt?: DateTimeFilter<"Application"> | Date | string
   }
@@ -14897,6 +14927,7 @@ export namespace Prisma {
   export type ApplicationCreateWithoutMatchingRoundInput = {
     id?: string
     status?: $Enums.ApplicationStatusEnum
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     applicant: ChallengerCreateNestedOneWithoutApplicationsInput
@@ -14909,6 +14940,7 @@ export namespace Prisma {
     applicantId: string
     formId: string
     status?: $Enums.ApplicationStatusEnum
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     formAnswers?: FormAnswerUncheckedCreateNestedManyWithoutApplicationInput
@@ -15171,6 +15203,7 @@ export namespace Prisma {
   export type ApplicationCreateWithoutFormInput = {
     id?: string
     status?: $Enums.ApplicationStatusEnum
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     applicant: ChallengerCreateNestedOneWithoutApplicationsInput
@@ -15183,6 +15216,7 @@ export namespace Prisma {
     applicantId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     formAnswers?: FormAnswerUncheckedCreateNestedManyWithoutApplicationInput
@@ -15588,6 +15622,7 @@ export namespace Prisma {
   export type ApplicationCreateWithoutFormAnswersInput = {
     id?: string
     status?: $Enums.ApplicationStatusEnum
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     applicant: ChallengerCreateNestedOneWithoutApplicationsInput
@@ -15601,6 +15636,7 @@ export namespace Prisma {
     formId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15656,6 +15692,7 @@ export namespace Prisma {
 
   export type ApplicationUpdateWithoutFormAnswersInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
@@ -15668,6 +15705,7 @@ export namespace Prisma {
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16036,6 +16074,7 @@ export namespace Prisma {
     formId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16060,6 +16099,7 @@ export namespace Prisma {
 
   export type ApplicationUpdateWithoutApplicantInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     form?: FormUpdateOneRequiredWithoutApplicationsNestedInput
@@ -16071,6 +16111,7 @@ export namespace Prisma {
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     formAnswers?: FormAnswerUncheckedUpdateManyWithoutApplicationNestedInput
@@ -16080,6 +16121,7 @@ export namespace Prisma {
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16141,12 +16183,14 @@ export namespace Prisma {
     applicantId: string
     formId: string
     status?: $Enums.ApplicationStatusEnum
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ApplicationUpdateWithoutMatchingRoundInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
@@ -16158,6 +16202,7 @@ export namespace Prisma {
     applicantId?: StringFieldUpdateOperationsInput | string
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     formAnswers?: FormAnswerUncheckedUpdateManyWithoutApplicationNestedInput
@@ -16167,6 +16212,7 @@ export namespace Prisma {
     applicantId?: StringFieldUpdateOperationsInput | string
     formId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -16243,6 +16289,7 @@ export namespace Prisma {
     applicantId: string
     status?: $Enums.ApplicationStatusEnum
     matchingRoundId: string
+    isDeleted?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -16262,6 +16309,7 @@ export namespace Prisma {
 
   export type ApplicationUpdateWithoutFormInput = {
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicant?: ChallengerUpdateOneRequiredWithoutApplicationsNestedInput
@@ -16273,6 +16321,7 @@ export namespace Prisma {
     applicantId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     formAnswers?: FormAnswerUncheckedUpdateManyWithoutApplicationNestedInput
@@ -16282,6 +16331,7 @@ export namespace Prisma {
     applicantId?: StringFieldUpdateOperationsInput | string
     status?: EnumApplicationStatusEnumFieldUpdateOperationsInput | $Enums.ApplicationStatusEnum
     matchingRoundId?: StringFieldUpdateOperationsInput | string
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

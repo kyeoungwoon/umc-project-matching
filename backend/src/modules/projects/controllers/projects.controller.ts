@@ -62,7 +62,7 @@ export class ProjectsController {
 
   @Post('')
   @ApiOperation({
-    summary: '새로운 프로젝트 생성',
+    summary: '[ADMIN] 새로운 프로젝트 생성',
     description: '관리자만 가능합니다.',
   })
   @CheckChallengerRole(CHALLENGER_ROLE.ADMIN)

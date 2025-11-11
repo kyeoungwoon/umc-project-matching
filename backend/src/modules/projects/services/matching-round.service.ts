@@ -66,30 +66,48 @@ export class MatchingRoundService {
   }
 
   /**
-   * 현재 시간에 해당하는 프로젝트 매칭 차수를 반환합니다. 존재하지 않으면 에러를 발생시킵니다.
+   * 현재 시간 이후로 가장 가까운 프로젝트 매칭 차수를 반환합니다.
+   *
+   * 미래에 매칭 차수가 아예 존재하지 않을 경우 에러를 반환합니다.
    */
-  async getOrThrowCurrentProjectMatchingRound() {
+  async getOrThrowClosestMatchingRound() {
     const now = new Date();
 
-    const currentRound = await this.getProjectMatchingRoundByStartEndDatetime(
+    const closestMatchingRound = await this.mongo.matchingRound.findFirst({
+      where: {
+        endDatetime: { gte: now },
+      },
+      orderBy: {
+        startDatetime: 'asc',
+      },
+    });
+
+    if (!closestMatchingRound) {
+      throw new NotFoundException('미래에 매칭 차수가 존재하지 않습니다.');
+    }
+
+    return closestMatchingRound;
+  }
+
+  async getCurrentMatchingRound() {
+    const now = new Date();
+    const current = await this.getProjectMatchingRoundByStartEndDatetime(
       now,
       now,
     );
 
-    if (!currentRound) {
-      throw new NotFoundException(
-        '현재 시간에 해당하는 매칭 차수가 존재하지 않습니다.',
-      );
+    if (!current) {
+      throw new NotFoundException('현재 진행 중인 매칭 차수가 없습니다.');
     }
 
-    return currentRound;
+    return current;
   }
 
   /**
    * 현재 시간에 해당하는 프로젝트 매칭 차수의 ID를 반환합니다.
    */
   async getCurrentProjectMatchingRoundId() {
-    const currentMatching = await this.getOrThrowCurrentProjectMatchingRound();
+    const currentMatching = await this.getCurrentMatchingRound();
 
     return currentMatching.id;
   }

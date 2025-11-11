@@ -34,7 +34,6 @@ import { UsersModule } from '@modules/users/users.module';
 import { ProjectsModule } from '@modules/projects/projects.module';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
 import { CacheModule } from '@nestjs/cache-manager';
-import { HttpModule } from '@nestjs/axios';
 import { EnvGuard } from '@common/guards/env.guard';
 
 @Module({

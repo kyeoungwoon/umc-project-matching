@@ -215,6 +215,7 @@ model Application {
   formId          String                @db.ObjectId
   status          ApplicationStatusEnum @default(DRAFT)
   matchingRoundId String                @map("matching_round_id") @db.ObjectId
+  isDeleted       Boolean               @default(false) @map("is_deleted")
 
   // 질문이 변경될 경우 기존 데이터는 유실되는거로
   // 객관식 : 선택지 보기가 변경되었을 경우 임시저장된 값은 무의미해짐
@@ -233,7 +234,6 @@ model Application {
   formAnswers   FormAnswer[]
 
   // 하나의 프로젝트, 하나의 폼에는 차수별로 한 번만 지원 가능함
-  // 여러 개의 프로젝트에 지원서를 저장해도 ㄱㅊ긴 함
   @@unique([applicantId, matchingRoundId])
   @@map("applications")
 }
