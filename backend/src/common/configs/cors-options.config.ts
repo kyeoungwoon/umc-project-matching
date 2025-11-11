@@ -4,6 +4,7 @@ export const corsOptions: CorsOptions = {
   origin: [
     'http://localhost:3000',
     'https://upms.kyeoungwoon.kr',
+    'https://dev-upms.kyeoungwoon.kr',
     'https://upms.haru.it.kr',
   ], // 허용할 출처
   credentials: true,
