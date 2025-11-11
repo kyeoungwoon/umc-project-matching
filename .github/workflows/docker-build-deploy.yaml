@@ -98,13 +98,13 @@ jobs:
             echo "📦 최신 Docker 이미지 Pull 시작"
             echo "=============================="
 
-            $COMPOSE_CMD -f "${{ secrets.SERVER_DOCKER_COMPOSE_PATH }}" pull --ignore-pull-failures
+            docker compose -f "${{ secrets.SERVER_DOCKER_COMPOSE_PATH }}" pull --ignore-pull-failures
 
             echo "=============================="
             echo "🔁 Docker Compose UP 시작"
             echo "=============================="
 
-            $COMPOSE_CMD -f "${{ secrets.SERVER_DOCKER_COMPOSE_PATH }}" up -d --remove-orphans
+            docker compose -f "${{ secrets.SERVER_DOCKER_COMPOSE_PATH }}" up -d --remove-orphans
 
             echo "=============================="
             echo "✅ Docker Compose 실행 완료"

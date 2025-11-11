@@ -80,7 +80,7 @@ export function ApplicantSummary({ applications }: ApplicantSummaryProps) {
           umsbChallengerId: id,
           name: app.applicant.name,
           nickname: app.applicant.nickname,
-          school: app.applicant.school.map((s) => s.name).join(', '),
+          school: app.applicant.challengerSchool.name,
           applications: [],
         });
       }
