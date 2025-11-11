@@ -96,7 +96,7 @@ export class ApplyController {
 
     // TODO: 현재 차수가 지원서의 지원 가능 차수에 해당하는지 확인
     const currentRound =
-      await this.matchingRoundService.getOrThrowCurrentProjectMatchingRound();
+      await this.matchingRoundService.getCurrentMatchingRound();
 
     const currentRoundApplications =
       await this.applyService.getApplicationByUserAndMatchingRound(
@@ -227,12 +227,15 @@ export class ApplyController {
 
     // 프로젝트에, 상태를 변경하고자 하는 지원자의 파트에 대한 TO가 있는지 확인합니다.
     // 지원 시점에도 확인하지만, 지원서 상태 변경 시에도 중복 확인 처리합니다.
+    // 합격 처리할 때만 고려하면 됩니다.
     // Zero Trust!
-    const application = await this.applyService.getApplication(applicationId);
-    await this.projectService.getCurrentAndMaxToByPartInProject(
-      projectId,
-      application.applicant.part,
-    );
+    if (body.status === 'CONFIRMED') {
+      const application = await this.applyService.getApplication(applicationId);
+      await this.projectService.getCurrentAndMaxToByPartInProject(
+        projectId,
+        application.applicant.part,
+      );
+    }
 
     this.logger.warn(
       `지원서의 상태를 ${body.status} 로 변경합니다. 챌린저 ${userId} 지원서 ${applicationId}`,

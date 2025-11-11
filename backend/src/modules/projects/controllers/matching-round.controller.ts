@@ -54,9 +54,9 @@ export class MatchingRoundController {
       '현재 시간을 기준으로 매칭 세션을 가져옵니다. 여러 개의 매칭 세션이 있을 경우, 그 중 시작시간이 가장 늦은 것을 기준으로 가져옵니다.',
   })
   @ApiOkResponseCommon(MatchingRoundResponseDto)
-  @Get('current')
-  async getCurrentMatchingRound() {
-    return this.matchingRoundService.getOrThrowCurrentProjectMatchingRound();
+  @Get('closest')
+  async getClosestMatchingRound() {
+    return this.matchingRoundService.getOrThrowClosestMatchingRound();
   }
 
   @ApiOperation({

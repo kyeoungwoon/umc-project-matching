@@ -245,6 +245,7 @@ export class ApplyService {
             name: true,
             nickname: true,
             school: true,
+            challengerSchool: true,
           },
         },
         form: {
@@ -259,6 +260,7 @@ export class ApplyService {
                     name: true,
                     nickname: true,
                     school: true,
+                    challengerSchool: true,
                   },
                 },
               },
