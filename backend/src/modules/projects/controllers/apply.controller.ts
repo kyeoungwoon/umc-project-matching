@@ -3,6 +3,7 @@ import {
   ConflictException,
   Controller,
   Delete,
+  ForbiddenException,
   Get,
   Inject,
   LoggerService,
@@ -221,6 +222,18 @@ export class ApplyController {
     // 해당 프로젝트의 Plan이 아닌 경우 거부합니다.
     const userId = this.reqContext.getOrThrowUserId();
     await this.projectService.throwIfUserNotPlanByProjectId(userId, projectId);
+
+    // 지원서의 매칭 차수가 종료되었는지 확인합니다.
+    const application = await this.applyService.getApplication(applicationId);
+    const applicationMatchingRound =
+      await this.matchingRoundService.getOrThrowMatchingRound(
+        application.matchingRoundId,
+      );
+    if (applicationMatchingRound.endDatetime > new Date()) {
+      throw new ForbiddenException(
+        '매칭 차수가 종료되기 전까지는 지원서의 상태를 변경할 수 없습니다.',
+      );
+    }
 
     // 지원서가 제출 상태인 경우에만 변경 가능, 이미 합격/불합격된 지원서는 변경 불가
     await this.applyService.throwIfApplicationStatusNotSubmitted(applicationId);
