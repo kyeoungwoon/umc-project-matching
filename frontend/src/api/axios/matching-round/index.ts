@@ -6,7 +6,7 @@ import {
 
 export const getCurrentMatchingRound = async () => {
   const res = await api.get<ApiResponse<MatchingRoundResponseDto>>(
-    '/v1/projects/matching-round/current',
+    '/v1/projects/matching-round/closest',
   );
   return res.data.result;
 };

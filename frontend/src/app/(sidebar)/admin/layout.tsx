@@ -11,12 +11,7 @@ import UpmsHeader from '@common/components/upms/UpmsHeader';
 const AdminLayout = ({ children }: { children?: ReactNode }) => {
   useRedirectToHomeIfNotAdmin();
 
-  return (
-    <div className={'flex flex-col gap-4'}>
-      <UpmsHeader section={HEADER_SECTION.ADMIN} />
-      <div className={'p-4'}>{children}</div>
-    </div>
-  );
+  return <>{children}</>;
 };
 
 export default AdminLayout;

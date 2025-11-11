@@ -14,7 +14,11 @@ export const useGetCurrentMatchingRoundQuery = () => {
 };
 
 export const useGetAllMatchingRoundQuery = () => {
-  return useQuery({ queryKey: ['matching-round', 'all'], queryFn: getAllMatchingRound });
+  return useQuery({
+    queryKey: ['matching-round', 'all'],
+    queryFn: getAllMatchingRound,
+    retry: false,
+  });
 };
 
 export const useGetMatchingRound = (roundId: string) => {

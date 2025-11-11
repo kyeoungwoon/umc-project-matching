@@ -10,8 +10,8 @@ const NoCurrentMatchingRound = () => {
         <InfoIcon className="text-muted-foreground h-6 w-6" />
       </div>
 
-      <p className="text-gray-800">현재 진행 중인 매칭 차수가 없습니다.</p>
-      <p className="text-muted-foreground">다음 매칭 차수를 기다려주세요</p>
+      <p className="text-gray-800">진행 예정인 매칭 차수가 존재하지 않습니다.</p>
+      <p className="text-muted-foreground">프로젝트 화이팅하세요!</p>
     </div>
   );
 };

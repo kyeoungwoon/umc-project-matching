@@ -23,6 +23,8 @@ const MatchingRoundInfoCard = ({ data }: { data: MatchingRoundResponseDto }) => 
   const startDate = formatDate(data?.startDatetime);
   const endDate = formatDate(data?.endDatetime);
 
+  const now = new Date();
+  const isFuture = now < new Date(data.startDatetime);
   // 1초마다 갱신되는 남은 시간 계산
   useEffect(() => {
     const interval = setInterval(() => {
@@ -41,7 +43,8 @@ const MatchingRoundInfoCard = ({ data }: { data: MatchingRoundResponseDto }) => 
     <div className="my-5 flex w-full flex-row items-center justify-between gap-x-4 overflow-hidden px-5">
       {/*이름 */}
       <Label className={'flex-shrink-0 flex-grow-0 text-3xl tracking-tight text-gray-600'}>
-        현재 매칭 | <p className="text-foreground font-semibold">{data.name}</p>
+        <span>{isFuture ? '다가오는 매칭' : '현재 매칭'}</span> |{' '}
+        <p className="text-foreground font-semibold">{data.name}</p>
       </Label>
 
       {/*종료 시간 */}
@@ -51,10 +54,11 @@ const MatchingRoundInfoCard = ({ data }: { data: MatchingRoundResponseDto }) => 
 
       <span
         className={
-          'flex w-50 flex-shrink-0 flex-grow-0 flex-row items-center gap-x-3 text-gray-600'
+          'flex w-70 flex-shrink-0 flex-grow-0 flex-row items-center gap-x-3 text-gray-600'
         }
       >
         <ClockIcon />
+        <span>{isFuture ? '시작까지' : '마감까지'}</span>
         {getTimeRemaining(data.endDatetime, currentTime)}
       </span>
 

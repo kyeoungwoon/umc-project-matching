@@ -30,7 +30,7 @@ import { useGetFormQuery } from '@api/query/form';
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
 import ApplicantApplicationCard from '@features/projects/components/ApplicantApplicationCard';
-import ApplicationStatusCard from '@features/projects/components/StatusCard';
+import ApplicationCountByStatusCard from '@features/projects/components/StatusCard';
 
 const ApplicantsPage = () => {
   const params = useParams();
@@ -88,16 +88,20 @@ const ApplicantsPage = () => {
       <Separator />
 
       {/* 지원 상태별 카드 */}
-      <div className="grid gap-3 md:grid-cols-3">
-        <ApplicationStatusCard
+      <div className="grid gap-4 md:grid-cols-4">
+        <ApplicationCountByStatusCard
+          status={'ALL'}
+          statusCount={statusCounts.SUBMITTED + statusCounts.CONFIRMED + statusCounts.REJECTED}
+        />
+        <ApplicationCountByStatusCard
           status={ApplicationStatusEnum.SUBMITTED}
           statusCount={statusCounts.SUBMITTED}
         />
-        <ApplicationStatusCard
+        <ApplicationCountByStatusCard
           status={ApplicationStatusEnum.CONFIRMED}
           statusCount={statusCounts.CONFIRMED}
         />
-        <ApplicationStatusCard
+        <ApplicationCountByStatusCard
           status={ApplicationStatusEnum.REJECTED}
           statusCount={statusCounts.REJECTED}
         />

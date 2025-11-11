@@ -1,21 +1,28 @@
 'use client';
 
 import { clsx } from 'clsx';
-import { CheckCircle2Icon, FileTextIcon, PencilIcon, SendIcon, XIcon } from 'lucide-react';
+import {
+  CheckCircle2Icon,
+  FileTextIcon,
+  ListIcon,
+  PencilIcon,
+  SendIcon,
+  XIcon,
+} from 'lucide-react';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@styles/components/ui/card';
 
 import { ApplicationStatusEnum } from '@api/axios/application/types';
 
-const ApplicationStatusCard = ({
+const ApplicationCountByStatusCard = ({
   statusCount,
   status,
 }: {
   statusCount: number;
-  status: ApplicationStatusEnum;
+  status: ApplicationStatusEnum | 'ALL';
 }) => {
   // Application에 따라서 Card title을 변경
-  const getCardTitle = (status: ApplicationStatusEnum) => {
+  const getCardTitle = (status: ApplicationStatusEnum | 'ALL') => {
     switch (status) {
       case ApplicationStatusEnum.SUBMITTED:
         return '제출됨';
@@ -25,13 +32,15 @@ const ApplicationStatusCard = ({
         return '불합격';
       case ApplicationStatusEnum.DRAFT:
         return '임시저장';
+      case 'ALL':
+        return '전체';
       default:
         return '상태 없음';
     }
   };
 
   // Application Status에 따라서 색깔 변경
-  const getStatusIcon = (status: ApplicationStatusEnum) => {
+  const getStatusIcon = (status: ApplicationStatusEnum | 'ALL') => {
     switch (status) {
       case ApplicationStatusEnum.SUBMITTED:
         return <SendIcon className={'text-blue-600'} />;
@@ -42,7 +51,7 @@ const ApplicationStatusCard = ({
       case ApplicationStatusEnum.DRAFT:
         return <PencilIcon className={'text-yellow-600'} />;
       default:
-        return 'text-gray-600';
+        return <ListIcon className={'text-black-800'} />;
     }
   };
 
@@ -59,4 +68,4 @@ const ApplicationStatusCard = ({
   );
 };
 
-export default ApplicationStatusCard;
+export default ApplicationCountByStatusCard;
