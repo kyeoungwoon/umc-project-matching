@@ -35,11 +35,10 @@ const CreateMatchingRoundCard = () => {
       {
         name: roundName,
         startDatetime: start.toISOString(),
-        endDatetime: end.toLocaleString(),
+        endDatetime: end.toISOString(),
       },
       {
         onSuccess: (data) => {
-          console.log('매칭 라운드가 성공적으로 생성되었습니다:', data);
           toast.success('매칭 라운드가 성공적으로 생성되었습니다.', {
             richColors: true,
             position: 'top-center',

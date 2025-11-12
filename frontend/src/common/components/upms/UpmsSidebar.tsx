@@ -57,7 +57,6 @@ const UpmsSideBar = () => {
   }, [data, setUserInfo]);
 
   const pathname = usePathname();
-  // console.log('path: ', pathname);
 
   const handleLogout = () => {
     clearUser();
@@ -83,7 +82,6 @@ const UpmsSideBar = () => {
                   {menu.items.map((item) => {
                     // NOTE: 현재 경로와 메뉴의 url이 일치하는지 확인합니다.
                     const isSelected = pathname == item.url;
-                    // console.log('isSelected: ', isSelected);
                     return (
                       <SidebarMenuItem key={item.title}>
                         <SidebarMenuButton asChild>
@@ -119,10 +117,10 @@ const UpmsSideBar = () => {
             <div className={'gap-8pxr flex w-full flex-row items-center px-3 py-2'}>
               <SchoolLogo schoolName={data.challengerSchool.handle} width={50} height={50} />
               <div className={'ml-2 flex w-full flex-col justify-between'}>
-                <Label className="whitespace-nowrap text-xl text-black">
+                <Label className="text-xl whitespace-nowrap text-black">
                   {data.nickname}/{data.name}
                 </Label>
-                <Label className="whitespace-nowrap text-md text-gray-700">
+                <Label className="text-md whitespace-nowrap text-gray-700">
                   {data.challengerSchool.name} <PartIcon className={'h-4 w-4'} part={data.part} />
                 </Label>
               </div>

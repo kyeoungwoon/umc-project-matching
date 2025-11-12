@@ -38,7 +38,6 @@ export const ObjectiveQuestion = ({ field, question }: ObjectiveQuestionProps) =
           <RadioGroup
             value={field.state.value[0]}
             onValueChange={(val) => {
-              console.log('single choice clicked', val);
               field.handleChange([val]);
             }}
             onBlur={field.handleBlur}
@@ -71,7 +70,6 @@ export const ObjectiveQuestion = ({ field, question }: ObjectiveQuestionProps) =
 
                     newValues = newValues.filter((v: string) => v !== '');
                     if (!newValues.length) newValues = [''];
-                    console.log(newValues);
                     field.handleChange(newValues);
                   }}
                 />

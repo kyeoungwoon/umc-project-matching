@@ -41,7 +41,6 @@ const ApplicantsPage = () => {
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'ALL'>('ALL');
 
   const { data: form, isLoading } = useGetFormQuery(projectId, formId);
-  // console.log(projects);
 
   if (isLoading || !form) {
     return <DefaultSkeleton />;

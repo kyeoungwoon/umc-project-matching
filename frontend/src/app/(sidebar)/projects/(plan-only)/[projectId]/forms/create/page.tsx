@@ -111,7 +111,6 @@ const CreateProjectFormPage = () => {
 
                       newValues = newValues.filter((v: string) => v !== '');
                       if (!newValues.length) newValues = [''];
-                      console.log(newValues);
                       setSelectedMatchingRounds(newValues);
                     }}
                   />

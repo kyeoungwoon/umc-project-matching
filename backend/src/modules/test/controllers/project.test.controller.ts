@@ -2,9 +2,12 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   Inject,
   LoggerService,
+  Param,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -29,6 +32,7 @@ import {
   CheckChallengerRole,
 } from '@common/decorators/challenger-role.decorator';
 import { CreateBulkMatchingRoundsDto } from '@modules/projects/dto/apply.dto';
+import { UserPartEnum } from '@generated/prisma/mongodb';
 
 @Controller({
   path: 'test/projects',
@@ -50,6 +54,14 @@ export class ProjectTestController {
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
   ) {}
+
+  @Get('project/:projectId/to')
+  async getProjectPartTo(
+    @Param('projectId') projectId: string,
+    @Query('part') part: UserPartEnum,
+  ) {
+    return this.projectService.checkIfToLeftInProject(projectId, part);
+  }
 
   @ApiOperation({
     summary: '[테스트용] Leo 지부 프로젝트, 폼, 질문 일괄 생성',

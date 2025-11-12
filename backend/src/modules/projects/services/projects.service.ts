@@ -209,32 +209,49 @@ export class ProjectsService {
     return project;
   }
 
-  async getCurrentAndMaxToByPartInProject(projectId: string, part: string) {
+  /**
+   * 프로젝트의 파트별 배정된 TO와 현재 멤버 수를 반환합니다.
+   */
+  async getProjectPartToStatus(projectId: string) {
     const project = await this.getProjectById(projectId);
 
-    // 사용자의 파트에 대한 TO를 확인합니다. TO 정보가 없으면 에러
-    const partToInfo = project.partTo.find((p) => p.part === part);
-    if (!partToInfo) {
+    return project.partTo.map((partInfo) => {
+      const currentTo = project.projectMember.filter(
+        (pm) => pm.user.part === partInfo.part,
+      ).length;
+
+      return {
+        part: partInfo.part,
+        currentTo,
+        maxTo: partInfo.to,
+      };
+    });
+  }
+
+  /**
+   * 프로젝트에 TO가 남아있는지 확인합니다.
+   */
+  async checkIfToLeftInProject(projectId: string, part: string) {
+    // 프로젝트 TO 현황을 가져와서, 매개변수로 받은 파트의 것만 추출합니다.
+    const projectPartToStatus = await this.getProjectPartToStatus(projectId);
+    const partStatus = projectPartToStatus.find((p) => p.part === part);
+
+    // 일치하는 정보가 없으면 에러
+    if (!partStatus) {
       throw new NotFoundException(
         `프로젝트에 ${part} 파트가 존재하지 않습니다.`,
       );
     }
 
-    // 현재 프로젝트 멤버들의 파트를 확인해서 해당 파트의 멤버 현황을 확인합니다.
-    const currentTo = project.projectMember.filter(
-      (pm) => pm.user.part === part,
-    ).length;
-
-    if (currentTo >= partToInfo.to) {
+    // 현재 멤버 수가 최대 TO에 도달했으면 에러
+    if (partStatus.currentTo >= partStatus.maxTo) {
       throw new BadRequestException(
         `해당 프로젝트의 ${part} 파트의 TO가 모두 찼습니다.`,
       );
     }
 
-    return {
-      currentTo,
-      maxTo: partToInfo.to,
-    };
+    // 다 아니면 반환 ~
+    return;
   }
 
   async isFormBelongsToProject(

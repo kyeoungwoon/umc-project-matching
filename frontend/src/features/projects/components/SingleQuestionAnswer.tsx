@@ -3,7 +3,6 @@
 import { FormAnswerResponseDto } from '@api/axios/application/types';
 
 const SingleQuestionAnswer = ({ answer }: { answer: FormAnswerResponseDto }) => {
-  console.log(answer);
   return (
     <div className="flex flex-col gap-y-2">
       {/*질문 제목*/}

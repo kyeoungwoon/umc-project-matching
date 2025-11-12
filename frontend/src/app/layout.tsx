@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
+import { GoogleTagManager } from '@next/third-parties/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import clsx from 'clsx';
@@ -29,8 +30,11 @@ const RootLayout = ({
 }: Readonly<{
   children: ReactNode;
 }>) => {
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
+
   return (
     <html lang="ko">
+      {gtmId && <GoogleTagManager gtmId={gtmId} />}
       <body className={clsx('flex min-h-screen flex-col', pretendard.variable)}>
         <QueryClientProviders>
           <SpeedInsights />

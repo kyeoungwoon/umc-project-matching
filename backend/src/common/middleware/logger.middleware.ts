@@ -1,4 +1,9 @@
-import { Inject, Injectable, LoggerService, NestMiddleware } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  LoggerService,
+  NestMiddleware,
+} from '@nestjs/common';
 
 import * as Sentry from '@sentry/nestjs';
 import { NextFunction, Request, Response } from 'express';
@@ -10,7 +15,8 @@ import { RequestContextService } from '@modules/als/services/request-context.ser
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
   constructor(
-    @Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService,
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
     @Inject(ALS) private readonly als: AlsInstance,
     private readonly requestContextService: RequestContextService,
   ) {}
@@ -27,15 +33,17 @@ export class LoggerMiddleware implements NestMiddleware {
       const duration = Date.now() - startTime;
 
       const requestContext = this.als.getStore();
-      const userId = this.requestContextService.getUserId()?.toString() ?? 'Anonymous';
-      const traceId = this.requestContextService.getTraceId() ?? 'no-trace-id';
+      const userId =
+        this.requestContextService.getUserId()?.toString() ?? 'Anonymous';
+      const traceId =
+        this.requestContextService.getOrThrowTraceId() ?? 'NO_TRACE_ID';
       const formattedTraceId = traceId.slice(0, 4);
 
       // ✅ 구조화된 로그 객체 생성
       const logPayload = {
         // message는 사람이 읽기 좋은 요약본으로 제공
-        message: `[HTTP Request] [${formattedTraceId}] ${method} ${originalUrl} ${statusCode} ${duration}ms`,
-        context: LoggerMiddleware.name,
+        message: `[${formattedTraceId}] ${method} ${originalUrl} ${statusCode} ${duration}ms`,
+        context: 'HTTP_REQUEST_LOGGER',
         request: {
           method: method,
           url: originalUrl,

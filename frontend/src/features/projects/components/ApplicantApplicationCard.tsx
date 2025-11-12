@@ -35,9 +35,6 @@ const ApplicantApplicationCard = ({
   application: ApplicationResponseDto;
   projectId: string;
 }) => {
-  // console.log('application:', application);
-  // console.log('projectId:', projectId);
-
   const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus | null>(
     application.status,
   );

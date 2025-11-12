@@ -97,6 +97,9 @@ export class MatchingRoundService {
     );
 
     if (!current) {
+      console.log(
+        `현재 시간 ${now.toISOString()}에 해당하는 매칭 차수가 없습니다.`,
+      );
       throw new NotFoundException('현재 진행 중인 매칭 차수가 없습니다.');
     }
 
@@ -130,7 +133,10 @@ export class MatchingRoundService {
       },
       orderBy: { startDatetime: 'desc' },
     });
+
     if (existing) {
+      console.log(existing);
+
       throw new ForbiddenException(
         '해당 기간에 이미 존재하는 매칭 차수가 있습니다.',
       );
