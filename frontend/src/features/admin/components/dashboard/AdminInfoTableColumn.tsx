@@ -10,7 +10,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -58,7 +57,7 @@ export const AdminInfoTableColumn = (
   {
     id: 'applicant.school',
     accessorKey: 'applicant.school',
-    header: '대학교',
+    header: '학교',
     cell: ({ row }) => {
       const schools = row.original.applicant.challengerSchool;
 
@@ -101,8 +100,8 @@ export const AdminInfoTableColumn = (
       const projectTitle = row.original.form.project.title;
       return (
         <button
-          onClick={() => onViewProject(projectTitle)}
-          className="text-left text-blue-600 hover:underline"
+          onClick={() => onViewProject(row.original.form.project.id)}
+          className="max-w-30 truncate text-left text-blue-600 hover:underline"
         >
           {projectTitle}
         </button>
@@ -111,8 +110,15 @@ export const AdminInfoTableColumn = (
   },
   {
     accessorKey: 'form.title',
-    header: '지원 폼 제목',
-    cell: ({ row }) => <div className="max-w-[200px] truncate">{row.original.form.title}</div>,
+    header: '지원서 폼',
+    cell: ({ row }) => (
+      <button
+        className="max-w-30 justify-start truncate hover:text-blue-600 hover:underline"
+        onClick={() => onViewProject(row.original.form.project.id)}
+      >
+        {row.original.form.title}
+      </button>
+    ),
   },
   {
     accessorKey: 'status',

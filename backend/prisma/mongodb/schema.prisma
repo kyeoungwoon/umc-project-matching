@@ -80,8 +80,8 @@ model Challenger {
 
   // --- 관계 ---
   applications     Application[]   @relation("ApplicantToApplications")
-  projects         Project[]
-  ProjectMember    ProjectMember[]
+  projectPlan      Project[]
+  projectMember    ProjectMember[]
   challengerSchool School          @relation(fields: [school], references: [handle], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([school, studentId]) // 학교 + 학번 복합 고유 키

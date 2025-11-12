@@ -1669,14 +1669,14 @@ export namespace Prisma {
 
   export type ChallengerCountOutputType = {
     applications: number
-    projects: number
-    ProjectMember: number
+    projectPlan: number
+    projectMember: number
   }
 
   export type ChallengerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | ChallengerCountOutputTypeCountApplicationsArgs
-    projects?: boolean | ChallengerCountOutputTypeCountProjectsArgs
-    ProjectMember?: boolean | ChallengerCountOutputTypeCountProjectMemberArgs
+    projectPlan?: boolean | ChallengerCountOutputTypeCountProjectPlanArgs
+    projectMember?: boolean | ChallengerCountOutputTypeCountProjectMemberArgs
   }
 
   // Custom InputTypes
@@ -1700,7 +1700,7 @@ export namespace Prisma {
   /**
    * ChallengerCountOutputType without action
    */
-  export type ChallengerCountOutputTypeCountProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ChallengerCountOutputTypeCountProjectPlanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ProjectWhereInput
   }
 
@@ -2220,8 +2220,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     applications?: boolean | Challenger$applicationsArgs<ExtArgs>
-    projects?: boolean | Challenger$projectsArgs<ExtArgs>
-    ProjectMember?: boolean | Challenger$ProjectMemberArgs<ExtArgs>
+    projectPlan?: boolean | Challenger$projectPlanArgs<ExtArgs>
+    projectMember?: boolean | Challenger$projectMemberArgs<ExtArgs>
     challengerSchool?: boolean | SchoolDefaultArgs<ExtArgs>
     _count?: boolean | ChallengerCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["challenger"]>
@@ -2248,8 +2248,8 @@ export namespace Prisma {
   export type ChallengerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "umsbChallengerId" | "name" | "nickname" | "introduction" | "school" | "studentId" | "password" | "part" | "role" | "gender" | "chapter" | "createdAt" | "updatedAt", ExtArgs["result"]["challenger"]>
   export type ChallengerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | Challenger$applicationsArgs<ExtArgs>
-    projects?: boolean | Challenger$projectsArgs<ExtArgs>
-    ProjectMember?: boolean | Challenger$ProjectMemberArgs<ExtArgs>
+    projectPlan?: boolean | Challenger$projectPlanArgs<ExtArgs>
+    projectMember?: boolean | Challenger$projectMemberArgs<ExtArgs>
     challengerSchool?: boolean | SchoolDefaultArgs<ExtArgs>
     _count?: boolean | ChallengerCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -2258,8 +2258,8 @@ export namespace Prisma {
     name: "Challenger"
     objects: {
       applications: Prisma.$ApplicationPayload<ExtArgs>[]
-      projects: Prisma.$ProjectPayload<ExtArgs>[]
-      ProjectMember: Prisma.$ProjectMemberPayload<ExtArgs>[]
+      projectPlan: Prisma.$ProjectPayload<ExtArgs>[]
+      projectMember: Prisma.$ProjectMemberPayload<ExtArgs>[]
       challengerSchool: Prisma.$SchoolPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -2641,8 +2641,8 @@ export namespace Prisma {
   export interface Prisma__ChallengerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     applications<T extends Challenger$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    projects<T extends Challenger$projectsArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    ProjectMember<T extends Challenger$ProjectMemberArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$ProjectMemberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    projectPlan<T extends Challenger$projectPlanArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$projectPlanArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    projectMember<T extends Challenger$projectMemberArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$projectMemberArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     challengerSchool<T extends SchoolDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SchoolDefaultArgs<ExtArgs>>): Prisma__SchoolClient<$Result.GetResult<Prisma.$SchoolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3081,9 +3081,9 @@ export namespace Prisma {
   }
 
   /**
-   * Challenger.projects
+   * Challenger.projectPlan
    */
-  export type Challenger$projectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Challenger$projectPlanArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Project
      */
@@ -3105,9 +3105,9 @@ export namespace Prisma {
   }
 
   /**
-   * Challenger.ProjectMember
+   * Challenger.projectMember
    */
-  export type Challenger$ProjectMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Challenger$projectMemberArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the ProjectMember
      */
@@ -11730,8 +11730,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Challenger"> | Date | string
     updatedAt?: DateTimeFilter<"Challenger"> | Date | string
     applications?: ApplicationListRelationFilter
-    projects?: ProjectListRelationFilter
-    ProjectMember?: ProjectMemberListRelationFilter
+    projectPlan?: ProjectListRelationFilter
+    projectMember?: ProjectMemberListRelationFilter
     challengerSchool?: XOR<SchoolScalarRelationFilter, SchoolWhereInput>
   }
 
@@ -11751,8 +11751,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     applications?: ApplicationOrderByRelationAggregateInput
-    projects?: ProjectOrderByRelationAggregateInput
-    ProjectMember?: ProjectMemberOrderByRelationAggregateInput
+    projectPlan?: ProjectOrderByRelationAggregateInput
+    projectMember?: ProjectMemberOrderByRelationAggregateInput
     challengerSchool?: SchoolOrderByWithRelationInput
   }
 
@@ -11776,8 +11776,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Challenger"> | Date | string
     updatedAt?: DateTimeFilter<"Challenger"> | Date | string
     applications?: ApplicationListRelationFilter
-    projects?: ProjectListRelationFilter
-    ProjectMember?: ProjectMemberListRelationFilter
+    projectPlan?: ProjectListRelationFilter
+    projectMember?: ProjectMemberListRelationFilter
     challengerSchool?: XOR<SchoolScalarRelationFilter, SchoolWhereInput>
   }, "id" | "school_studentId">
 
@@ -12389,8 +12389,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
-    projects?: ProjectCreateNestedManyWithoutProjectPlanInput
-    ProjectMember?: ProjectMemberCreateNestedManyWithoutUserInput
+    projectPlan?: ProjectCreateNestedManyWithoutProjectPlanInput
+    projectMember?: ProjectMemberCreateNestedManyWithoutUserInput
     challengerSchool: SchoolCreateNestedOneWithoutChallengersInput
   }
 
@@ -12410,8 +12410,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
-    ProjectMember?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
+    projectPlan?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
+    projectMember?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type ChallengerUpdateInput = {
@@ -12428,8 +12428,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUpdateManyWithoutProjectPlanNestedInput
-    ProjectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
+    projectPlan?: ProjectUpdateManyWithoutProjectPlanNestedInput
+    projectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
     challengerSchool?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
   }
 
@@ -12448,8 +12448,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
-    ProjectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
+    projectPlan?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
+    projectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ChallengerCreateManyInput = {
@@ -12574,7 +12574,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     projectMember?: ProjectMemberCreateNestedManyWithoutProjectInput
     projectForms?: FormCreateNestedManyWithoutProjectInput
-    projectPlan: ChallengerCreateNestedOneWithoutProjectsInput
+    projectPlan: ChallengerCreateNestedOneWithoutProjectPlanInput
   }
 
   export type ProjectUncheckedCreateInput = {
@@ -12601,7 +12601,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMember?: ProjectMemberUpdateManyWithoutProjectNestedInput
     projectForms?: FormUpdateManyWithoutProjectNestedInput
-    projectPlan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
+    projectPlan?: ChallengerUpdateOneRequiredWithoutProjectPlanNestedInput
   }
 
   export type ProjectUncheckedUpdateInput = {
@@ -13966,9 +13966,9 @@ export namespace Prisma {
     connect?: FormWhereUniqueInput | FormWhereUniqueInput[]
   }
 
-  export type ChallengerCreateNestedOneWithoutProjectsInput = {
-    create?: XOR<ChallengerCreateWithoutProjectsInput, ChallengerUncheckedCreateWithoutProjectsInput>
-    connectOrCreate?: ChallengerCreateOrConnectWithoutProjectsInput
+  export type ChallengerCreateNestedOneWithoutProjectPlanInput = {
+    create?: XOR<ChallengerCreateWithoutProjectPlanInput, ChallengerUncheckedCreateWithoutProjectPlanInput>
+    connectOrCreate?: ChallengerCreateOrConnectWithoutProjectPlanInput
     connect?: ChallengerWhereUniqueInput
   }
 
@@ -14021,12 +14021,12 @@ export namespace Prisma {
     deleteMany?: FormScalarWhereInput | FormScalarWhereInput[]
   }
 
-  export type ChallengerUpdateOneRequiredWithoutProjectsNestedInput = {
-    create?: XOR<ChallengerCreateWithoutProjectsInput, ChallengerUncheckedCreateWithoutProjectsInput>
-    connectOrCreate?: ChallengerCreateOrConnectWithoutProjectsInput
-    upsert?: ChallengerUpsertWithoutProjectsInput
+  export type ChallengerUpdateOneRequiredWithoutProjectPlanNestedInput = {
+    create?: XOR<ChallengerCreateWithoutProjectPlanInput, ChallengerUncheckedCreateWithoutProjectPlanInput>
+    connectOrCreate?: ChallengerCreateOrConnectWithoutProjectPlanInput
+    upsert?: ChallengerUpsertWithoutProjectPlanInput
     connect?: ChallengerWhereUniqueInput
-    update?: XOR<XOR<ChallengerUpdateToOneWithWhereWithoutProjectsInput, ChallengerUpdateWithoutProjectsInput>, ChallengerUncheckedUpdateWithoutProjectsInput>
+    update?: XOR<XOR<ChallengerUpdateToOneWithWhereWithoutProjectPlanInput, ChallengerUpdateWithoutProjectPlanInput>, ChallengerUncheckedUpdateWithoutProjectPlanInput>
   }
 
   export type ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput = {
@@ -15025,7 +15025,7 @@ export namespace Prisma {
     data: FormCreateManyProjectInput | FormCreateManyProjectInput[]
   }
 
-  export type ChallengerCreateWithoutProjectsInput = {
+  export type ChallengerCreateWithoutProjectPlanInput = {
     id?: string
     umsbChallengerId?: string | null
     name: string
@@ -15040,11 +15040,11 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
-    ProjectMember?: ProjectMemberCreateNestedManyWithoutUserInput
+    projectMember?: ProjectMemberCreateNestedManyWithoutUserInput
     challengerSchool: SchoolCreateNestedOneWithoutChallengersInput
   }
 
-  export type ChallengerUncheckedCreateWithoutProjectsInput = {
+  export type ChallengerUncheckedCreateWithoutProjectPlanInput = {
     id?: string
     umsbChallengerId?: string | null
     name: string
@@ -15060,12 +15060,12 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
-    ProjectMember?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
+    projectMember?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
-  export type ChallengerCreateOrConnectWithoutProjectsInput = {
+  export type ChallengerCreateOrConnectWithoutProjectPlanInput = {
     where: ChallengerWhereUniqueInput
-    create: XOR<ChallengerCreateWithoutProjectsInput, ChallengerUncheckedCreateWithoutProjectsInput>
+    create: XOR<ChallengerCreateWithoutProjectPlanInput, ChallengerUncheckedCreateWithoutProjectPlanInput>
   }
 
   export type ProjectToUpdateManyInput = {
@@ -15122,18 +15122,18 @@ export namespace Prisma {
     availableMatchingRounds?: StringNullableListFilter<"Form">
   }
 
-  export type ChallengerUpsertWithoutProjectsInput = {
-    update: XOR<ChallengerUpdateWithoutProjectsInput, ChallengerUncheckedUpdateWithoutProjectsInput>
-    create: XOR<ChallengerCreateWithoutProjectsInput, ChallengerUncheckedCreateWithoutProjectsInput>
+  export type ChallengerUpsertWithoutProjectPlanInput = {
+    update: XOR<ChallengerUpdateWithoutProjectPlanInput, ChallengerUncheckedUpdateWithoutProjectPlanInput>
+    create: XOR<ChallengerCreateWithoutProjectPlanInput, ChallengerUncheckedCreateWithoutProjectPlanInput>
     where?: ChallengerWhereInput
   }
 
-  export type ChallengerUpdateToOneWithWhereWithoutProjectsInput = {
+  export type ChallengerUpdateToOneWithWhereWithoutProjectPlanInput = {
     where?: ChallengerWhereInput
-    data: XOR<ChallengerUpdateWithoutProjectsInput, ChallengerUncheckedUpdateWithoutProjectsInput>
+    data: XOR<ChallengerUpdateWithoutProjectPlanInput, ChallengerUncheckedUpdateWithoutProjectPlanInput>
   }
 
-  export type ChallengerUpdateWithoutProjectsInput = {
+  export type ChallengerUpdateWithoutProjectPlanInput = {
     umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
@@ -15147,11 +15147,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
-    ProjectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
+    projectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
     challengerSchool?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
   }
 
-  export type ChallengerUncheckedUpdateWithoutProjectsInput = {
+  export type ChallengerUncheckedUpdateWithoutProjectPlanInput = {
     umsbChallengerId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
@@ -15166,7 +15166,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
-    ProjectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
+    projectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProjectCreateWithoutProjectFormsInput = {
@@ -15179,7 +15179,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     projectMember?: ProjectMemberCreateNestedManyWithoutProjectInput
-    projectPlan: ChallengerCreateNestedOneWithoutProjectsInput
+    projectPlan: ChallengerCreateNestedOneWithoutProjectPlanInput
   }
 
   export type ProjectUncheckedCreateWithoutProjectFormsInput = {
@@ -15288,7 +15288,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMember?: ProjectMemberUpdateManyWithoutProjectNestedInput
-    projectPlan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
+    projectPlan?: ChallengerUpdateOneRequiredWithoutProjectPlanNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutProjectFormsInput = {
@@ -15473,7 +15473,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     projectForms?: FormCreateNestedManyWithoutProjectInput
-    projectPlan: ChallengerCreateNestedOneWithoutProjectsInput
+    projectPlan: ChallengerCreateNestedOneWithoutProjectPlanInput
   }
 
   export type ProjectUncheckedCreateWithoutProjectMemberInput = {
@@ -15509,7 +15509,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
-    projects?: ProjectCreateNestedManyWithoutProjectPlanInput
+    projectPlan?: ProjectCreateNestedManyWithoutProjectPlanInput
     challengerSchool: SchoolCreateNestedOneWithoutChallengersInput
   }
 
@@ -15529,7 +15529,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
+    projectPlan?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
   }
 
   export type ChallengerCreateOrConnectWithoutProjectMemberInput = {
@@ -15557,7 +15557,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectForms?: FormUpdateManyWithoutProjectNestedInput
-    projectPlan?: ChallengerUpdateOneRequiredWithoutProjectsNestedInput
+    projectPlan?: ChallengerUpdateOneRequiredWithoutProjectPlanNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutProjectMemberInput = {
@@ -15597,7 +15597,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUpdateManyWithoutProjectPlanNestedInput
+    projectPlan?: ProjectUpdateManyWithoutProjectPlanNestedInput
     challengerSchool?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
   }
 
@@ -15616,7 +15616,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
+    projectPlan?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
   }
 
   export type ApplicationCreateWithoutFormAnswersInput = {
@@ -15761,8 +15761,8 @@ export namespace Prisma {
     chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    projects?: ProjectCreateNestedManyWithoutProjectPlanInput
-    ProjectMember?: ProjectMemberCreateNestedManyWithoutUserInput
+    projectPlan?: ProjectCreateNestedManyWithoutProjectPlanInput
+    projectMember?: ProjectMemberCreateNestedManyWithoutUserInput
     challengerSchool: SchoolCreateNestedOneWithoutChallengersInput
   }
 
@@ -15781,8 +15781,8 @@ export namespace Prisma {
     chapter?: $Enums.ChallengerChapterEnum | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    projects?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
-    ProjectMember?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
+    projectPlan?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
+    projectMember?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type ChallengerCreateOrConnectWithoutApplicationsInput = {
@@ -15889,8 +15889,8 @@ export namespace Prisma {
     chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUpdateManyWithoutProjectPlanNestedInput
-    ProjectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
+    projectPlan?: ProjectUpdateManyWithoutProjectPlanNestedInput
+    projectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
     challengerSchool?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
   }
 
@@ -15908,8 +15908,8 @@ export namespace Prisma {
     chapter?: NullableEnumChallengerChapterEnumFieldUpdateOperationsInput | $Enums.ChallengerChapterEnum | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
-    ProjectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
+    projectPlan?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
+    projectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type FormUpsertWithoutApplicationsInput = {
@@ -16001,8 +16001,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
-    projects?: ProjectCreateNestedManyWithoutProjectPlanInput
-    ProjectMember?: ProjectMemberCreateNestedManyWithoutUserInput
+    projectPlan?: ProjectCreateNestedManyWithoutProjectPlanInput
+    projectMember?: ProjectMemberCreateNestedManyWithoutUserInput
   }
 
   export type ChallengerUncheckedCreateWithoutChallengerSchoolInput = {
@@ -16020,8 +16020,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
-    ProjectMember?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
+    projectPlan?: ProjectUncheckedCreateNestedManyWithoutProjectPlanInput
+    projectMember?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type ChallengerCreateOrConnectWithoutChallengerSchoolInput = {
@@ -16462,8 +16462,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUpdateManyWithoutProjectPlanNestedInput
-    ProjectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
+    projectPlan?: ProjectUpdateManyWithoutProjectPlanNestedInput
+    projectMember?: ProjectMemberUpdateManyWithoutUserNestedInput
   }
 
   export type ChallengerUncheckedUpdateWithoutChallengerSchoolInput = {
@@ -16480,8 +16480,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
-    ProjectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
+    projectPlan?: ProjectUncheckedUpdateManyWithoutProjectPlanNestedInput
+    projectMember?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ChallengerUncheckedUpdateManyWithoutChallengerSchoolInput = {

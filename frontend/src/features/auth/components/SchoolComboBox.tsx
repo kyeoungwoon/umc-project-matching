@@ -15,6 +15,7 @@ import {
   CommandList,
 } from '@styles/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@styles/components/ui/popover';
+import { Skeleton } from '@styles/components/ui/skeleton';
 
 import { useGetSchoolsQuery } from '@api/query/auth';
 
@@ -25,18 +26,18 @@ interface School {
   name: string;
 }
 
-interface LoginComboBoxProps {
+interface SchoolComboBoxProps {
   value: School;
   onValueChange: (value: School) => void;
 }
 
-const LoginComboBox = ({ value, onValueChange }: LoginComboBoxProps) => {
+const SchoolComboBox = ({ value, onValueChange }: SchoolComboBoxProps) => {
   const [open, setOpen] = useState(false);
 
   const { data: schools, isLoading } = useGetSchoolsQuery();
 
   if (isLoading || !schools) {
-    return <DefaultSkeleton />;
+    return <Skeleton className={'h-5 w-full'} />;
   }
 
   return (
@@ -90,4 +91,4 @@ const LoginComboBox = ({ value, onValueChange }: LoginComboBoxProps) => {
   );
 };
 
-export default LoginComboBox;
+export default SchoolComboBox;
