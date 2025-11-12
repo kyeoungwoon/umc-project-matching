@@ -2,7 +2,6 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 
-import { Badge } from '@styles/components/ui/badge';
 import {
   Card,
   CardContent,
@@ -10,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@styles/components/ui/card';
-import { Label } from '@styles/components/ui/label';
 
 import { ProjectApplicationStats } from '@api/axios/admin/types';
 import { useAdminGetProjectApplicationStats } from '@api/query/admin';
@@ -33,6 +31,11 @@ const columns: ColumnDef<ProjectApplicationStats>[] = [
     accessorKey: 'part', // part 객체의 name 속성에 접근
     header: '파트',
     cell: ({ row }) => row.original.part,
+  },
+  {
+    accessorKey: 'maxTo',
+    header: 'TO',
+    cell: ({ row }) => row.original.maxTo,
   },
   {
     accessorKey: 'matchingRound.name', // matchingRound 객체의 name 속성에 접근

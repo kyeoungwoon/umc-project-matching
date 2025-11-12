@@ -17,7 +17,7 @@ export const getStatusBadgeVariant = (status: ApplicationStatus) => {
   }
 };
 
-export const getStatusText = (status: ApplicationStatus) => {
+export const getStatusText = (status: ApplicationStatus | 'NOT_APPLIED') => {
   switch (status) {
     case 'SUBMITTED':
       return '제출됨';
@@ -27,6 +27,8 @@ export const getStatusText = (status: ApplicationStatus) => {
       return '불합격';
     case 'DRAFT':
       return '임시저장';
+    case 'NOT_APPLIED':
+      return '-';
     default:
       return status;
   }

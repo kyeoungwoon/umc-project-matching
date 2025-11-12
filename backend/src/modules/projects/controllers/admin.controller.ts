@@ -20,7 +20,10 @@ import {
   CheckChallengerRole,
 } from '@common/decorators/challenger-role.decorator';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { AdminGetApplicationQueryDto } from '@modules/projects/dto/admin.dto';
+import {
+  ApplicationStatusByProjectRequestQuery,
+  ApplicationStatsByChallengerRequestQuery,
+} from '@modules/projects/dto/admin.dto';
 
 @Controller({
   path: 'projects/admin',
@@ -54,8 +57,10 @@ export class AdminController {
       '프로젝트에 대해서 파트별로 TO 및 차수 별 지원 현황을 요약해서 보내줍니다.',
   })
   @Get('applications')
-  async getApplicationsSummary(@Query() query: AdminGetApplicationQueryDto) {
-    // 프로젝트 마다 차수별로 지원 현황을 요역해서 제공
+  async getApplicationsSummary(
+    @Query() query: ApplicationStatusByProjectRequestQuery,
+  ) {
+    // 프로젝트 마다 차수별로 지원 현황을 요약해서 제공
     const projectInfo = await this.projectService.getProjectById(
       query.projectId,
     );
@@ -66,6 +71,18 @@ export class AdminController {
       project: projectInfo,
       applicationStats: projectApplicationStats,
     };
+  }
+
+  // 챌린저 전부 조회 -> applications -> matchingRound, form->project
+  @Get('applications/statistics/challenger')
+  async getApplicationStatisticsByChallenger(
+    @Query() query: ApplicationStatsByChallengerRequestQuery,
+  ) {
+    return this.applyService.getApplicationStatisticsByChallenger(
+      query.part,
+      query.school,
+      query.challengerId,
+    );
   }
 
   // 남는 자리 랜덤매칭 기능

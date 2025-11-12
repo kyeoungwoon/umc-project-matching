@@ -15,7 +15,7 @@ import { ROUTES } from '@common/constants/routes.constants';
 
 import { useSetUser } from '@features/auth/hooks/useAuthStore';
 
-import LoginComboBox from '@features/auth/components/LoginComboBox';
+import SchoolComboBox from '@features/auth/components/SchoolComboBox';
 import InputFormField from '@features/projects/components/forms/InputFormField';
 
 const loginSchema = z.object({
@@ -96,7 +96,7 @@ export default function LoginForm() {
               return (
                 <Field className={'w-full'}>
                   <FieldLabel htmlFor={field.name}>학교</FieldLabel>
-                  <LoginComboBox value={field.state.value} onValueChange={field.handleChange} />
+                  <SchoolComboBox value={field.state.value} onValueChange={field.handleChange} />
                   {field.state.meta.isTouched && !field.state.value.handle && (
                     <FieldError errors={[{ message: '학교를 선택해 주세요.' }]} />
                   )}

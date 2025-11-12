@@ -10,7 +10,7 @@ interface AdminPartialUserInfoDto {
   nickname: string;
   school: string;
   challengerSchool: SchoolInfo;
-  part?: Part;
+  part: Part;
 }
 
 interface AdminPartialFormInfoDto {
@@ -47,4 +47,26 @@ export interface ProjectApplicationStats {
   confirmedApplicants: number;
   rejectedApplicants: number;
   submittedApplicants: number;
+}
+
+export interface ApplicationStatsByChallengerResponse {
+  applicationResults: ChallengerApplicationInfo[];
+}
+
+export interface ChallengerApplicationInfo {
+  challengerId: string;
+  umsbChallengerId: string;
+  name: string;
+  nickname: string;
+  part: Part;
+  school: string;
+  projectMember: {
+    projectId: string;
+    title: string;
+  };
+  matchingResults: {
+    matchingRoundName: string;
+    projectTitle: string;
+    applicationStatus: ApplicationStatus | 'NOT_APPLIED';
+  }[];
 }

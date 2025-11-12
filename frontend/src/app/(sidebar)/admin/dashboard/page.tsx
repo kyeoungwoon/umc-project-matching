@@ -2,28 +2,40 @@
 
 import { useMemo, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
+import { Combobox, ComboboxOption } from '@styles/components/ui/combobox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@styles/components/ui/tabs';
 
 import { AdminGetAllApplicationsResponseDto } from '@api/axios/admin/types';
 import { ApplicationStatus } from '@api/axios/application/types';
+import { Part } from '@api/axios/auth/types';
 import { useAdminGetAllApplications } from '@api/query/admin';
+import { useGetSchoolsQuery } from '@api/query/auth';
+
+import { ROUTES } from '@common/constants/routes.constants';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
-import { AdminInfoTableColumn } from '@features/admin/components/AdminInfoTableColumn';
-import { ApplicantSummary } from '@features/admin/components/ApplicantSummary';
 import { ApplicationDetailDialog } from '@features/admin/components/ApplicationDetailDialog';
 import { DataTable } from '@features/admin/components/DataTable';
 import { OverviewStatus } from '@features/admin/components/OverviewStatus';
-import { ProjectStats } from '@features/admin/components/ProjectStats';
+import { AdminInfoTableColumn } from '@features/admin/components/dashboard/AdminInfoTableColumn';
+import ApplicationStatsByApplicant from '@features/admin/components/dashboard/ApplicantTable';
+import { ProjectStats } from '@features/admin/components/dashboard/ProjectStats';
 
 const AdminDashboard = () => {
-  const { data: applications, isLoading } = useAdminGetAllApplications();
+  const { data: applications, isLoading: isApplicationsLoading } = useAdminGetAllApplications();
+  const { data: schools, isLoading: isSchoolLoading } = useGetSchoolsQuery();
+  const router = useRouter();
 
   const [selectedApplication, setSelectedApplication] =
     useState<AdminGetAllApplicationsResponseDto | null>(null);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [partFilter, setPartFilter] = useState<Part | undefined>(undefined);
+  const [schoolFilter, setSchoolFilter] = useState<string | undefined>(undefined);
 
   const projectIds = useMemo(() => {
     if (!applications) return [];
@@ -36,9 +48,8 @@ const AdminDashboard = () => {
     setIsDialogOpen(true);
   };
 
-  const handleViewProject = (projectTitle: string) => {
-    // TODO: Navigate to project details page
-    console.log('View project:', projectTitle);
+  const handleViewProject = (projectId: string) => {
+    router.push(ROUTES.PROJECTS.FORM_LIST(projectId));
   };
 
   const handleApplicationStatusChange = (applicationId: string, status: ApplicationStatus) => {
@@ -51,7 +62,21 @@ const AdminDashboard = () => {
     console.log('Change application status:', applicationId);
   };
 
-  if (isLoading) {
+  const partOptions: ComboboxOption[] = [
+    { value: 'PLAN', label: 'Plan' },
+    { value: 'DESIGN', label: 'Design' },
+    { value: 'WEB', label: 'Web' },
+    { value: 'ANDROID', label: 'Android' },
+    { value: 'IOS', label: 'iOS' },
+    { value: 'SPRINGBOOT', label: 'SpringBoot' },
+    { value: 'NODEJS', label: 'Node.js' },
+  ];
+
+  const schoolOptions: ComboboxOption[] = schools
+    ? schools.map((school) => ({ value: school.handle, label: school.name }))
+    : [];
+
+  if (isApplicationsLoading || isSchoolLoading) {
     return <DefaultSkeleton />;
   }
 
@@ -79,7 +104,7 @@ const AdminDashboard = () => {
       <OverviewStatus applications={applications} />
 
       {/* 탭 : 조건 선택 */}
-      <Tabs defaultValue="applications" className="space-y-4">
+      <Tabs defaultValue="applications" className="">
         <TabsList>
           <TabsTrigger value="applications">전체 지원서</TabsTrigger>
           <TabsTrigger value="projects">프로젝트별 통계</TabsTrigger>
@@ -113,18 +138,39 @@ const AdminDashboard = () => {
         </TabsContent>
 
         {/*지원자별 지원서 확인*/}
-        <TabsContent value="applicants" className="space-y-4">
-          NOT IMPLEMENTED
-          {/*<ApplicantSummary applications={applications} />*/}
+        <TabsContent value="applicants" className="flex flex-col gap-y-4">
+          <div className={'flex flex-row gap-x-2'}>
+            <Combobox
+              options={schoolOptions}
+              value={schoolFilter}
+              onChange={(schoolHandle) => setSchoolFilter(schoolHandle)}
+              placeholder="학교 선택"
+              searchPlaceholder="학교를 검색하세요..."
+              emptyPlaceholder="해당하는 학교가 없습니다."
+              className="" // 필요에 따라 너비 등 스타일 조정
+            />
+
+            <Combobox
+              options={partOptions}
+              value={partFilter}
+              onChange={(part) => setPartFilter(part as Part | undefined)}
+              placeholder="파트 선택"
+              searchPlaceholder="파트를 검색하세요..."
+              emptyPlaceholder="해당 파트가 없습니다."
+              className="" // 필요에 따라 너비 등 스타일 조정
+            />
+          </div>
+
+          <ApplicationStatsByApplicant school={schoolFilter} part={partFilter} />
         </TabsContent>
       </Tabs>
 
       {/* 지원서 상세보기 Dialog */}
-      {/*<ApplicationDetailDialog*/}
-      {/*  application={selectedApplication}*/}
-      {/*  open={isDialogOpen}*/}
-      {/*  onOpenChange={setIsDialogOpen}*/}
-      {/*/>*/}
+      <ApplicationDetailDialog
+        application={selectedApplication}
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+      />
     </div>
   );
 };

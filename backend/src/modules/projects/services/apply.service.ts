@@ -9,11 +9,20 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
-import { ApplicationStatusEnum, UserPartEnum } from '@generated/prisma/mongodb';
+import {
+  ApplicationStatusEnum,
+  Prisma,
+  UserPartEnum,
+} from '@generated/prisma/mongodb';
 import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
 import { AnswerDto } from '@modules/projects/dto/apply.dto';
 import { ProjectsService } from '@modules/projects/services/projects.service';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import {
+  ApplicationStatsByChallengerResponseDto,
+  ChallengerApplicationInfo,
+} from '@modules/projects/dto/admin.dto';
+import ChallengerWhereInput = Prisma.ChallengerWhereInput;
 
 @Injectable()
 export class ApplyService {
@@ -538,5 +547,92 @@ export class ApplyService {
     }
 
     return stats;
+  }
+
+  async getApplicationStatisticsByChallenger(
+    part?: UserPartEnum,
+    school?: string,
+    challengerId?: string,
+  ): Promise<ApplicationStatsByChallengerResponseDto> {
+    const whereClause: ChallengerWhereInput = {};
+    if (part) whereClause.part = part;
+    if (school) whereClause.challengerSchool = { handle: school };
+    if (challengerId) whereClause.id = challengerId;
+
+    const challengers = await this.mongo.challenger.findMany({
+      where: whereClause,
+      include: {
+        challengerSchool: true,
+        projectMember: {
+          include: {
+            project: true,
+          },
+        },
+        applications: {
+          include: {
+            matchingRound: true,
+            form: {
+              include: {
+                project: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const matchingRounds = await this.mongo.matchingRound.findMany({
+      orderBy: { startDatetime: 'asc' },
+    });
+
+    const stats: ChallengerApplicationInfo[] = challengers.map((challenger) => {
+      const matchingResults = matchingRounds.map((round) => {
+        const application = challenger.applications.find(
+          (app) => app.matchingRoundId === round.id,
+        );
+
+        const applicationStatus: ApplicationStatusEnum | 'NOT_APPLIED' =
+          application ? application.status : 'NOT_APPLIED';
+
+        return {
+          matchingRoundName: round.name,
+          projectTitle: application ? application.form.project.title : '-',
+          applicationStatus,
+        };
+      });
+
+      let projectMember = {
+        projectId: '-',
+        title: '-',
+      };
+
+      if (challenger.projectMember.length > 1) {
+        this.logger.error(
+          `챌린저 ${challenger.id}가 여러 프로젝트의 멤버로 등록되어 있습니다.`,
+          'APPLY_SERVICE',
+        );
+        throw new ConflictException(
+          '챌린저가 여러 프로젝트의 멤버로 등록되어 있습니다.',
+        );
+      } else if (challenger.projectMember.length === 1) {
+        projectMember = {
+          projectId: challenger.projectMember[0].project.id,
+          title: challenger.projectMember[0].project.title,
+        };
+      }
+
+      return {
+        challengerId: challenger.id,
+        umsbChallengerId: challenger.umsbChallengerId || '-',
+        name: challenger.name,
+        nickname: challenger.nickname,
+        part: challenger.part,
+        school: challenger.challengerSchool.name,
+        projectMember,
+        matchingResults,
+      };
+    });
+
+    return { applicationResults: stats };
   }
 }

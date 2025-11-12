@@ -1,5 +1,7 @@
 'use client';
 
+import { clsx } from 'clsx';
+
 import { parsePart } from '@common/utils/parse-userinfo';
 
 const ApplicantChallengerInfo = ({
@@ -7,14 +9,18 @@ const ApplicantChallengerInfo = ({
   part,
   name,
   nickname,
+  className,
 }: {
   school: string;
   part: string;
   nickname: string;
   name: string;
+  className?: string;
 }) => {
   return (
-    <div className={'text-30pxr mt-3 flex flex-row items-end justify-start gap-x-2'}>
+    <div
+      className={clsx('text-30pxr mt-3 flex flex-row items-end justify-start gap-x-2', className)}
+    >
       <span className={''}>{school}</span>
       <span className={'font-semibold'}>
         {nickname}/{name}
