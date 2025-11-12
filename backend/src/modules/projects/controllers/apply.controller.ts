@@ -131,10 +131,7 @@ export class ApplyController {
 
     // 지원하고자 하는 프로젝트에 본인의 TO가 남아있는지 확인합니다.
     const { part } = await this.userService.getUserByUserId(userId);
-    await this.projectService.getCurrentAndMaxToByPartInProject(
-      projectId,
-      part,
-    );
+    await this.projectService.checkIfToLeftInProject(projectId, part);
 
     // DB 상에도 Unique Constraint를 적용하여 이중으로 확인합니다.
     await this.applyService.applyToProjectByFormId(
@@ -224,16 +221,7 @@ export class ApplyController {
     await this.projectService.throwIfUserNotPlanByProjectId(userId, projectId);
 
     // 지원서의 매칭 차수가 종료되었는지 확인합니다.
-    const application = await this.applyService.getApplication(applicationId);
-    const applicationMatchingRound =
-      await this.matchingRoundService.getOrThrowMatchingRound(
-        application.matchingRoundId,
-      );
-    if (applicationMatchingRound.endDatetime > new Date()) {
-      throw new ForbiddenException(
-        '매칭 차수가 종료되기 전까지는 지원서의 상태를 변경할 수 없습니다.',
-      );
-    }
+    await this.applyService.checkApplicationMatchingRoundExpired(applicationId);
 
     // 지원서가 제출 상태인 경우에만 변경 가능, 이미 합격/불합격된 지원서는 변경 불가
     await this.applyService.throwIfApplicationStatusNotSubmitted(applicationId);
@@ -241,14 +229,15 @@ export class ApplyController {
     // 프로젝트에, 상태를 변경하고자 하는 지원자의 파트에 대한 TO가 있는지 확인합니다.
     // 지원 시점에도 확인하지만, 지원서 상태 변경 시에도 중복 확인 처리합니다.
     // 합격 처리할 때만 고려하면 됩니다.
-    // Zero Trust!
-    if (body.status === 'CONFIRMED') {
-      const application = await this.applyService.getApplication(applicationId);
-      await this.projectService.getCurrentAndMaxToByPartInProject(
-        projectId,
-        application.applicant.part,
-      );
-    }
+
+    // 지원서를 합격시켜도 되는지 확인합니다.
+
+    await this.applyService.isApplicationStatusChangeValid(
+      applicationId,
+      body.status,
+    );
+
+    // 지원서를 불합격시킬 수 있는지 확인합니다.
 
     this.logger.warn(
       `지원서의 상태를 ${body.status} 로 변경합니다. 챌린저 ${userId} 지원서 ${applicationId}`,

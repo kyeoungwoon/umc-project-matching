@@ -8,7 +8,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
-import { ApplicationStatusEnum } from '@generated/prisma/mongodb';
+import { ApplicationStatusEnum, UserPartEnum } from '@generated/prisma/mongodb';
 import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
 import { AnswerDto } from '@modules/projects/dto/apply.dto';
 import { ProjectsService } from '@modules/projects/services/projects.service';
@@ -129,7 +129,11 @@ export class ApplyService {
       where: { id: applicationId },
       include: {
         applicant: true,
-        form: true,
+        form: {
+          include: {
+            project: true,
+          },
+        },
         formAnswers: true,
       },
     });
@@ -269,5 +273,170 @@ export class ApplyService {
         },
       },
     });
+  }
+
+  async checkApplicationMatchingRoundExpired(
+    applicationId: string,
+    datetime: Date = new Date(),
+  ) {
+    // 지원서의 매칭 차수가 종료되었는지 확인합니다.
+    const application = await this.getApplication(applicationId);
+    const applicationMatchingRound =
+      await this.matching.getOrThrowMatchingRound(application.matchingRoundId);
+
+    if (applicationMatchingRound.endDatetime > datetime) {
+      throw new ForbiddenException(
+        '매칭 차수가 종료되기 전까지는 지원서의 상태를 변경할 수 없습니다.',
+      );
+    }
+  }
+
+  async isApplicationStatusChangeValid(
+    applicationId: string,
+    newStatus: ApplicationStatusEnum,
+  ) {
+    if (newStatus === ApplicationStatusEnum.CONFIRMED) {
+      await this.isApplicationAcceptable(applicationId);
+    } else if (newStatus === ApplicationStatusEnum.REJECTED) {
+      await this.isApplicationRejectable(applicationId);
+    }
+  }
+
+  /**
+   * 지원서가 수락 가능한지 확인합니다.
+   */
+  async isApplicationAcceptable(applicationId: string) {
+    const application = await this.getApplication(applicationId);
+
+    const applicantPart = application.applicant.part;
+    const appliedProjectId = application.form.projectId;
+
+    // 현재는 TO가 남아있는지만 확인합니다.
+    await this.projectsService.checkIfToLeftInProject(
+      appliedProjectId,
+      applicantPart,
+    );
+
+    return;
+  }
+
+  /**
+    ### **1. PM ↔ 디자이너 매칭 관련**
+  
+    - **디자이너 지원자가 2명 이상**이라면 PM은 반드시 **한 명 이상을 선택**해야 합니다.
+    - **디자이너 지원자가 1명**이라면 PM은 해당 지원자를 **선택할 수도 있고, 선택하지 않을 수도 있습니다**.
+    
+    
+    ### 2. 팀 ↔ 개발자 매칭 관련
+  
+    - **지원자 ≥ TO(모집 인원)**일 경우,
+    - PM은 반드시 **TO 대비 50% 이상을 선택**해야 합니다.
+    
+    
+    - **지원자가 TO(모집 인원) 대비 50% 초과일 경우**,
+    - PM은 반드시 **TO 대비 25% 이상을 선택**해야 합니다.
+    
+    
+    - **지원자가 TO(모집 인원) 대비 50% 이하일 경우**,
+    - PM은 지원자를 **선택할 수도 있고, 선택하지 않을 수도 있습니다**.
+ */
+  async isApplicationRejectable(applicationId: string) {
+    const application = await this.getApplication(applicationId);
+
+    const appliedProjectId = application.form.projectId;
+    const applicantPart = application.applicant.part;
+
+    const projectParts =
+      await this.projectsService.getProjectPartToStatus(appliedProjectId);
+
+    const partInfo = projectParts.find((p) => p.part === applicantPart);
+    if (!partInfo) {
+      throw new NotFoundException(
+        `프로젝트에 ${applicantPart} 파트가 존재하지 않습니다.`,
+      );
+    }
+
+    const { maxTo, currentTo } = partInfo;
+
+    // TODO: 미래의 치원 차수에서 온 사람인 것 아니면 상관 없음 ..
+
+    // "현재 차수가 아닌 차수" 에서 파트가 동일한 팀 멤버의 수
+    // 기존 팀 멤버 수를 뜻함 (이번 차수의 TO를 결정하는데에 사용됨)
+    const originalTeamMemberCount = await this.mongo.application.count({
+      where: {
+        form: {
+          projectId: appliedProjectId,
+        },
+        matchingRoundId: {
+          not: application.matchingRoundId,
+        },
+        status: ApplicationStatusEnum.CONFIRMED,
+        applicant: {
+          part: applicantPart,
+        },
+      },
+    });
+
+    // 현재 차수에 대해, 지원서와 차수가 일치하는 지원자 수 조회
+    // 지원서 상태 = 제출됨 + 매칭 차수가 동일한 것만
+    const totalApplicants = await this.mongo.application.count({
+      where: {
+        form: {
+          projectId: appliedProjectId,
+        },
+        matchingRoundId: application.matchingRoundId,
+        status: ApplicationStatusEnum.SUBMITTED,
+        applicant: {
+          part: applicantPart,
+        },
+      },
+    });
+
+    const currentMatchingConfirmedCount = currentTo - originalTeamMemberCount;
+
+    // --- 1. 디자이너 매칭 로직 ---
+    if (applicantPart === UserPartEnum.DESIGN) {
+      // TO가 1명인 경우 무조건 거절 가능
+      if (maxTo === 1) return;
+
+      // 요구사항: 지원자 2명 이상이면 1명 이상 선택
+      if (totalApplicants >= 2 && currentMatchingConfirmedCount < 1) {
+        throw new ForbiddenException(
+          `현재 ${applicantPart} 파트의 지원자는 ${totalApplicants}명이며, 1명 이상을 선택해야 거절할 수 있습니다.`,
+        );
+      }
+      // (참고: 지원자가 1명이거나 0명이면 이 if문을 통과하고, 아무 제한 없이 return 됨)
+    }
+    // --- 2. 개발자 (및 그 외 파트) 매칭 로직 ---
+    else {
+      // 현재 매칭 세션에 할당된 TO
+      const currentMatchingRoundTo = maxTo - originalTeamMemberCount;
+      const halfTo = Math.ceil(currentMatchingRoundTo * 0.5);
+      const quarterTo = Math.ceil(currentMatchingRoundTo * 0.25);
+
+      // 이번 차수에 선발된 사람을 구하는 방법 = currentTo는 현재 선발된 팀원을 뜻함
+      // 거기서 이번 차수 전에 멤버였던 사람을 구하면 됨
+      // 그럼 currentTo - originalTeamMemberCount = 이번 차수에 선발된 사람
+
+      if (totalApplicants >= currentMatchingRoundTo) {
+        // 지원자가 TO 이상인 경우, TO의 50% 이상을 선택해야 함
+        if (currentMatchingConfirmedCount < halfTo) {
+          throw new ForbiddenException(
+            `[50% 제한] 현재 ${applicantPart} 파트의 지원자는 ${totalApplicants}명이며, ${halfTo}명 이상을 선택해야 거절할 수 있습니다.`,
+          );
+        }
+      } else if (totalApplicants > halfTo) {
+        // 지원자가 TO의 50% 초과인 경우, TO의 25% 이상을 선택해야 함
+        if (currentMatchingConfirmedCount < quarterTo) {
+          throw new ForbiddenException(
+            `[25% 제한] 현재 ${applicantPart} 파트의 지원자는 ${totalApplicants}명이며, ${quarterTo}명 이상을 선택해야 거절할 수 있습니다.`,
+          );
+        }
+      }
+
+      // 지원자가 TO의 50% 이하인 경우는 제한 없음
+    }
+
+    return;
   }
 }
