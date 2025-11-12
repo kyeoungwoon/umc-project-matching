@@ -10,7 +10,7 @@ const ApplicationStatusBadge = ({ status }: { status: string }) => {
   return (
     <div
       className={clsx(
-        'w-full max-w-15 rounded-md px-3 py-1 text-center text-lg font-semibold',
+        'w-16 rounded-md px-2 py-1 text-center text-lg font-semibold',
         status === 'REJECTED' && 'bg-red-500 text-white',
         status === 'CONFIRMED' && 'bg-green-500 text-white',
         status === 'SUBMITTED' && 'bg-blue-500 text-white',
