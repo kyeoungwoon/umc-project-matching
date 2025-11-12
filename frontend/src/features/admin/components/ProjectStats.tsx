@@ -55,7 +55,7 @@ export function ProjectStats({ applications }: ProjectStatsProps) {
       const stat = statsMap.get(key)!;
       stat.totalApplications++;
 
-      if (app.status === 'PENDING') stat.pendingCount++;
+      if (app.status === 'SUBMITTED') stat.pendingCount++;
       if (app.status === 'ACCEPTED') stat.acceptedCount++;
       if (app.status === 'REJECTED') stat.rejectedCount++;
     });

@@ -243,17 +243,21 @@ export class ApplyService {
   async adminGetAllApplications() {
     return this.mongo.application.findMany({
       include: {
+        matchingRound: true,
         applicant: {
           select: {
+            id: true,
             umsbChallengerId: true,
             name: true,
             nickname: true,
             school: true,
+            part: true,
             challengerSchool: true,
           },
         },
         form: {
           select: {
+            id: true,
             title: true,
             project: {
               select: {

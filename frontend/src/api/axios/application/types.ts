@@ -8,10 +8,6 @@ export interface AnswerDto {
   value: string[];
 }
 
-export interface AnswerResponseDto extends AnswerDto {
-  questionTitle?: string;
-}
-
 export interface ApplyToProjectRequestDto {
   answers: AnswerDto[];
 }

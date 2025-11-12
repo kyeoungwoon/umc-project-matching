@@ -1,7 +1,9 @@
+import { ApplicationStatus } from '@api/axios/application/types';
 import { Part, SchoolInfo, SchoolResponseDto } from '@api/axios/auth/types';
 import { MatchingRoundResponseDto } from '@api/axios/matching-round/types';
 
 interface AdminPartialUserInfoDto {
+  id: string;
   umsbChallengerId: string;
   name: string;
   nickname: string;
@@ -11,6 +13,7 @@ interface AdminPartialUserInfoDto {
 }
 
 interface AdminPartialFormInfoDto {
+  id: string;
   title: string;
   project: {
     title: string;
@@ -20,7 +23,7 @@ interface AdminPartialFormInfoDto {
 
 export interface AdminGetAllApplicationsResponseDto {
   id: string;
-  status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+  status: ApplicationStatus;
   createdAt: string;
   updatedAt: string;
   applicant: AdminPartialUserInfoDto;

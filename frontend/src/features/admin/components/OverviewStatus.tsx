@@ -17,7 +17,7 @@ export function OverviewStatus({ applications }: OverviewStatsProps) {
     const uniqueApplicants = new Set(applications.map((app) => app.applicant.umsbChallengerId))
       .size;
     const uniqueProjects = new Set(applications.map((app) => app.form.project.title)).size;
-    const pendingCount = applications.filter((app) => app.status === 'PENDING').length;
+    const pendingCount = applications.filter((app) => app.status === 'SUBMITTED').length;
     const acceptedCount = applications.filter((app) => app.status === 'ACCEPTED').length;
     const rejectedCount = applications.filter((app) => app.status === 'REJECTED').length;
 

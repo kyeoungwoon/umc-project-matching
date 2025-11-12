@@ -32,6 +32,19 @@ export const getStatusText = (status: ApplicationStatus) => {
   }
 };
 
+export const getStatusLabelClassname = (status: 'SUBMITTED' | 'CONFIRMED' | 'REJECTED'): string => {
+  switch (status) {
+    case 'CONFIRMED':
+      return 'bg-green-600 text-white';
+    case 'SUBMITTED':
+      return 'bg-gray-600 text-white';
+    case 'REJECTED':
+      return 'bg-red-600 text-white';
+    default:
+      return status;
+  }
+};
+
 export const getStatusIcon = (status: ApplicationStatus) => {
   switch (status) {
     case 'CONFIRMED':

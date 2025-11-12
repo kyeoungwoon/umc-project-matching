@@ -11,56 +11,29 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@styles/components/ui/dropdown-menu';
 import { Label } from '@styles/components/ui/label';
 
 import { AdminGetAllApplicationsResponseDto } from '@api/axios/admin/types';
+import { ApplicationStatus, ApplicationStatusEnum } from '@api/axios/application/types';
 
-const getStatusBadgeVariant = (
-  status: 'SUBMITTED' | 'CONFIRMED' | 'REJECTED',
-): 'default' | 'secondary' | 'destructive' => {
-  switch (status) {
-    case 'CONFIRMED':
-      return 'default';
-    case 'SUBMITTED':
-      return 'secondary';
-    case 'REJECTED':
-      return 'destructive';
-    default:
-      return 'secondary';
-  }
-};
+import { parsePart } from '@common/utils/parse-userinfo';
 
-const getStatusLabel = (status: 'SUBMITTED' | 'CONFIRMED' | 'REJECTED'): string => {
-  switch (status) {
-    case 'CONFIRMED':
-      return '합격';
-    case 'SUBMITTED':
-      return '대기';
-    case 'REJECTED':
-      return '불합격';
-    default:
-      return status;
-  }
-};
+import {
+  getStatusLabelClassname,
+  getStatusText,
+} from '@features/projects/utils/get-by-application-status';
 
-const getStatusLabelClassname = (status: 'SUBMITTED' | 'CONFIRMED' | 'REJECTED'): string => {
-  switch (status) {
-    case 'CONFIRMED':
-      return 'bg-green-600 text-white';
-    case 'SUBMITTED':
-      return 'bg-gray-600 text-white';
-    case 'REJECTED':
-      return 'bg-red-600 text-white';
-    default:
-      return status;
-  }
-};
-
+// 테이블 행들이 어떻게 이루어질 것인지를 정의한다.
 export const AdminInfoTableColumn = (
   onViewApplication: (application: AdminGetAllApplicationsResponseDto) => void,
   onViewProject: (projectTitle: string) => void,
+  onApplicationStatusChange: (applicationId: string, status: ApplicationStatus) => void,
+  onApplicationDelete: (applicationId: string) => void,
 ): ColumnDef<AdminGetAllApplicationsResponseDto>[] => [
   {
     accessorKey: 'createdAt',
@@ -76,7 +49,7 @@ export const AdminInfoTableColumn = (
     cell: ({ row }) => {
       const matchingRound = row.original.matchingRound;
       return matchingRound ? (
-        <Badge variant="outline">{matchingRound.name}</Badge>
+        <Label>{matchingRound.name}</Label>
       ) : (
         <span className="text-muted-foreground text-sm">-</span>
       );
@@ -85,7 +58,7 @@ export const AdminInfoTableColumn = (
   {
     id: 'applicant.school',
     accessorKey: 'applicant.school',
-    header: '소속 대학',
+    header: '대학교',
     cell: ({ row }) => {
       const schools = row.original.applicant.challengerSchool;
 
@@ -94,13 +67,7 @@ export const AdminInfoTableColumn = (
         return <span className="text-muted-foreground text-sm">-</span>;
       }
 
-      return (
-        // <div className="flex flex-wrap gap-1">
-        //   {schools.map((school, idx) => (
-        <Label>{schools.name}</Label>
-        // ))}
-        // </div>
-      );
+      return <Label>{schools.name}</Label>;
     },
   },
   {
@@ -121,7 +88,7 @@ export const AdminInfoTableColumn = (
     cell: ({ row }) => {
       const part = row.original.applicant.part;
       return part ? (
-        <Badge variant="secondary">{part}</Badge>
+        <Label>{parsePart(part)}</Label>
       ) : (
         <span className="text-muted-foreground text-sm">-</span>
       );
@@ -129,7 +96,7 @@ export const AdminInfoTableColumn = (
   },
   {
     accessorKey: 'form.project.title',
-    header: '지원한 기획',
+    header: '지원한 프로젝트',
     cell: ({ row }) => {
       const projectTitle = row.original.form.project.title;
       return (
@@ -152,7 +119,7 @@ export const AdminInfoTableColumn = (
     header: '상태',
     cell: ({ row }) => {
       const status = row.getValue('status') as 'SUBMITTED' | 'CONFIRMED' | 'REJECTED';
-      return <Badge className={getStatusLabelClassname(status)}>{getStatusLabel(status)}</Badge>;
+      return <Badge className={getStatusLabelClassname(status)}>{getStatusText(status)}</Badge>;
     },
   },
   {
@@ -170,14 +137,63 @@ export const AdminInfoTableColumn = (
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>작업</DropdownMenuLabel>
+            {/*<DropdownMenuLabel>작업</DropdownMenuLabel>*/}
+            {/*지원서 상세보기 dialog open*/}
             <DropdownMenuItem onClick={() => onViewApplication(application)}>
               지원서 상세보기
             </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(application.applicant.umsbChallengerId)}
-            >
-              챌린저 ID 복사
+            {/*서브 메뉴 표출 - 각종 정보 복사*/}
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>복사하기</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem
+                  onClick={() => navigator.clipboard.writeText(application.applicant.id)}
+                >
+                  UPMS 챌린저 ID
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => navigator.clipboard.writeText(application.form.id)}
+                >
+                  Form ID
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    navigator.clipboard.writeText(application.applicant.umsbChallengerId)
+                  }
+                >
+                  UMSB 챌린저 ID
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            {/*manual 지원서 합/불 처리*/}
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger>지원서 상태 변경</DropdownMenuSubTrigger>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem
+                  onClick={() =>
+                    onApplicationStatusChange(application.id, ApplicationStatusEnum.SUBMITTED)
+                  }
+                >
+                  제출됨으로 변경
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    onApplicationStatusChange(application.id, ApplicationStatusEnum.CONFIRMED)
+                  }
+                >
+                  합격으로 변경
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() =>
+                    onApplicationStatusChange(application.id, ApplicationStatusEnum.REJECTED)
+                  }
+                >
+                  불합격으로 변경
+                </DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+            <DropdownMenuItem onClick={() => onApplicationDelete(application.id)}>
+              지원서 삭제
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

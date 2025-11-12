@@ -34,19 +34,19 @@ interface ApplicantInfo {
   school: string;
   applications: {
     projectTitle: string;
-    status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+    status: 'SUBMITTED' | 'ACCEPTED' | 'REJECTED';
     createdAt: string;
   }[];
   acceptedProject?: string;
 }
 
 const getStatusBadgeVariant = (
-  status: 'PENDING' | 'ACCEPTED' | 'REJECTED',
+  status: 'SUBMITTED' | 'ACCEPTED' | 'REJECTED',
 ): 'default' | 'secondary' | 'destructive' => {
   switch (status) {
     case 'ACCEPTED':
       return 'default';
-    case 'PENDING':
+    case 'SUBMITTED':
       return 'secondary';
     case 'REJECTED':
       return 'destructive';
@@ -55,11 +55,11 @@ const getStatusBadgeVariant = (
   }
 };
 
-const getStatusLabel = (status: 'PENDING' | 'ACCEPTED' | 'REJECTED'): string => {
+const getStatusLabel = (status: 'SUBMITTED' | 'ACCEPTED' | 'REJECTED'): string => {
   switch (status) {
     case 'ACCEPTED':
       return '합격';
-    case 'PENDING':
+    case 'SUBMITTED':
       return '대기';
     case 'REJECTED':
       return '불합격';

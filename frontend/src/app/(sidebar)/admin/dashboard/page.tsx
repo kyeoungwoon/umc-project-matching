@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@styles/components/ui/tabs';
 
 import { AdminGetAllApplicationsResponseDto } from '@api/axios/admin/types';
+import { ApplicationStatus } from '@api/axios/application/types';
 import { useAdminGetAllApplications } from '@api/query/admin';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
@@ -18,8 +19,10 @@ import { ProjectStats } from '@features/admin/components/ProjectStats';
 
 const AdminDashboard = () => {
   const { data: applications, isLoading } = useAdminGetAllApplications();
+
   const [selectedApplication, setSelectedApplication] =
     useState<AdminGetAllApplicationsResponseDto | null>(null);
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleViewApplication = (application: AdminGetAllApplicationsResponseDto) => {
@@ -30,6 +33,16 @@ const AdminDashboard = () => {
   const handleViewProject = (projectTitle: string) => {
     // TODO: Navigate to project details page
     console.log('View project:', projectTitle);
+  };
+
+  const handleApplicationStatusChange = (applicationId: string, status: ApplicationStatus) => {
+    // TODO: API 구현 후 연결
+    console.log('Change application status:', applicationId, status);
+  };
+
+  const handleApplicationDelete = (applicationId: string) => {
+    // TODO: API 구현 후 연결
+    console.log('Change application status:', applicationId);
   };
 
   if (isLoading) {
@@ -49,16 +62,17 @@ const AdminDashboard = () => {
 
   return (
     <div className="container space-y-6 p-6">
-      {/* 최상단 헤더 */}
+      {/* 페이지 최상단 헤더 */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">운영진 대시보드</h1>
         <p className="text-muted-foreground">지원서 관리 및 통계를 확인할 수 있습니다.</p>
       </div>
 
       {/* 지원 통계 카드들 (수치 표시) */}
+      {/*총 지원서, 지원자 수, 프로젝트 수, 상태별 (제출됨/합격/불합격) 지원서 수 등*/}
       <OverviewStatus applications={applications} />
 
-      {/* 탭, 조건별 필터링 선택화면 */}
+      {/* 탭 : 조건 선택 */}
       <Tabs defaultValue="applications" className="space-y-4">
         <TabsList>
           <TabsTrigger value="applications">전체 지원서</TabsTrigger>
@@ -69,7 +83,12 @@ const AdminDashboard = () => {
         {/*전체 지원서 확인*/}
         <TabsContent value="applications" className="space-y-4">
           <DataTable
-            columns={AdminInfoTableColumn(handleViewApplication, handleViewProject)}
+            columns={AdminInfoTableColumn(
+              handleViewApplication,
+              handleViewProject,
+              handleApplicationStatusChange,
+              handleApplicationDelete,
+            )}
             data={applications}
             filterConfigs={[
               { columnId: 'applicant.nickname', placeholder: '닉네임으로 필터링...' },
