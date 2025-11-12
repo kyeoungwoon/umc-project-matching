@@ -49,7 +49,16 @@ export class RequestContextService {
   /**
    * 현재 요청 컨텍스트에서 traceId를 가져옵니다.
    */
-  getTraceId(): string {
+  getOrThrowTraceId(): string {
     return this.getContext().getTraceId();
+  }
+
+  getTraceId(): string {
+    const requestContext = this.als.getStore();
+    if (!requestContext) {
+      return 'NO_TRACE_ID';
+    }
+
+    return requestContext.getTraceId();
   }
 }

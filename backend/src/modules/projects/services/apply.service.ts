@@ -396,8 +396,16 @@ export class ApplyService {
 
     // --- 1. 디자이너 매칭 로직 ---
     if (applicantPart === UserPartEnum.DESIGN) {
-      // TO가 1명인 경우 무조건 거절 가능
+      // 최대 TO가 1명인 경우 무조건 거절 가능
       if (maxTo === 1) return;
+
+      this.logger.log(
+        `지원서 ${applicationId} | 프로젝트 내 현재 인원 ${currentTo}명, 이전 인원 ${originalTeamMemberCount}명, 최대 TO ${maxTo}명`,
+      );
+
+      this.logger.log(
+        `Design 파트 지원 거절 가능 검증 | 현재 매칭 차수에 대해 지원자 수 ${totalApplicants}명, 합격한 인원 ${currentMatchingConfirmedCount}명, 기존 팀 멤버 수 ${originalTeamMemberCount}명, 최대 TO ${maxTo}명`,
+      );
 
       // 요구사항: 지원자 2명 이상이면 1명 이상 선택
       if (totalApplicants >= 2 && currentMatchingConfirmedCount < 1) {

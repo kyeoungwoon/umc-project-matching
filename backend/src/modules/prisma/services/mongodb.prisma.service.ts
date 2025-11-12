@@ -1,10 +1,64 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  LoggerService,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 
-import { PrismaClient } from '@generated/prisma/mongodb';
+import { Prisma, PrismaClient } from '@generated/prisma/mongodb';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { RequestContextService } from '@modules/als/services/request-context.service';
+import { randomUUID } from 'node:crypto';
 
 @Injectable()
-export class MongoDBPrismaService extends PrismaClient implements OnModuleInit {
+export class MongoDBPrismaService
+  extends PrismaClient
+  implements OnModuleInit, OnModuleDestroy
+{
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
+    private readonly requestContextService: RequestContextService,
+  ) {
+    super({
+      log: [
+        { emit: 'event', level: 'query' },
+        { emit: 'event', level: 'error' },
+        { emit: 'event', level: 'info' },
+        { emit: 'event', level: 'warn' },
+      ],
+    });
+  }
+
   async onModuleInit() {
     await this.$connect();
+    (this.$on as any)('error', (event: any) => {
+      this.logger.error(`[Prisma Error]: ${event.message}`, 'PRISMA_ERROR');
+    });
+    (this.$on as any)('info', (event: any) => {
+      this.logger.debug?.(`[Prisma Info]: ${event.message}`, 'PRISMA_INFO');
+    });
+    (this.$on as any)('warn', (event: Prisma.LogEvent) => {
+      this.logger.warn(`[Prisma Warn]: ${event.message}`, 'PRISMA_WARN');
+    });
+
+    (this.$on as any)('query', (event: Prisma.QueryEvent) => {
+      // const prismaTraceId = randomUUID();
+      // TODO: 이거 왜 안되는지 해결
+      // const prismaTraceId = this.requestContextService.getTraceId();
+      this.logger.log(
+        ` [TARGET] ${event.target} [DURATION] ${event.duration} ms, [QUERY] ${event.query}`,
+        'PRISMA_QUERY',
+      );
+      // this.logger.log(
+      //   `[Query]: ${event.query}, PRISMA_TRACE_ID : ${prismaTraceId}`,
+      //   'PRISMA_QUERY',
+      // );
+    });
+  }
+
+  async onModuleDestroy() {
+    await this.$disconnect();
   }
 }

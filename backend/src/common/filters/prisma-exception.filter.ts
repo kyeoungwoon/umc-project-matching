@@ -8,19 +8,21 @@ import {
 } from '@nestjs/common';
 
 import { PrismaClientKnownRequestError as MongoDBPrismaError } from '@generated/prisma/mongodb/runtime/library';
-import { PrismaClientKnownRequestError as MySQLPrismaError } from '@generated/prisma/mysql/runtime/library';
 import { SentryExceptionCaptured } from '@sentry/nestjs';
 import { Request, Response } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { ApiCommonResponse } from '@common/dto/common-response.dto';
 
-@Catch(MySQLPrismaError, MongoDBPrismaError)
+@Catch(MongoDBPrismaError)
 export class PrismaExceptionFilter implements ExceptionFilter {
-  constructor(@Inject(WINSTON_MODULE_NEST_PROVIDER) private readonly logger: LoggerService) {}
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
+  ) {}
 
   @SentryExceptionCaptured()
-  catch(exception: MySQLPrismaError | MongoDBPrismaError, host: ArgumentsHost) {
+  catch(exception: MongoDBPrismaError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
