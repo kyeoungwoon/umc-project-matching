@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { Combobox, ComboboxOption } from '@styles/components/ui/combobox';
+import { MultiSelectCombobox } from '@styles/components/ui/multi-select-combobox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@styles/components/ui/tabs';
 
 import { AdminGetAllApplicationsResponseDto } from '@api/axios/admin/types';
@@ -12,6 +13,7 @@ import { ApplicationStatus } from '@api/axios/application/types';
 import { Part } from '@api/axios/auth/types';
 import { useAdminGetAllApplications } from '@api/query/admin';
 import { useGetSchoolsQuery } from '@api/query/auth';
+import { useGetProjectListQuery } from '@api/query/project';
 
 import { ROUTES } from '@common/constants/routes.constants';
 
@@ -27,13 +29,14 @@ import { ProjectStats } from '@features/admin/components/dashboard/ProjectStats'
 const AdminDashboard = () => {
   const { data: applications, isLoading: isApplicationsLoading } = useAdminGetAllApplications();
   const { data: schools, isLoading: isSchoolLoading } = useGetSchoolsQuery();
+  const { data: projects, isLoading: isProjectListLoading } = useGetProjectListQuery();
   const router = useRouter();
 
   const [selectedApplication, setSelectedApplication] =
     useState<AdminGetAllApplicationsResponseDto | null>(null);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
+  const [projectFilter, setProjectFilter] = useState<string[]>([]);
   const [partFilter, setPartFilter] = useState<Part | undefined>(undefined);
   const [schoolFilter, setSchoolFilter] = useState<string | undefined>(undefined);
 
@@ -76,7 +79,13 @@ const AdminDashboard = () => {
     ? schools.map((school) => ({ value: school.handle, label: school.name }))
     : [];
 
-  if (isApplicationsLoading || isSchoolLoading) {
+  const projectOptions: ComboboxOption[] = projects
+    ? projects.map((project) => {
+        return { value: project.id, label: project.title };
+      })
+    : [];
+
+  if (isApplicationsLoading || isSchoolLoading || isProjectListLoading) {
     return <DefaultSkeleton />;
   }
 
@@ -130,8 +139,17 @@ const AdminDashboard = () => {
 
         {/*프로젝트별 지원서 확인*/}
         <TabsContent value="projects" className="space-y-4">
-          <div className="space-y-4">
-            {projectIds.map((id, idx) => (
+          <MultiSelectCombobox
+            options={projectOptions}
+            selectedValues={projectFilter}
+            onChange={(selectedProjects) => setProjectFilter(selectedProjects)}
+            placeholder="프로젝트 선택"
+            searchPlaceholder="프로젝트를 검색하세요..."
+            className="w-fit max-w-100 min-w-60 truncate"
+          />
+
+          <div className="flex flex-col gap-y-4">
+            {projectFilter.map((id, idx) => (
               <ProjectStats key={idx} projectId={id} />
             ))}
           </div>

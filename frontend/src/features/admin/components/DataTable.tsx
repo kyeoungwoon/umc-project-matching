@@ -85,7 +85,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       {filterConfigs && filterConfigs.length > 0 && (
         <div className="flex items-center gap-2">
           {filterConfigs.map((config) => (
@@ -96,7 +96,7 @@ export function DataTable<TData, TValue>({
               onChange={(event) =>
                 table.getColumn(config.columnId)?.setFilterValue(event.target.value)
               }
-              className="max-w-sm"
+              className="w-1/8 max-w-sm min-w-50"
             />
           ))}
         </div>
