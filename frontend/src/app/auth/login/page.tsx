@@ -42,7 +42,6 @@ export default function LoginForm() {
       password: '',
     },
     onSubmit: ({ value }) => {
-      console.log('login clicked!');
       mutate(
         {
           school: value.school.handle,
@@ -51,7 +50,6 @@ export default function LoginForm() {
         },
         {
           onSuccess: (data) => {
-            console.log('로그인 성공:', data);
             if (!data) throw new Error('사용자 정보가 없습니다.');
 
             setUser({
@@ -95,7 +93,6 @@ export default function LoginForm() {
           <form.Field
             name={'school'}
             children={(field) => {
-              console.log('school field state:', field.state.meta.isTouched);
               return (
                 <Field className={'w-full'}>
                   <FieldLabel htmlFor={field.name}>학교</FieldLabel>

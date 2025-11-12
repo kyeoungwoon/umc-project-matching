@@ -88,7 +88,6 @@ export const AdminInfoTableColumn = (
     header: '소속 대학',
     cell: ({ row }) => {
       const schools = row.original.applicant.challengerSchool;
-      console.log(schools.name);
 
       // Handle case where school might not be an array or might be undefined
       if (!schools) {

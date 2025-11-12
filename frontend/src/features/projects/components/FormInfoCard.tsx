@@ -44,8 +44,6 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
   const isPlan = useIsPlanChallenger();
   const isAdmin = useIsAdminChallenger();
 
-  // console.log(isPlan, isAdmin, isAdmin || isPlan, '!!!!!!!!!!');
-
   const [mode, setMode] = useState<FormCardMode>(FormCardMode.NORMAL);
   const [editedForm, setEditedForm] = useState<UpdateFormRequestDto>({
     title: form.title,
@@ -84,8 +82,6 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
   if (isMatchingRoundInfoLoading) {
     return <DefaultSkeleton />;
   }
-
-  console.log(availableMatchingRounds);
 
   return (
     <div className={'flex flex-col gap-y-4 rounded-lg border border-gray-200 px-8 py-6'}>

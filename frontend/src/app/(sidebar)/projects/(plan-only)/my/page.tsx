@@ -39,7 +39,6 @@ const MyProjectsPage = () => {
   // Filter projects where the current user is the planner.
   const myProjects = projects.filter((p) => p.planId === user.id);
 
-  console.log(myProjects);
   const projectCards = myProjects.map(projectResponseToCardProps);
 
   return (

@@ -56,7 +56,6 @@ export const ApplicationForm = ({
           router.push(ROUTES.PROJECTS.LIST); // Redirect to project list or a confirmation page
         },
         onError: (err) => {
-          console.error('지원 실패', err);
           toast.error('지원에 실패했습니다. 다시 시도해주세요.', {
             richColors: true,
             position: 'top-center',
