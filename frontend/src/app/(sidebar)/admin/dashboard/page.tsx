@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@styles/components/ui/tabs';
 
@@ -24,6 +24,12 @@ const AdminDashboard = () => {
     useState<AdminGetAllApplicationsResponseDto | null>(null);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const projectIds = useMemo(() => {
+    if (!applications) return [];
+    const ids = applications.map((app) => app.form.project.id);
+    return [...new Set(ids)];
+  }, [applications]);
 
   const handleViewApplication = (application: AdminGetAllApplicationsResponseDto) => {
     setSelectedApplication(application);
@@ -99,7 +105,11 @@ const AdminDashboard = () => {
 
         {/*프로젝트별 지원서 확인*/}
         <TabsContent value="projects" className="space-y-4">
-          <ProjectStats applications={applications} />
+          <div className="space-y-4">
+            {projectIds.map((id, idx) => (
+              <ProjectStats key={idx} projectId={id} />
+            ))}
+          </div>
         </TabsContent>
 
         {/*지원자별 지원서 확인*/}

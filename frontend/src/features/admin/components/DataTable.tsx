@@ -15,6 +15,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  ChevronsUpDownIcon,
+} from 'lucide-react';
 
 import { Button } from '@styles/components/ui/button';
 import { Input } from '@styles/components/ui/input';
@@ -102,9 +109,28 @@ export function DataTable<TData, TValue>({
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(header.column.columnDef.header, header.getContext())}
+                      {/*{header.isPlaceholder*/}
+                      {/*  ? null*/}
+                      {/*  : flexRender(header.column.columnDef.header, header.getContext())}*/}
+                      {header.isPlaceholder ? null : (
+                        <div
+                          {...{
+                            className: header.column.getCanSort()
+                              ? 'cursor-pointer select-none flex items-center gap-1'
+                              : '',
+                            onClick: header.column.getToggleSortingHandler(),
+                          }}
+                        >
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                          {{
+                            asc: <ChevronUpIcon className="ml-2 h-4 w-4" />,
+                            desc: <ChevronDownIcon className="ml-2 h-4 w-4" />,
+                          }[header.column.getIsSorted() as string] ??
+                            (header.column.getCanSort() ? (
+                              <ChevronsUpDownIcon className="text-muted-foreground/50 ml-2 h-4 w-4" />
+                            ) : null)}
+                        </div>
+                      )}
                     </TableHead>
                   );
                 })}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import SidebarSkeleton from '@skeletons/components/SidebarSkeleton';
 
 import { Badge } from '@styles/components/ui/badge';
 import {
@@ -19,94 +19,80 @@ import {
   TableRow,
 } from '@styles/components/ui/table';
 
-import { AdminGetAllApplicationsResponseDto } from '@api/axios/admin/types';
+import { useAdminGetProjectApplicationStats } from '@api/query/admin';
 
 interface ProjectStatsProps {
-  applications: AdminGetAllApplicationsResponseDto[];
+  projectId: string;
 }
 
-interface ProjectStat {
-  projectTitle: string;
-  formTitle: string;
-  totalApplications: number;
-  pendingCount: number;
-  acceptedCount: number;
-  rejectedCount: number;
-}
 
-export function ProjectStats({ applications }: ProjectStatsProps) {
-  const projectStats = useMemo(() => {
-    const statsMap = new Map<string, ProjectStat>();
 
-    applications.forEach((app) => {
-      const key = `${app.form.project.title}|||${app.form.title}`;
+export function ProjectStats({ projectId }: ProjectStatsProps) {
+  const { data: stats, isLoading } = useAdminGetProjectApplicationStats(projectId);
 
-      if (!statsMap.has(key)) {
-        statsMap.set(key, {
-          projectTitle: app.form.project.title,
-          formTitle: app.form.title,
-          totalApplications: 0,
-          pendingCount: 0,
-          acceptedCount: 0,
-          rejectedCount: 0,
-        });
-      }
+  if (isLoading || !stats) {
+    return <SidebarSkeleton />;
+  }
 
-      const stat = statsMap.get(key)!;
-      stat.totalApplications++;
+  const { project, applicationStats } = stats;
 
-      if (app.status === 'SUBMITTED') stat.pendingCount++;
-      if (app.status === 'ACCEPTED') stat.acceptedCount++;
-      if (app.status === 'REJECTED') stat.rejectedCount++;
-    });
-
-    return Array.from(statsMap.values()).sort((a, b) =>
-      a.projectTitle.localeCompare(b.projectTitle),
+  if (!stats) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>프로젝트별 지원 현황</CardTitle>
+          <CardDescription>데이터를 불러오는 중 오류가 발생했습니다.</CardDescription>
+        </CardHeader>
+      </Card>
     );
-  }, [applications]);
+  }
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>프로젝트별 지원 현황</CardTitle>
-        <CardDescription>각 프로젝트의 지원자 수와 합격/불합격 현황</CardDescription>
+        <CardTitle>{project.title}</CardTitle>
+        <CardDescription>각 파트별 지원자 수와 합격/불합격 현황</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="rounded-md border">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>프로젝트</TableHead>
-                <TableHead>지원 폼</TableHead>
+                <TableHead className="">파트</TableHead>
+                <TableHead className="">매칭 차수</TableHead>
+                <TableHead className="text-center">TO</TableHead>
                 <TableHead className="text-center">총 지원자</TableHead>
-                <TableHead className="text-center">대기</TableHead>
                 <TableHead className="text-center">합격</TableHead>
                 <TableHead className="text-center">불합격</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {projectStats.length > 0 ? (
-                projectStats.map((stat, idx) => (
+              {applicationStats.length > 0 ? (
+                applicationStats.map((stat, idx) => (
                   <TableRow key={idx}>
-                    <TableCell className="font-medium">{stat.projectTitle}</TableCell>
-                    <TableCell className="max-w-[200px] truncate">{stat.formTitle}</TableCell>
+                    {/*파트*/}
+                    <TableCell className="font-medium">{stat.part}</TableCell>
+                    {/*매칭 차수 이름*/}
+                    <TableCell className="font-medium">{stat.matchingRound.name}</TableCell>
+                    {/*파트별 최대 TO*/}
+                    <TableCell className="text-center">{stat.maxTo}</TableCell>
+                    {/*해당 차수 총 지원자*/}
+                    <TableCell className="text-center">{stat.totalApplicants}</TableCell>
+                    {/*해당 차수에서 합격한 지원자*/}
                     <TableCell className="text-center">
-                      <Badge variant="outline">{stat.totalApplications}</Badge>
+                      <Badge className={'bg-green-700 text-white'}>
+                        {stat.confirmedApplicants}
+                      </Badge>
                     </TableCell>
+                    {/*해당 차수에서 불합격한 지원자*/}
                     <TableCell className="text-center">
-                      <Badge variant="secondary">{stat.pendingCount}</Badge>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant="default">{stat.acceptedCount}</Badge>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <Badge variant="destructive">{stat.rejectedCount}</Badge>
+                      <Badge className={'bg-red-700 text-white'}>{stat.rejectedApplicants}</Badge>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="h-24 text-center">
+                  <TableCell colSpan={5} className="h-24 text-center">
                     데이터가 없습니다.
                   </TableCell>
                 </TableRow>

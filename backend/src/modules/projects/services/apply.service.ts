@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ConflictException,
   ForbiddenException,
+  ImATeapotException,
   Inject,
   Injectable,
   LoggerService,
@@ -261,6 +262,7 @@ export class ApplyService {
             title: true,
             project: {
               select: {
+                id: true,
                 title: true,
                 projectPlan: {
                   select: {
@@ -450,5 +452,91 @@ export class ApplyService {
     }
 
     return;
+  }
+
+  // 프로젝트 - 파트 - TO - (차수별로 반복) 지원자 수, 합격자 수 통계 반환
+  async getProjectPartToStatusStats(projectId: string) {
+    // TODO: 과연 이 과정이 필요할지 고민해볼 필요는 있음
+    // part와 maxTo만 뽑으면 된다.
+    const projectParts =
+      await this.projectsService.getProjectPartToStatus(projectId);
+
+    const stats: Array<any> = [];
+
+    // 지원서를 프로젝트 기준으로 전부 가져온 다음에, 차수별로 1차 구분 후에 파트별로 구분해서 지원서 상태 별로 분류
+    const matchingApplications = await this.mongo.application.findMany({
+      where: {
+        form: {
+          projectId,
+        },
+      },
+      include: {
+        matchingRound: true,
+        applicant: true,
+      },
+    });
+
+    // 매칭 라운드별로 지원서 필터링
+    const matchingRoundsSet = new Set(
+      matchingApplications.map((app) => app.matchingRoundId),
+    );
+
+    // 각 매칭 라운드에 대해서 filter
+    for (const matchingRoundId of matchingRoundsSet) {
+      const roundApplications = matchingApplications.filter(
+        (app) => app.matchingRoundId === matchingRoundId,
+      );
+
+      // 해당 프로젝트의 파트별 TO를 모아놓은 것 (currentTo는 부가적인 정보로, 여기서는 활용 안함)
+      for (const partInfo of projectParts) {
+        const { part, maxTo } = partInfo;
+
+        // 해당 차수의 지원서 중에서 파트가 일치하는 것만 추출하도록 함
+        // side effect : 해당 프로젝트에 없는 파트에 대한 지원서는 통계에 포함되지 않음 (근데 그러면 안됨 ㅋㅋ)
+        const partApplications = roundApplications.filter(
+          (app) => app.applicant.part === part,
+        );
+
+        // 전체 지원서 수랑 상태별로 분류, 위에 나온 edge case에 대한 오류를 파악할 수 있을 것으로 보임
+        const totalApplicants = partApplications.length;
+        const confirmedApplicants = partApplications.filter(
+          (app) => app.status === ApplicationStatusEnum.CONFIRMED,
+        ).length;
+        const rejectedApplicants = partApplications.filter(
+          (app) => app.status === ApplicationStatusEnum.REJECTED,
+        ).length;
+        const submittedApplicants = partApplications.filter(
+          (app) => app.status === ApplicationStatusEnum.SUBMITTED,
+        ).length;
+
+        // edge case 검증
+        if (
+          totalApplicants !==
+          confirmedApplicants + rejectedApplicants + submittedApplicants
+        ) {
+          this.logger.error(
+            `지원서 통계 집계 중 이상 발견됨 - 프로젝트 ${projectId} | 매칭 차수 ${matchingRoundId} | 파트 ${part} | 전체 지원서 ${totalApplicants}명 vs 합격 ${confirmedApplicants}명 + 불합격 ${rejectedApplicants}명 + 제출됨 ${submittedApplicants}명`,
+          );
+          throw new ImATeapotException('어라 무슨 짓을 하신 거에요?');
+        }
+
+        const matchingRound = matchingApplications.find(
+          (app) => app.matchingRoundId === matchingRoundId,
+        )?.matchingRound;
+
+        stats.push({
+          matchingRoundId,
+          matchingRound,
+          part,
+          maxTo,
+          totalApplicants,
+          confirmedApplicants,
+          rejectedApplicants,
+          submittedApplicants,
+        });
+      }
+    }
+
+    return stats;
   }
 }
