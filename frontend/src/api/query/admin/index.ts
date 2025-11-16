@@ -9,13 +9,18 @@ import {
 } from '@api/axios/admin';
 import { Part } from '@api/axios/auth/types';
 
+import { queryKeyStore } from '@common/constants/query-key.constants';
+
 export const useAdminGetAllApplications = () => {
-  return useQuery({ queryKey: ['admin', 'applications', 'all'], queryFn: adminGetAllApplications });
+  return useQuery({
+    queryKey: queryKeyStore.admin.applications.queryKey,
+    queryFn: adminGetAllApplications,
+  });
 };
 
 export const useAdminGetProjectApplicationStats = (projectId: string, part?: Part[]) => {
   return useQuery({
-    queryKey: ['admin', 'applications', 'stats', projectId, part],
+    queryKey: queryKeyStore.admin.applicationStatByProjectAndPart(projectId, part).queryKey,
     queryFn: () => adminGetProjectApplicationStats(projectId, part),
   });
 };
@@ -26,7 +31,7 @@ export const useAdminGetApplicationStatusByChallenger = (
   challengerId?: string,
 ) => {
   return useQuery({
-    queryKey: ['admin', 'applications', 'status', part, school, challengerId],
+    queryKey: queryKeyStore.admin.applicationStatByChallenger(part, school, challengerId).queryKey,
     queryFn: () => adminGetApplicationStatisticsByChallenger(part, school, challengerId),
   });
 };

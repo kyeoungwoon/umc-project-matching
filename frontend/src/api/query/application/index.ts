@@ -9,6 +9,8 @@ import {
 } from '@api/axios/application';
 import { ApplyToProjectRequestDto, ChangeApplicationStatusDto } from '@api/axios/application/types';
 
+import { queryKeyStore } from '@common/constants/query-key.constants';
+
 export const useApplyToProjectMutation = (projectId: string, formId: string) => {
   return useMutation({
     mutationFn: (data: ApplyToProjectRequestDto) => applyToProject(projectId, formId, data),
@@ -17,7 +19,7 @@ export const useApplyToProjectMutation = (projectId: string, formId: string) => 
 
 export const useGetApplicationQuery = (projectId: string, applicationId: string) => {
   return useQuery({
-    queryKey: ['application', projectId, applicationId],
+    queryKey: queryKeyStore.application.singleApplication(projectId, applicationId).queryKey,
     queryFn: () => getApplication(projectId, applicationId),
     enabled: !!projectId && !!applicationId,
   });
@@ -39,7 +41,7 @@ export const useChangeApplicationStatusMutation = (projectId: string, applicatio
 
 export const useGetMyApplicationsQuery = () => {
   return useQuery({
-    queryKey: ['applications', 'me'],
+    queryKey: queryKeyStore.application.myApplications.queryKey,
     queryFn: getMyApplications,
   });
 };

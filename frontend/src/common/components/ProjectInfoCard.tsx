@@ -16,6 +16,7 @@ import { Label } from '@styles/components/ui/label';
 import { FilteredUserInfoDto, UpdateProjectRequestDto } from '@api/axios/project/types';
 import { useUpdateProjectMutation } from '@api/query/project';
 
+import { queryKeyStore } from '@common/constants/query-key.constants';
 import { ROUTES } from '@common/constants/routes.constants';
 
 import { useIsAdminChallenger, useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
@@ -79,13 +80,16 @@ const ProjectInfoCard = (props: ProjectCardProps) => {
     setMode(ProjectCardMode.VIEW);
     mutate(editedProject, {
       onSuccess: async () => {
-        toast.success('프로젝트가 성공적으로 수정되었습니다.', { richColors: true });
         // 모든 쿼리 캐시 무효화
-        await queryClient.invalidateQueries();
-        // router.refresh();
+        await queryClient.invalidateQueries({
+          queryKey: queryKeyStore.project.singleProject(id).queryKey,
+        });
+        toast.success('프로젝트가 성공적으로 수정되었습니다.');
       },
       onError: (error) => {
-        toast.error(`프로젝트 수정에 실패했습니다, ${error}`, { richColors: true });
+        toast.error(`프로젝트 수정에 실패했습니다.`, {
+          description: error.message,
+        });
         console.error(error);
       },
     });

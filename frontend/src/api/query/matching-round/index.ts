@@ -9,9 +9,11 @@ import {
 } from '@api/axios/matching-round';
 import { CreateMatchingRoundRequestDto } from '@api/axios/matching-round/types';
 
+import { queryKeyStore } from '@common/constants/query-key.constants';
+
 export const useGetClosestMatchingRoundQuery = () => {
   return useQuery({
-    queryKey: ['matching-round', 'closest'],
+    queryKey: queryKeyStore.matchingRound.closest.queryKey,
     queryFn: getClosestMatchingRound,
     retry: false,
   });
@@ -19,7 +21,7 @@ export const useGetClosestMatchingRoundQuery = () => {
 
 export const useGetAllMatchingRoundQuery = () => {
   return useQuery({
-    queryKey: ['matching-round', 'all'],
+    queryKey: queryKeyStore.matchingRound.all.queryKey,
     queryFn: getAllMatchingRound,
     retry: false,
   });
@@ -27,7 +29,7 @@ export const useGetAllMatchingRoundQuery = () => {
 
 export const useGetMatchingRound = (roundId: string) => {
   return useQuery({
-    queryKey: ['matching-round', 'roundId', roundId],
+    queryKey: queryKeyStore.matchingRound.singleMatchingRound(roundId).queryKey,
     queryFn: () => getMatchingRound(roundId),
   });
 };
@@ -40,7 +42,7 @@ export const useCreateMatchingRoundMutation = () => {
 
 export const useGetMatchingRoundByStartEndDatetime = (startDate: Date, endDate: Date) => {
   return useQuery({
-    queryKey: ['matching-round', 'start-end-datetime', startDate, endDate],
+    queryKey: queryKeyStore.matchingRound.byPeriod(startDate, endDate).queryKey,
     queryFn: () => getMatchingRoundsByStartEndDatetime(startDate, endDate),
   });
 };

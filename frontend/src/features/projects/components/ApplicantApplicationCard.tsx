@@ -19,6 +19,8 @@ import { ScrollArea } from '@styles/components/ui/scroll-area';
 import { ApplicationResponseDto, ApplicationStatus } from '@api/axios/application/types';
 import { useChangeApplicationStatusMutation } from '@api/query/application';
 
+import { queryKeyStore } from '@common/constants/query-key.constants';
+
 import ApplicantChallengerInfo from '@common/components/ApplicantChallengerInfo';
 
 import ApplicationStatusBadge from '@features/matching/components/ApplicationStatusBadge';
@@ -66,7 +68,8 @@ const ApplicantApplicationCard = ({
           setIsDialogOpen(false);
           setSelectedStatus(null);
           await queryClient.invalidateQueries({
-            queryKey: ['form', projectId, application.formId],
+            queryKey: queryKeyStore.application.singleApplication(application.id, projectId)
+              .queryKey,
           });
         },
         onError: (err) => {

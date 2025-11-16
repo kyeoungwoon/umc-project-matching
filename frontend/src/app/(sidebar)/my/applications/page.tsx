@@ -9,6 +9,8 @@ import { Separator } from '@styles/components/ui/separator';
 
 import { useDeleteApplicationMutation, useGetMyApplicationsQuery } from '@api/query/application';
 
+import { queryKeyStore } from '@common/constants/query-key.constants';
+
 import { useDoubleCheck } from '@common/hooks/useDoubleCheck';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
@@ -39,7 +41,7 @@ const MyApplicationsPage = () => {
         { projectId, applicationId },
         {
           onSuccess: async () => {
-            await queryClient.invalidateQueries({ queryKey: ['applications', 'me'] });
+            await queryClient.invalidateQueries({ queryKey: queryKeyStore.me.info.queryKey });
             toast.success('지원서가 성공적으로 삭제되었습니다.');
           },
           onError: (err) =>

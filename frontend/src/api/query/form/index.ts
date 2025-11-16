@@ -15,13 +15,15 @@ import {
   UpdateQuestionRequestDto,
 } from '@api/axios/form/types';
 
+import { queryKeyStore } from '@common/constants/query-key.constants';
+
 export const useCreateFormMutation = (projectId: string) => {
   return useMutation({ mutationFn: (data: CreateFormRequestDto) => createForm(projectId, data) });
 };
 
 export const useGetFormQuery = (projectId: string, formId: string) => {
   return useQuery({
-    queryKey: ['form', projectId, formId],
+    queryKey: queryKeyStore.form.singleForm(projectId, formId).queryKey,
     queryFn: () => getForm(projectId, formId),
     enabled: !!projectId && !!formId,
   });
