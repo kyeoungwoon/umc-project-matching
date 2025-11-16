@@ -42,7 +42,9 @@ const DoubleCheckDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{content.title}</DialogTitle>
-          <DialogDescription>{content.description}</DialogDescription>
+          <DialogDescription className={'whitespace-pre-line'}>
+            {content.description}
+          </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button onClick={onClose}>{content.cancelText ?? '취소'}</Button>

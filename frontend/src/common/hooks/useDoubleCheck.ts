@@ -8,7 +8,7 @@ export const useDoubleCheck = (content: DialogContents) => {
   const [isOpen, setIsOpen] = useState(false);
   const onConfirmRef = useRef<() => void>(() => {});
 
-  const onOpen = (onConfirm: () => void) => {
+  const openAndSetOnConfirm = (onConfirm: () => void) => {
     setIsOpen(true);
     onConfirmRef.current = onConfirm;
   };
@@ -28,5 +28,5 @@ export const useDoubleCheck = (content: DialogContents) => {
     content,
   };
 
-  return { onOpen, dialogProps };
+  return { onOpen: openAndSetOnConfirm, dialogProps };
 };

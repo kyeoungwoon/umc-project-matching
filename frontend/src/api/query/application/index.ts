@@ -23,8 +23,11 @@ export const useGetApplicationQuery = (projectId: string, applicationId: string)
   });
 };
 
-export const useDeleteApplicationMutation = (projectId: string, applicationId: string) => {
-  return useMutation({ mutationFn: () => deleteApplication(projectId, applicationId) });
+export const useDeleteApplicationMutation = () => {
+  return useMutation({
+    mutationFn: (data: { projectId: string; applicationId: string }) =>
+      deleteApplication(data.projectId, data.applicationId),
+  });
 };
 
 export const useChangeApplicationStatusMutation = (projectId: string, applicationId: string) => {
