@@ -1,8 +1,12 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
   Inject,
   LoggerService,
+  Param,
+  Patch,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -23,6 +27,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import {
   ApplicationStatusByProjectRequestQuery,
   ApplicationStatsByChallengerRequestQuery,
+  ChangeApplicationStatusRequestDto,
 } from '@modules/projects/dto/admin.dto';
 
 @Controller({
@@ -65,7 +70,10 @@ export class AdminController {
       query.projectId,
     );
     const projectApplicationStats =
-      await this.applyService.getProjectPartToStatusStats(query.projectId);
+      await this.applyService.getProjectPartToStatusStats(
+        query.projectId,
+        query.part,
+      );
 
     return {
       project: projectInfo,
@@ -88,6 +96,22 @@ export class AdminController {
   // 남는 자리 랜덤매칭 기능
   @Get('projects/random-match')
   async randomMatchForRemainingSeats() {}
+
+  @Patch('application/status')
+  async updateApplicationStatus(
+    @Body() body: ChangeApplicationStatusRequestDto,
+  ) {
+    // 관리자용 API는 따로 검증을 하지 않고 합/불 처리를 허용함
+    return this.applyService.changeApplicationStatus(
+      body.applicationId,
+      body.newStatus,
+    );
+  }
+
+  @Delete('application/:applicationId')
+  async deleteApplication(@Param('applicationId') applicationId: string) {
+    return this.applyService.deleteApplication(applicationId, true);
+  }
 
   // 팀 매칭 마스터시트와 동일한 양식으로 제공할 수 있도록 함
 }

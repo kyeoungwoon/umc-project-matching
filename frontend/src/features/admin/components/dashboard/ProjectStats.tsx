@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import { ColumnDef } from '@tanstack/react-table';
 
 import {
@@ -11,6 +13,7 @@ import {
 } from '@styles/components/ui/card';
 
 import { ProjectApplicationStats } from '@api/axios/admin/types';
+import { Part } from '@api/axios/auth/types';
 import { useAdminGetProjectApplicationStats } from '@api/query/admin';
 
 // ProjectApplicationStats 임포트
@@ -23,6 +26,7 @@ import { DataTable } from '../DataTable';
 
 interface ProjectStatsProps {
   projectId: string;
+  part?: Part[];
 }
 
 // DataTable에 사용할 columns 정의
@@ -76,8 +80,8 @@ const columns: ColumnDef<ProjectApplicationStats>[] = [
   },
 ];
 
-export function ProjectStats({ projectId }: ProjectStatsProps) {
-  const { data: stats, isLoading } = useAdminGetProjectApplicationStats(projectId);
+export function ProjectStats({ projectId, part }: ProjectStatsProps) {
+  const { data: stats, isLoading } = useAdminGetProjectApplicationStats(projectId, part);
 
   if (isLoading) {
     return <DefaultSkeleton />; // 로딩 스켈레톤 변경

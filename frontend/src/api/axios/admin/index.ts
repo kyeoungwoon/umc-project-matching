@@ -1,10 +1,12 @@
+import qs from 'qs';
+
 import { ApiResponse, api } from '@api/axios';
 import {
   AdminGetAllApplicationsResponseDto,
   AdminProjectApplicationSummaryResponseDto,
   ApplicationStatsByChallengerResponse,
-  ChallengerApplicationInfo,
 } from '@api/axios/admin/types';
+import { ApplicationStatus } from '@api/axios/application/types';
 import { Part } from '@api/axios/auth/types';
 
 export const adminGetAllApplications = async () => {
@@ -15,12 +17,16 @@ export const adminGetAllApplications = async () => {
   return res.data.result;
 };
 
-export const adminGetProjectApplicationStats = async (projectId: string) => {
+export const adminGetProjectApplicationStats = async (projectId: string, part?: Part[]) => {
   const res = await api.get<ApiResponse<AdminProjectApplicationSummaryResponseDto>>(
     `/v1/projects/admin/applications`,
     {
       params: {
         projectId,
+        part,
+      },
+      paramsSerializer: (params) => {
+        return qs.stringify(params, { arrayFormat: 'repeat' });
       },
     },
   );
@@ -43,6 +49,24 @@ export const adminGetApplicationStatisticsByChallenger = async (
       },
     },
   );
+
+  return res.data.result;
+};
+
+export const adminChangeApplicationStatus = async (data: {
+  applicationId: string;
+  newStatus: ApplicationStatus;
+}) => {
+  const res = await api.patch<ApiResponse<any>>('/v1/projects/admin/application/status', {
+    applicationId: data.applicationId,
+    newStatus: data.newStatus,
+  });
+
+  return res.data.result;
+};
+
+export const adminDeleteApplication = async (applicationId: string) => {
+  const res = await api.delete<ApiResponse<any>>(`/v1/projects/admin/application/${applicationId}`);
 
   return res.data.result;
 };

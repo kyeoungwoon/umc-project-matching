@@ -17,12 +17,14 @@ export class ApplicationStatusByProjectRequestQuery {
   matchingRoundId?: string;
 
   @IsOptional()
-  @IsEnum(UserPartEnum)
+  @IsEnum(UserPartEnum, { each: true })
   @ApiProperty({
     enum: UserPartEnum,
-    description: '파트별로 지원 현황을 필터링합니다.',
+    description:
+      '특정 파트의 사용자만 조회합니다. 여러 파트를 선택할 수 있습니다.',
+    isArray: true,
   })
-  part?: UserPartEnum;
+  part?: UserPartEnum[];
 }
 
 export class ApplicationStatsByChallengerRequestQuery {
@@ -69,4 +71,21 @@ export class ChallengerApplicationInfo {
     projectTitle: string;
     applicationStatus: ApplicationStatusEnum | 'NOT_APPLIED';
   }[];
+}
+
+export class ChangeApplicationStatusRequestDto {
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: '변경하고자 하는 지원서 ID',
+  })
+  applicationId!: string;
+
+  @IsNotEmpty()
+  @IsEnum(ApplicationStatusEnum)
+  @ApiProperty({
+    enum: ApplicationStatusEnum,
+    description: '변경할 지원서 상태',
+  })
+  newStatus!: ApplicationStatusEnum;
 }

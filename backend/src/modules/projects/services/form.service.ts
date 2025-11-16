@@ -113,9 +113,6 @@ export class FormService {
       include: {
         project: true,
         questions: {
-          where: {
-            isDeleted: false,
-          },
           orderBy: {
             questionNo: 'asc',
           },

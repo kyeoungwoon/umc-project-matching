@@ -17,15 +17,15 @@ export function OverviewStatus({ applications }: OverviewStatsProps) {
     const uniqueApplicants = new Set(applications.map((app) => app.applicant.umsbChallengerId))
       .size;
     const uniqueProjects = new Set(applications.map((app) => app.form.project.title)).size;
-    const pendingCount = applications.filter((app) => app.status === 'SUBMITTED').length;
-    const acceptedCount = applications.filter((app) => app.status === 'ACCEPTED').length;
+    const submittedCount = applications.filter((app) => app.status === 'SUBMITTED').length;
+    const acceptedCount = applications.filter((app) => app.status === 'CONFIRMED').length;
     const rejectedCount = applications.filter((app) => app.status === 'REJECTED').length;
 
     return {
       totalApplications: applications.length,
       uniqueApplicants,
       uniqueProjects,
-      pendingCount,
+      submittedCount,
       acceptedCount,
       rejectedCount,
     };
@@ -62,18 +62,18 @@ export function OverviewStatus({ applications }: OverviewStatsProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.uniqueProjects}</div>
-          <p className="text-muted-foreground text-xs">지원 가능한 프로젝트</p>
+          <p className="text-muted-foreground text-xs">지원자를 받은 프로젝트 수</p>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium">대기 중</CardTitle>
+          <CardTitle className="text-sm font-medium">제출됨</CardTitle>
           <Clock className="text-muted-foreground h-4 w-4" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{stats.pendingCount}</div>
-          <p className="text-muted-foreground text-xs">심사 대기 중인 지원서</p>
+          <div className="text-2xl font-bold">{stats.submittedCount}</div>
+          <p className="text-muted-foreground text-xs">합격/불합격을 기다리고 있는 지원서</p>
         </CardContent>
       </Card>
 
@@ -84,7 +84,7 @@ export function OverviewStatus({ applications }: OverviewStatsProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.acceptedCount}</div>
-          <p className="text-muted-foreground text-xs">합격한 지원서</p>
+          <p className="text-muted-foreground text-xs">합격한 지원서 수</p>
         </CardContent>
       </Card>
 
@@ -95,7 +95,7 @@ export function OverviewStatus({ applications }: OverviewStatsProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.rejectedCount}</div>
-          <p className="text-muted-foreground text-xs">불합격한 지원서</p>
+          <p className="text-muted-foreground text-xs">불합격한 지원서 수</p>
         </CardContent>
       </Card>
     </div>

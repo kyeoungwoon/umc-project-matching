@@ -112,7 +112,7 @@ export class ApplyService {
   /**
    * 지원서를 삭제합니다. 현재 차수에 작성한 지원서만 삭제가 가능합니다.
    */
-  async deleteApplication(applicationId: string) {
+  async deleteApplication(applicationId: string, isAdmin: boolean = false) {
     const currentRoundId =
       await this.matching.getCurrentProjectMatchingRoundId();
 
@@ -124,11 +124,22 @@ export class ApplyService {
       throw new NotFoundException('해당하는 지원서가 존재하지 않습니다.');
     }
 
-    if (application.matchingRoundId !== currentRoundId) {
+    // 일반 사용자인 경우에만 현재 차수 검증
+    if (!isAdmin && application.matchingRoundId !== currentRoundId) {
       throw new NotFoundException('현재 차수의 지원서만 삭제할 수 있습니다.');
     }
 
-    return this.mongo.application.delete({ where: { id: applicationId } });
+    return this.mongo.$transaction(async (tx) => {
+      // formAnswers 먼저 삭제
+      await tx.formAnswer.deleteMany({
+        where: { applicationId },
+      });
+
+      // 그 다음에 application 삭제
+      return tx.application.delete({
+        where: { id: applicationId },
+      });
+    });
   }
 
   /**
@@ -180,12 +191,30 @@ export class ApplyService {
     applicationId: string,
     status: ApplicationStatusEnum,
   ) {
+    const application = await this.mongo.application.findUnique({
+      where: { id: applicationId },
+    });
+
+    if (!application) {
+      throw new NotFoundException('해당하는 지원서가 존재하지 않습니다.');
+    }
+
     // 승인하는 경우 팀원에 추가하기
     if (status === ApplicationStatusEnum.CONFIRMED) {
       // 팀원에도 추가해야함
       const { projectId, userId } =
         await this.getProjectAndUserIdByApplicationId(applicationId);
       await this.projectsService.addTeamMember(projectId, userId);
+    } else if (status === ApplicationStatusEnum.REJECTED) {
+      // 프로젝트 멤버에서도 삭제
+      await this.mongo.projectMember.delete({
+        where: {
+          projectId_userId: {
+            projectId: application.formId,
+            userId: application.applicantId,
+          },
+        },
+      });
     }
 
     return this.mongo.application.update({
@@ -464,7 +493,10 @@ export class ApplyService {
   }
 
   // 프로젝트 - 파트 - TO - (차수별로 반복) 지원자 수, 합격자 수 통계 반환
-  async getProjectPartToStatusStats(projectId: string) {
+  async getProjectPartToStatusStats(
+    projectId: string,
+    partFilter?: UserPartEnum[],
+  ) {
     // TODO: 과연 이 과정이 필요할지 고민해볼 필요는 있음
     // part와 maxTo만 뽑으면 된다.
     const projectParts =
@@ -472,11 +504,21 @@ export class ApplyService {
 
     const stats: Array<any> = [];
 
+    // 파트가 주어졌는지의 여부
+    const isPartFilterGiven = partFilter && partFilter.length > 0;
+
     // 지원서를 프로젝트 기준으로 전부 가져온 다음에, 차수별로 1차 구분 후에 파트별로 구분해서 지원서 상태 별로 분류
     const matchingApplications = await this.mongo.application.findMany({
       where: {
         form: {
           projectId,
+        },
+        applicant: {
+          part: isPartFilterGiven
+            ? {
+                in: partFilter,
+              }
+            : undefined,
         },
       },
       include: {
@@ -499,6 +541,12 @@ export class ApplyService {
       // 해당 프로젝트의 파트별 TO를 모아놓은 것 (currentTo는 부가적인 정보로, 여기서는 활용 안함)
       for (const partInfo of projectParts) {
         const { part, maxTo } = partInfo;
+
+        // part가 주어졌을 때, 해당 part만 나올 수 있도록 함
+        if (partFilter && !partFilter.includes(part)) {
+          console.log('continue part filter', partFilter, part);
+          continue;
+        }
 
         // 해당 차수의 지원서 중에서 파트가 일치하는 것만 추출하도록 함
         // side effect : 해당 프로젝트에 없는 파트에 대한 지원서는 통계에 포함되지 않음 (근데 그러면 안됨 ㅋㅋ)

@@ -4,6 +4,8 @@ import { useMemo, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
+import { toast } from 'sonner';
+
 import { Combobox, ComboboxOption } from '@styles/components/ui/combobox';
 import { MultiSelectCombobox } from '@styles/components/ui/multi-select-combobox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@styles/components/ui/tabs';
@@ -11,7 +13,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@styles/components/ui/
 import { AdminGetAllApplicationsResponseDto } from '@api/axios/admin/types';
 import { ApplicationStatus } from '@api/axios/application/types';
 import { Part } from '@api/axios/auth/types';
-import { useAdminGetAllApplications } from '@api/query/admin';
+import {
+  useAdminChangeApplicationStatus,
+  useAdminDeleteApplicationMutation,
+  useAdminGetAllApplications,
+} from '@api/query/admin';
 import { useGetSchoolsQuery } from '@api/query/auth';
 import { useGetProjectListQuery } from '@api/query/project';
 
@@ -30,6 +36,8 @@ const AdminDashboard = () => {
   const { data: applications, isLoading: isApplicationsLoading } = useAdminGetAllApplications();
   const { data: schools, isLoading: isSchoolLoading } = useGetSchoolsQuery();
   const { data: projects, isLoading: isProjectListLoading } = useGetProjectListQuery();
+  const { mutate: changeApplicationStatus } = useAdminChangeApplicationStatus();
+  const { mutate: deleteApplication } = useAdminDeleteApplicationMutation();
   const router = useRouter();
 
   const [selectedApplication, setSelectedApplication] =
@@ -37,14 +45,9 @@ const AdminDashboard = () => {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [projectFilter, setProjectFilter] = useState<string[]>([]);
+  const [projectPartFilter, setProjectPartFilter] = useState<Part[]>([]);
   const [partFilter, setPartFilter] = useState<Part | undefined>(undefined);
   const [schoolFilter, setSchoolFilter] = useState<string | undefined>(undefined);
-
-  const projectIds = useMemo(() => {
-    if (!applications) return [];
-    const ids = applications.map((app) => app.form.project.id);
-    return [...new Set(ids)];
-  }, [applications]);
 
   const handleViewApplication = (application: AdminGetAllApplicationsResponseDto) => {
     setSelectedApplication(application);
@@ -58,11 +61,33 @@ const AdminDashboard = () => {
   const handleApplicationStatusChange = (applicationId: string, status: ApplicationStatus) => {
     // TODO: API 구현 후 연결
     console.log('Change application status:', applicationId, status);
+
+    changeApplicationStatus(
+      { applicationId, newStatus: status },
+      {
+        onSuccess: () => {
+          toast.success(`지원서 상태를 ${status}로 변경하였습니다.`);
+        },
+        onError: (err) => {
+          toast.error(`지원서 상태를 ${status}로 변경하는데 실패하였습니다.`, {
+            description: err.message,
+          });
+        },
+      },
+    );
   };
 
   const handleApplicationDelete = (applicationId: string) => {
-    // TODO: API 구현 후 연결
-    console.log('Change application status:', applicationId);
+    deleteApplication(applicationId, {
+      onSuccess: () => {
+        toast.success(`지원서 ${applicationId}를 삭제하였습니다.`);
+      },
+      onError: (err) => {
+        toast.error(`지원서 삭제에 실패하였습니다.`, {
+          description: err.message,
+        });
+      },
+    });
   };
 
   const partOptions: ComboboxOption[] = [
@@ -138,7 +163,7 @@ const AdminDashboard = () => {
         </TabsContent>
 
         {/*프로젝트별 지원서 확인*/}
-        <TabsContent value="projects" className="space-y-4">
+        <TabsContent value="projects" className="flex flex-col gap-y-4">
           <MultiSelectCombobox
             options={projectOptions}
             selectedValues={projectFilter}
@@ -150,7 +175,18 @@ const AdminDashboard = () => {
 
           <div className="flex flex-col gap-y-4">
             {projectFilter.map((id, idx) => (
-              <ProjectStats key={idx} projectId={id} />
+              <div className={'flex flex-col gap-y-2'} key={id}>
+                <MultiSelectCombobox
+                  options={partOptions}
+                  selectedValues={projectPartFilter}
+                  onChange={(part) => setProjectPartFilter(part as Part[])}
+                  placeholder="파트 선택"
+                  searchPlaceholder="파트를 검색하세요..."
+                  emptyPlaceholder="해당 파트가 없습니다."
+                  className="" // 필요에 따라 너비 등 스타일 조정
+                />
+                <ProjectStats key={idx} projectId={id} part={projectPartFilter} />
+              </div>
             ))}
           </div>
         </TabsContent>
