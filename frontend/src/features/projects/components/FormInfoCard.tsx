@@ -151,7 +151,7 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
           {/*Plan이거나 관리자일 땐 질문 수정 및 지원자 보기 버튼 활성화 (관리자는 아직 TODO)*/}
           {(isPlan || isAdmin) && (
             <>
-              <ButtonGroup className={'w-full'}>
+              <div className={'flex w-full flex-row gap-x-4'}>
                 <Button
                   className={'h-14 flex-grow-1 py-4 text-2xl'}
                   onClick={handleToggleMode}
@@ -166,7 +166,7 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
                 >
                   질문 수정하기
                 </Button>
-              </ButtonGroup>
+              </div>
               <div className={'flex w-full flex-row gap-x-4'}>
                 <Button
                   className={'mt-4 h-14 flex-grow-1 py-4 text-2xl'}

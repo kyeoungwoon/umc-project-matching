@@ -3,12 +3,21 @@
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 
-import { FileTextIcon, InboxIcon, InfoIcon } from 'lucide-react';
+import {
+  CircleAlertIcon,
+  CircleQuestionMarkIcon,
+  FileTextIcon,
+  InboxIcon,
+  InfoIcon,
+  UsersIcon,
+} from 'lucide-react';
 
 import { Badge } from '@styles/components/ui/badge';
 import { Button } from '@styles/components/ui/button';
 import { Card, CardContent, CardTitle } from '@styles/components/ui/card';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@styles/components/ui/hover-card';
 import { Label } from '@styles/components/ui/label';
+import { Popover, PopoverContent, PopoverTrigger } from '@styles/components/ui/popover';
 import { Separator } from '@styles/components/ui/separator';
 
 import { useGetProjectDetailsQuery } from '@api/query/project';
@@ -74,9 +83,9 @@ const ProjectFormsPage = () => {
       {/*TODO: 안내멘트, 삭제 필요*/}
       {/*TODO: 중복된 내용 컴포넌트화하기*/}
       <div className="mb-5 flex flex-row items-center gap-x-2 text-base tracking-tight text-black">
-        <InfoIcon className={'h-5 w-5'} />
-        <span className={'text-gray-600'}>파트별 TO | </span>
-        형식 : (현재 지원자 수) TO
+        {/*<InfoIcon className={'h-5 w-5'} />*/}
+        {/*<span className={'text-gray-600'}>파트별 TO | </span>*/}
+        형식 : (현재 지원자 수) TO / 사람 아이콘에 마우스 올리면 팀원 목록이 표시됩니다.
       </div>
 
       <div className="mt-2 mb-5 flex w-full flex-col items-center gap-y-1">
@@ -84,30 +93,54 @@ const ProjectFormsPage = () => {
           const { part, currentTo, maxTo } = partTo;
           return (
             <div key={index} className="flex w-full flex-row items-center justify-between">
-              <div className={'flex flex-row items-center text-lg text-gray-800'}>
+              <div className={'mr-5 flex flex-shrink flex-row items-center text-lg text-gray-800'}>
                 <span className="min-w-35">{part}</span>
-                <span className={'tracking-wide'}>
-                  {currentTo}/{maxTo}
+                <span className={'mr-5 tracking-widest'}>
+                  ({currentTo}){maxTo}
                 </span>
+                <HoverCard openDelay={0.1} closeDelay={1}>
+                  <HoverCardTrigger asChild>
+                    <UsersIcon className={'h-5'} />
+                  </HoverCardTrigger>
+                  <HoverCardContent className={'flex max-w-70 flex-row flex-wrap gap-2'}>
+                    {(() => {
+                      const filteredMembers = project.projectMember.filter(
+                        (mem) => mem?.user?.part === part,
+                      );
+
+                      return filteredMembers.length > 0 ? (
+                        filteredMembers.map((member) => (
+                          <Badge
+                            variant={'outline'}
+                            className={'flex-shrink-0 text-gray-700'}
+                            // 3. 불필요한 <> 제거, 고유한 값(예: user.id)을 key로 사용
+                            key={member.user?.id}
+                          >
+                            {member.user?.challengerSchool.name} {member.user?.nickname}/
+                            {member.user?.name}
+                          </Badge>
+                        ))
+                      ) : (
+                        // 4. length가 0일 때 "멤버 없음" 텍스트를 표시합니다.
+                        <div
+                          className={
+                            'flex w-full flex-row items-center justify-center font-semibold'
+                          }
+                        >
+                          <CircleAlertIcon className={'mr-2 h-5'} />
+                          해당 파트의 멤버가 없습니다.
+                        </div>
+                      );
+                    })()}
+                  </HoverCardContent>
+                </HoverCard>
               </div>
               <Label
-                className={`text-lg font-semibold tracking-wide ${currentTo >= maxTo ? 'text-red-500' : 'text-green-600'}`}
+                className={`flex-shrink-0 text-lg font-semibold tracking-wide ${currentTo >= maxTo ? 'text-red-500' : 'text-green-600'}`}
               >
                 {currentTo >= maxTo ? '모집 완료' : '모집 중'}
               </Label>
             </div>
-          );
-        })}
-      </div>
-
-      <div className={'flex w-full flex-row items-center justify-start gap-x-2 text-xl'}>
-        <Label className={'text-xl'}>팀원 목록 : </Label>
-        {project.projectMember.map((member, idx) => {
-          return (
-            <span className={'text-gray-700'} key={idx}>
-              {member.user?.challengerSchool.name} {member.user?.nickname}/{member.user?.name} (
-              {member.user?.part})
-            </span>
           );
         })}
       </div>
