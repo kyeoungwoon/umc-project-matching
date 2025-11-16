@@ -7,6 +7,8 @@ import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.se
 import * as argon2 from 'argon2';
 import { UsersService } from '@modules/users/services/users.service';
 import { CreateUserRequestDto } from '@modules/users/dto/user.dto';
+import { Prisma } from '@generated/prisma/mongodb';
+import ChallengerCreateInput = Prisma.ChallengerCreateInput;
 
 @Injectable()
 export class AuthService {
@@ -37,26 +39,30 @@ export class AuthService {
   }
 
   async register(data: CreateUserRequestDto) {
-    const { name, nickname, introduction, school, studentId, password, part } =
-      data;
+    const {
+      name,
+      nickname,
+      introduction,
+      school,
+      studentId,
+      password,
+      part,
+      role,
+    } = data;
 
     const hashedPassword = await argon2.hash(password);
 
-    const newUserData: any = {
-      name,
-      nickname,
-      school,
-      studentId,
-      password: hashedPassword,
-      part,
-    };
-
-    if (introduction) {
-      newUserData.introduction = introduction;
-    }
-
     return this.mongo.challenger.create({
-      data: newUserData,
+      data: {
+        name,
+        nickname,
+        school,
+        studentId,
+        password: hashedPassword,
+        part,
+        introduction: introduction || '',
+        role: role || 'USER',
+      },
     });
   }
 

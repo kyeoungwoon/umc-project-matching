@@ -7,12 +7,10 @@ import {
   Query,
   Req,
   UseGuards,
-  VERSION_NEUTRAL,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ApiBearerAuth,
-  ApiCookieAuth,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -28,11 +26,9 @@ import { Public } from '@modules/auth/decorators/public.decorator';
 import { TokenAuthService } from '@modules/auth/services/token.auth.service';
 import { BypassResponseInterceptor } from '@common/decorators/bypass-response-interceptor.decorator';
 import { AuthService } from '@modules/auth/services/auth.service';
-import {
-  CreateBulkUserRequestDto,
-  CreateUserRequestDto,
-} from '@modules/users/dto/user.dto';
+import { CreateBulkUserRequestDto } from '@modules/users/dto/user.dto';
 import { EnvGuard } from '@common/guards/env.guard';
+import { UserPartEnum } from '@generated/prisma/mongodb';
 
 @Controller({
   version: '1',
@@ -103,22 +99,39 @@ export class AuthTestController {
   @ApiTags(API_TAGS.TEST)
   @Post('test/user/init')
   @ApiOperation({
-    summary: '[TEST] 유령 박경운 생성',
+    summary: '[TEST] 각 파트 사용자 임의 생성',
+    description: '학교는 중앙대로 고정됩니다. 학번은 파트명으로 정해집니다.',
   })
   @Public()
   async createSampleUser() {
-    return await this.authService.register({
-      name: '박경운',
-      nickname: '하늘',
-      school: 'cau',
-      studentId: crypto.randomUUID().slice(0, 8),
-      password: 'password123',
-      part: 'ADMIN',
-    });
+    const parts = [
+      'ADMIN',
+      'PLAN',
+      'DESIGN',
+      'WEB',
+      'IOS',
+      'ANDROID',
+      'SPRINGBOOT',
+      'NODEJS',
+    ];
+
+    return Promise.all(
+      parts.map((part) =>
+        this.authService.register({
+          name: `${part.slice(0, 1)}NAME`,
+          nickname: `${part.slice(0, 1)}NICK`,
+          school: 'cau',
+          studentId: part.toLowerCase(),
+          password: part.toLowerCase(),
+          part: part as UserPartEnum,
+          role: part === 'ADMIN' ? 'ADMIN' : 'USER',
+        }),
+      ),
+    );
   }
 
   @ApiOperation({
-    summary: '[TEST] Leo user bulk create',
+    summary: '[TEST] 대량 사용자 회원가입 API 입니다.',
     description: '명단은 제공해야 합니다.',
   })
   @Public()
