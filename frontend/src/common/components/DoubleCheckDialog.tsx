@@ -10,9 +10,7 @@ import {
   DialogTitle,
 } from '@styles/components/ui/dialog';
 
-import { ApplicationStatus } from '@api/axios/application/types';
-
-interface DialogContents {
+export interface DialogContents {
   title: string;
   description: string;
   variant: 'default' | 'destructive' | 'outline';
@@ -20,7 +18,7 @@ interface DialogContents {
   confirmText?: string;
 }
 
-interface DoubleCheckDialogProps {
+export interface DoubleCheckDialogProps {
   isOpen: boolean;
   onOpenChange: (isOpen?: boolean) => void;
   onConfirm: () => void;
@@ -36,6 +34,7 @@ const DoubleCheckDialog = ({
   onConfirm,
   content,
 }: DoubleCheckDialogProps) => {
+  // onConfirm가 없으면 아무것도 렌더링하지 않음
   if (!onConfirm) return null;
 
   return (
