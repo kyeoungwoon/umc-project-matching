@@ -1,6 +1,13 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsArray,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ApplicationStatusEnum, UserPartEnum } from '@generated/prisma/mongodb';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export class ApplicationStatusByProjectRequestQuery {
   @IsNotEmpty()
@@ -18,6 +25,19 @@ export class ApplicationStatusByProjectRequestQuery {
 
   @IsOptional()
   @IsEnum(UserPartEnum, { each: true })
+  @Transform(({ value }) => {
+    // 값이 undefined, null이면 그대로 반환 (@IsOptional이 처리)
+    if (!value) {
+      return value;
+    }
+    // 이미 배열이면 그대로 반환
+    if (Array.isArray(value)) {
+      return value;
+    }
+    // 배열이 아닌 값(문자열 등)이면 배열로 감싸서 반환
+    return [value];
+  })
+  @IsArray()
   @ApiProperty({
     enum: UserPartEnum,
     description:
