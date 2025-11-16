@@ -73,7 +73,7 @@ const ProjectFormsPage = () => {
 
       {/*TODO: 안내멘트, 삭제 필요*/}
       {/*TODO: 중복된 내용 컴포넌트화하기*/}
-      <div className="text-md mb-5 flex flex-row items-center gap-x-2 tracking-tight text-black">
+      <div className="mb-5 flex flex-row items-center gap-x-2 text-base tracking-tight text-black">
         <InfoIcon className={'h-5 w-5'} />
         <span className={'text-gray-600'}>파트별 TO | </span>
         형식 : (현재 지원자 수) TO

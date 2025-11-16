@@ -134,7 +134,7 @@ const ProjectInfoCard = (props: ProjectCardProps) => {
             {projectPlan?.challengerSchool.name} {projectPlan?.nickname}/{projectPlan?.name}
           </div>
         </div>
-        <p className="text-muted-foreground text-md">{description}</p>
+        <p className="text-muted-foreground text-base">{description}</p>
 
         {/*TODO: 안내멘트, 삭제 필요*/}
         {/*<div className="text-muted-foreground mb-2 text-sm">*/}
@@ -169,7 +169,7 @@ const ProjectInfoCard = (props: ProjectCardProps) => {
           <Button
             variant={'outline'}
             onClick={handleEditModeClick}
-            className={'text-md h-10 w-full px-4'}
+            className={'h-10 w-full px-4 text-base'}
           >
             프로젝트 정보 수정
           </Button>
@@ -178,14 +178,14 @@ const ProjectInfoCard = (props: ProjectCardProps) => {
           <Button
             onClick={handleViewMoreClick}
             variant={'default'}
-            className={'text-md h-full flex-1'}
+            className={'h-full flex-1 text-base'}
           >
             기획안 자세히 보기
           </Button>
           <Button
             onClick={handleApplyClick}
             variant={'outline'}
-            className={'text-md h-full flex-1'}
+            className={'h-full flex-1 text-base'}
           >
             {isPlan ? '지원자 보기' : '지원하기'}
           </Button>

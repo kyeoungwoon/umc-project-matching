@@ -7,7 +7,6 @@ import {
   adminGetApplicationStatisticsByChallenger,
   adminGetProjectApplicationStats,
 } from '@api/axios/admin';
-import { ApplicationStatus } from '@api/axios/application/types';
 import { Part } from '@api/axios/auth/types';
 
 export const useAdminGetAllApplications = () => {

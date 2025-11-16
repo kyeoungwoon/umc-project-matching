@@ -62,7 +62,7 @@ export function ApplicationDetailDialog({
               </div>
               <div>
                 <p className="text-muted-foreground text-sm">챌린저 ID</p>
-                <p className="text-md">{application.applicant.umsbChallengerId}</p>
+                <p className="text-base">{application.applicant.umsbChallengerId}</p>
               </div>
               <div>
                 <p className="text-muted-foreground text-sm">소속 대학</p>

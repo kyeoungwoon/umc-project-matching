@@ -21,6 +21,7 @@ import {
 import { useGetSchoolsQuery } from '@api/query/auth';
 import { useGetProjectListQuery } from '@api/query/project';
 
+import { partOptions } from '@common/constants/part-options.constants';
 import { ROUTES } from '@common/constants/routes.constants';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
@@ -89,16 +90,6 @@ const AdminDashboard = () => {
       },
     });
   };
-
-  const partOptions: ComboboxOption[] = [
-    { value: 'PLAN', label: 'Plan' },
-    { value: 'DESIGN', label: 'Design' },
-    { value: 'WEB', label: 'Web' },
-    { value: 'ANDROID', label: 'Android' },
-    { value: 'IOS', label: 'iOS' },
-    { value: 'SPRINGBOOT', label: 'SpringBoot' },
-    { value: 'NODEJS', label: 'Node.js' },
-  ];
 
   const schoolOptions: ComboboxOption[] = schools
     ? schools.map((school) => ({ value: school.handle, label: school.name }))
@@ -170,22 +161,13 @@ const AdminDashboard = () => {
             onChange={(selectedProjects) => setProjectFilter(selectedProjects)}
             placeholder="프로젝트 선택"
             searchPlaceholder="프로젝트를 검색하세요..."
-            className="w-fit max-w-100 min-w-60 truncate"
+            className="w-100 truncate"
           />
 
           <div className="flex flex-col gap-y-4">
             {projectFilter.map((id, idx) => (
               <div className={'flex flex-col gap-y-2'} key={id}>
-                <MultiSelectCombobox
-                  options={partOptions}
-                  selectedValues={projectPartFilter}
-                  onChange={(part) => setProjectPartFilter(part as Part[])}
-                  placeholder="파트 선택"
-                  searchPlaceholder="파트를 검색하세요..."
-                  emptyPlaceholder="해당 파트가 없습니다."
-                  className="" // 필요에 따라 너비 등 스타일 조정
-                />
-                <ProjectStats key={idx} projectId={id} part={projectPartFilter} />
+                <ProjectStats key={idx} projectId={id} />
               </div>
             ))}
           </div>
