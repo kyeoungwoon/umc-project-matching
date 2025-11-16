@@ -6,6 +6,7 @@ import { Check, ChevronsUpDown, X } from 'lucide-react';
 
 import { Badge } from '@styles/components/ui/badge';
 import { Button } from '@styles/components/ui/button';
+import { ComboboxOption } from '@styles/components/ui/combobox';
 import {
   Command,
   CommandEmpty,
@@ -16,11 +17,6 @@ import {
 } from '@styles/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@styles/components/ui/popover';
 import { cn } from '@styles/lib/utils';
-
-export interface ComboboxOption {
-  value: string;
-  label: string;
-}
 
 interface MultiSelectComboboxProps {
   options: ComboboxOption[];

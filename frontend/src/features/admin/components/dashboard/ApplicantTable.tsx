@@ -11,6 +11,8 @@ import { ApplicationStatus } from '@api/axios/application/types';
 import { Part } from '@api/axios/auth/types';
 import { useAdminGetApplicationStatusByChallenger } from '@api/query/admin';
 
+import { parsePart } from '@common/utils/parse-userinfo';
+
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
 
 import { getStatusText } from '@features/projects/utils/get-by-application-status';
@@ -44,6 +46,7 @@ const baseColumns: ColumnDef<ChallengerApplicationInfo>[] = [
   {
     accessorKey: 'part',
     header: '파트',
+    accessorFn: (data) => parsePart(data.part),
   },
   {
     accessorKey: 'projectMember.title',
