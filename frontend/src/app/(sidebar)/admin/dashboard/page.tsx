@@ -1,8 +1,10 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
+
+import { useQueryClient } from '@tanstack/react-query';
 
 import { toast } from 'sonner';
 
@@ -22,6 +24,7 @@ import { useGetSchoolsQuery } from '@api/query/auth';
 import { useGetProjectListQuery } from '@api/query/project';
 
 import { partOptions } from '@common/constants/part-options.constants';
+import { queryKeyStore } from '@common/constants/query-key.constants';
 import { ROUTES } from '@common/constants/routes.constants';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
@@ -40,6 +43,7 @@ const AdminDashboard = () => {
   const { mutate: changeApplicationStatus } = useAdminChangeApplicationStatus();
   const { mutate: deleteApplication } = useAdminDeleteApplicationMutation();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [selectedApplication, setSelectedApplication] =
     useState<AdminGetAllApplicationsResponseDto | null>(null);
@@ -60,13 +64,14 @@ const AdminDashboard = () => {
   };
 
   const handleApplicationStatusChange = (applicationId: string, status: ApplicationStatus) => {
-    // TODO: API 구현 후 연결
-    console.log('Change application status:', applicationId, status);
-
     changeApplicationStatus(
       { applicationId, newStatus: status },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
+          await queryClient.invalidateQueries({
+            // 지원서 목록 쿼리 무효화
+            queryKey: queryKeyStore.admin.applications.queryKey,
+          });
           toast.success(`지원서 상태를 ${status}로 변경하였습니다.`);
         },
         onError: (err) => {

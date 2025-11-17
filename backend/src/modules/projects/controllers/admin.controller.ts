@@ -7,6 +7,7 @@ import {
   LoggerService,
   Param,
   Patch,
+  Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -28,6 +29,7 @@ import {
   ApplicationStatusByProjectRequestQuery,
   ApplicationStatsByChallengerRequestQuery,
   ChangeApplicationStatusRequestDto,
+  ForceMatchChallengerToProjectRequestDto,
 } from '@modules/projects/dto/admin.dto';
 
 @Controller({
@@ -111,6 +113,14 @@ export class AdminController {
   @Delete('application/:applicationId')
   async deleteApplication(@Param('applicationId') applicationId: string) {
     return this.applyService.deleteApplication(applicationId, true);
+  }
+
+  @Post('projects/force-match')
+  async forceMatchChallengerToProject(
+    @Body() body: ForceMatchChallengerToProjectRequestDto,
+  ) {
+    // 특정 챌린저를 특정 프로젝트에 강제 매칭하는 기능
+    return this.projectService.addTeamMember(body.projectId, body.challengerId);
   }
 
   // 팀 매칭 마스터시트와 동일한 양식으로 제공할 수 있도록 함

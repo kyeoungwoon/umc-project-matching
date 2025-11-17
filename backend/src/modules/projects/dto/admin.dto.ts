@@ -109,3 +109,19 @@ export class ChangeApplicationStatusRequestDto {
   })
   newStatus!: ApplicationStatusEnum;
 }
+
+export class ForceMatchChallengerToProjectRequestDto {
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: '강제 매칭할 챌린저 ID',
+  })
+  challengerId!: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: '강제 매칭할 프로젝트 ID',
+  })
+  projectId!: string;
+}
