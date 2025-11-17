@@ -62,7 +62,7 @@ const NoticeCard = () => {
         </div>
         <Link
           href={GITHUB_LINK}
-          className={'text-md mt-3 flex flex-row items-center gap-x-2 font-semibold text-black'}
+          className={'mt-3 flex flex-row items-center gap-x-2 text-base font-semibold text-black'}
         >
           <GitHubIcon /> UPMS Source Code
         </Link>

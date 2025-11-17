@@ -13,9 +13,11 @@ import { Input } from '@styles/components/ui/input';
 import { Label } from '@styles/components/ui/label';
 import { Textarea } from '@styles/components/ui/textarea';
 
+import { Part } from '@api/axios/auth/types';
 import { useCreateFormMutation } from '@api/query/form';
 import { useGetAllMatchingRoundQuery } from '@api/query/matching-round';
 
+import { partOptions } from '@common/constants/part-options.constants';
 import { ROUTES } from '@common/constants/routes.constants';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
@@ -30,6 +32,7 @@ const CreateProjectFormPage = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedMatchingRounds, setSelectedMatchingRounds] = useState<string[]>([]);
+  const [selectedPart, setSelectedPart] = useState<Part[]>([]);
 
   const { data: matchingRounds, isLoading: isLoadingMatchingRounds } =
     useGetAllMatchingRoundQuery();
@@ -37,9 +40,7 @@ const CreateProjectFormPage = () => {
 
   const handleCreateForm = () => {
     if (!title || !selectedMatchingRounds[0]) {
-      toast.error('지원서 제목과 매칭 차수를 입력해주세요.', {
-        richColors: true,
-      }); // Simple alert for now
+      toast.error('필수 입력 필드를 모두 채워주세요.');
       return;
     }
 
@@ -76,14 +77,14 @@ const CreateProjectFormPage = () => {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className={'flex flex-col gap-y-2'}>
-            <Label htmlFor="form-title">
+            <Label className={'text-lg'}>
               폼 제목 (필수)
               <RequiredStar />
             </Label>
             <Input id="form-title" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
           <div className={'flex flex-col gap-y-2'}>
-            <Label htmlFor="form-description">폼 설명</Label>
+            <Label className={'text-lg'}>폼 설명</Label>
             <Textarea
               id="form-description"
               value={description}
@@ -91,10 +92,10 @@ const CreateProjectFormPage = () => {
             />
           </div>
           <div className={'flex flex-col gap-y-2'}>
-            <Label>
+            <Label className={'mb-3 text-lg'}>
               매칭 차수 선택 <RequiredStar />
             </Label>
-            <div className="space-y-2">
+            <div className="flex flex-col gap-y-2">
               {matchingRounds.map((round) => (
                 <div key={round.id} className="flex items-center space-x-2">
                   <Checkbox
@@ -114,7 +115,36 @@ const CreateProjectFormPage = () => {
                       setSelectedMatchingRounds(newValues);
                     }}
                   />
-                  <Label htmlFor={round.name}>{round.name}</Label>
+                  <Label className={'text-base'} htmlFor={round.name}>
+                    {round.name}
+                  </Label>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className={'flex flex-col gap-y-2'}>
+            <Label className={'mb-3 text-lg'}>
+              지원 가능 파트 선택 <RequiredStar />
+            </Label>
+            <div className="flex flex-col gap-y-2">
+              {partOptions.map((part) => (
+                <div key={part.value} className="flex items-center space-x-2">
+                  <Checkbox
+                    id={part.value}
+                    checked={selectedPart.includes(part.value as Part)}
+                    onCheckedChange={(checked) => {
+                      let newValues = selectedPart || [];
+                      if (checked) {
+                        newValues = [...newValues, part.value as Part];
+                      } else {
+                        newValues = newValues.filter((v: Part) => v !== part.value);
+                      }
+                      setSelectedPart(newValues);
+                    }}
+                  />
+                  <Label className={'text-base'} htmlFor={part.value}>
+                    {part.label}
+                  </Label>
                 </div>
               ))}
             </div>

@@ -16,6 +16,7 @@ import { Label } from '@styles/components/ui/label';
 import { FilteredUserInfoDto, UpdateProjectRequestDto } from '@api/axios/project/types';
 import { useUpdateProjectMutation } from '@api/query/project';
 
+import { queryKeyStore } from '@common/constants/query-key.constants';
 import { ROUTES } from '@common/constants/routes.constants';
 
 import { useIsAdminChallenger, useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
@@ -79,13 +80,16 @@ const ProjectInfoCard = (props: ProjectCardProps) => {
     setMode(ProjectCardMode.VIEW);
     mutate(editedProject, {
       onSuccess: async () => {
-        toast.success('프로젝트가 성공적으로 수정되었습니다.', { richColors: true });
         // 모든 쿼리 캐시 무효화
-        await queryClient.invalidateQueries();
-        // router.refresh();
+        await queryClient.invalidateQueries({
+          queryKey: queryKeyStore.project.singleProject(id).queryKey,
+        });
+        toast.success('프로젝트가 성공적으로 수정되었습니다.');
       },
       onError: (error) => {
-        toast.error(`프로젝트 수정에 실패했습니다, ${error}`, { richColors: true });
+        toast.error(`프로젝트 수정에 실패했습니다.`, {
+          description: error.message,
+        });
         console.error(error);
       },
     });
@@ -134,7 +138,7 @@ const ProjectInfoCard = (props: ProjectCardProps) => {
             {projectPlan?.challengerSchool.name} {projectPlan?.nickname}/{projectPlan?.name}
           </div>
         </div>
-        <p className="text-muted-foreground text-md">{description}</p>
+        <p className="text-muted-foreground text-base">{description}</p>
 
         {/*TODO: 안내멘트, 삭제 필요*/}
         {/*<div className="text-muted-foreground mb-2 text-sm">*/}
@@ -169,7 +173,7 @@ const ProjectInfoCard = (props: ProjectCardProps) => {
           <Button
             variant={'outline'}
             onClick={handleEditModeClick}
-            className={'text-md h-10 w-full px-4'}
+            className={'h-10 w-full px-4 text-base'}
           >
             프로젝트 정보 수정
           </Button>
@@ -178,14 +182,14 @@ const ProjectInfoCard = (props: ProjectCardProps) => {
           <Button
             onClick={handleViewMoreClick}
             variant={'default'}
-            className={'text-md h-full flex-1'}
+            className={'h-full flex-1 text-base'}
           >
             기획안 자세히 보기
           </Button>
           <Button
             onClick={handleApplyClick}
             variant={'outline'}
-            className={'text-md h-full flex-1'}
+            className={'h-full flex-1 text-base'}
           >
             {isPlan ? '지원자 보기' : '지원하기'}
           </Button>

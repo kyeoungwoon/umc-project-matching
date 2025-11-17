@@ -9,7 +9,6 @@ import {
 import { Prisma, PrismaClient } from '@generated/prisma/mongodb';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { RequestContextService } from '@modules/als/services/request-context.service';
-import { randomUUID } from 'node:crypto';
 
 @Injectable()
 export class MongoDBPrismaService
@@ -43,12 +42,14 @@ export class MongoDBPrismaService
       this.logger.warn(`[Prisma Warn]: ${event.message}`, 'PRISMA_WARN');
     });
 
+    const IS_PROD = process.env.NODE_ENV === 'production';
+
     (this.$on as any)('query', (event: Prisma.QueryEvent) => {
       // const prismaTraceId = randomUUID();
       // TODO: 이거 왜 안되는지 해결
       // const prismaTraceId = this.requestContextService.getTraceId();
       this.logger.log(
-        ` [TARGET] ${event.target} [DURATION] ${event.duration} ms, [QUERY] ${event.query}`,
+        ` [TARGET] ${event.target} [DURATION] ${event.duration} ms, [QUERY] ${IS_PROD ? event.query : '...'}`,
         'PRISMA_QUERY',
       );
       // this.logger.log(

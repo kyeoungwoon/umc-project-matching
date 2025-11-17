@@ -3,13 +3,13 @@
 import HeaderSkeleton from '@skeletons/components/HeaderSkeleton';
 import { toast } from 'sonner';
 
-import { useGetCurrentMatchingRoundQuery } from '@api/query/matching-round';
+import { useGetClosestMatchingRoundQuery } from '@api/query/matching-round';
 
 import MatchingRoundInfoCard from '@features/matching/components/matching-info/MatchingRoundInfoCard';
 import NoCurrentMatchingRound from '@features/matching/components/matching-info/NoCurrentMatchingRound';
 
 const MatchingRoundAnnouncementCard = () => {
-  const { data, isLoading, isError, error } = useGetCurrentMatchingRoundQuery();
+  const { data, isLoading, isError, error } = useGetClosestMatchingRoundQuery();
 
   if (isLoading) {
     return <HeaderSkeleton />;

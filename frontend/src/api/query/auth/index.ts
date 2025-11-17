@@ -9,8 +9,10 @@ import {
   register,
 } from '@api/axios/auth';
 
+import { queryKeyStore } from '@common/constants/query-key.constants';
+
 export const useGetSchoolsQuery = () => {
-  return useQuery({ queryKey: ['schools'], queryFn: getSchools });
+  return useQuery({ queryKey: queryKeyStore.auth.schoolList.queryKey, queryFn: getSchools });
 };
 
 export const useRegisterMutation = () => {

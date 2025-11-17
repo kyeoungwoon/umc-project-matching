@@ -9,8 +9,13 @@ import {
 } from '@api/axios/project';
 import { UpdateProjectRequestDto } from '@api/axios/project/types';
 
+import { queryKeyStore } from '@common/constants/query-key.constants';
+
 export const useGetProjectListQuery = () => {
-  return useQuery({ queryKey: ['projects'], queryFn: getProjectList });
+  return useQuery({
+    queryKey: queryKeyStore.project.allProjects.queryKey,
+    queryFn: getProjectList,
+  });
 };
 
 export const useCreateProjectMutation = () => {
@@ -19,7 +24,7 @@ export const useCreateProjectMutation = () => {
 
 export const useGetProjectDetailsQuery = (projectId: string) => {
   return useQuery({
-    queryKey: ['project', projectId],
+    queryKey: queryKeyStore.project.singleProject(projectId).queryKey,
     queryFn: () => getProjectDetails(projectId),
     enabled: !!projectId,
   });

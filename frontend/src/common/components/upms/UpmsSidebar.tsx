@@ -120,7 +120,7 @@ const UpmsSideBar = () => {
                 <Label className="text-xl whitespace-nowrap text-black">
                   {data.nickname}/{data.name}
                 </Label>
-                <Label className="text-md whitespace-nowrap text-gray-700">
+                <Label className="text-base whitespace-nowrap text-gray-700">
                   {data.challengerSchool.name} <PartIcon className={'h-4 w-4'} part={data.part} />
                 </Label>
               </div>

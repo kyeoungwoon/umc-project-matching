@@ -85,6 +85,14 @@ export class User {
   })
   part!: UserPartEnum;
 
+  @IsEnum(['ADMIN', 'USER'])
+  @IsOptional()
+  @ApiProperty({
+    description: '챌린저 역할입니다. 일반 사용자 또는 관리자',
+    enum: ['ADMIN', 'USER'],
+  })
+  role?: 'ADMIN' | 'USER';
+
   @IsOptional()
   @Type(() => Date)
   @ApiProperty({

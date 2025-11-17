@@ -4,7 +4,7 @@ import {
   MatchingRoundResponseDto,
 } from '@api/axios/matching-round/types';
 
-export const getCurrentMatchingRound = async () => {
+export const getClosestMatchingRound = async () => {
   const res = await api.get<ApiResponse<MatchingRoundResponseDto>>(
     '/v1/projects/matching-round/closest',
   );

@@ -2,24 +2,24 @@ import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { Badge } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@styles/components/ui/button';
 import { ButtonGroup } from '@styles/components/ui/button-group';
-import { Card, CardContent, CardHeader, CardTitle } from '@styles/components/ui/card';
 import { Input } from '@styles/components/ui/input';
-import { Separator } from '@styles/components/ui/separator';
+import { Textarea } from '@styles/components/ui/textarea';
 
 import { FormResponseDto, UpdateFormRequestDto } from '@api/axios/form/types';
-import { useEditFormMutation } from '@api/query/form';
+import { useDeleteFormMutation, useEditFormMutation } from '@api/query/form';
 import { useGetAllMatchingRoundQuery, useGetMatchingRound } from '@api/query/matching-round';
 
 import { ROUTES } from '@common/constants/routes.constants';
 
+import { useDoubleCheck } from '@common/hooks/useDoubleCheck';
 import { useIsAdminChallenger, useIsPlanChallenger } from '@common/hooks/useGetChallengerPerms';
 
 import DefaultSkeleton from '@common/components/DefaultSkeleton';
+import DoubleCheckDialog from '@common/components/DoubleCheckDialog';
 
 interface FormCardProps {
   form: FormResponseDto;
@@ -34,6 +34,15 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
   const { id: formId, projectId, availableMatchingRounds } = form;
 
   const { mutate: editForm } = useEditFormMutation(projectId, formId);
+  const { mutate: deleteForm } = useDeleteFormMutation(projectId, formId);
+
+  const { onOpen, dialogProps } = useDoubleCheck({
+    title: '폼 삭제하기',
+    variant: 'destructive',
+    cancelText: '취소',
+    confirmText: '삭제하기',
+    description: '폼을 삭제하면 해당 폼에 대한 모든 정보가 사라집니다. 정말 삭제하시겠습니까?',
+  });
 
   // TODO: 각각 가져오도록 변경
   const { data: matchingRound, isLoading: isMatchingRoundInfoLoading } =
@@ -79,88 +88,115 @@ export const FormInfoCard = ({ form }: FormCardProps) => {
     router.push(ROUTES.PROJECTS.VIEW_APPLICANTS(projectId, formId));
   };
 
+  const handleDeleteForm = () => {
+    onOpen(() =>
+      deleteForm(undefined, {
+        onSuccess: () => {
+          toast.success('폼을 삭제하였습니다.');
+        },
+        onError: (err) => {
+          toast.error('폼 삭제에 실패하였습니다.', {
+            description: err.message,
+          });
+        },
+      }),
+    );
+  };
+
   if (isMatchingRoundInfoLoading) {
     return <DefaultSkeleton />;
   }
 
   return (
-    <div className={'flex flex-col gap-y-4 rounded-lg border border-gray-200 px-8 py-6'}>
-      <div>
-        {mode === FormCardMode.NORMAL ? (
-          <>
-            <div className={'flex flex-col gap-y-5'}>
-              <p className="text-4xl font-bold">{form.title}</p>
-              <p className="mb-2 text-xl whitespace-pre-line text-gray-900">
-                {form.description || '설명 없음'}
-              </p>
+    <>
+      <DoubleCheckDialog {...dialogProps} />
+      <div className={'flex flex-col gap-y-4 rounded-lg border border-gray-200 px-8 py-6'}>
+        <div>
+          {mode === FormCardMode.NORMAL ? (
+            <>
+              <div className={'flex flex-col gap-y-5'}>
+                <p className="text-4xl font-bold">{form.title}</p>
+                <p className="mb-2 text-xl whitespace-pre-line text-gray-900">
+                  {form.description || '설명 없음'}
+                </p>
 
-              {/*<div className={'flex flex-row items-center gap-x-2 text-lg'}>*/}
-              {/*  <span>지원 가능한 매칭 라운드 : </span>*/}
-              {/*  {availableMatchingRounds.map((roundId, idx) => {*/}
-              {/*    const round = matchingRound?.find((mr) => mr.id === roundId);*/}
-              {/*    if (!round) return null;*/}
-              {/*    return (*/}
-              {/*      <Badge key={roundId} className="text-muted-foreground text-lg">*/}
-              {/*        {isMatchingRoundInfoLoading ? '로딩 중...' : round.name}{' '}*/}
-              {/*      </Badge>*/}
-              {/*    );*/}
-              {/*  })}*/}
-              {/*</div>*/}
-            </div>
-          </>
-        ) : (
-          <>
-            <Input
-              value={editedForm.title}
-              onChange={(e) => setEditedForm({ ...editedForm, title: e.target.value })}
-            />
-            <Input
-              value={editedForm.description}
-              onChange={(e) => setEditedForm({ ...editedForm, description: e.target.value })}
-            />
-          </>
-        )}
-      </div>
-      <div className="mt-4 flex w-full flex-col justify-between">
-        {/*Plan이거나 관리자일 땐 질문 수정 및 지원자 보기 버튼 활성화 (관리자는 아직 TODO)*/}
-        {(isPlan || isAdmin) && (
-          <>
-            <ButtonGroup className={'w-full'}>
-              <Button
-                className={'mt-4 h-14 flex-grow-1 py-4 text-2xl'}
-                onClick={handleToggleMode}
-                variant="outline"
-              >
-                {mode === FormCardMode.NORMAL ? '제목/설명 수정' : '저장하기'}
-              </Button>
-              <Button
-                className={'mt-4 h-14 flex-grow-1 py-4 text-2xl'}
-                onClick={handleManageForm}
-                variant="outline"
-              >
-                질문 수정하기
-              </Button>
-            </ButtonGroup>
+                {/*<div className={'flex flex-row items-center gap-x-2 text-lg'}>*/}
+                {/*  <span>지원 가능한 매칭 라운드 : </span>*/}
+                {/*  {availableMatchingRounds.map((roundId, idx) => {*/}
+                {/*    const round = matchingRound?.find((mr) => mr.id === roundId);*/}
+                {/*    if (!round) return null;*/}
+                {/*    return (*/}
+                {/*      <Badge key={roundId} className="text-muted-foreground text-lg">*/}
+                {/*        {isMatchingRoundInfoLoading ? '로딩 중...' : round.name}{' '}*/}
+                {/*      </Badge>*/}
+                {/*    );*/}
+                {/*  })}*/}
+                {/*</div>*/}
+              </div>
+            </>
+          ) : (
+            <>
+              <Input
+                value={editedForm.title}
+                onChange={(e) => setEditedForm({ ...editedForm, title: e.target.value })}
+              />
+              <Textarea
+                value={editedForm.description}
+                onChange={(e) => setEditedForm({ ...editedForm, description: e.target.value })}
+              />
+            </>
+          )}
+        </div>
+        <div className="mt-4 flex w-full flex-col justify-between">
+          {/*Plan이거나 관리자일 땐 질문 수정 및 지원자 보기 버튼 활성화 (관리자는 아직 TODO)*/}
+          {(isPlan || isAdmin) && (
+            <>
+              <div className={'flex w-full flex-row gap-x-4'}>
+                <Button
+                  className={'h-14 flex-grow-1 py-4 text-2xl'}
+                  onClick={handleToggleMode}
+                  variant="outline"
+                >
+                  {mode === FormCardMode.NORMAL ? '제목/설명 수정' : '저장하기'}
+                </Button>
+                <Button
+                  className={'h-14 flex-grow-1 py-4 text-2xl'}
+                  onClick={handleManageForm}
+                  variant="outline"
+                >
+                  질문 수정하기
+                </Button>
+              </div>
+              <div className={'flex w-full flex-row gap-x-4'}>
+                <Button
+                  className={'mt-4 h-14 flex-grow-1 py-4 text-2xl'}
+                  onClick={handleDeleteForm}
+                  variant="destructive"
+                >
+                  폼 삭제하기
+                </Button>
+                <Button
+                  className={'mt-4 h-14 flex-grow-1 py-4 text-2xl'}
+                  onClick={handleViewApplicants}
+                  variant="default"
+                >
+                  지원자 보기
+                </Button>
+              </div>
+            </>
+          )}
+          {/*일반 사용자는 무조건 지원하기만 가능*/}
+          {!isPlan && (
             <Button
-              className={'mt-4 h-14 flex-grow-1 py-4 text-2xl'}
-              onClick={handleViewApplicants}
+              onClick={handleApplyToForm}
+              className={'mt-4 h-14 w-full py-4 text-2xl'}
               variant="default"
             >
-              지원자 보기
+              지원하기
             </Button>
-          </>
-        )}
-        {/*일반 사용자는 무조건 지원하기만 가능*/}
-        {!isPlan && (
-          <Button
-            onClick={handleApplyToForm}
-            className={'mt-4 h-14 w-full py-4 text-2xl'}
-            variant="default"
-          >
-            지원하기
-          </Button>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };

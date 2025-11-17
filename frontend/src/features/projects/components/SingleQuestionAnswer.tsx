@@ -7,7 +7,7 @@ const SingleQuestionAnswer = ({ answer }: { answer: FormAnswerResponseDto }) => 
     <div className="flex flex-col gap-y-2">
       {/*질문 제목*/}
       {/*질문 배지 삭제 처리 하였음, 디자인 상 어떤게 더 좋을까?*/}
-      <p className="text-md ml-1 leading-relaxed font-semibold tracking-tight">
+      <p className="ml-1 text-base leading-relaxed font-semibold tracking-tight">
         {answer.question.title}
       </p>
       {/*질문 답변*/}

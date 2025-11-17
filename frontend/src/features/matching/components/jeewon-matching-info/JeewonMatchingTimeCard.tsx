@@ -17,7 +17,7 @@ const JeewonMatchingTimeCard = ({
         <p className="text-muted-foreground text-sm">{isStart ? '시작 시간' : '종료 시간'}</p>
         <div className="flex items-baseline gap-2">
           <p className="text-lg font-medium">{date.date}</p>
-          <p className="text-muted-foreground text-md">{date.time}</p>
+          <p className="text-muted-foreground text-base">{date.time}</p>
         </div>
       </div>
     </div>

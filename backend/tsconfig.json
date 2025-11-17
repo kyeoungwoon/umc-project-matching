@@ -10,10 +10,7 @@
     "noFallthroughCasesInSwitch": false,
     "module": "commonjs",
     "target": "ES2023",
-    "lib": [
-      "es2020",
-      "DOM"
-    ],
+    "lib": ["es2020"],
     "sourceMap": true,
     "allowJs": false,
     "skipLibCheck": true,
@@ -30,35 +27,15 @@
     "rootDir": "./src",
     "baseUrl": "./src",
     "paths": {
-      "@config/*": [
-        "config/*"
-      ],
-      "@common/*": [
-        "common/*"
-      ],
-      "@utils/*": [
-        "utils/*"
-      ],
-      "@generated/prisma": [
-        "generated/prisma"
-      ],
-      "@generated/prisma/*": [
-        "generated/prisma/*"
-      ],
-      "@modules/*": [
-        "modules/*"
-      ],
-      "@/*": [
-        "*"
-      ]
+      "@config/*": ["config/*"],
+      "@common/*": ["common/*"],
+      "@utils/*": ["utils/*"],
+      "@generated/prisma": ["generated/prisma"],
+      "@generated/prisma/*": ["generated/prisma/*"],
+      "@modules/*": ["modules/*"],
+      "@/*": ["*"]
     }
   },
-  "include": [
-    "**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "test/**/*.e2e-spec.ts"
-  ]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist", "test/**/*.e2e-spec.ts"]
 }
