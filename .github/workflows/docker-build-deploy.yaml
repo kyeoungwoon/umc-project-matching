@@ -4,6 +4,13 @@ on:
   push:
     branches:
       - main
+    # 👇 BE, 공유 패키지가 변경되었을 때만 실행
+    paths:
+      - "apps/api/**"
+      - "packages/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
   workflow_dispatch:
 
 jobs:
@@ -11,6 +18,16 @@ jobs:
     name: Build and Push to Docker Hub
     # runs-on: ubuntu-latest
     runs-on: [self-hosted, largeserver]
+    strategy:
+      # 👇 amd64와 arm64를 병렬로 독립적으로 빌드
+      matrix:
+        platform: [linux/amd64, linux/arm64]
+        include:
+          - platform: linux/amd64
+            tag-suffix: amd64
+          - platform: linux/arm64
+            tag-suffix: arm64
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,18 +50,58 @@ jobs:
 
       # Docker 이미지 빌드 및 푸시
       # 위에서 작성한 Dockerfile을 사용하여 이미지를 빌드하고 태깅하여 푸시합니다.
+      # - name: Build and push Docker image
+      #   uses: docker/build-push-action@v6
+      #   with:
+      #     context: ${{secrets.DOCKER_BUILD_CONTEXT_PATH}} # 빌드 컨텍스트 경로
+      #     file: ${{secrets.DOCKER_DOCKERFILE_PATH}} # Dockerfile path
+      #     push: true # 빌드 후 푸시 실행
+      #     tags: ${{secrets.DOCKER_IMAGE_NAME_WITH_TAG}} # version은 latest로 우선 고정
+      #     platforms: linux/amd64,linux/arm64
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
-          context: ${{secrets.DOCKER_BUILD_CONTEXT_PATH}} # 빌드 컨텍스트 경로
-          file: ${{secrets.DOCKER_DOCKERFILE_PATH}} # Dockerfile path
-          push: true # 빌드 후 푸시 실행
-          tags: ${{secrets.DOCKER_IMAGE_NAME_WITH_TAG}} # version은 latest로 우선 고정
-          platforms: linux/amd64,linux/arm64
+          # 모노레포 루트를 컨텍스트로 지정
+          context: .
+          # Dockerfile의 실제 위치
+          file: apps/api/Dockerfile
+          push: true
+          # 아키텍처별로 다른 태그
+          tags: ${{ secrets.DOCKER_IMAGE_NAME }}:${{ matrix.tag-suffix }}
+          # 한 번에 하나의 플랫폼만 빌드
+          platforms: ${{ matrix.platform }}
+          # 빌드 캐시 사용으로 속도 최적화
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
+  # ==================================================================================
+  # JOB 2: 분리된 이미지를 하나의 태그(:latest)로 합치기 (Manifest)
+  # ==================================================================================
+  merge-manifest:
+    name: Create Docker Manifest
+    needs: build-docker-image-and-push
+    runs-on: largeserver
+    steps:
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Create and push manifest
+        run: |
+          # amd64와 arm64 이미지를 묶어서 latest 태그 생성
+          docker buildx imagetools create -t ${{ secrets.DOCKER_IMAGE_NAME }}:latest \
+            ${{ secrets.DOCKER_IMAGE_NAME }}:amd64 \
+            ${{ secrets.DOCKER_IMAGE_NAME }}:arm64
+
+  # ==================================================================================
+  # JOB 3: 서버 배포
+  # ==================================================================================
   docker-pull-and-run:
     name: Pull Latest Docker Image and Run on Home Server
-    needs: build-docker-image-and-push
+    needs: merge-manifest
     runs-on: ubuntu-latest
     steps:
       - name: SSH 접속 및 스크립트 실행
@@ -68,7 +125,6 @@ jobs:
                 exit 1
               fi
             fi
-
 
             echo "✅ Docker 이미지 Pull 완료"
 
