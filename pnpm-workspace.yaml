@@ -1,0 +1,3 @@
+packages:
+  - 'apps/*'
+  - 'packages/*' # 나중에 공유 패키지용
