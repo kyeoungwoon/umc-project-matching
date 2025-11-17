@@ -1,3 +1,18 @@
 packages:
-  - 'apps/*'
-  - 'packages/*' # 나중에 공유 패키지용
+  - apps/*
+  - packages/*
+
+onlyBuiltDependencies:
+  - '@nestjs/core'
+  - '@prisma/client'
+  - '@prisma/engines'
+  - '@scarf/scarf'
+  - '@sentry-internal/node-cpu-profiler'
+  - '@swc/core'
+  - '@vercel/speed-insights'
+  - argon2
+  - lefthook
+  - prisma
+  - puppeteer
+  - sharp
+  - unrs-resolver

@@ -1,5 +1,5 @@
 {
-  "name": "umc-project-matching",
+  "name": "@upms/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -20,6 +20,7 @@
     "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN"
   },
   "dependencies": {
+    "@upms/shared": "workspace:*",
     "@lukemorales/query-key-factory": "^1.3.4",
     "@next/third-parties": "^16.0.1",
     "@radix-ui/react-checkbox": "^1.3.3",

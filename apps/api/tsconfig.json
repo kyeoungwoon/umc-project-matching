@@ -1,36 +1,26 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "declaration": true,
-    "removeComments": true,
-    "allowSyntheticDefaultImports": true,
-    "strictNullChecks": true,
-    "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false,
-    "module": "commonjs",
+    // [Backend 전용 설정]
+    // Node.js 환경에 맞는 타겟 상향 조정
     "target": "ES2023",
-    "lib": ["es2020"],
-    "sourceMap": true,
-    "allowJs": false,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": false,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "incremental": true,
+    // NestJS는 CommonJS 모듈 시스템 사용
+    "module": "commonjs",
+    // NestJS 의존성 주입을 위한 데코레이터 필수 설정
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    // 빌드 결과물 생성
+    "noEmit": false,
     "outDir": "./dist",
     "rootDir": "./src",
+
+    // [내부 경로 설정]
     "baseUrl": "./src",
     "paths": {
+      // API 내부 경로
       "@config/*": ["config/*"],
       "@common/*": ["common/*"],
       "@utils/*": ["utils/*"],
-      "@generated/prisma": ["generated/prisma"],
       "@generated/prisma/*": ["generated/prisma/*"],
       "@modules/*": ["modules/*"],
       "@/*": ["*"]

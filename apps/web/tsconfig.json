@@ -1,62 +1,41 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2020",
+    // [Frontend 전용 설정]
+    // 브라우저 환경 라이브러리 추가
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noImplicitAny": false,
-    "noEmit": true,
-    "esModuleInterop": true,
+    // React JSX 설정
+    "jsx": "react-jsx",
+    // 최신 번들러 방식 사용
     "module": "esnext",
     "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    // Next.js는 빌드를 자체적으로 처리하므로 noEmit true
+    "noEmit": true,
+    "allowJs": true,
+
+    // [내부 경로 설정]
+    // 앱 내부 파일들은 src 폴더를 기준으로 찾습니다.
     "baseUrl": "./src",
     "paths": {
-      // 전역 리소스 계층
+      // Web 내부 경로
       "@styles/*": ["styles/*"],
       "@assets/*": ["assets/*"],
       "@icons/*": ["common/components/icons/*"],
       "@svgs/*": ["assets/svgs/*"],
-      // 라이브러리 & API 계층
       "@lib/*": ["lib/*"],
       "@api/*": ["api/*"],
-      // common 계층
-      "@common/types/*": ["common/types/*"],
-      "@common/constants/*": ["common/constants/*"],
-      "@common/errors/*": ["common/errors/*"],
-      "@common/schemas/*": ["common/schemas/*"],
-      "@common/utils/*": ["common/utils/*"],
-      "@common/hooks/*": ["common/hooks/*"],
-      "@common/apis/*": ["common/apis/*"],
-      "@common/components/*": ["common/components/*"],
-      "@common/stores/*": ["common/stores/*"],
-      "@buttons/*": ["common/components/buttons/*"], // components 하위라 여기 배치
       "@common/*": ["common/*"],
-      // features 계층
       "@features/*": ["features/*"],
       "@skeletons/*": ["skeletons/*"],
-      // 앱 엔트리 계층
       "@app/*": ["app/*"],
       "@/*": ["*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": [
-    "image-modules.d.ts",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/features/ai-meeting-manager/components/MinutesClient/MinutesClient.client.tsx",
-    ".next/dev/types/**/*.ts"
-  ],
-  "exclude": ["node_modules", ".next"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }
