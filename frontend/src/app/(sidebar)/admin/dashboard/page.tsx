@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
@@ -43,7 +43,7 @@ const AdminDashboard = () => {
   const { mutate: changeApplicationStatus } = useAdminChangeApplicationStatus();
   const { mutate: deleteApplication } = useAdminDeleteApplicationMutation();
   const router = useRouter();
-  const queryClinet = useQueryClient();
+  const queryClient = useQueryClient();
 
   const [selectedApplication, setSelectedApplication] =
     useState<AdminGetAllApplicationsResponseDto | null>(null);
@@ -68,7 +68,7 @@ const AdminDashboard = () => {
       { applicationId, newStatus: status },
       {
         onSuccess: async () => {
-          await queryClinet.invalidateQueries({
+          await queryClient.invalidateQueries({
             // 지원서 목록 쿼리 무효화
             queryKey: queryKeyStore.admin.applications.queryKey,
           });
