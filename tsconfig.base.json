@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    // 1. 기본 언어 설정 (하위 호환성을 위해 낮은 버전 기준인 ES2020 선택)
+    "target": "ES2020",
+    // 기본 라이브러리 (DOM은 프론트엔드에서만 필요하므로 여기서는 제외)
+    "lib": ["es2020"],
+
+    // 2. 모듈 해석 방식 (기본값 node, 프론트엔드는 bundler로 오버라이딩)
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true, // Next.js 필수 요구사항 (NestJS에도 문제없음)
+
+    // 3. 엄격함 및 타입 체크
+    "strict": true,
+    // 두 설정 모두 noImplicitAny가 false로 되어 있어 반영 (권장: true)
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+
+    // 4. 빌드 성능
+    "incremental": true,
+
+    // 5. 경로 설정 기준점 (모노레포 루트 기준)
+    "baseUrl": ".",
+    // 공유 패키지 경로는 여기서 관리합니다.
+    "paths": {
+      "@upms/shared/*": ["packages/shared/src/*"]
+    }
+  },
+  // node_modules 등 공통 제외 설정
+  "exclude": ["node_modules", "dist", ".next"]
+}

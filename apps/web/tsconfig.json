@@ -1,0 +1,41 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    // [Frontend 전용 설정]
+    // 브라우저 환경 라이브러리 추가
+    "lib": ["dom", "dom.iterable", "esnext"],
+    // React JSX 설정
+    "jsx": "react-jsx",
+    // 최신 번들러 방식 사용
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    // Next.js는 빌드를 자체적으로 처리하므로 noEmit true
+    "noEmit": true,
+    "allowJs": true,
+
+    // [내부 경로 설정]
+    // 앱 내부 파일들은 src 폴더를 기준으로 찾습니다.
+    "baseUrl": "./src",
+    "paths": {
+      // Web 내부 경로
+      "@styles/*": ["styles/*"],
+      "@assets/*": ["assets/*"],
+      "@icons/*": ["common/components/icons/*"],
+      "@svgs/*": ["assets/svgs/*"],
+      "@lib/*": ["lib/*"],
+      "@api/*": ["api/*"],
+      "@common/*": ["common/*"],
+      "@features/*": ["features/*"],
+      "@skeletons/*": ["skeletons/*"],
+      "@app/*": ["app/*"],
+      "@/*": ["*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}

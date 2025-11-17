@@ -1,0 +1,25 @@
+{
+  "name": "umc-project-matching",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "turbo run lint",
+    "dev": "pnpm --parallel --filter \"@upms/*\" dev",
+    "dev:be": "pnpm --filter \"@upms/api\" dev",
+    "dev:fe": "pnpm --filter \"@upms/web\" dev",
+    "build": "pnpm --filter \"@upms/*\" build",
+    "build:be": "pnpm --filter \"@upms/api\" build",
+    "build:fe": "pnpm --filter \"@upms/web\" build",
+    "prisma:generate": "pnpm --filter \"@upms/api\" prisma:generate",
+    "prisma:push": "pnpm --filter \"@upms/api\" prisma:push"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.20.0",
+  "devDependencies": {
+    "turbo": "^2.6.1"
+  }
+}

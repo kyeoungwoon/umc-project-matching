@@ -1,12 +1,12 @@
 {
-  "name": "umc-team-matching-system",
+  "name": "@upms/api",
   "version": "0.1.0",
   "description": "UMC 9th Leo 지부의 프로젝트 팀 매칭을 위한 프로젝트 입니다.",
   "author": "Kyeoung Woon Park",
   "private": true,
   "license": "&copy; 2025 Kyeoung Woon Park. All rights reserved.",
   "scripts": {
-    "build": "nest build",
+    "build": "pnpm remove-leftovers && nest build",
     "start": "nest start",
     "dev": "pnpm remove-leftovers && cross-env NODE_ENV=development nest start --watch",
     "prod:watch": "pnpm remove-leftovers && cross-env NODE_ENV=production nest start --watch",
@@ -28,6 +28,7 @@
     "prisma:push": "pnpm prisma db push --schema=prisma/mongodb/schema.prisma"
   },
   "dependencies": {
+    "@upms/shared": "workspace:*",
     "@aws-sdk/client-s3": "^3.922.0",
     "@aws-sdk/s3-request-presigner": "^3.922.0",
     "@nestjs/axios": "^4.0.1",

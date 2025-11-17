@@ -1,5 +1,6 @@
 packages:
-  - .
+  - apps/*
+  - packages/*
 
 onlyBuiltDependencies:
   - '@nestjs/core'
@@ -8,7 +9,10 @@ onlyBuiltDependencies:
   - '@scarf/scarf'
   - '@sentry-internal/node-cpu-profiler'
   - '@swc/core'
+  - '@vercel/speed-insights'
   - argon2
   - lefthook
   - prisma
   - puppeteer
+  - sharp
+  - unrs-resolver

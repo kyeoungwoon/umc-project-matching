@@ -1,0 +1,61 @@
+# --- 1. Builder Stage ---
+# NestJS 앱을 빌드하는 단계
+FROM node:24-alpine AS builder
+
+# pnpm 설치
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# 모노레포 전체의 의존성 구조를 파악하기 위해 
+# 모든 package.json과 pnpm-workspace.yaml을 먼저 복사합니다.
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/api/package.json ./apps/api/
+COPY apps/web/package.json ./apps/web/
+COPY packages/shared/package.json ./packages/shared/
+
+# 의존성 설치 (dev dependencies 포함)
+# --frozen-lockfile은 lockfile을 기반으로 정확히 설치합니다.
+RUN pnpm install --frozen-lockfile --ignore-scripts
+
+# 전체 소스 코드 복사 (의존성 설치 이후에 복사해야 캐시 효율이 좋음)
+COPY . .
+
+# Prisma Client를 생성하고 있으나, 우리한테는 필요 없긴 함. 우선 유지
+RUN pnpm --filter "@upms/api" run prisma:generate
+
+# [수정] NestJS 프로젝트만 필터링하여 빌드
+RUN pnpm --filter "@upms/api" run build
+
+# 프로덕션용 node_modules만 분리 (이미지 최적화)
+# CI=true를 통해서 대화형 사용 X
+RUN CI=true pnpm prune --prod
+
+# --- 2. Production Stage ---
+# 실제 운영 환경에서 실행될 가벼운 이미지 생성
+FROM node:24-alpine
+
+# pnpm 설치
+RUN npm install -g pnpm
+
+WORKDIR /app
+
+# NODE_ENV 환경 변수 설정
+ENV NODE_ENV=production
+
+# Builder 스테이지에서 생성된 '프로덕션용' node_modules만 복사
+COPY --from=builder /app/node_modules ./node_modules
+# pnpm이 워크스페이스를 인식할 수 있도록 설정 파일 복사
+COPY --from=builder /app/package.json /app/pnpm-lock.yaml /app/pnpm-workspace.yaml ./
+# 각 앱/패키지의 package.json도 복사 (pnpm 링크용)
+COPY --from=builder /app/apps/api/package.json ./apps/api/
+COPY --from=builder /app/packages/shared/package.json ./packages/shared/
+
+# Builder 스테이지에서 빌드된 'api'의 결과물(dist)만 복사
+COPY --from=builder /app/apps/api/dist ./apps/api/dist
+
+# pnpm이 node_modules와 workspace 패키지들을 올바르게 연결하도록 함
+RUN CI=true pnpm install --frozen-lockfile --ignore-scripts
+
+# 애플리케이션 실행 (Node가 'apps/api/dist/main.js'를 실행)
+CMD ["node", "apps/api/dist/main.js"]
