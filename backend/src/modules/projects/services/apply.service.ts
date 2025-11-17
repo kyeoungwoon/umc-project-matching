@@ -195,6 +195,11 @@ export class ApplyService {
       where: { id: applicationId },
       include: {
         form: true,
+        applicant: {
+          include: {
+            projectMember: true,
+          },
+        },
       },
     });
 
@@ -221,6 +226,12 @@ export class ApplyService {
 
     // 변경하고자 하는 상태가, 승인하는 경우 팀원에 추가하기
     if (status === ApplicationStatusEnum.CONFIRMED) {
+      // 이미 다른 팀에 소속해 있으면 에러 발생
+      if (application.applicant.projectMember.length > 0) {
+        throw new ForbiddenException(
+          '이미 다른 프로젝트의 팀원으로 소속되어 있어, 지원서 상태를 합격으로 변경할 수 없습니다.',
+        );
+      }
       // 팀원에도 추가해야함
       const { projectId, userId } =
         await this.getProjectAndUserIdByApplicationId(applicationId);
