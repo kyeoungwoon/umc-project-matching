@@ -193,29 +193,43 @@ export class ApplyService {
   ) {
     const application = await this.mongo.application.findUnique({
       where: { id: applicationId },
+      include: {
+        form: true,
+      },
     });
 
     if (!application) {
       throw new NotFoundException('해당하는 지원서가 존재하지 않습니다.');
     }
 
-    // 승인하는 경우 팀원에 추가하기
+    // 변경 전 상태가 합격이였으면, 변경 시 무조건 프로젝트 멤버 목록에서 삭제 처리
+    if (application.status === ApplicationStatusEnum.CONFIRMED) {
+      await this.mongo.projectMember.delete({
+        where: {
+          projectId_userId: {
+            projectId: application.form.projectId,
+            userId: application.applicantId,
+          },
+        },
+      });
+      this.logger.log(
+        `지원서 ${applicationId} 불합격 처리로 인해 사용자 ${application.applicantId} 가 프로젝트 멤버에서 삭제되었습니다.`,
+      );
+
+      // 아니면 그냥 지원서 상태 업데이트만 하면 됨
+    }
+
+    // 변경하고자 하는 상태가, 승인하는 경우 팀원에 추가하기
     if (status === ApplicationStatusEnum.CONFIRMED) {
       // 팀원에도 추가해야함
       const { projectId, userId } =
         await this.getProjectAndUserIdByApplicationId(applicationId);
       await this.projectsService.addTeamMember(projectId, userId);
-    } else if (status === ApplicationStatusEnum.REJECTED) {
-      // 프로젝트 멤버에서도 삭제
-      await this.mongo.projectMember.delete({
-        where: {
-          projectId_userId: {
-            projectId: application.formId,
-            userId: application.applicantId,
-          },
-        },
-      });
     }
+
+    this.logger.log(
+      `지원서 ${applicationId} 상태가 ${application.status} 에서 ${status} 로 변경되었습니다.`,
+    );
 
     return this.mongo.application.update({
       where: { id: applicationId },
