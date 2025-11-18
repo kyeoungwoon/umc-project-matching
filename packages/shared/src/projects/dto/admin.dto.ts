@@ -8,7 +8,7 @@ import {
   ApplicationStatusEnum,
   USER_PART,
   UserPartEnum,
-} from '@common/enum/application-status.enum';
+} from '@common/enum/user.enum';
 
 export class ApplicationStatusByProjectRequestQuery {
   @IsNotEmpty()

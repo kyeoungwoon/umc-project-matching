@@ -12,7 +12,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { USER_PART, UserPartEnum } from '@common/enum/application-status.enum';
+import { USER_PART, UserPartEnum } from '@common/enum/user.enum';
 
 import { CreateQuestionRequestDto } from '@/projects/dto/form-question.dto';
 import { CreateFormRequestDto } from '@/projects/dto/form.dto';

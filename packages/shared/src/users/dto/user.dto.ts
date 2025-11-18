@@ -3,7 +3,7 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { ArrayNotEmpty, IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-import { GENDER, GenderEnum, USER_PART, UserPartEnum } from '@common/enum/application-status.enum';
+import { GENDER, GenderEnum, USER_PART, UserPartEnum } from '@common/enum/user.enum';
 
 export class User {
   // User Table에 포함된 정보

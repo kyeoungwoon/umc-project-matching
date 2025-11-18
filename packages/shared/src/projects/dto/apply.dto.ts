@@ -11,7 +11,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { APPLICATION_STATUS, ApplicationStatusEnum } from '@common/enum/application-status.enum';
+import { APPLICATION_STATUS, ApplicationStatusEnum } from '@common/enum/user.enum';
 
 export class AnswerDto {
   @IsNotEmpty()

@@ -12,7 +12,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { QUESTION_TYPE, QuestionTypeEnum } from '@common/enum/application-status.enum';
+import { QUESTION_TYPE, QuestionTypeEnum } from '@common/enum/user.enum';
 
 export class FormQuestionDto {
   @IsNotEmpty()

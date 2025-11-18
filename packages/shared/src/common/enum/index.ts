@@ -1,1 +1,1 @@
-export * from '@common/enum/application-status.enum';
+export * from '@common/enum/user.enum';
