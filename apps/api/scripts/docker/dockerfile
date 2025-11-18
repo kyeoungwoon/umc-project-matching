@@ -21,6 +21,10 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 # 전체 소스 코드 복사 (의존성 설치 이후에 복사해야 캐시 효율이 좋음)
 COPY . .
 
+# 이는 pnpm이 node_modules 내에 'apps'와 'packages'로의
+# 심볼릭 링크(symlink)를 올바르게 생성하도록 보장합니다.
+RUN pnpm install --frozen-lockfile --ignore-scripts
+
 # Prisma Client를 생성하고 있으나, 우리한테는 필요 없긴 함. 우선 유지
 RUN pnpm --filter "@upms/api" run prisma:generate
 
