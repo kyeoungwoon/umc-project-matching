@@ -38,11 +38,7 @@ import { EnvGuard } from '@common/guards/env.guard';
       isGlobal: true,
       envFilePath: ['.env.local', `.env.${process.env.NODE_ENV}`, '.env'],
       load: [
-        GoogleOAuthConfig,
-        KakaoOAuthConfig,
         JwtConfig,
-        RegisterJwtConfig,
-        FrontendUrlConfig,
       ],
       // validate,
     }),
