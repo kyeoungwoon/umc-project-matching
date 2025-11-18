@@ -1,0 +1,279 @@
+// prisma generate --schema=prisma/postgresql/schema.prisma
+// prisma db push --schema=prisma/postgresql/schema.prisma
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../../src/generated/prisma/postgresql"
+  binaryTargets = ["native", "darwin", "darwin-arm64", "linux-arm64-openssl-3.0.x", "linux-musl-openssl-3.0.x", "windows", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL_POSTGRESQL")
+  directUrl = env("DATABASE_DIRECT_URL_POSTGRESQL")
+}
+
+enum GenderEnum {
+  MALE
+  FEMALE
+}
+
+enum UserPartEnum {
+  PLAN
+  DESIGN
+  WEB
+  ANDROID
+  IOS
+  SPRINGBOOT
+  NODEJS
+  NULL
+}
+
+model Challenger {
+  id              BigInt     @id @default(autoincrement())
+  umsbId          Int        @map("umsb_id")
+  name            String
+  nickname        String
+  gender          GenderEnum
+  schoolId        BigInt     @map("school_id")
+  studentId       String     @map("student_id")
+  profileImageUrl String?    @map("profile_image_url")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  school             School           @relation(fields: [schoolId], references: [id])
+  gisuRoles          ChallengerGisu[]
+  ledGisuSchools     GisuSchool[]     @relation("LeaderOfGisuSchool")
+  viceLedGisuSchools GisuSchool[]     @relation("ViceLeaderOfGisuSchool")
+  projectMembers     ProjectMember[]
+  applications       Application[]
+
+  @@map("challenger")
+}
+
+model ChallengerGisu {
+  id           BigInt @id @default(autoincrement())
+  challengerId BigInt @map("challenger_id")
+  gisuId       BigInt @map("gisu_id")
+
+  // 학교/지부/중앙운영사무국 운영진 여부
+  isSchoolAdmin    Boolean @map("is_school_admin")
+  isChapterAdmin   Boolean @map("is_chapter_admin")
+  isCentralAdmin   Boolean @map("is_central_admin")
+  // 각 역할
+  schoolAdminType  String? @map("school_admin_type")
+  chapterAdminType String? @map("chapter_admin_type")
+  centralAdminType String? @map("central_admin_type")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  challenger Challenger @relation(fields: [challengerId], references: [id])
+  gisu       Gisu       @relation(fields: [gisuId], references: [id])
+
+  @@map("challenger_gisu")
+}
+
+model Gisu {
+  id          BigInt  @id @default(autoincrement())
+  name        String
+  description String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  gisuSchools     GisuSchool[]
+  chapters        Chapter[]
+  challengerGisus ChallengerGisu[]
+
+  @@map("gisu")
+}
+
+model GisuSchool {
+  id           BigInt  @id @default(autoincrement())
+  gisuId       BigInt  @map("gisu_id")
+  schoolId     BigInt  @map("school_id")
+  leaderId     BigInt  @map("leader_id")
+  viceLeaderId BigInt? @map("vice_leader_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  gisu       Gisu        @relation(fields: [gisuId], references: [id])
+  school     School      @relation(fields: [schoolId], references: [id])
+  leader     Challenger  @relation("LeaderOfGisuSchool", fields: [leaderId], references: [id])
+  viceLeader Challenger? @relation("ViceLeaderOfGisuSchool", fields: [viceLeaderId], references: [id])
+
+  @@map("gisu_school")
+}
+
+model School {
+  id           BigInt  @id @default(autoincrement())
+  name         String
+  logoImageUrl String? @map("logo_image_url")
+  description  String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  challengers Challenger[]
+  gisuSchools GisuSchool[]
+
+  @@map("school")
+}
+
+model Chapter {
+  id          BigInt   @id @default(autoincrement())
+  name        String
+  description String?
+  gisuId      BigInt   @map("gisu_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  gisu     Gisu      @relation(fields: [gisuId], references: [id])
+  projects Project[]
+
+  @@map("chapter")
+}
+
+model Project {
+  id             BigInt   @id @default(autoincrement())
+  name           String
+  description    String?
+  chapterId      BigInt   @map("chapter_id")
+  logoImageUrl   String?  @map("logo_image_url")
+  bannerImageUrl String?  @map("banner_image_url")
+  planTo         Int      @map("plan_to")
+  designTo       Int      @map("design_to")
+  webTo          Int      @map("web_to")
+  androidTo      Int      @map("android_to")
+  iosTo          Int      @map("ios_to")
+  springbootTo   Int      @map("springboot_to")
+  nodejsTo       Int      @map("nodejs_to")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  chapter          Chapter           @relation(fields: [chapterId], references: [id])
+  members          ProjectMember[]
+  applicationForms ApplicationForm[]
+
+  @@map("project")
+}
+
+model ProjectMember {
+  id           BigInt       @id @default(autoincrement())
+  projectId    BigInt       @map("project_id")
+  challengerId BigInt       @map("challenger_id")
+  role         UserPartEnum
+  isActive     Boolean      @default(true) @map("is_active")
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  // 관계 필드
+  project    Project    @relation(fields: [projectId], references: [id])
+  challenger Challenger @relation(fields: [challengerId], references: [id])
+
+  @@map("project_member")
+}
+
+model ApplicationForm {
+  id          BigInt   @id @default(autoincrement())
+  projectId   BigInt   @map("project_id")
+  title       String
+  description String?
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  project   Project        @relation(fields: [projectId], references: [id])
+  questions FormQuestion[]
+
+  @@map("application_form")
+}
+
+enum QuestionTypeEnum {
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  SUBJECTIVE
+}
+
+model FormQuestion {
+  id          BigInt           @id @default(autoincrement())
+  formId      BigInt           @map("form_id")
+  questionNo  Int              @map("question_no")
+  title       String
+  description String?
+  type        QuestionTypeEnum
+  options     String[]
+  isRequired  Boolean          @default(true) @map("is_required")
+  isDeleted   Boolean          @default(false) @map("is_deleted")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  // 관계 필드
+  form      ApplicationForm       @relation(fields: [formId], references: [id])
+  responses ApplicationResponse[]
+
+  @@map("form_question")
+}
+
+enum ApplicationStatusEnum {
+  PENDING
+  CONFIRMED
+  REJECTED
+}
+
+model Application {
+  id              BigInt                @id @default(autoincrement())
+  applicantId     BigInt                @map("applicant_id")
+  matchingRoundId BigInt                @map("matching_round_id")
+  status          ApplicationStatusEnum
+  createdAt       DateTime              @default(now()) @map("created_at")
+  updatedAt       DateTime              @updatedAt @map("updated_at")
+
+  // 관계 필드
+  applicant     Challenger            @relation(fields: [applicantId], references: [id])
+  matchingRound MatchingRound         @relation(fields: [matchingRoundId], references: [id])
+  responses     ApplicationResponse[]
+
+  @@map("application")
+}
+
+model ApplicationResponse {
+  id            BigInt   @id @default(autoincrement())
+  applicationId BigInt   @map("application_id")
+  questionId    BigInt   @map("question_id")
+  value         String[]
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  application Application  @relation(fields: [applicationId], references: [id])
+  question    FormQuestion @relation(fields: [questionId], references: [id])
+
+  @@map("application_response")
+}
+
+model MatchingRound {
+  id          BigInt   @id @default(autoincrement())
+  name        String
+  description String?
+  startAt     DateTime @map("start_at")
+  endAt       DateTime @map("end_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  applications Application[]
+
+  @@map("matching_round")
+}
