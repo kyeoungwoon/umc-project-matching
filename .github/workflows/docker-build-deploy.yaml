@@ -65,7 +65,7 @@ jobs:
           # 모노레포 루트를 컨텍스트로 지정
           context: .
           # Dockerfile의 실제 위치
-          file: apps/api/Dockerfile
+          file: apps/api/scripts/docker/dockerfile
           push: true
           # 아키텍처별로 다른 태그
           tags: ${{ secrets.DOCKER_IMAGE_NAME }}:${{ matrix.tag-suffix }}
