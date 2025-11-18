@@ -8,7 +8,6 @@ import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { PassportModule } from '@nestjs/passport';
 
-import { SentryModule } from '@sentry/nestjs/setup';
 import cookieParser from 'cookie-parser';
 import { WinstonModule } from 'nest-winston';
 
@@ -22,11 +21,7 @@ import { RequestContextMiddleware } from '@common/middleware/request-context.mid
 
 import { AlsModule } from '@modules/als/als.module';
 import { AuthModule } from '@modules/auth/auth.module';
-import { FrontendUrlConfig } from '@modules/auth/config/frontend-url.config';
-import { GoogleOAuthConfig } from '@modules/auth/config/google-oauth-config';
 import { JwtConfig } from '@modules/auth/config/jwt.config';
-import { KakaoOAuthConfig } from '@modules/auth/config/kakao-oauth-config';
-import { RegisterJwtConfig } from '@modules/auth/config/register-jwt.config';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { PrismaModule } from '@modules/prisma/prisma.module';
 import { TestModule } from '@modules/test/test.module';
