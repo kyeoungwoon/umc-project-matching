@@ -1,16 +1,13 @@
 import { Inject, Injectable, LoggerService, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 
-import { Prisma, PrismaClient } from '@generated/prisma/mongodb';
+import { Prisma, PrismaClient } from '@generated/prisma/postgresql';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-import { RequestContextService } from '@modules/als/services/request-context.service';
-
 @Injectable()
-export class MongoDBPrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+export class PostgreSQLPrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   constructor(
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
-    private readonly requestContextService: RequestContextService,
   ) {
     super({
       log: [
@@ -25,13 +22,13 @@ export class MongoDBPrismaService extends PrismaClient implements OnModuleInit, 
   async onModuleInit() {
     await this.$connect();
     (this.$on as any)('error', (event: any) => {
-      this.logger.error(`[Prisma Error]: ${event.message}`, 'MONGO_PRISMA_ERROR');
+      this.logger.error(`[Prisma Error]: ${event.message}`, 'POSTGRESQL_PRISMA_ERROR');
     });
     (this.$on as any)('info', (event: any) => {
-      this.logger.debug?.(`[Prisma Info]: ${event.message}`, 'MONGO_PRISMA_INFO');
+      this.logger.debug?.(`[Prisma Info]: ${event.message}`, 'POSTGRESQL_PRISMA_INFO');
     });
     (this.$on as any)('warn', (event: Prisma.LogEvent) => {
-      this.logger.warn(`[Prisma Warn]: ${event.message}`, 'MONGO_PRISMA_WARN');
+      this.logger.warn(`[Prisma Warn]: ${event.message}`, 'POSTGRESQL_PRISMA_WARN');
     });
 
     const IS_PROD = process.env.NODE_ENV === 'production';
@@ -42,7 +39,7 @@ export class MongoDBPrismaService extends PrismaClient implements OnModuleInit, 
       // const prismaTraceId = this.requestContextService.getTraceId();
       this.logger.log(
         ` [TARGET] ${event.target} [DURATION] ${event.duration} ms, [QUERY] ${IS_PROD ? event.query : '...'}`,
-        'MONGO_PRISMA_QUERY',
+        'POSTGRESQL_PRISMA_QUERY',
       );
       // this.logger.log(
       //   `[Query]: ${event.query}, PRISMA_TRACE_ID : ${prismaTraceId}`,
