@@ -13,7 +13,8 @@
     "build:be": "pnpm --filter \"@upms/api\" build",
     "build:fe": "pnpm --filter \"@upms/web\" build",
     "prisma:generate": "pnpm --filter \"@upms/api\" prisma:generate",
-    "prisma:push": "pnpm --filter \"@upms/api\" prisma:push"
+    "prisma:push": "pnpm --filter \"@upms/api\" prisma:push",
+    "type-check": "pnpm --parallel --filter \"@upms/*\" type-check"
   },
   "keywords": [],
   "author": "",
