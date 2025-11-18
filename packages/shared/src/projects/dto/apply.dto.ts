@@ -11,7 +11,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { ApplicationStatusEnum } from '@common/enum/application-status.enum';
+import { APPLICATION_STATUS, ApplicationStatusEnum } from '@common/enum/application-status.enum';
 
 export class AnswerDto {
   @IsNotEmpty()
@@ -84,11 +84,11 @@ export class CreateBulkMatchingRoundsDto {
 
 export class ChangeApplicationStatus {
   @IsNotEmpty()
-  @IsEnum(ApplicationStatusEnum)
+  @IsEnum(APPLICATION_STATUS)
   @ApiProperty({
     description: '변경할 지원 상태',
-    enum: ApplicationStatusEnum,
-    example: ApplicationStatusEnum.CONFIRMED,
+    enum: APPLICATION_STATUS,
+    example: APPLICATION_STATUS.CONFIRMED,
     required: true,
   })
   status!: ApplicationStatusEnum;

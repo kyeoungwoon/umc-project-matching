@@ -9,9 +9,14 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { ChangePasswordRequestDto, CreateSchoolRequestDto, LoginRequestDto } from '@upms/shared';
+import {
+  ChangePasswordRequestDto,
+  CreateSchoolRequestDto,
+  CreateUserRequestDto,
+  LoginRequestDto,
+} from '@upms/shared';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';
@@ -22,7 +27,6 @@ import { Public } from '@modules/auth/decorators/public.decorator';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
 import { AuthService } from '@modules/auth/services/auth.service';
 import { TokenAuthService } from '@modules/auth/services/token.auth.service';
-import { CreateUserRequestDto } from '@modules/users/dto/user.dto';
 
 @Controller({
   version: '1',

@@ -23,17 +23,9 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';
 import { CHALLENGER_ROLE, CheckChallengerRole } from '@common/decorators/challenger-role.decorator';
-import {
-  ApiOkResponseCommon,
-  ApiOkResponseCommonArray,
-} from '@common/decorators/response/api-ok-response-common.decorator';
 
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
-import {
-  FormResponseDto,
-  FormWithDetailsResponseDto,
-} from '@modules/projects/dto/ok-responses/form.ok-response.dto';
 import { ApplyService } from '@modules/projects/services/apply.service';
 import { FormService } from '@modules/projects/services/form.service';
 import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
@@ -71,7 +63,6 @@ export class FormController {
     description: '폼을 생성할 프로젝트의 ID',
     required: true,
   })
-  @ApiOkResponseCommon(FormResponseDto)
   @CheckChallengerRole(CHALLENGER_ROLE.PLAN)
   @Post('project/:projectId/form')
   async createProjectApplicationForm(
@@ -98,7 +89,6 @@ export class FormController {
     name: 'formId',
     required: true,
   })
-  @ApiOkResponseCommon(FormWithDetailsResponseDto)
   @Get('project/:projectId/form/:formId')
   async getProjectApplicationForm(
     @Param('projectId') projectId: string,
@@ -130,7 +120,6 @@ export class FormController {
     name: 'formId',
     required: true,
   })
-  @ApiOkResponseCommon(FormResponseDto)
   @Delete('project/:projectId/form/:formId')
   @CheckChallengerRole(CHALLENGER_ROLE.ADMIN)
   async deleteProjectApplicationForm(
@@ -159,7 +148,6 @@ export class FormController {
     name: 'formId',
     required: true,
   })
-  @ApiOkResponseCommonArray(FormQuestionDto)
   @Post('project/:projectId/forms/:formId/questions')
   async addQuestionsToForm(
     @Param('formId') formId: string,
@@ -192,7 +180,6 @@ export class FormController {
     name: 'formId',
     required: true,
   })
-  @ApiOkResponseCommon(FormResponseDto)
   @Patch('project/:projectId/form/:formId')
   async editProjectApplicationForm(
     @Param('formId') formId: string,

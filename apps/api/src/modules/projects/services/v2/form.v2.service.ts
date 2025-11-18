@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
+
+import { CreateFormRequestV2Dto } from '@upms/shared';
+
 import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
-import { CreateFormRequestV2Dto } from '@modules/projects/dto/form.dto';
 
 @Injectable()
 export class FormServiceV2 {

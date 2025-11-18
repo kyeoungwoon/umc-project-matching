@@ -1,34 +1,19 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  Post,
-  Query,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiQuery,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 
+import { UserPartEnum } from '@generated/prisma/mongodb';
+import { CreateBulkUserRequestDto } from '@upms/shared';
 import { Request } from 'express';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';
+import { BypassResponseInterceptor } from '@common/decorators/bypass-response-interceptor.decorator';
 import { ResponseMessage } from '@common/decorators/response/response-message.decorator';
+import { EnvGuard } from '@common/guards/env.guard';
 
 import { Public } from '@modules/auth/decorators/public.decorator';
-import { TokenAuthService } from '@modules/auth/services/token.auth.service';
-import { BypassResponseInterceptor } from '@common/decorators/bypass-response-interceptor.decorator';
 import { AuthService } from '@modules/auth/services/auth.service';
-import { CreateBulkUserRequestDto } from '@modules/users/dto/user.dto';
-import { EnvGuard } from '@common/guards/env.guard';
-import { UserPartEnum } from '@generated/prisma/mongodb';
+import { TokenAuthService } from '@modules/auth/services/token.auth.service';
 
 @Controller({
   version: '1',
@@ -104,16 +89,7 @@ export class AuthTestController {
   })
   @Public()
   async createSampleUser() {
-    const parts = [
-      'ADMIN',
-      'PLAN',
-      'DESIGN',
-      'WEB',
-      'IOS',
-      'ANDROID',
-      'SPRINGBOOT',
-      'NODEJS',
-    ];
+    const parts = ['ADMIN', 'PLAN', 'DESIGN', 'WEB', 'IOS', 'ANDROID', 'SPRINGBOOT', 'NODEJS'];
 
     return Promise.all(
       parts.map((part) =>

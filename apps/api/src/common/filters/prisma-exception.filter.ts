@@ -9,10 +9,9 @@ import {
 
 import { PrismaClientKnownRequestError as MongoDBPrismaError } from '@generated/prisma/mongodb/runtime/library';
 import { SentryExceptionCaptured } from '@sentry/nestjs';
+import { ApiCommonResponse } from '@upms/shared';
 import { Request, Response } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-
-import { ApiCommonResponse } from '@common/dto/common-response.dto';
 
 @Catch(MongoDBPrismaError)
 export class PrismaExceptionFilter implements ExceptionFilter {

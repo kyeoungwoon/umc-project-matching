@@ -1,18 +1,14 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+
 import { ApplicationStatusEnum } from '@generated/prisma/mongodb';
 import {
-  CreateFormRequestDto,
-  UpdateFormRequestDto,
-} from '@modules/projects/dto/form.dto';
-import {
   CreateFormQuestionDto,
+  CreateFormRequestDto,
   UpdateFormQuestionDto,
-} from '@modules/projects/dto/form-question.dto';
+  UpdateFormRequestDto,
+} from '@upms/shared';
+
+import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
 
 @Injectable()
 export class FormService {
@@ -102,10 +98,7 @@ export class FormService {
    *
    * 지원자의 경우, Plan 챌린저만 받아올 수 있으며 임시 저장 상태인 지원서는 제외됩니다.
    */
-  async getOrThrowFormByFormId(
-    formId: string,
-    includeApplications: boolean = false,
-  ) {
+  async getOrThrowFormByFormId(formId: string, includeApplications: boolean = false) {
     const form = await this.mongo.form.findUnique({
       where: {
         id: formId,
@@ -152,10 +145,7 @@ export class FormService {
     return form;
   }
 
-  async getFormWithAvailableMatchingRounds(
-    formId: string,
-    isPlanChallenger: boolean = false,
-  ) {
+  async getFormWithAvailableMatchingRounds(formId: string, isPlanChallenger: boolean = false) {
     const form = await this.getOrThrowFormByFormId(formId, isPlanChallenger);
     // console.log('form:', form);
 
@@ -172,10 +162,7 @@ export class FormService {
     return { ...form, availableMatchingRounds };
   }
 
-  async isQuestionBelongsToForm(
-    questionId: string,
-    formId: string,
-  ): Promise<boolean> {
+  async isQuestionBelongsToForm(questionId: string, formId: string): Promise<boolean> {
     const question = await this.mongo.formQuestion.findUnique({
       where: {
         id: questionId,

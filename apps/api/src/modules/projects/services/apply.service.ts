@@ -8,21 +8,21 @@ import {
   LoggerService,
   NotFoundException,
 } from '@nestjs/common';
-import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
+
 import {
-  ApplicationStatusEnum,
-  Prisma,
-  UserPartEnum,
-} from '@generated/prisma/mongodb';
-import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
-import { AnswerDto } from '@modules/projects/dto/apply.dto';
-import { ProjectsService } from '@modules/projects/services/projects.service';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import {
+  APPLICATION_STATUS,
+  AnswerDto,
   ApplicationStatsByChallengerResponseDto,
+  ApplicationStatusEnum,
   ChallengerApplicationInfo,
-} from '@modules/projects/dto/admin.dto';
-import ChallengerWhereInput = Prisma.ChallengerWhereInput;
+  USER_PART,
+  UserPartEnum,
+} from '@upms/shared';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+
+import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
+import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
+import { ProjectsService } from '@modules/projects/services/projects.service';
 
 @Injectable()
 export class ApplyService {
@@ -37,14 +37,9 @@ export class ApplyService {
   /**
    * 프로젝트에 생성된 지원 form에 맞는 형식의 지원서를 제출합니다.
    */
-  async applyToProjectByFormId(
-    formId: string,
-    userId: string,
-    answers: AnswerDto[],
-  ) {
+  async applyToProjectByFormId(formId: string, userId: string, answers: AnswerDto[]) {
     // 지원한 시간에 따라서 자동으로 현재 매칭 차수를 기입합니다.
-    const currentRoundId =
-      await this.matching.getCurrentProjectMatchingRoundId();
+    const currentRoundId = await this.matching.getCurrentProjectMatchingRoundId();
 
     // 필수 질문이 모두 응답되었는지 확인하기 위해 formQuestions 조회
     const questions = await this.mongo.formQuestion.findMany({
@@ -59,9 +54,7 @@ export class ApplyService {
         // ans.value 배열에 빈 문자열이 아닌 값이 하나라도 있는 경우
         // 즉, 응답을 한 경우
         const answered = answers.find(
-          (ans) =>
-            ans.questionId === question.id &&
-            ans.value.filter((v) => v !== '').length > 0,
+          (ans) => ans.questionId === question.id && ans.value.filter((v) => v !== '').length > 0,
         );
         // 그러한 객체가 존재하지 않을 경우
         if (!answered) {
@@ -80,7 +73,7 @@ export class ApplyService {
             formId,
             applicantId: userId,
             matchingRoundId: currentRoundId,
-            status: ApplicationStatusEnum.SUBMITTED,
+            status: APPLICATION_STATUS.SUBMITTED,
           },
         });
 
@@ -96,9 +89,7 @@ export class ApplyService {
       this.logger.error(err);
       if (err.code === 'P2002') {
         // 중복 지원 에러
-        throw new ConflictException(
-          '동일 차수 내 중복 지원은 허용되지 않습니다.',
-        );
+        throw new ConflictException('동일 차수 내 중복 지원은 허용되지 않습니다.');
       }
 
       throw new BadRequestException(
@@ -113,8 +104,7 @@ export class ApplyService {
    * 지원서를 삭제합니다. 현재 차수에 작성한 지원서만 삭제가 가능합니다.
    */
   async deleteApplication(applicationId: string, isAdmin: boolean = false) {
-    const currentRoundId =
-      await this.matching.getCurrentProjectMatchingRoundId();
+    const currentRoundId = await this.matching.getCurrentProjectMatchingRoundId();
 
     const application = await this.mongo.application.findUnique({
       where: { id: applicationId },
@@ -169,10 +159,7 @@ export class ApplyService {
   /**
    * 지원서를 조회하고, 해당 지원서의 소유자가 제공된 userId와 일치하는지 확인합니다.
    */
-  async isUserApplicationOwner(
-    userId: string,
-    applicationId: string,
-  ): Promise<boolean> {
+  async isUserApplicationOwner(userId: string, applicationId: string): Promise<boolean> {
     const application = await this.getApplication(applicationId);
     return application.applicantId === userId;
   }
@@ -187,10 +174,7 @@ export class ApplyService {
   /**
    * [내부용] 지원서 상태를 변경합니다. Validation이 존재하지 않습니다.
    */
-  async changeApplicationStatus(
-    applicationId: string,
-    status: ApplicationStatusEnum,
-  ) {
+  async changeApplicationStatus(applicationId: string, status: ApplicationStatusEnum) {
     const application = await this.mongo.application.findUnique({
       where: { id: applicationId },
       include: {
@@ -208,7 +192,7 @@ export class ApplyService {
     }
 
     // 변경 전 상태가 합격이였으면, 변경 시 무조건 프로젝트 멤버 목록에서 삭제 처리
-    if (application.status === ApplicationStatusEnum.CONFIRMED) {
+    if (application.status === APPLICATION_STATUS.CONFIRMED) {
       await this.mongo.projectMember.delete({
         where: {
           projectId_userId: {
@@ -225,7 +209,7 @@ export class ApplyService {
     }
 
     // 변경하고자 하는 상태가, 승인하는 경우 팀원에 추가하기
-    if (status === ApplicationStatusEnum.CONFIRMED) {
+    if (status === APPLICATION_STATUS.CONFIRMED) {
       // 이미 다른 팀에 소속해 있으면 에러 발생
       if (application.applicant.projectMember.length > 0) {
         throw new ForbiddenException(
@@ -233,8 +217,7 @@ export class ApplyService {
         );
       }
       // 팀원에도 추가해야함
-      const { projectId, userId } =
-        await this.getProjectAndUserIdByApplicationId(applicationId);
+      const { projectId, userId } = await this.getProjectAndUserIdByApplicationId(applicationId);
       await this.projectsService.addTeamMember(projectId, userId);
     }
 
@@ -264,7 +247,7 @@ export class ApplyService {
    */
   async throwIfApplicationStatusNotSubmitted(applicationId: string) {
     const application = await this.getApplication(applicationId);
-    if (application.status !== ApplicationStatusEnum.SUBMITTED) {
+    if (application.status !== APPLICATION_STATUS.SUBMITTED) {
       throw new ForbiddenException('지원서 상태를 변경할 수 없습니다.');
     }
   }
@@ -291,10 +274,7 @@ export class ApplyService {
     });
   }
 
-  async getApplicationByUserAndMatchingRound(
-    userId: string,
-    matchingRoundId: string,
-  ) {
+  async getApplicationByUserAndMatchingRound(userId: string, matchingRoundId: string) {
     return this.mongo.application.findMany({
       where: {
         applicantId: userId,
@@ -344,14 +324,12 @@ export class ApplyService {
     });
   }
 
-  async checkApplicationMatchingRoundExpired(
-    applicationId: string,
-    datetime: Date = new Date(),
-  ) {
+  async checkApplicationMatchingRoundExpired(applicationId: string, datetime: Date = new Date()) {
     // 지원서의 매칭 차수가 종료되었는지 확인합니다.
     const application = await this.getApplication(applicationId);
-    const applicationMatchingRound =
-      await this.matching.getOrThrowMatchingRound(application.matchingRoundId);
+    const applicationMatchingRound = await this.matching.getOrThrowMatchingRound(
+      application.matchingRoundId,
+    );
 
     if (applicationMatchingRound.endDatetime > datetime) {
       throw new ForbiddenException(
@@ -360,13 +338,10 @@ export class ApplyService {
     }
   }
 
-  async isApplicationStatusChangeValid(
-    applicationId: string,
-    newStatus: ApplicationStatusEnum,
-  ) {
-    if (newStatus === ApplicationStatusEnum.CONFIRMED) {
+  async isApplicationStatusChangeValid(applicationId: string, newStatus: ApplicationStatusEnum) {
+    if (newStatus === APPLICATION_STATUS.CONFIRMED) {
       await this.isApplicationAcceptable(applicationId);
-    } else if (newStatus === ApplicationStatusEnum.REJECTED) {
+    } else if (newStatus === APPLICATION_STATUS.REJECTED) {
       await this.isApplicationRejectable(applicationId);
     }
   }
@@ -381,10 +356,7 @@ export class ApplyService {
     const appliedProjectId = application.form.projectId;
 
     // 현재는 TO가 남아있는지만 확인합니다.
-    await this.projectsService.checkIfToLeftInProject(
-      appliedProjectId,
-      applicantPart,
-    );
+    await this.projectsService.checkIfToLeftInProject(appliedProjectId, applicantPart);
 
     return;
   }
@@ -415,14 +387,11 @@ export class ApplyService {
     const appliedProjectId = application.form.projectId;
     const applicantPart = application.applicant.part;
 
-    const projectParts =
-      await this.projectsService.getProjectPartToStatus(appliedProjectId);
+    const projectParts = await this.projectsService.getProjectPartToStatus(appliedProjectId);
 
     const partInfo = projectParts.find((p) => p.part === applicantPart);
     if (!partInfo) {
-      throw new NotFoundException(
-        `프로젝트에 ${applicantPart} 파트가 존재하지 않습니다.`,
-      );
+      throw new NotFoundException(`프로젝트에 ${applicantPart} 파트가 존재하지 않습니다.`);
     }
 
     const { maxTo, currentTo } = partInfo;
@@ -439,7 +408,7 @@ export class ApplyService {
         matchingRoundId: {
           not: application.matchingRoundId,
         },
-        status: ApplicationStatusEnum.CONFIRMED,
+        status: APPLICATION_STATUS.CONFIRMED,
         applicant: {
           part: applicantPart,
         },
@@ -454,7 +423,7 @@ export class ApplyService {
           projectId: appliedProjectId,
         },
         matchingRoundId: application.matchingRoundId,
-        status: ApplicationStatusEnum.SUBMITTED,
+        status: APPLICATION_STATUS.SUBMITTED,
         applicant: {
           part: applicantPart,
         },
@@ -464,7 +433,7 @@ export class ApplyService {
     const currentMatchingConfirmedCount = currentTo - originalTeamMemberCount;
 
     // --- 1. 디자이너 매칭 로직 ---
-    if (applicantPart === UserPartEnum.DESIGN) {
+    if (applicantPart === USER_PART.DESIGN) {
       // 최대 TO가 1명인 경우 무조건 거절 가능
       if (maxTo === 1) return;
 
@@ -518,14 +487,10 @@ export class ApplyService {
   }
 
   // 프로젝트 - 파트 - TO - (차수별로 반복) 지원자 수, 합격자 수 통계 반환
-  async getProjectPartToStatusStats(
-    projectId: string,
-    partFilter?: UserPartEnum[],
-  ) {
+  async getProjectPartToStatusStats(projectId: string, partFilter?: UserPartEnum[]) {
     // TODO: 과연 이 과정이 필요할지 고민해볼 필요는 있음
     // part와 maxTo만 뽑으면 된다.
-    const projectParts =
-      await this.projectsService.getProjectPartToStatus(projectId);
+    const projectParts = await this.projectsService.getProjectPartToStatus(projectId);
 
     const stats: Array<any> = [];
 
@@ -553,9 +518,7 @@ export class ApplyService {
     });
 
     // 매칭 라운드별로 지원서 필터링
-    const matchingRoundsSet = new Set(
-      matchingApplications.map((app) => app.matchingRoundId),
-    );
+    const matchingRoundsSet = new Set(matchingApplications.map((app) => app.matchingRoundId));
 
     // 각 매칭 라운드에 대해서 filter
     for (const matchingRoundId of matchingRoundsSet) {
@@ -575,27 +538,22 @@ export class ApplyService {
 
         // 해당 차수의 지원서 중에서 파트가 일치하는 것만 추출하도록 함
         // side effect : 해당 프로젝트에 없는 파트에 대한 지원서는 통계에 포함되지 않음 (근데 그러면 안됨 ㅋㅋ)
-        const partApplications = roundApplications.filter(
-          (app) => app.applicant.part === part,
-        );
+        const partApplications = roundApplications.filter((app) => app.applicant.part === part);
 
         // 전체 지원서 수랑 상태별로 분류, 위에 나온 edge case에 대한 오류를 파악할 수 있을 것으로 보임
         const totalApplicants = partApplications.length;
         const confirmedApplicants = partApplications.filter(
-          (app) => app.status === ApplicationStatusEnum.CONFIRMED,
+          (app) => app.status === APPLICATION_STATUS.CONFIRMED,
         ).length;
         const rejectedApplicants = partApplications.filter(
-          (app) => app.status === ApplicationStatusEnum.REJECTED,
+          (app) => app.status === APPLICATION_STATUS.REJECTED,
         ).length;
         const submittedApplicants = partApplications.filter(
-          (app) => app.status === ApplicationStatusEnum.SUBMITTED,
+          (app) => app.status === APPLICATION_STATUS.SUBMITTED,
         ).length;
 
         // edge case 검증
-        if (
-          totalApplicants !==
-          confirmedApplicants + rejectedApplicants + submittedApplicants
-        ) {
+        if (totalApplicants !== confirmedApplicants + rejectedApplicants + submittedApplicants) {
           this.logger.error(
             `지원서 통계 집계 중 이상 발견됨 - 프로젝트 ${projectId} | 매칭 차수 ${matchingRoundId} | 파트 ${part} | 전체 지원서 ${totalApplicants}명 vs 합격 ${confirmedApplicants}명 + 불합격 ${rejectedApplicants}명 + 제출됨 ${submittedApplicants}명`,
           );
@@ -627,7 +585,7 @@ export class ApplyService {
     school?: string,
     challengerId?: string,
   ): Promise<ApplicationStatsByChallengerResponseDto> {
-    const whereClause: ChallengerWhereInput = {};
+    const whereClause: any = {};
     if (part) whereClause.part = part;
     if (school) whereClause.challengerSchool = { handle: school };
     if (challengerId) whereClause.id = challengerId;
@@ -660,12 +618,11 @@ export class ApplyService {
 
     const stats: ChallengerApplicationInfo[] = challengers.map((challenger) => {
       const matchingResults = matchingRounds.map((round) => {
-        const application = challenger.applications.find(
-          (app) => app.matchingRoundId === round.id,
-        );
+        const application = challenger.applications.find((app) => app.matchingRoundId === round.id);
 
-        const applicationStatus: ApplicationStatusEnum | 'NOT_APPLIED' =
-          application ? application.status : 'NOT_APPLIED';
+        const applicationStatus: ApplicationStatusEnum | 'NOT_APPLIED' = application
+          ? application.status
+          : 'NOT_APPLIED';
 
         return {
           matchingRoundName: round.name,
@@ -684,9 +641,7 @@ export class ApplyService {
           `챌린저 ${challenger.id}가 여러 프로젝트의 멤버로 등록되어 있습니다.`,
           'APPLY_SERVICE',
         );
-        throw new ConflictException(
-          '챌린저가 여러 프로젝트의 멤버로 등록되어 있습니다.',
-        );
+        throw new ConflictException('챌린저가 여러 프로젝트의 멤버로 등록되어 있습니다.');
       } else if (challenger.projectMember.length === 1) {
         projectMember = {
           projectId: challenger.projectMember[0].project.id,

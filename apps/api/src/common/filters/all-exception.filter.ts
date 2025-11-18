@@ -1,11 +1,11 @@
 import { ArgumentsHost, Catch, ExceptionFilter, Inject, LoggerService } from '@nestjs/common';
 
 import { SentryExceptionCaptured } from '@sentry/nestjs';
+import { ApiCommonResponse } from '@upms/shared';
 import { Request, Response } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { CommonErrorCode } from '@common/codes/error/common.error.code';
-import { ApiCommonResponse } from '@common/dto/common-response.dto';
 
 @Catch() // 👈 모든 예외를 캐치
 export class AllExceptionsFilter implements ExceptionFilter {

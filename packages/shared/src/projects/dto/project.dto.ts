@@ -12,16 +12,16 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { UserPartEnum } from '@common/enum/application-status.enum';
+import { USER_PART, UserPartEnum } from '@common/enum/application-status.enum';
 
 import { CreateQuestionRequestDto } from '@/projects/dto/form-question.dto';
 import { CreateFormRequestDto } from '@/projects/dto/form.dto';
 
 export class ProjectToDto {
   @IsNotEmpty()
-  @IsEnum(UserPartEnum)
+  @IsEnum(USER_PART)
   @ApiProperty({
-    enum: UserPartEnum,
+    enum: USER_PART,
   })
   part!: UserPartEnum;
 

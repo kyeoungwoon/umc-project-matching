@@ -12,7 +12,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { QuestionTypeEnum } from '@common/enum/application-status.enum';
+import { QUESTION_TYPE, QuestionTypeEnum } from '@common/enum/application-status.enum';
 
 export class FormQuestionDto {
   @IsNotEmpty()
@@ -42,12 +42,12 @@ export class FormQuestionDto {
   })
   description?: string;
 
-  @IsEnum(QuestionTypeEnum)
+  @IsEnum(QUESTION_TYPE)
   @IsNotEmpty()
   @ApiProperty({
     description: '질문 유형',
-    enum: QuestionTypeEnum,
-    example: QuestionTypeEnum.SINGLE_CHOICE,
+    enum: QUESTION_TYPE,
+    example: QUESTION_TYPE.SINGLE_CHOICE,
     required: true,
   })
   type!: QuestionTypeEnum;

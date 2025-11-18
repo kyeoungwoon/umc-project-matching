@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 
+import { ApiCommonResponse } from '@upms/shared';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -17,7 +18,6 @@ import { catchError, map } from 'rxjs/operators';
 import { BYPASS_RESPONSE_INTERCEPTOR } from '@common/decorators/bypass-response-interceptor.decorator';
 import { RESPONSE_CODE_METADATA } from '@common/decorators/response/response-code.decorator';
 import { RESPONSE_MESSAGE_METADATA } from '@common/decorators/response/response-message.decorator';
-import { ApiCommonResponse } from '@common/dto/common-response.dto';
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, ApiCommonResponse<T>> {

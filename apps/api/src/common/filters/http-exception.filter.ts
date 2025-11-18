@@ -8,12 +8,12 @@ import {
 } from '@nestjs/common';
 
 import { SentryExceptionCaptured } from '@sentry/nestjs';
+import { ApiCommonResponse } from '@upms/shared';
 import { Request, Response } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { ExceptionDetails, ExceptionLogPayload } from '@common/codes/code.type';
 import { CustomException } from '@common/codes/custom.exception';
-import { ApiCommonResponse } from '@common/dto/common-response.dto';
 import {
   parseContextToRequestInfo,
   parseCustomExceptionToErrorDetails,

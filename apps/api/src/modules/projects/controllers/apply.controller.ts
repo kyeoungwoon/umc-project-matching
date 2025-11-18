@@ -17,11 +17,9 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';
 import { CHALLENGER_ROLE, CheckChallengerRole } from '@common/decorators/challenger-role.decorator';
-import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
 
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
-import { ApplicationResponseDto } from '@modules/projects/dto/ok-responses/apply.ok-response.dto';
 import { ApplyService } from '@modules/projects/services/apply.service';
 import { FormService } from '@modules/projects/services/form.service';
 import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
@@ -73,7 +71,6 @@ export class ApplyController {
     name: 'formId',
     required: true,
   })
-  @ApiOkResponseCommon(ApplicationResponseDto)
   @Post('project/:projectId/form/:formId/apply')
   async applyToProject(
     @Param('projectId') projectId: string,
@@ -141,7 +138,6 @@ export class ApplyController {
     name: 'applicationId',
     required: true,
   })
-  @ApiOkResponseCommon(ApplicationResponseDto)
   @Get('project/:projectId/apply/:applicationId')
   async getApplication(@Param('applicationId') applicationId: string) {
     const userId = this.reqContext.getOrThrowUserId();
@@ -162,7 +158,6 @@ export class ApplyController {
     name: 'applicationId',
     required: true,
   })
-  @ApiOkResponseCommon(ApplicationResponseDto)
   @Delete('project/:projectId/apply/:applicationId')
   async deleteApplicationForm(@Param('applicationId') applicationId: string) {
     const userId = this.reqContext.getOrThrowUserId();
@@ -175,7 +170,6 @@ export class ApplyController {
 
   // ========== Plan Only ==========
 
-  @ApiOkResponseCommon(ApplicationResponseDto)
   @Post('project/:projectId/apply/:applicationId/status')
   @CheckChallengerRole(CHALLENGER_ROLE.PLAN)
   @ApiOperation({

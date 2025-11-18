@@ -1,10 +1,9 @@
-import { CreateProjectRequestDto } from '@modules/projects/dto/project.dto';
+import { CreateProjectRequestDto } from '@upms/shared';
 
 export const leoProjects: CreateProjectRequestDto[] = [
   {
     title: '북리플',
-    description:
-      '“독서를 기록하고 나누며, 질문과 연결을 통해 책 너머의 경험을 확장하는 서비스.”',
+    description: '“독서를 기록하고 나누며, 질문과 연결을 통해 책 너머의 경험을 확장하는 서비스.”',
     link: 'https://makeus-challenge.notion.site/2a4b57f4596b8063b891fa8f86146af7?source=copy_link',
     planId: '252',
     partTo: [
@@ -26,8 +25,7 @@ export const leoProjects: CreateProjectRequestDto[] = [
   },
   {
     title: 'Wearly',
-    description:
-      'Wearly는 내 옷을 시각적으로 관리하고 코디를 계획할 수 있는 스마트 옷장 앱입니다.',
+    description: 'Wearly는 내 옷을 시각적으로 관리하고 코디를 계획할 수 있는 스마트 옷장 앱입니다.',
     link: 'https://makeus-challenge.notion.site/Wearly-2a3b57f4596b802781c7f110616bbc2e?source=copy_link',
     planId: '146',
     partTo: [
@@ -106,8 +104,7 @@ export const leoProjects: CreateProjectRequestDto[] = [
   },
   {
     title: 'RealMatch',
-    description:
-      '브랜드와 인플루언서를 톤앤매너 중심으로 정교하게 연결해주는 매칭 플랫폼',
+    description: '브랜드와 인플루언서를 톤앤매너 중심으로 정교하게 연결해주는 매칭 플랫폼',
     link: 'https://makeus-challenge.notion.site/RealMatch-2a3b57f4596b80e7b248cc9d059aefdd?pvs=25',
     planId: '555',
     partTo: [
@@ -130,8 +127,7 @@ export const leoProjects: CreateProjectRequestDto[] = [
   },
   {
     title: '모아요',
-    description:
-      '모아요는 대학생의 이력 관리와 팀 빌딩을 한 번에 해결하는 플랫폼입니다.',
+    description: '모아요는 대학생의 이력 관리와 팀 빌딩을 한 번에 해결하는 플랫폼입니다.',
     link: 'https://makeus-challenge.notion.site/2a1b57f4596b80ecafeadba8766900d1?pvs=25',
     planId: '147',
     partTo: [

@@ -1,11 +1,8 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
-import { CreateMatchingRoundDto } from '@modules/projects/dto/apply.dto';
+import { CreateMatchingRoundDto } from '@upms/shared';
+
+import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
 
 @Injectable()
 export class MatchingRoundService {
@@ -28,10 +25,7 @@ export class MatchingRoundService {
   /**
    * start ~ end 사이에 있는 프로젝트 매칭 차수를 하나만 반환합니다.
    */
-  async getProjectMatchingRoundByStartEndDatetime(
-    startDatetime: Date,
-    endDatetime: Date,
-  ) {
+  async getProjectMatchingRoundByStartEndDatetime(startDatetime: Date, endDatetime: Date) {
     return this.mongo.matchingRound.findFirst({
       where: {
         startDatetime: {
@@ -50,10 +44,7 @@ export class MatchingRoundService {
   /**
    * start ~ end 사이에 있는 프로젝트 매칭 차수를 모두 반환합니다.
    */
-  async getAllProjectMatchingRoundByStartEndDatetime(
-    startDatetime: Date,
-    endDatetime: Date,
-  ) {
+  async getAllProjectMatchingRoundByStartEndDatetime(startDatetime: Date, endDatetime: Date) {
     return this.mongo.matchingRound.findMany({
       where: {
         startDatetime: { lt: endDatetime }, // 매칭라운드 시작시간이 조회 종료시간보다 이전
@@ -91,15 +82,10 @@ export class MatchingRoundService {
 
   async getCurrentMatchingRound() {
     const now = new Date();
-    const current = await this.getProjectMatchingRoundByStartEndDatetime(
-      now,
-      now,
-    );
+    const current = await this.getProjectMatchingRoundByStartEndDatetime(now, now);
 
     if (!current) {
-      console.log(
-        `현재 시간 ${now.toISOString()}에 해당하는 매칭 차수가 없습니다.`,
-      );
+      console.log(`현재 시간 ${now.toISOString()}에 해당하는 매칭 차수가 없습니다.`);
       throw new NotFoundException('현재 진행 중인 매칭 차수가 없습니다.');
     }
 
@@ -126,10 +112,7 @@ export class MatchingRoundService {
     // 일치하는 매칭 차수가 존재하는지 확인
     const existing = await this.mongo.matchingRound.findFirst({
       where: {
-        AND: [
-          { startDatetime: { lte: endDatetime } },
-          { endDatetime: { gte: startDatetime } },
-        ],
+        AND: [{ startDatetime: { lte: endDatetime } }, { endDatetime: { gte: startDatetime } }],
       },
       orderBy: { startDatetime: 'desc' },
     });
@@ -137,9 +120,7 @@ export class MatchingRoundService {
     if (existing) {
       console.log(existing);
 
-      throw new ForbiddenException(
-        '해당 기간에 이미 존재하는 매칭 차수가 있습니다.',
-      );
+      throw new ForbiddenException('해당 기간에 이미 존재하는 매칭 차수가 있습니다.');
     }
 
     return this.mongo.matchingRound.create({

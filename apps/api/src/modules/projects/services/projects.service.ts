@@ -1,3 +1,5 @@
+import { HttpService } from '@nestjs/axios';
+import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import {
   BadRequestException,
   ForbiddenException,
@@ -6,19 +8,17 @@ import {
   LoggerService,
   NotFoundException,
 } from '@nestjs/common';
-import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
+
 import {
   CreateProjectRequestDto,
   LinkPreviewResponseDto,
   UpdateProjectRequestDto,
-} from '@modules/projects/dto/project.dto';
-
+} from '@upms/shared';
 import * as cheerio from 'cheerio';
-
-import { Cache, CACHE_MANAGER } from '@nestjs/cache-manager';
-import { HttpService } from '@nestjs/axios';
-import { firstValueFrom } from 'rxjs';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { firstValueFrom } from 'rxjs';
+
+import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
 import { UsersService } from '@modules/users/services/users.service';
 
 @Injectable()
@@ -118,10 +118,7 @@ export class ProjectsService {
   }
 
   // 프로젝트 수정
-  async updateProjectByProjectId(
-    projectId: string,
-    data: UpdateProjectRequestDto,
-  ) {
+  async updateProjectByProjectId(projectId: string, data: UpdateProjectRequestDto) {
     const { title, description, link } = data;
 
     return this.mongo.project.update({
@@ -216,9 +213,7 @@ export class ProjectsService {
     const project = await this.getProjectById(projectId);
 
     return project.partTo.map((partInfo) => {
-      const currentTo = project.projectMember.filter(
-        (pm) => pm.user.part === partInfo.part,
-      ).length;
+      const currentTo = project.projectMember.filter((pm) => pm.user.part === partInfo.part).length;
 
       return {
         part: partInfo.part,
@@ -238,26 +233,19 @@ export class ProjectsService {
 
     // 일치하는 정보가 없으면 에러
     if (!partStatus) {
-      throw new NotFoundException(
-        `프로젝트에 ${part} 파트가 존재하지 않습니다.`,
-      );
+      throw new NotFoundException(`프로젝트에 ${part} 파트가 존재하지 않습니다.`);
     }
 
     // 현재 멤버 수가 최대 TO에 도달했으면 에러
     if (partStatus.currentTo >= partStatus.maxTo) {
-      throw new BadRequestException(
-        `해당 프로젝트의 ${part} 파트의 TO가 모두 찼습니다.`,
-      );
+      throw new BadRequestException(`해당 프로젝트의 ${part} 파트의 TO가 모두 찼습니다.`);
     }
 
     // 다 아니면 반환 ~
     return;
   }
 
-  async isFormBelongsToProject(
-    formId: string,
-    projectId: string,
-  ): Promise<boolean> {
+  async isFormBelongsToProject(formId: string, projectId: string): Promise<boolean> {
     const form = await this.mongo.form.findUnique({
       where: {
         id: formId,
@@ -278,10 +266,7 @@ export class ProjectsService {
     }
   }
 
-  async isUserProjectPlanByProjectId(
-    userId: string,
-    projectId: string,
-  ): Promise<boolean> {
+  async isUserProjectPlanByProjectId(userId: string, projectId: string): Promise<boolean> {
     const project = await this.getProjectById(projectId);
 
     return project.planId === userId;
@@ -306,17 +291,14 @@ export class ProjectsService {
   }
 
   async getLinkPreview(targetUrl: string): Promise<LinkPreviewResponseDto> {
-    const cachedData =
-      await this.cacheManager.get<LinkPreviewResponseDto>(targetUrl);
+    const cachedData = await this.cacheManager.get<LinkPreviewResponseDto>(targetUrl);
     // if (cachedData) {
     //   this.logger.log(`Cache hit for URL: ${targetUrl}`);
     //   return cachedData;
     // }
 
     this.logger.log(`Cache miss for URL: ${targetUrl}. Fetching...`);
-    const { data: html } = await firstValueFrom(
-      this.httpService.get(targetUrl),
-    );
+    const { data: html } = await firstValueFrom(this.httpService.get(targetUrl));
 
     console.log('html:', html.slice(0, 5000)); // 첫 500자만 출력
 
@@ -343,9 +325,7 @@ export class ProjectsService {
     if (!imageUrl) {
       const firstImage = $('img').first().attr('src');
       if (firstImage) {
-        imageUrl = firstImage.startsWith('http')
-          ? firstImage
-          : new URL(firstImage, targetUrl).href;
+        imageUrl = firstImage.startsWith('http') ? firstImage : new URL(firstImage, targetUrl).href;
       }
     } else {
       // 기존 이메일

@@ -3,7 +3,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-import { ApplicationStatusEnum, UserPartEnum } from '@common/enum/application-status.enum';
+import {
+  APPLICATION_STATUS,
+  ApplicationStatusEnum,
+  USER_PART,
+  UserPartEnum,
+} from '@common/enum/application-status.enum';
 
 export class ApplicationStatusByProjectRequestQuery {
   @IsNotEmpty()
@@ -20,7 +25,7 @@ export class ApplicationStatusByProjectRequestQuery {
   matchingRoundId?: string;
 
   @IsOptional()
-  @IsEnum(UserPartEnum, { each: true })
+  @IsEnum(USER_PART, { each: true })
   @Transform(({ value }) => {
     // 값이 undefined, null이면 그대로 반환 (@IsOptional이 처리)
     if (!value) {
@@ -35,7 +40,7 @@ export class ApplicationStatusByProjectRequestQuery {
   })
   @IsArray()
   @ApiProperty({
-    enum: UserPartEnum,
+    enum: USER_PART,
     description: '특정 파트의 사용자만 조회합니다. 여러 파트를 선택할 수 있습니다.',
     isArray: true,
   })
@@ -44,9 +49,9 @@ export class ApplicationStatusByProjectRequestQuery {
 
 export class ApplicationStatsByChallengerRequestQuery {
   @IsOptional()
-  @IsEnum(UserPartEnum)
+  @IsEnum(USER_PART)
   @ApiProperty({
-    enum: UserPartEnum,
+    enum: USER_PART,
     description: '특정 파트의 사용자만 조회합니다.',
   })
   part?: UserPartEnum;
@@ -97,9 +102,9 @@ export class ChangeApplicationStatusRequestDto {
   applicationId!: string;
 
   @IsNotEmpty()
-  @IsEnum(ApplicationStatusEnum)
+  @IsEnum(APPLICATION_STATUS)
   @ApiProperty({
-    enum: ApplicationStatusEnum,
+    enum: APPLICATION_STATUS,
     description: '변경할 지원서 상태',
   })
   newStatus!: ApplicationStatusEnum;

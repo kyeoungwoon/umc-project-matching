@@ -3,7 +3,7 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { ArrayNotEmpty, IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-import { GenderEnum, UserPartEnum } from '@common/enum/application-status.enum';
+import { GENDER, GenderEnum, USER_PART, UserPartEnum } from '@common/enum/application-status.enum';
 
 export class User {
   // User Table에 포함된 정보
@@ -37,7 +37,7 @@ export class User {
   umsbChallengerId?: string;
 
   // TODO: required로 바꾸어야 함
-  @IsEnum(GenderEnum)
+  @IsEnum(GENDER)
   @IsOptional()
   gender?: GenderEnum;
 
@@ -70,11 +70,11 @@ export class User {
   })
   password!: string;
 
-  @IsEnum(UserPartEnum)
+  @IsEnum(USER_PART)
   @IsNotEmpty()
   @ApiProperty({
     description: '챌린저 파트',
-    enum: UserPartEnum,
+    enum: USER_PART,
   })
   part!: UserPartEnum;
 

@@ -1,14 +1,10 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+
+import { CreateUserRequestDto } from '@upms/shared';
 import * as argon2 from 'argon2';
+
+import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
 import { UsersService } from '@modules/users/services/users.service';
-import { CreateUserRequestDto } from '@modules/users/dto/user.dto';
-import { Prisma } from '@generated/prisma/mongodb';
-import ChallengerCreateInput = Prisma.ChallengerCreateInput;
 
 @Injectable()
 export class AuthService {
@@ -39,16 +35,7 @@ export class AuthService {
   }
 
   async register(data: CreateUserRequestDto) {
-    const {
-      name,
-      nickname,
-      introduction,
-      school,
-      studentId,
-      password,
-      part,
-      role,
-    } = data;
+    const { name, nickname, introduction, school, studentId, password, part, role } = data;
 
     const hashedPassword = await argon2.hash(password);
 
@@ -80,10 +67,7 @@ export class AuthService {
   }
 
   // userId와 password를 검증합니다.
-  async verifyPasswordWithUserId(
-    userId: string,
-    password: string,
-  ): Promise<boolean> {
+  async verifyPasswordWithUserId(userId: string, password: string): Promise<boolean> {
     const user = await this.user.getUserByUserId(userId);
 
     // 사용자가 존재하지 않으면 false 반환
@@ -94,15 +78,8 @@ export class AuthService {
     return await argon2.verify(user.password, password);
   }
 
-  async changePasswordWithUserId(
-    userId: string,
-    currentPassword: string,
-    newPassword: string,
-  ) {
-    const isValidCurrentPassword = await this.verifyPasswordWithUserId(
-      userId,
-      currentPassword,
-    );
+  async changePasswordWithUserId(userId: string, currentPassword: string, newPassword: string) {
+    const isValidCurrentPassword = await this.verifyPasswordWithUserId(userId, currentPassword);
 
     if (!isValidCurrentPassword) {
       throw new UnauthorizedException('현재 비밀번호가 올바르지 않습니다.');

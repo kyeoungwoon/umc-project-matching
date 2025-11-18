@@ -5,10 +5,8 @@ import { CreateMatchingRoundDto, QueryMatchingRoundsDto } from '@upms/shared';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';
-import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
 
 import { RequestContextService } from '@modules/als/services/request-context.service';
-import { MatchingRoundResponseDto } from '@modules/projects/dto/ok-responses/matching-round.ok-response.dto';
 import { ApplyService } from '@modules/projects/services/apply.service';
 import { FormService } from '@modules/projects/services/form.service';
 import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
@@ -38,7 +36,6 @@ export class MatchingRoundController {
     description:
       '현재 시간을 기준으로 매칭 세션을 가져옵니다. 여러 개의 매칭 세션이 있을 경우, 그 중 시작시간이 가장 늦은 것을 기준으로 가져옵니다.',
   })
-  @ApiOkResponseCommon(MatchingRoundResponseDto)
   @Get('closest')
   async getClosestMatchingRound() {
     return this.matchingRoundService.getOrThrowClosestMatchingRound();
@@ -48,7 +45,6 @@ export class MatchingRoundController {
     summary: '매칭 라운드 생성',
     description: '이름, 시작 시간, 종료 시간을 기준으로 매칭 라운드를 생성합니다.',
   })
-  @ApiOkResponseCommon(MatchingRoundResponseDto)
   @Post('')
   createMatchingRound(@Body() body: CreateMatchingRoundDto) {
     this.logger.log(`CREATE_MATCHING_ROUND_REQUEST`, body);
@@ -60,7 +56,6 @@ export class MatchingRoundController {
     summary: '매칭 라운드 조회',
     description: 'Body로 제공된 start ~ end 사이의 matching round를 반환합니다.',
   })
-  @ApiOkResponseCommon(MatchingRoundResponseDto)
   @ApiQuery({
     name: 'start',
     description: '조회할 매칭 라운드의 시작 날짜 (ISO 8601 형식)',
@@ -90,7 +85,6 @@ export class MatchingRoundController {
     summary: '모든 매칭 라운드 조회',
     description: '모든 매칭 라운드를 조회합니다.',
   })
-  @ApiOkResponseCommon(MatchingRoundResponseDto)
   @Get('all')
   getAllMatchingRounds() {
     return this.matchingRoundService.getAllMatchingRounds();
@@ -102,7 +96,6 @@ export class MatchingRoundController {
     summary: '매칭 라운드 ID로 매칭 라운드 조회',
     description: '매칭 라운드 ID로 매칭 라운드를 조회합니다.',
   })
-  @ApiOkResponseCommon(MatchingRoundResponseDto)
   async getMatchingRoundById(@Param('matchingRoundId') matchingRoundId: string) {
     return this.matchingRoundService.getOrThrowMatchingRound(matchingRoundId);
   }

@@ -1,23 +1,17 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Inject,
-  LoggerService,
-  Param,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Inject, LoggerService, Param, Post, Query } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+
+import { ApplyToProjectRequestDto } from '@upms/shared';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+
 import { API_TAGS } from '@common/constants/api-tags.constants';
-import { ProjectsService } from '@modules/projects/services/projects.service';
+
+import { RequestContextService } from '@modules/als/services/request-context.service';
+import { ApplyService } from '@modules/projects/services/apply.service';
 import { FormService } from '@modules/projects/services/form.service';
 import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
-import { ApplyService } from '@modules/projects/services/apply.service';
-import { RequestContextService } from '@modules/als/services/request-context.service';
+import { ProjectsService } from '@modules/projects/services/projects.service';
 import { UsersService } from '@modules/users/services/users.service';
-import { ApplyToProjectRequestDto } from '@modules/projects/dto/apply.dto';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Controller({
   path: 'projects',

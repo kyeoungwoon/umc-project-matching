@@ -20,14 +20,9 @@ import {
 
 import { API_TAGS } from '@common/constants/api-tags.constants';
 import { CHALLENGER_ROLE, CheckChallengerRole } from '@common/decorators/challenger-role.decorator';
-import {
-  ApiOkResponseCommon,
-  ApiOkResponseCommonArray,
-} from '@common/decorators/response/api-ok-response-common.decorator';
 
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
-import { ProjectResponseDto } from '@modules/projects/dto/ok-responses/project.ok-response.dto';
 import { ProjectsService } from '@modules/projects/services/projects.service';
 import { UsersService } from '@modules/users/services/users.service';
 
@@ -50,7 +45,6 @@ export class ProjectsController {
     summary: '프로젝트 목록 조회',
     description: '',
   })
-  @ApiOkResponseCommonArray(ProjectResponseDto)
   async getProjectList() {
     return this.projectService.getProjectList();
   }
@@ -61,7 +55,6 @@ export class ProjectsController {
     description: '관리자만 가능합니다.',
   })
   @CheckChallengerRole(CHALLENGER_ROLE.ADMIN)
-  @ApiOkResponseCommon(ProjectResponseDto)
   async createProject(@Body() body: CreateProjectRequestDto) {
     const userId = this.reqContext.getOrThrowUserId();
     await this.userService.throwIfNotPlanChallenger(userId);
@@ -84,7 +77,6 @@ export class ProjectsController {
     summary: '프로젝트 상세 보기',
     description: '',
   })
-  @ApiOkResponseCommon(ProjectResponseDto)
   async getProjectDetails(@Param('projectId') projectId: string) {
     return this.projectService.getProjectById(projectId);
   }
@@ -99,7 +91,6 @@ export class ProjectsController {
     description: '프로젝트 내용을 수정합니다.',
   })
   @CheckChallengerRole(CHALLENGER_ROLE.PLAN)
-  @ApiOkResponseCommon(ProjectResponseDto)
   async updateProject(
     @Param('projectId') projectId: string,
     @Body() body: UpdateProjectRequestDto,
@@ -120,7 +111,6 @@ export class ProjectsController {
     description: '[ADMIN] 프로젝트를 삭제합니다.',
   })
   @CheckChallengerRole(CHALLENGER_ROLE.ADMIN)
-  @ApiOkResponseCommon(ProjectResponseDto)
   async deleteProject(@Param('projectId') projectId: string) {
     const userId = this.reqContext.getOrThrowUserId();
     await this.userService.throwIfNotAdminChallenger(userId);
