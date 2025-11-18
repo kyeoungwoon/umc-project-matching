@@ -9,30 +9,20 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+
+import { ChangePasswordRequestDto, CreateSchoolRequestDto, LoginRequestDto } from '@upms/shared';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';
-import {
-  ChangePasswordRequestDto,
-  CreateSchoolRequestDto,
-  LoginRequestDto,
-} from '@modules/auth/dto/auth.dto';
-import { AuthService } from '@modules/auth/services/auth.service';
-import { Public } from '@modules/auth/decorators/public.decorator';
-import { CreateUserRequestDto } from '@modules/users/dto/user.dto';
+import { CHALLENGER_ROLE, CheckChallengerRole } from '@common/decorators/challenger-role.decorator';
+
 import { RequestContextService } from '@modules/als/services/request-context.service';
-import { TokenAuthService } from '@modules/auth/services/token.auth.service';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { Public } from '@modules/auth/decorators/public.decorator';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
-import {
-  CHALLENGER_ROLE,
-  CheckChallengerRole,
-} from '@common/decorators/challenger-role.decorator';
+import { AuthService } from '@modules/auth/services/auth.service';
+import { TokenAuthService } from '@modules/auth/services/token.auth.service';
+import { CreateUserRequestDto } from '@modules/users/dto/user.dto';
 
 @Controller({
   version: '1',
@@ -53,8 +43,7 @@ export class AuthV1Controller {
   @Post('register')
   @ApiOperation({
     summary: '[ADMIN] 회원가입',
-    description:
-      '관리자 전용입니다. 사용자 정보를 입력해서 새로운 사용자를 생성합니다.',
+    description: '관리자 전용입니다. 사용자 정보를 입력해서 새로운 사용자를 생성합니다.',
   })
   @CheckChallengerRole(CHALLENGER_ROLE.ADMIN)
   register(@Body() body: CreateUserRequestDto) {
@@ -85,17 +74,12 @@ export class AuthV1Controller {
   @ApiOperation({
     summary: '로그인',
     description:
-      '학교, 학번, 비밀번호로 로그인 합니다.' +
-      'AccessToken만 제공되며, 유효기간은 24시간 입니다.',
+      '학교, 학번, 비밀번호로 로그인 합니다.' + 'AccessToken만 제공되며, 유효기간은 24시간 입니다.',
   })
   @Public()
   async login(@Body() body: LoginRequestDto) {
     const { school, studentId, password } = body;
-    const loggedInUser = await this.auth.loginWithPassword(
-      school,
-      studentId,
-      password,
-    );
+    const loggedInUser = await this.auth.loginWithPassword(school, studentId, password);
 
     this.logger.log(`USER_ID ${loggedInUser.id} LOGIN_SUCCESS`);
 
@@ -113,11 +97,7 @@ export class AuthV1Controller {
 
     this.logger.log(`USER_ID ${userId} PASSWORD_CHANGE_ATTEMPT`);
 
-    return this.auth.changePasswordWithUserId(
-      userId,
-      body.currentPassword,
-      body.newPassword,
-    );
+    return this.auth.changePasswordWithUserId(userId, body.currentPassword, body.newPassword);
   }
 
   @ApiOperation({

@@ -3,7 +3,6 @@ import {
   ConflictException,
   Controller,
   Delete,
-  ForbiddenException,
   Get,
   Inject,
   LoggerService,
@@ -11,31 +10,23 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+
+import { ApplyToProjectRequestDto, ChangeApplicationStatus } from '@upms/shared';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+
 import { API_TAGS } from '@common/constants/api-tags.constants';
-import { ProjectsService } from '@modules/projects/services/projects.service';
+import { CHALLENGER_ROLE, CheckChallengerRole } from '@common/decorators/challenger-role.decorator';
+import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
+
+import { RequestContextService } from '@modules/als/services/request-context.service';
+import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
+import { ApplicationResponseDto } from '@modules/projects/dto/ok-responses/apply.ok-response.dto';
+import { ApplyService } from '@modules/projects/services/apply.service';
 import { FormService } from '@modules/projects/services/form.service';
 import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
-import { ApplyService } from '@modules/projects/services/apply.service';
-import { RequestContextService } from '@modules/als/services/request-context.service';
+import { ProjectsService } from '@modules/projects/services/projects.service';
 import { UsersService } from '@modules/users/services/users.service';
-import {
-  ApplyToProjectRequestDto,
-  ChangeApplicationStatus,
-} from '@modules/projects/dto/apply.dto';
-import { ApplicationResponseDto } from '@modules/projects/dto/ok-responses/apply.ok-response.dto';
-import { ApiOkResponseCommon } from '@common/decorators/response/api-ok-response-common.decorator';
-import {
-  CHALLENGER_ROLE,
-  CheckChallengerRole,
-} from '@common/decorators/challenger-role.decorator';
-import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 @Controller({
   path: 'projects/applications',
@@ -66,10 +57,7 @@ export class ApplyController {
   async getMyApplications() {
     const userId = this.reqContext.getOrThrowUserId();
 
-    this.logger.log(
-      `본인이 작성한 지원서를 조회하였습니다. 챌린저 ${userId}`,
-      this.LOG_CONTEXT,
-    );
+    this.logger.log(`본인이 작성한 지원서를 조회하였습니다. 챌린저 ${userId}`, this.LOG_CONTEXT);
     return this.applyService.getMyApplications(userId);
   }
 
@@ -96,14 +84,12 @@ export class ApplyController {
     await this.projectService.throwIfFormNotBelongsToProject(formId, projectId);
 
     // TODO: 현재 차수가 지원서의 지원 가능 차수에 해당하는지 확인
-    const currentRound =
-      await this.matchingRoundService.getCurrentMatchingRound();
+    const currentRound = await this.matchingRoundService.getCurrentMatchingRound();
 
-    const currentRoundApplications =
-      await this.applyService.getApplicationByUserAndMatchingRound(
-        userId,
-        currentRound.id,
-      );
+    const currentRoundApplications = await this.applyService.getApplicationByUserAndMatchingRound(
+      userId,
+      currentRound.id,
+    );
 
     if (currentRoundApplications.length > 0) {
       this.logger.warn(
@@ -111,9 +97,7 @@ export class ApplyController {
         this.LOG_CONTEXT,
       );
 
-      throw new ConflictException(
-        '동일 차수 내 중복 지원은 허용되지 않습니다.',
-      );
+      throw new ConflictException('동일 차수 내 중복 지원은 허용되지 않습니다.');
     }
 
     // 폼 정보를 가져옵니다, 없으면 throw error!
@@ -134,11 +118,7 @@ export class ApplyController {
     await this.projectService.checkIfToLeftInProject(projectId, part);
 
     // DB 상에도 Unique Constraint를 적용하여 이중으로 확인합니다.
-    await this.applyService.applyToProjectByFormId(
-      formId,
-      userId,
-      body.answers,
-    );
+    await this.applyService.applyToProjectByFormId(formId, userId, body.answers);
 
     this.logger.log(
       `프로젝트 지원 성공, 챌린저 ${userId} 프로젝트 ${projectId} 폼 ${formId} 폼 응답 ${JSON.stringify(body.answers)}`,
@@ -165,10 +145,7 @@ export class ApplyController {
   @Get('project/:projectId/apply/:applicationId')
   async getApplication(@Param('applicationId') applicationId: string) {
     const userId = this.reqContext.getOrThrowUserId();
-    await this.applyService.throwIfUserNotApplicationOwner(
-      userId,
-      applicationId,
-    );
+    await this.applyService.throwIfUserNotApplicationOwner(userId, applicationId);
 
     return this.applyService.getApplication(applicationId);
   }
@@ -189,14 +166,9 @@ export class ApplyController {
   @Delete('project/:projectId/apply/:applicationId')
   async deleteApplicationForm(@Param('applicationId') applicationId: string) {
     const userId = this.reqContext.getOrThrowUserId();
-    await this.applyService.throwIfUserNotApplicationOwner(
-      userId,
-      applicationId,
-    );
+    await this.applyService.throwIfUserNotApplicationOwner(userId, applicationId);
 
-    this.logger.warn(
-      `지원서를 삭제하였습니다. 챌린저 ${userId} 삭제된 지원서 ${applicationId}`,
-    );
+    this.logger.warn(`지원서를 삭제하였습니다. 챌린저 ${userId} 삭제된 지원서 ${applicationId}`);
 
     return this.applyService.deleteApplication(applicationId);
   }
@@ -232,10 +204,7 @@ export class ApplyController {
 
     // 지원서를 합격시켜도 되는지 확인합니다.
 
-    await this.applyService.isApplicationStatusChangeValid(
-      applicationId,
-      body.status,
-    );
+    await this.applyService.isApplicationStatusChangeValid(applicationId, body.status);
 
     // 지원서를 불합격시킬 수 있는지 확인합니다.
 
@@ -243,9 +212,6 @@ export class ApplyController {
       `지원서의 상태를 ${body.status} 로 변경합니다. 챌린저 ${userId} 지원서 ${applicationId}`,
     );
 
-    return this.applyService.changeApplicationStatus(
-      applicationId,
-      body.status,
-    );
+    return this.applyService.changeApplicationStatus(applicationId, body.status);
   }
 }

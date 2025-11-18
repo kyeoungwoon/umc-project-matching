@@ -256,7 +256,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "/Users/haneul/GitHub/umc/umc-project-matching/backend/src/generated/prisma/mongodb",
+      "value": "/Users/haneul/GitHub/umc/umc-project-matching/apps/api/src/generated/prisma/mongodb",
       "fromEnvVar": null
     },
     "config": {
@@ -294,7 +294,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/Users/haneul/GitHub/umc/umc-project-matching/backend/prisma/mongodb/schema.prisma",
+    "sourceFilePath": "/Users/haneul/GitHub/umc/umc-project-matching/apps/api/prisma/mongodb/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -308,6 +308,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mongodb",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {

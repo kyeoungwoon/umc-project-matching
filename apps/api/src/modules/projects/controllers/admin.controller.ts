@@ -12,25 +12,25 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { API_TAGS } from '@common/constants/api-tags.constants';
-import { ProjectsService } from '@modules/projects/services/projects.service';
-import { FormService } from '@modules/projects/services/form.service';
-import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
-import { ApplyService } from '@modules/projects/services/apply.service';
-import { RequestContextService } from '@modules/als/services/request-context.service';
-import { UsersService } from '@modules/users/services/users.service';
-import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
+
 import {
-  CHALLENGER_ROLE,
-  CheckChallengerRole,
-} from '@common/decorators/challenger-role.decorator';
-import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import {
-  ApplicationStatusByProjectRequestQuery,
   ApplicationStatsByChallengerRequestQuery,
+  ApplicationStatusByProjectRequestQuery,
   ChangeApplicationStatusRequestDto,
   ForceMatchChallengerToProjectRequestDto,
-} from '@modules/projects/dto/admin.dto';
+} from '@upms/shared';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+
+import { API_TAGS } from '@common/constants/api-tags.constants';
+import { CHALLENGER_ROLE, CheckChallengerRole } from '@common/decorators/challenger-role.decorator';
+
+import { RequestContextService } from '@modules/als/services/request-context.service';
+import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
+import { ApplyService } from '@modules/projects/services/apply.service';
+import { FormService } from '@modules/projects/services/form.service';
+import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
+import { ProjectsService } from '@modules/projects/services/projects.service';
+import { UsersService } from '@modules/users/services/users.service';
 
 @Controller({
   path: 'projects/admin',
@@ -60,22 +60,16 @@ export class AdminController {
   }
 
   @ApiOperation({
-    summary:
-      '프로젝트에 대해서 파트별로 TO 및 차수 별 지원 현황을 요약해서 보내줍니다.',
+    summary: '프로젝트에 대해서 파트별로 TO 및 차수 별 지원 현황을 요약해서 보내줍니다.',
   })
   @Get('applications')
-  async getApplicationsSummary(
-    @Query() query: ApplicationStatusByProjectRequestQuery,
-  ) {
+  async getApplicationsSummary(@Query() query: ApplicationStatusByProjectRequestQuery) {
     // 프로젝트 마다 차수별로 지원 현황을 요약해서 제공
-    const projectInfo = await this.projectService.getProjectById(
+    const projectInfo = await this.projectService.getProjectById(query.projectId);
+    const projectApplicationStats = await this.applyService.getProjectPartToStatusStats(
       query.projectId,
+      query.part,
     );
-    const projectApplicationStats =
-      await this.applyService.getProjectPartToStatusStats(
-        query.projectId,
-        query.part,
-      );
 
     return {
       project: projectInfo,
@@ -100,14 +94,9 @@ export class AdminController {
   async randomMatchForRemainingSeats() {}
 
   @Patch('application/status')
-  async updateApplicationStatus(
-    @Body() body: ChangeApplicationStatusRequestDto,
-  ) {
+  async updateApplicationStatus(@Body() body: ChangeApplicationStatusRequestDto) {
     // 관리자용 API는 따로 검증을 하지 않고 합/불 처리를 허용함
-    return this.applyService.changeApplicationStatus(
-      body.applicationId,
-      body.newStatus,
-    );
+    return this.applyService.changeApplicationStatus(body.applicationId, body.newStatus);
   }
 
   @Delete('application/:applicationId')
@@ -116,9 +105,7 @@ export class AdminController {
   }
 
   @Post('projects/force-match')
-  async forceMatchChallengerToProject(
-    @Body() body: ForceMatchChallengerToProjectRequestDto,
-  ) {
+  async forceMatchChallengerToProject(@Body() body: ForceMatchChallengerToProjectRequestDto) {
     // 특정 챌린저를 특정 프로젝트에 강제 매칭하는 기능
     return this.projectService.addTeamMember(body.projectId, body.challengerId);
   }

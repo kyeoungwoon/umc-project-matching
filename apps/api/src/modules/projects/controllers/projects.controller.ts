@@ -10,31 +10,26 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiParam,
-  ApiTags,
-} from '@nestjs/swagger';
-import { ProjectsService } from '@modules/projects/services/projects.service';
-import { RequestContextService } from '@modules/als/services/request-context.service';
-import { UsersService } from '@modules/users/services/users.service';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
+
 import {
   CreateMultipleProjectRequestDto,
   CreateProjectRequestDto,
   UpdateProjectRequestDto,
-} from '@modules/projects/dto/project.dto';
+} from '@upms/shared';
+
 import { API_TAGS } from '@common/constants/api-tags.constants';
-import { ProjectResponseDto } from '@modules/projects/dto/ok-responses/project.ok-response.dto';
+import { CHALLENGER_ROLE, CheckChallengerRole } from '@common/decorators/challenger-role.decorator';
 import {
   ApiOkResponseCommon,
   ApiOkResponseCommonArray,
 } from '@common/decorators/response/api-ok-response-common.decorator';
+
+import { RequestContextService } from '@modules/als/services/request-context.service';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
-import {
-  CHALLENGER_ROLE,
-  CheckChallengerRole,
-} from '@common/decorators/challenger-role.decorator';
+import { ProjectResponseDto } from '@modules/projects/dto/ok-responses/project.ok-response.dto';
+import { ProjectsService } from '@modules/projects/services/projects.service';
+import { UsersService } from '@modules/users/services/users.service';
 
 @Controller({
   path: 'projects',

@@ -28,8 +28,8 @@ RUN pnpm install --frozen-lockfile --ignore-scripts
 # Prisma Client를 생성하고 있으나, 우리한테는 필요 없긴 함. 우선 유지
 RUN pnpm --filter "@upms/api" run prisma:generate
 
-# [수정] NestJS 프로젝트만 필터링하여 빌드
-RUN pnpm --filter "@upms/api" run build
+# Turbo를 사용하여 Nest.js build
+RUN turbo run build --filter="@upms/api"
 
 # 프로덕션용 node_modules만 분리 (이미지 최적화)
 # CI=true를 통해서 대화형 사용 X

@@ -1,4 +1,6 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "references": [{ "path": "packages/shared/tsconfig.json" }],
   "compilerOptions": {
     // 1. 기본 언어 설정 (하위 호환성을 위해 낮은 버전 기준인 ES2020 선택)
     "target": "ES2020",
@@ -26,9 +28,12 @@
     "baseUrl": ".",
     // 공유 패키지 경로는 여기서 관리합니다.
     "paths": {
-      "@upms/shared/*": ["packages/shared/src/*"]
+      "@upms/shared": ["packages/shared/src"],
+      "@upms/shared/*": ["packages/shared/src/*"],
+      "@/*": ["*"]
     }
   },
   // node_modules 등 공통 제외 설정
-  "exclude": ["node_modules", "dist", ".next"]
+  "include": ["packages/*/src", "apps/*/src"],
+  "exclude": ["node_modules", "dist", ".next", ".turbo"]
 }

@@ -1,10 +1,30 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "./dist",
-    // 👇 이 두 옵션이 반드시 true여야 합니다.
+    "module": "commonjs",
+    // d.ts 파일 생성
+    "composite": true,
+    "declaration": true,
+    "sourceMap": true,
+    "strict": true,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "@config/*": ["config/*"],
+      "@common/*": ["common/*"],
+      "@auth/*": ["auth/*"],
+      "@projects/*": ["projects/*"],
+      "@users/*": ["users/*"],
+      "@utils/*": ["utils/*"],
+      "@generated/prisma/*": ["generated/prisma/*"],
+      "@modules/*": ["modules/*"],
+      "@/*": ["*"]
+    }
   },
-  "include": ["src"],
+  "include": ["**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

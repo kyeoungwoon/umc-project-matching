@@ -2,15 +2,27 @@
   "name": "@upms/shared",
   "version": "0.1.0",
   "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsc -p tsconfig.json --watch",
+    "build": "pnpm remove-leftovers && tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
+    "remove-leftovers": "rimraf dist tsconfig.build.tsbuildinfo tsconfig.tsbuildinfo",
+    "type-check": "tsc --noEmit -p tsconfig.json"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.20.0",
   "dependencies": {
+    "@nestjs/common": "^11.1.9",
+    "@nestjs/swagger": "^11.2.2",
     "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.2"
+    "class-validator": "^0.14.2",
+    "rimraf": "^6.1.0",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "tsc-alias": "^1.8.16"
   }
 }
