@@ -21,8 +21,8 @@ import {
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
-import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
-import { ProjectsService } from '@modules/projects/services/projects.service';
+import { MatchingRoundService } from '@modules/projects/services/v1/matching-round.service';
+import { ProjectsService } from '@modules/projects/services/v1/projects.service';
 
 @Injectable()
 export class ApplyService {

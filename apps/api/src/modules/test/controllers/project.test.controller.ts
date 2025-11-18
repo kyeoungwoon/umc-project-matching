@@ -23,13 +23,13 @@ import { EnvGuard } from '@common/guards/env.guard';
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { Public } from '@modules/auth/decorators/public.decorator';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
-import { AuthService } from '@modules/auth/services/auth.service';
+import { AuthService } from '@modules/auth/services/v1/auth.service';
 import { leoProjects } from '@modules/projects/mock/leo-projects';
-import { ApplyService } from '@modules/projects/services/apply.service';
-import { FormService } from '@modules/projects/services/form.service';
-import { MatchingRoundService } from '@modules/projects/services/matching-round.service';
-import { ProjectsService } from '@modules/projects/services/projects.service';
-import { UsersService } from '@modules/users/services/users.service';
+import { ApplyService } from '@modules/projects/services/v1/apply.service';
+import { FormService } from '@modules/projects/services/v1/form.service';
+import { MatchingRoundService } from '@modules/projects/services/v1/matching-round.service';
+import { ProjectsService } from '@modules/projects/services/v1/projects.service';
+import { UsersService } from '@modules/users/services/v1/users.service';
 
 @Controller({
   path: 'test/projects',

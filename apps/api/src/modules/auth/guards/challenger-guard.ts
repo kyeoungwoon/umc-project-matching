@@ -1,20 +1,24 @@
 import {
-  Injectable,
   CanActivate,
   ExecutionContext,
-  Inject,
-  LoggerService,
   ForbiddenException, // 👈 접근 거부 Exception
+  Inject,
+  Injectable,
+  LoggerService,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core'; // 👈 Reflector 임포트
-import { RequestContextService } from '@modules/als/services/request-context.service';
-import { UsersService } from '@modules/users/services/users.service';
+import { Reflector } from '@nestjs/core';
+
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+
 import {
   CHALLENGER_ROLE,
   CHALLENGER_ROLE_KEY,
   ChallengerRole,
 } from '@common/decorators/challenger-role.decorator';
+
+// 👈 Reflector 임포트
+import { RequestContextService } from '@modules/als/services/request-context.service';
+import { UsersService } from '@modules/users/services/v1/users.service';
 
 @Injectable()
 export class ChallengerRoleGuard implements CanActivate {
@@ -55,10 +59,7 @@ export class ChallengerRoleGuard implements CanActivate {
 
     // 6. 권한이 없으면 접근 거부(403) 에러를 발생시킵니다.
     if (!hasPermission) {
-      this.logger.error(
-        '권한이 없는 사용자의 요청입니다.',
-        context.switchToHttp().getRequest(),
-      );
+      this.logger.error('권한이 없는 사용자의 요청입니다.', context.switchToHttp().getRequest());
       throw new ForbiddenException('이 작업을 수행할 권한이 없습니다.');
     }
 

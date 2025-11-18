@@ -5,7 +5,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { JWT_CONFIG, JwtConfig } from '@modules/auth/config/jwt.config';
-import { TokenAuthService } from '@modules/auth/services/token.auth.service';
+import { TokenAuthService } from '@modules/auth/services/v1/token.auth.service';
 import { JWT_STRATEGY } from '@modules/auth/strategies/strategy.constants';
 import { AccessTokenJwtPayload } from '@modules/auth/types/jwt.types';
 
@@ -22,8 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, JWT_STRATEGY) {
     configService: ConfigService,
     private authService: TokenAuthService,
   ) {
-    const jwtConfig =
-      configService.getOrThrow<ConfigType<typeof JwtConfig>>(JWT_CONFIG);
+    const jwtConfig = configService.getOrThrow<ConfigType<typeof JwtConfig>>(JWT_CONFIG);
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

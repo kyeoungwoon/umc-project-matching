@@ -19,7 +19,7 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { firstValueFrom } from 'rxjs';
 
 import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
-import { UsersService } from '@modules/users/services/users.service';
+import { UsersService } from '@modules/users/services/v1/users.service';
 
 @Injectable()
 export class ProjectsService {

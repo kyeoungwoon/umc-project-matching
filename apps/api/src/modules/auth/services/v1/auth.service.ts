@@ -4,7 +4,7 @@ import { CreateUserRequestDto } from '@upms/shared';
 import * as argon2 from 'argon2';
 
 import { MongoDBPrismaService } from '@modules/prisma/services/mongodb.prisma.service';
-import { UsersService } from '@modules/users/services/users.service';
+import { UsersService } from '@modules/users/services/v1/users.service';
 
 @Injectable()
 export class AuthService {

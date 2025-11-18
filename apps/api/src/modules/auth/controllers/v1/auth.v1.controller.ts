@@ -25,8 +25,8 @@ import { CHALLENGER_ROLE, CheckChallengerRole } from '@common/decorators/challen
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { Public } from '@modules/auth/decorators/public.decorator';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
-import { AuthService } from '@modules/auth/services/auth.service';
-import { TokenAuthService } from '@modules/auth/services/token.auth.service';
+import { AuthService } from '@modules/auth/services/v1/auth.service';
+import { TokenAuthService } from '@modules/auth/services/v1/token.auth.service';
 
 @Controller({
   version: '1',

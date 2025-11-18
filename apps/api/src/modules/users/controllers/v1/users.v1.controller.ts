@@ -6,7 +6,7 @@ import { API_TAGS } from '@common/constants/api-tags.constants';
 import { RequestContextService } from '@modules/als/services/request-context.service';
 // 임시 유저 식별 (JWT 붙기 전까지 mock 헤더 사용)
 
-import { UsersService } from '@modules/users/services/users.service';
+import { UsersService } from '@modules/users/services/v1/users.service';
 
 @ApiTags(API_TAGS.USERS)
 @ApiBearerAuth()

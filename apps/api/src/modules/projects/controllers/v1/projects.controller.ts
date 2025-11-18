@@ -23,8 +23,8 @@ import { CHALLENGER_ROLE, CheckChallengerRole } from '@common/decorators/challen
 
 import { RequestContextService } from '@modules/als/services/request-context.service';
 import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
-import { ProjectsService } from '@modules/projects/services/projects.service';
-import { UsersService } from '@modules/users/services/users.service';
+import { ProjectsService } from '@modules/projects/services/v1/projects.service';
+import { UsersService } from '@modules/users/services/v1/users.service';
 
 @Controller({
   path: 'projects',
