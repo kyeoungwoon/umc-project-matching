@@ -7,6 +7,7 @@ import {
   Param,
   Post,
   UseGuards,
+  VERSION_NEUTRAL,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
@@ -21,8 +22,8 @@ import { AuthService } from '@modules/auth/services/auth.service';
 import { UsersServiceV2 } from '@modules/users/services/v2/users.v2.service';
 
 @Controller({
-  path: 'admin/test',
-  version: '1',
+  path: 'test',
+  version: VERSION_NEUTRAL,
 })
 @ApiTags(API_TAGS.ADMIN)
 @UseGuards(EnvGuard)
@@ -38,7 +39,7 @@ export class AdminTestController {
   @ApiOperation({
     summary: '테스트 토큰 발급',
   })
-  @Get('test-token/:userId')
+  @Get('token/:userId')
   async getTestToken(@Param('userId') userId: string) {
     return this.auth.generateTestToken(BigInt(userId));
   }

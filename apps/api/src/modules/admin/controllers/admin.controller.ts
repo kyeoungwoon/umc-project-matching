@@ -24,7 +24,7 @@ import { UsersServiceV2 } from '@modules/users/services/v2/users.v2.service';
 
 @Controller({
   path: 'admin',
-  version: '1',
+  version: '2',
 })
 @ApiTags(API_TAGS.ADMIN)
 @Public()
@@ -38,7 +38,7 @@ export class AdminController {
   ) {}
 
   @ApiOperation({
-    summary: '새로운 학교 생성',
+    summary: '[중앙운영진 이상] 새로운 학교를 생성합니다.',
   })
   @Post('school')
   async createSchool(@Body() body: CreateSchoolDtoV2) {
@@ -46,7 +46,7 @@ export class AdminController {
   }
 
   @ApiOperation({
-    summary: '새로운 학교 생성',
+    summary: '[중앙운영진 이상] 새로운 학교를 단체로 생성합니다.',
   })
   @Post('school/bulk')
   async createSchoolBulk(@Body() body: CreateSchoolBulkDtoV2) {
@@ -54,17 +54,27 @@ export class AdminController {
   }
 
   @ApiOperation({
-    summary: '지원서 조회 (지부, 파트, 매칭 차수, 학교, 챌린저 별로 필터링 가능)',
+    summary:
+      '[각 학교 회장단 이상] 지원서 조회 (지부, 파트, 매칭 차수, 학교, 챌린저 별로 필터링 가능)',
   })
   @Get('applications')
   async getApplications(@Query() query: any) {}
 
+  @ApiOperation({
+    summary: '[지부 운영진 이상] 랜덤 매칭 차수에 특정 챌린저를 프로젝트에 매칭합니다.',
+  })
   @Post('projects/:projectId/ramdom-match')
   async randomMatchToProject() {}
 
+  @ApiOperation({
+    summary: '[지부 운영진 이상] 지원서 상태를 변경합니다.',
+  })
   @Patch('applications/:applicationId')
   async updateApplication() {}
 
+  @ApiOperation({
+    summary: '[지부 운영진 이상] 지원서를 삭제합니다.',
+  })
   @Delete('applications/:applicationId')
   async deleteApplication() {}
 }

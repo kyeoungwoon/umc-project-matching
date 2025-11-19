@@ -8,6 +8,8 @@ import {
   FormQuestionEntityResponseDto,
   UpdateFormQuestionDtoV2,
 } from '@upms/shared';
+import { CreateApplicationFormWithQuestionsDtoV2 } from '@upms/shared/dist/common';
+import { UpdateApplicationFormDtoV2 } from '@upms/shared/dist/common/dto';
 
 import { PostgreSQLPrismaService } from '@modules/prisma/services/postgresql.prisma.service';
 
@@ -23,6 +25,26 @@ export class FormV2Service {
     return ApplicationFormEntityResponseDto.fromEntity(form);
   }
 
+  async createFormWithQuestions(data: CreateApplicationFormWithQuestionsDtoV2) {
+    return this.postgre.$transaction(async (tx) => {
+      const form = await tx.applicationForm.create({
+        data: {
+          projectId: data.projectId,
+          title: data.title,
+          description: data.description,
+          questions: {
+            create: data.questions,
+          },
+        },
+        include: {
+          questions: true,
+        },
+      });
+
+      return ApplicationFormWithQuestionsEntityResponseDto.fromEntity(form);
+    });
+  }
+
   async getFormWithQuestionsById(formId: bigint) {
     const form = await this.postgre.applicationForm.findUnique({
       where: { id: formId },
@@ -34,7 +56,7 @@ export class FormV2Service {
     return ApplicationFormWithQuestionsEntityResponseDto.fromEntity(form);
   }
 
-  async updateForm(formId: bigint, data: CreateApplicationFormDtoV2) {
+  async updateForm(formId: bigint, data: UpdateApplicationFormDtoV2) {
     const form = await this.postgre.applicationForm.update({
       where: { id: formId },
       data,

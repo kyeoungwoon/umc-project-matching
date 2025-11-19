@@ -1,9 +1,8 @@
 // ApplicationStatus
 export const APPLICATION_STATUS = {
-  SUBMITTED: 'SUBMITTED',
+  PENDING: 'PENDING',
   CONFIRMED: 'CONFIRMED',
   REJECTED: 'REJECTED',
-  DRAFT: 'DRAFT',
 } as const;
 
 export type ApplicationStatusEnum = (typeof APPLICATION_STATUS)[keyof typeof APPLICATION_STATUS];

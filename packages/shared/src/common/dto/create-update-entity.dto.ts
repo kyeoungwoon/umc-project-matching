@@ -324,7 +324,9 @@ export class CreateApplicationFormDtoV2 {
   @IsString()
   description?: string;
 }
-export class UpdateApplicationFormDtoV2 extends PartialType(CreateApplicationFormDtoV2) {}
+export class UpdateApplicationFormDtoV2 extends PartialType(
+  OmitType(CreateApplicationFormDtoV2, ['projectId']),
+) {}
 
 export class CreateFormQuestionDtoV2 {
   @ApiProperty({ type: String, description: '지원서 ID' })
@@ -368,6 +370,17 @@ export class CreateFormQuestionDtoV2 {
   @IsNotEmpty()
   isDeleted!: boolean;
 }
+export class CreateFormQuestionWithoutFormIdDtoV2 extends OmitType(CreateFormQuestionDtoV2, [
+  'formId',
+] as const) {}
+
+export class CreateApplicationFormWithQuestionsDtoV2 extends CreateApplicationFormDtoV2 {
+  @ApiProperty({ type: [CreateFormQuestionWithoutFormIdDtoV2], description: '질문 목록' })
+  @IsArray()
+  @Type(() => CreateFormQuestionWithoutFormIdDtoV2)
+  @ValidateNested({ each: true })
+  questions!: CreateFormQuestionWithoutFormIdDtoV2[];
+}
 
 export class UpdateFormQuestionDtoV2 extends PartialType(CreateFormQuestionDtoV2) {}
 
@@ -393,11 +406,11 @@ export class CreateApplicationDtoV2 {
   @ApiProperty({
     enum: APPLICATION_STATUS,
     description: '지원 상태',
-    default: APPLICATION_STATUS.SUBMITTED,
+    default: APPLICATION_STATUS.PENDING,
   })
   @IsEnum(APPLICATION_STATUS)
   @IsNotEmpty()
-  status: ApplicationStatusEnum = APPLICATION_STATUS.SUBMITTED;
+  status: ApplicationStatusEnum = APPLICATION_STATUS.PENDING;
 }
 
 export class UpdateApplicationDtoV2 extends PickType(CreateApplicationDtoV2, ['status']) {}
@@ -419,6 +432,14 @@ export class CreateApplicationResponseDtoV2 {
   @IsArray()
   @ArrayNotEmpty()
   value!: string[];
+}
+
+export class CreateApplicationWithResponsesDtoV2 extends CreateApplicationDtoV2 {
+  @ApiProperty({ type: [CreateApplicationResponseDtoV2], description: '응답 목록' })
+  @IsArray()
+  @Type(() => CreateApplicationResponseDtoV2)
+  @ValidateNested({ each: true })
+  responses!: CreateApplicationResponseDtoV2[];
 }
 
 export class CreateMatchingRoundDtoV2 {

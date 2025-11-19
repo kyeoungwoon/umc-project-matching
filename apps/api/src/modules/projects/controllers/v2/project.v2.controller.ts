@@ -13,7 +13,6 @@ import {
 import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import {
-  CreateFormRequestV2Dto,
   CreateProjectToDtoV2,
   CreateProjectWithToRequestDtoV2,
   ProjectEntityResponseDto,
@@ -32,7 +31,7 @@ import { ProjectV2Service } from '@modules/projects/services/v2/project.v2.servi
   path: 'projects',
   version: '2',
 })
-@ApiTags(API_TAGS.FORM)
+@ApiTags(API_TAGS.PROJECT)
 @ApiBearerAuth()
 export class ProjectV2Controller {
   constructor(
@@ -44,6 +43,9 @@ export class ProjectV2Controller {
 
   // ================= ADMIN ONLY ==================
 
+  @ApiOperation({
+    summary: '[지부 운영진 이상] 프로젝트의 TO를 수정합니다.',
+  })
   @Patch('to')
   async updateProjectTo(@Body() body: CreateProjectToDtoV2) {
     return this.project.updateProjectTo(body);
@@ -102,7 +104,7 @@ export class ProjectV2Controller {
   // ================ ADMIN ONLY ==================
 
   @ApiOperation({
-    summary: '프로젝트를 삭제합니다.',
+    summary: '[지부 운영진 이상] 프로젝트를 삭제합니다.',
   })
   @Delete(':projectId')
   async deleteProject(@Param('projectId', ParseBigIntPipe) projectId: bigint) {

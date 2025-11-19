@@ -321,3 +321,17 @@ export class GisuChapterWithProjectsResponseDto extends GisuChapterEntityRespons
   @Type(() => ProjectEntityResponseDto)
   projects!: ProjectEntityResponseDto[];
 }
+
+export class ApplicationWithApplicantAndMatchingRoundAndResponsesDto extends ApplicationEntityResponseDto {
+  @ApiProperty({ type: ChallengerEntityResponseDto, description: '지원자 정보' })
+  @Type(() => ChallengerEntityResponseDto)
+  applicant!: ChallengerEntityResponseDto;
+
+  @ApiProperty({ type: MatchingRoundEntityResponseDto, description: '매칭 회차 정보' })
+  @Type(() => MatchingRoundEntityResponseDto)
+  matchingRound!: MatchingRoundEntityResponseDto;
+
+  @ApiProperty({ type: [ApplicationResponseEntityResponseDto], description: '지원 응답 목록' })
+  @Type(() => ApplicationResponseEntityResponseDto)
+  responses!: ApplicationResponseEntityResponseDto[];
+}
