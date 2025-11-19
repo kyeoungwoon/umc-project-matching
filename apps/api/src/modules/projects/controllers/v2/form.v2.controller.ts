@@ -34,7 +34,7 @@ import { FormV2Service } from '@modules/projects/services/v2/form.v2.service';
 })
 @ApiTags(API_TAGS.FORM)
 @ApiBearerAuth()
-export class FormControllerV2 {
+export class FormV2Controller {
   constructor(
     private readonly formV2: FormV2Service,
     private readonly reqContext: RequestContextService,

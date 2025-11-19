@@ -27,7 +27,7 @@ import { ApplicationV2Service } from '@modules/projects/services/v2/application.
 })
 @ApiTags(API_TAGS.APPLY)
 @ApiBearerAuth()
-export class ApplyControllerV2 {
+export class ApplyV2Controller {
   constructor(
     private readonly reqContext: RequestContextService,
     @Inject(WINSTON_MODULE_NEST_PROVIDER)

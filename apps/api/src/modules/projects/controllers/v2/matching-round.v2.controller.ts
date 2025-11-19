@@ -11,7 +11,7 @@ import { API_TAGS } from '@common/constants/api-tags.constants';
 })
 @ApiTags(API_TAGS.MATCHING_ROUND)
 @ApiBearerAuth()
-export class MatchingRoundControllerV2 {
+export class MatchingRoundV2Controller {
   constructor(
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
     private readonly logger: LoggerService,
