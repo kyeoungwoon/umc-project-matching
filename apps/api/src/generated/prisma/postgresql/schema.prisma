@@ -26,7 +26,7 @@ enum UserPartEnum {
   IOS
   SPRINGBOOT
   NODEJS
-  NULL
+  NO_PART
 }
 
 model Challenger {
@@ -185,6 +185,7 @@ model ProjectTo {
   // 관계 필드
   project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
+  @@unique([projectId, part], name: "uniq_project_part")
   @@map("project_to")
 }
 
@@ -212,8 +213,9 @@ model ApplicationForm {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   // 관계 필드
-  project   Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  questions FormQuestion[]
+  project      Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  questions    FormQuestion[]
+  applications Application[]
 
   @@map("application_form")
 }
@@ -256,6 +258,7 @@ enum ApplicationStatusEnum {
 
 model Application {
   id              BigInt                @id @default(autoincrement())
+  formId          BigInt                @map("form_id")
   applicantId     BigInt                @map("applicant_id")
   matchingRoundId BigInt                @map("matching_round_id")
   status          ApplicationStatusEnum
@@ -263,6 +266,7 @@ model Application {
   updatedAt       DateTime              @updatedAt @map("updated_at")
 
   // 관계 필드
+  form          ApplicationForm       @relation(fields: [formId], references: [id], onDelete: Cascade)
   applicant     Challenger            @relation(fields: [applicantId], references: [id], onDelete: Cascade)
   matchingRound MatchingRound         @relation(fields: [matchingRoundId], references: [id], onDelete: Cascade)
   responses     ApplicationResponse[]

@@ -1,5 +1,6 @@
 export const API_TAGS = {
   ADMIN: '운영진',
+  UMC: 'UMC',
   PROJECT: '프로젝트',
   FORM: '프로젝트 지원 폼',
   APPLY: '프로젝트 지원',

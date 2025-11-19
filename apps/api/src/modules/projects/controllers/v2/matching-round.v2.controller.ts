@@ -1,14 +1,9 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Inject, LoggerService } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { API_TAGS } from '@common/constants/api-tags.constants';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-import { RequestContextService } from '@modules/als/services/request-context.service';
-import { ApplyService } from '@modules/projects/services/v1/apply.service';
-import { FormService } from '@modules/projects/services/v1/form.service';
-import { MatchingRoundService } from '@modules/projects/services/v1/matching-round.service';
-import { ProjectsService } from '@modules/projects/services/v1/projects.service';
-import { UsersService } from '@modules/users/services/v1/users.service';
+import { API_TAGS } from '@common/constants/api-tags.constants';
 
 @Controller({
   path: 'projects',
@@ -17,7 +12,10 @@ import { UsersService } from '@modules/users/services/v1/users.service';
 @ApiTags(API_TAGS.MATCHING_ROUND)
 @ApiBearerAuth()
 export class MatchingRoundControllerV2 {
-  constructor() {}
+  constructor(
+    @Inject(WINSTON_MODULE_NEST_PROVIDER)
+    private readonly logger: LoggerService,
+  ) {}
 
   async getAllMatchingRounds() {
     // Implementation goes here

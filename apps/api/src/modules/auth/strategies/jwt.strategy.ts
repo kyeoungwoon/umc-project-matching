@@ -5,9 +5,9 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import { JWT_CONFIG, JwtConfig } from '@modules/auth/config/jwt.config';
-import { TokenAuthService } from '@modules/auth/services/v1/token.auth.service';
 import { JWT_STRATEGY } from '@modules/auth/strategies/strategy.constants';
 import { AccessTokenJwtPayload } from '@modules/auth/types/jwt.types';
+import { UsersServiceV2 } from '@modules/users/services/v2/users.v2.service';
 
 /**
  * JWT를 이용한 Guard 입니다.
@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, JWT_STRATEGY) {
     // Note: 여기에 RequestContext를 주입했었으나, 순환의존성 및 알 수 없는 버그 발생으로 제거하였습니다.
     // 향후 작업 시 주의하세요.
     configService: ConfigService,
-    private authService: TokenAuthService,
+    private readonly user: UsersServiceV2,
   ) {
     const jwtConfig = configService.getOrThrow<ConfigType<typeof JwtConfig>>(JWT_CONFIG);
 
@@ -35,6 +35,6 @@ export class JwtStrategy extends PassportStrategy(Strategy, JWT_STRATEGY) {
     const userId = payload.userId;
     // console.log('Validated user ID:', userId);
 
-    return this.authService.validateJwtUser(userId);
+    return this.user.getChallenger(BigInt(userId));
   }
 }

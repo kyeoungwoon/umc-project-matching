@@ -38,7 +38,8 @@ export class PostgreSQLPrismaService extends PrismaClient implements OnModuleIni
       // TODO: 이거 왜 안되는지 해결
       // const prismaTraceId = this.requestContextService.getTraceId();
       this.logger.log(
-        ` [TARGET] ${event.target} [DURATION] ${event.duration} ms, [QUERY] ${IS_PROD ? event.query : '...'}`,
+        // ` [TARGET] ${event.target} [DURATION] ${event.duration} ms, [QUERY] ${IS_PROD ? event.query : '...'}`,
+        ` [TARGET] ${event.target} [DURATION] ${event.duration} ms, [QUERY] ${event.query}`,
         'POSTGRESQL_PRISMA_QUERY',
       );
       // this.logger.log(

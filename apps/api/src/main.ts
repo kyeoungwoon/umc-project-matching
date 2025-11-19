@@ -2,16 +2,18 @@ import { VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import { apiReference } from '@scalar/nestjs-api-reference';
 import * as Sentry from '@sentry/nestjs';
+import { RedocModule, RedocOptions } from 'nestjs-redoc';
 
 import { corsOptions } from '@common/configs/cors-options.config';
 import { API_TAGS } from '@common/constants/api-tags.constants';
 
 import { AppModule } from '@modules/app/app.module';
 
-BigInt.prototype['toJSON'] = function () {
-  return this.toString();
-};
+// BigInt.prototype['toJSON'] = function () {
+//   return this.toString();
+// };
 
 async function bootstrap() {
   Sentry.init({
@@ -35,14 +37,13 @@ async function bootstrap() {
       .setTitle('UPMS API Docs')
       .setDescription(
         '## UMC Project Matching System, UPMS\n\n' +
-          '#### Made By : 중앙대학교 하늘/박경운, 보니/정보운\n\n' +
-          '##### Suppoted By : 중앙대학교 벨라/황지원',
+          '#### MADE BY - 중앙대학교 하늘/박경운, 보니/정보운\n\n' +
+          '#####  SUPPORTED BY - 중앙대학교 벨라/황지원',
       )
       .setVersion('0.1.0')
       .addBearerAuth()
       .addServer('http://localhost:9999', 'Local')
-      .addServer('https://api.upms.kyeoungwoon.kr', 'Production')
-      .setLicense('MIT', 'https://opensource.org/license/mit/');
+      .addServer('https://api.upms.kyeoungwoon.kr', 'Production');
 
     Object.values(API_TAGS).forEach((tag) => {
       configBuilder.addTag(tag, `APIs`); // 각 태그에 설명 추가
@@ -53,9 +54,22 @@ async function bootstrap() {
     // 설정을 바탕으로 문서 생성
     const document = SwaggerModule.createDocument(app, config);
 
+    // Scalar 설정
+    app.use(
+      '/api-docs',
+      apiReference({
+        spec: {
+          content: document,
+        },
+        theme: 'purple', // 'default', 'alternate', 'moon', 'purple', 'solarized' 등
+        layout: 'modern', // 'modern' 또는 'classic'
+        darkMode: false,
+      }),
+    );
+
     // Swagger UI 경로 지정, 예: /api-docs
     SwaggerModule.setup('docs', app, document, {
-      customSiteTitle: 'UMC Team Matching System API Docs',
+      customSiteTitle: 'UPMS API Docs',
       swaggerOptions: {
         persistAuthorization: true,
       },

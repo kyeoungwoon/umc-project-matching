@@ -4,7 +4,7 @@ import { APPLICATION_STATUS, ApplicationStatusEnum } from '@projects/enum';
 import { Transform } from 'class-transformer';
 import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-import { USER_PART, UserPartEnum } from '@/common';
+import { USER_PART, UserPartEnum } from '@common/enum/user.enum';
 
 export class ApplicationStatusByProjectRequestQuery {
   @IsNotEmpty()

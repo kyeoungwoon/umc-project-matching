@@ -23,6 +23,7 @@ enum UserPartEnum {
   SPRINGBOOT // 스프링
   NODEJS // 노드
   ADMIN // 운영진
+  NO_PART
 }
 
 enum UserStatusEnum {

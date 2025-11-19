@@ -1,9 +1,13 @@
+import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
+
+import { transformStringToBigint } from '@common/utils/transform.util';
 
 export class LoginRequestDto {
   @IsNotEmpty()
   @IsString()
-  school!: string;
+  @Transform(transformStringToBigint)
+  schoolId!: bigint;
 
   @IsNotEmpty()
   @IsString()

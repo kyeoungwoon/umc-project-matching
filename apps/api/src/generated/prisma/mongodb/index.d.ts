@@ -76,7 +76,8 @@ export namespace $Enums {
   IOS: 'IOS',
   SPRINGBOOT: 'SPRINGBOOT',
   NODEJS: 'NODEJS',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  NO_PART: 'NO_PART'
 };
 
 export type UserPartEnum = (typeof UserPartEnum)[keyof typeof UserPartEnum]

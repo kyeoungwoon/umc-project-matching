@@ -12,6 +12,7 @@ import { AllExceptionsFilter } from '@common/filters/all-exception.filter';
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { PrismaExceptionFilter } from '@common/filters/prisma-exception.filter';
 import { EnvGuard } from '@common/guards/env.guard';
+import { BigIntSerializationInterceptor } from '@common/interceptors/bigint-serialization.interceptor';
 import { ResponseInterceptor } from '@common/interceptors/response.interceptor';
 import { LoggerMiddleware } from '@common/middleware/logger.middleware';
 import { RequestContextMiddleware } from '@common/middleware/request-context.middleware';
@@ -20,7 +21,6 @@ import { AdminModule } from '@modules/admin/admin.module';
 import { AlsModule } from '@modules/als/als.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { JwtConfig } from '@modules/auth/config/jwt.config';
-import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { PrismaModule } from '@modules/prisma/prisma.module';
 import { ProjectsModule } from '@modules/projects/projects.module';
@@ -57,6 +57,10 @@ import { UsersModule } from '@modules/users/users.module';
       provide: APP_INTERCEPTOR,
       useClass: ResponseInterceptor,
     },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: BigIntSerializationInterceptor,
+    },
     // ===== FILTER =====
     // FILTER 간에는, 순서가 중요합니다.
     // 더 구체적인 ExceptionFilter가 뒤에 와야 합니다.
@@ -86,7 +90,6 @@ import { UsersModule } from '@modules/users/users.module';
         // forbidNonWhitelisted: true,
       }),
     },
-    ChallengerRoleGuard,
     EnvGuard,
   ],
 })

@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-import { ChallengerResponseDto } from '@upms/shared/dist/users';
+import { ChallengerWithSchoolDto } from '@upms/shared/dist/users/dto/user.v2.dto';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';
 
@@ -21,9 +21,9 @@ export class UsersV2Controller {
   ) {}
 
   @Get('me')
-  async getMyProfile(): Promise<ChallengerResponseDto> {
+  async getMyProfile(): Promise<ChallengerWithSchoolDto> {
     const userId = this.requestContext.getOrThrowUserIdAsBigInt();
 
-    return this.user.getChallengerInfo(userId);
+    return this.user.getChallengerWithSchool(userId);
   }
 }

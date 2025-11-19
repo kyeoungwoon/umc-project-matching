@@ -225,7 +225,8 @@ exports.UserPartEnum = exports.$Enums.UserPartEnum = {
   IOS: 'IOS',
   SPRINGBOOT: 'SPRINGBOOT',
   NODEJS: 'NODEJS',
-  ADMIN: 'ADMIN'
+  ADMIN: 'ADMIN',
+  NO_PART: 'NO_PART'
 };
 
 exports.UserRoleEnum = exports.$Enums.UserRoleEnum = {

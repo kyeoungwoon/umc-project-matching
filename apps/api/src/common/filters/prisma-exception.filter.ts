@@ -8,12 +8,13 @@ import {
 } from '@nestjs/common';
 
 import { PrismaClientKnownRequestError as MongoDBPrismaError } from '@generated/prisma/mongodb/runtime/library';
+import { PrismaClientKnownRequestError as PostgreSQLPrismaError } from '@generated/prisma/postgresql/runtime/library';
 import { SentryExceptionCaptured } from '@sentry/nestjs';
 import { ApiCommonResponse } from '@upms/shared';
 import { Request, Response } from 'express';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-@Catch(MongoDBPrismaError)
+@Catch(MongoDBPrismaError, PostgreSQLPrismaError)
 export class PrismaExceptionFilter implements ExceptionFilter {
   constructor(
     @Inject(WINSTON_MODULE_NEST_PROVIDER)
@@ -21,13 +22,13 @@ export class PrismaExceptionFilter implements ExceptionFilter {
   ) {}
 
   @SentryExceptionCaptured()
-  catch(exception: MongoDBPrismaError, host: ArgumentsHost) {
+  catch(exception: MongoDBPrismaError | PostgreSQLPrismaError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const request = ctx.getRequest<Request>();
     const response = ctx.getResponse<Response>();
 
     this.logger.error(
-      `[PRISMA EXCEPTION] [${request.method} ${request.url}] [CODE ${exception.code}] ${exception.message}`,
+      `[PRISMA EXCEPTION] [${request.method} ${request.url}] [CODE ${exception?.code}] ${exception.message}`,
       exception.stack,
     );
 
@@ -37,7 +38,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
       response
         .status(HttpStatus.SERVICE_UNAVAILABLE)
         // TODO: prod에서는 그대로 반환 X
-        .json(ApiCommonResponse.fail(exception.code, 'PRISMA FAIL', exception));
+        .json(ApiCommonResponse.fail(exception.code, 'DB_QUERY_FAIL', exception));
     }
   }
 }

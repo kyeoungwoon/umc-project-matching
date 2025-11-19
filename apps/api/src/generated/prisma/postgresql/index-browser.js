@@ -241,6 +241,7 @@ exports.Prisma.FormQuestionScalarFieldEnum = {
 
 exports.Prisma.ApplicationScalarFieldEnum = {
   id: 'id',
+  formId: 'formId',
   applicantId: 'applicantId',
   matchingRoundId: 'matchingRoundId',
   status: 'status',
@@ -295,7 +296,7 @@ exports.UserPartEnum = exports.$Enums.UserPartEnum = {
   IOS: 'IOS',
   SPRINGBOOT: 'SPRINGBOOT',
   NODEJS: 'NODEJS',
-  NULL: 'NULL'
+  NO_PART: 'NO_PART'
 };
 
 exports.QuestionTypeEnum = exports.$Enums.QuestionTypeEnum = {

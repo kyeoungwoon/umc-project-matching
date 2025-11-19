@@ -7,7 +7,7 @@ export const USER_PART = {
   IOS: 'IOS',
   SPRINGBOOT: 'SPRINGBOOT',
   NODEJS: 'NODEJS',
-  ADMIN: 'ADMIN',
+  NO_PART: 'NO_PART',
 } as const;
 
 export type UserPartEnum = (typeof USER_PART)[keyof typeof USER_PART];

@@ -20,5 +20,7 @@ export const transformStringToBigint = ({ value }: TransformFnParams) => {
   }
 };
 
-export const transformDate = ({ value }: TransformFnParams) =>
-  value instanceof Date ? value : new Date(value);
+export const transformDate = ({ value }: TransformFnParams) => {
+  if (!value) return value;
+  return value instanceof Date ? value.toISOString() : new Date(value).toISOString();
+};
