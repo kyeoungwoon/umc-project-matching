@@ -453,6 +453,12 @@ export class CreateMatchingRoundDtoV2 {
   @IsString()
   description?: string;
 
+  @ApiProperty({ type: String, description: '지부 ID' })
+  @Transform(transformStringToBigint)
+  @IsBigInt()
+  @IsNotEmpty()
+  chapterId!: bigint;
+
   @ApiProperty({ type: Date, description: '시작일' })
   @IsDate()
   @Type(() => Date)

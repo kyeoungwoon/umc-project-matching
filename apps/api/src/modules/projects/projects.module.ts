@@ -20,7 +20,7 @@ import { UsersModule } from '@modules/users/users.module';
     ApplyV2Controller,
     MatchingRoundV2Controller,
   ],
-  providers: [FormV2Service, ProjectV2Service, ApplicationV2Service],
-  exports: [FormV2Service, ProjectV2Service, ApplicationV2Service],
+  providers: [FormV2Service, ProjectV2Service, ApplicationV2Service, MatchingRoundV2Service],
+  exports: [FormV2Service, ProjectV2Service, ApplicationV2Service, MatchingRoundV2Service],
 })
 export class ProjectsModule {}
