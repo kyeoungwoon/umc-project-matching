@@ -8,6 +8,7 @@ import { MatchingRoundV2Controller } from '@modules/projects/controllers/v2/matc
 import { ProjectV2Controller } from '@modules/projects/controllers/v2/project.v2.controller';
 import { ApplicationV2Service } from '@modules/projects/services/v2/application.v2.service';
 import { FormV2Service } from '@modules/projects/services/v2/form.v2.service';
+import { MatchingRoundV2Service } from '@modules/projects/services/v2/matching-round.v2.service';
 import { ProjectV2Service } from '@modules/projects/services/v2/project.v2.service';
 import { UsersModule } from '@modules/users/users.module';
 
