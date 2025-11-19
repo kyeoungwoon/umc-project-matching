@@ -31,22 +31,23 @@ enum UserPartEnum {
 
 model Challenger {
   id              BigInt     @id @default(autoincrement())
-  umsbId          Int        @map("umsb_id")
+  umsbId          BigInt     @map("umsb_id")
   name            String
   nickname        String
   gender          GenderEnum
   schoolId        BigInt     @map("school_id")
   studentId       String     @map("student_id")
   profileImageUrl String?    @map("profile_image_url")
+  passwordHash    String     @map("password_hash")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // 관계 필드
-  school             School           @relation(fields: [schoolId], references: [id])
+  school             School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   gisuRoles          ChallengerGisu[]
-  ledGisuSchools     GisuSchool[]     @relation("LeaderOfGisuSchool")
-  viceLedGisuSchools GisuSchool[]     @relation("ViceLeaderOfGisuSchool")
+  leaderGisuSchool   ChapterSchool[]  @relation("LeaderOfGisuSchool")
+  viceLeadGisuSchool ChapterSchool[]  @relation("ViceLeaderOfGisuSchool")
   projectMembers     ProjectMember[]
   applications       Application[]
 
@@ -54,9 +55,13 @@ model Challenger {
 }
 
 model ChallengerGisu {
-  id           BigInt @id @default(autoincrement())
-  challengerId BigInt @map("challenger_id")
-  gisuId       BigInt @map("gisu_id")
+  id              BigInt @id @default(autoincrement())
+  challengerId    BigInt @map("challenger_id")
+  chapterSchoolId BigInt @map("chapter_school_id")
+
+  isTerminated Boolean @default(false) @map("is_terminated")
+
+  part UserPartEnum
 
   // 학교/지부/중앙운영사무국 운영진 여부
   isSchoolAdmin    Boolean @map("is_school_admin")
@@ -71,8 +76,8 @@ model ChallengerGisu {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // 관계 필드
-  challenger Challenger @relation(fields: [challengerId], references: [id])
-  gisu       Gisu       @relation(fields: [gisuId], references: [id])
+  challenger    Challenger  @relation(fields: [challengerId], references: [id], onDelete: Cascade)
+  chapterSchool GisuChapter @relation(fields: [chapterSchoolId], references: [id], onDelete: Cascade)
 
   @@map("challenger_gisu")
 }
@@ -81,32 +86,52 @@ model Gisu {
   id          BigInt  @id @default(autoincrement())
   name        String
   description String?
+  isCurrent   Boolean @default(false) @map("is_current")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // 관계 필드
-  gisuSchools     GisuSchool[]
-  chapters        Chapter[]
-  challengerGisus ChallengerGisu[]
+  chapters GisuChapter[] // 기수에는 여러 개의 지부가 있습니다.
 
   @@map("gisu")
 }
 
-model GisuSchool {
-  id           BigInt  @id @default(autoincrement())
-  gisuId       BigInt  @map("gisu_id")
-  schoolId     BigInt  @map("school_id")
-  leaderId     BigInt  @map("leader_id")
+model GisuChapter {
+  id          BigInt  @id @default(autoincrement())
+  name        String
+  description String?
+  gisuId      BigInt  @map("gisu_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  gisu                  Gisu             @relation(fields: [gisuId], references: [id], onDelete: Cascade)
+  projects              Project[] // 지부에는 여러 개의 프로젝트가 생성되어 있습니다.
+  chapterMatchingRound  MatchingRound[] // 지부 별 매칭 라운드를 생성합니다.
+  gisuChapterSchool     ChapterSchool[] // 지부에 속한 학교들
+  gisuChapterChallenger ChallengerGisu[] // 지부에 속한 챌린저들
+
+  @@map("chapter")
+}
+
+model ChapterSchool {
+  id        BigInt @id @default(autoincrement())
+  chapterId BigInt @map("chapter_id")
+  schoolId  BigInt @map("school_id")
+
+  // 해당 기수 학교 회장, 부회장
+  leaderId     BigInt? @map("leader_id")
   viceLeaderId BigInt? @map("vice_leader_id")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   // 관계 필드
-  gisu       Gisu        @relation(fields: [gisuId], references: [id])
-  school     School      @relation(fields: [schoolId], references: [id])
-  leader     Challenger  @relation("LeaderOfGisuSchool", fields: [leaderId], references: [id])
+  chapter    GisuChapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  school     School      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  leader     Challenger? @relation("LeaderOfGisuSchool", fields: [leaderId], references: [id])
   viceLeader Challenger? @relation("ViceLeaderOfGisuSchool", fields: [viceLeaderId], references: [id])
 
   @@map("gisu_school")
@@ -123,63 +148,57 @@ model School {
 
   // 관계 필드
   challengers Challenger[]
-  gisuSchools GisuSchool[]
+  gisuSchools ChapterSchool[]
 
   @@map("school")
 }
 
-model Chapter {
-  id          BigInt   @id @default(autoincrement())
-  name        String
-  description String?
-  gisuId      BigInt   @map("gisu_id")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  // 관계 필드
-  gisu     Gisu      @relation(fields: [gisuId], references: [id])
-  projects Project[]
-
-  @@map("chapter")
-}
-
 model Project {
-  id             BigInt   @id @default(autoincrement())
+  id             BigInt  @id @default(autoincrement())
   name           String
   description    String?
-  chapterId      BigInt   @map("chapter_id")
-  logoImageUrl   String?  @map("logo_image_url")
-  bannerImageUrl String?  @map("banner_image_url")
-  planTo         Int      @map("plan_to")
-  designTo       Int      @map("design_to")
-  webTo          Int      @map("web_to")
-  androidTo      Int      @map("android_to")
-  iosTo          Int      @map("ios_to")
-  springbootTo   Int      @map("springboot_to")
-  nodejsTo       Int      @map("nodejs_to")
-  createdAt      DateTime @default(now()) @map("created_at")
-  updatedAt      DateTime @updatedAt @map("updated_at")
+  chapterId      BigInt  @map("chapter_id")
+  logoImageUrl   String? @map("logo_image_url")
+  bannerImageUrl String? @map("banner_image_url")
+
+  // 파트별 TO류
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   // 관계 필드
-  chapter          Chapter           @relation(fields: [chapterId], references: [id])
-  members          ProjectMember[]
-  applicationForms ApplicationForm[]
+  chapter          GisuChapter       @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  members          ProjectMember[] // 프로젝트에 속한 인원
+  applicationForms ApplicationForm[] // 프로젝트에 생성된 지원용 폼들
+  to               ProjectTo[] // 프로젝트 파트별 TO
 
   @@map("project")
 }
 
-model ProjectMember {
-  id           BigInt       @id @default(autoincrement())
-  projectId    BigInt       @map("project_id")
-  challengerId BigInt       @map("challenger_id")
-  role         UserPartEnum
-  isActive     Boolean      @default(true) @map("is_active")
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime     @updatedAt @map("updated_at")
+model ProjectTo {
+  id        BigInt       @id @default(autoincrement())
+  projectId BigInt       @map("project_id")
+  part      UserPartEnum
+  to        Int          @map("to")
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
 
   // 관계 필드
-  project    Project    @relation(fields: [projectId], references: [id])
-  challenger Challenger @relation(fields: [challengerId], references: [id])
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("project_to")
+}
+
+model ProjectMember {
+  id           BigInt   @id @default(autoincrement())
+  projectId    BigInt   @map("project_id")
+  challengerId BigInt   @map("challenger_id")
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // 관계 필드
+  project    Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  challenger Challenger @relation(fields: [challengerId], references: [id], onDelete: Cascade)
 
   @@map("project_member")
 }
@@ -189,13 +208,13 @@ model ApplicationForm {
   projectId   BigInt   @map("project_id")
   title       String
   description String?
-  isActive    Boolean  @default(true) @map("is_active")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   // 관계 필드
-  project   Project        @relation(fields: [projectId], references: [id])
-  questions FormQuestion[]
+  project      Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  questions    FormQuestion[]
+  applications Application[]
 
   @@map("application_form")
 }
@@ -207,20 +226,24 @@ enum QuestionTypeEnum {
 }
 
 model FormQuestion {
-  id          BigInt           @id @default(autoincrement())
-  formId      BigInt           @map("form_id")
-  questionNo  Int              @map("question_no")
+  id     BigInt @id @default(autoincrement())
+  formId BigInt @map("form_id")
+
+  questionNo  Int     @map("question_no")
   title       String
   description String?
-  type        QuestionTypeEnum
-  options     String[]
-  isRequired  Boolean          @default(true) @map("is_required")
-  isDeleted   Boolean          @default(false) @map("is_deleted")
-  createdAt   DateTime         @default(now()) @map("created_at")
-  updatedAt   DateTime         @updatedAt @map("updated_at")
+
+  type    QuestionTypeEnum
+  options String[]
+
+  isRequired Boolean @default(true) @map("is_required")
+  isDeleted  Boolean @default(false) @map("is_deleted")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   // 관계 필드
-  form      ApplicationForm       @relation(fields: [formId], references: [id])
+  form      ApplicationForm       @relation(fields: [formId], references: [id], onDelete: Cascade)
   responses ApplicationResponse[]
 
   @@map("form_question")
@@ -234,6 +257,7 @@ enum ApplicationStatusEnum {
 
 model Application {
   id              BigInt                @id @default(autoincrement())
+  formId          BigInt                @map("form_id")
   applicantId     BigInt                @map("applicant_id")
   matchingRoundId BigInt                @map("matching_round_id")
   status          ApplicationStatusEnum
@@ -241,8 +265,9 @@ model Application {
   updatedAt       DateTime              @updatedAt @map("updated_at")
 
   // 관계 필드
-  applicant     Challenger            @relation(fields: [applicantId], references: [id])
-  matchingRound MatchingRound         @relation(fields: [matchingRoundId], references: [id])
+  form          ApplicationForm       @relation(fields: [formId], references: [id], onDelete: Cascade)
+  applicant     Challenger            @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  matchingRound MatchingRound         @relation(fields: [matchingRoundId], references: [id], onDelete: Cascade)
   responses     ApplicationResponse[]
 
   @@map("application")
@@ -253,12 +278,13 @@ model ApplicationResponse {
   applicationId BigInt   @map("application_id")
   questionId    BigInt   @map("question_id")
   value         String[]
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   // 관계 필드
-  application Application  @relation(fields: [applicationId], references: [id])
-  question    FormQuestion @relation(fields: [questionId], references: [id])
+  application Application  @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  question    FormQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@map("application_response")
 }
@@ -267,6 +293,7 @@ model MatchingRound {
   id          BigInt   @id @default(autoincrement())
   name        String
   description String?
+  chapterId   BigInt   @map("chapter_id")
   startAt     DateTime @map("start_at")
   endAt       DateTime @map("end_at")
   createdAt   DateTime @default(now()) @map("created_at")
@@ -274,6 +301,7 @@ model MatchingRound {
 
   // 관계 필드
   applications Application[]
+  chapter      GisuChapter   @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   @@map("matching_round")
 }

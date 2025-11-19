@@ -29,25 +29,30 @@ export type ChallengerGisu = $Result.DefaultSelection<Prisma.$ChallengerGisuPayl
  */
 export type Gisu = $Result.DefaultSelection<Prisma.$GisuPayload>
 /**
- * Model GisuSchool
+ * Model GisuChapter
  * 
  */
-export type GisuSchool = $Result.DefaultSelection<Prisma.$GisuSchoolPayload>
+export type GisuChapter = $Result.DefaultSelection<Prisma.$GisuChapterPayload>
+/**
+ * Model ChapterSchool
+ * 
+ */
+export type ChapterSchool = $Result.DefaultSelection<Prisma.$ChapterSchoolPayload>
 /**
  * Model School
  * 
  */
 export type School = $Result.DefaultSelection<Prisma.$SchoolPayload>
 /**
- * Model Chapter
- * 
- */
-export type Chapter = $Result.DefaultSelection<Prisma.$ChapterPayload>
-/**
  * Model Project
  * 
  */
 export type Project = $Result.DefaultSelection<Prisma.$ProjectPayload>
+/**
+ * Model ProjectTo
+ * 
+ */
+export type ProjectTo = $Result.DefaultSelection<Prisma.$ProjectToPayload>
 /**
  * Model ProjectMember
  * 
@@ -189,6 +194,13 @@ export class PrismaClient<
    */
   $disconnect(): $Utils.JsPromise<void>;
 
+  /**
+   * Add a middleware
+   * @deprecated since 4.16.0. For new code, prefer client extensions instead.
+   * @see https://pris.ly/d/extensions
+   */
+  $use(cb: Prisma.Middleware): void
+
 /**
    * Executes a prepared raw query and returns the number of affected rows.
    * @example
@@ -289,14 +301,24 @@ export class PrismaClient<
   get gisu(): Prisma.GisuDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.gisuSchool`: Exposes CRUD operations for the **GisuSchool** model.
+   * `prisma.gisuChapter`: Exposes CRUD operations for the **GisuChapter** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more GisuSchools
-    * const gisuSchools = await prisma.gisuSchool.findMany()
+    * // Fetch zero or more GisuChapters
+    * const gisuChapters = await prisma.gisuChapter.findMany()
     * ```
     */
-  get gisuSchool(): Prisma.GisuSchoolDelegate<ExtArgs, ClientOptions>;
+  get gisuChapter(): Prisma.GisuChapterDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.chapterSchool`: Exposes CRUD operations for the **ChapterSchool** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ChapterSchools
+    * const chapterSchools = await prisma.chapterSchool.findMany()
+    * ```
+    */
+  get chapterSchool(): Prisma.ChapterSchoolDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.school`: Exposes CRUD operations for the **School** model.
@@ -309,16 +331,6 @@ export class PrismaClient<
   get school(): Prisma.SchoolDelegate<ExtArgs, ClientOptions>;
 
   /**
-   * `prisma.chapter`: Exposes CRUD operations for the **Chapter** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Chapters
-    * const chapters = await prisma.chapter.findMany()
-    * ```
-    */
-  get chapter(): Prisma.ChapterDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.project`: Exposes CRUD operations for the **Project** model.
     * Example usage:
     * ```ts
@@ -327,6 +339,16 @@ export class PrismaClient<
     * ```
     */
   get project(): Prisma.ProjectDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.projectTo`: Exposes CRUD operations for the **ProjectTo** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProjectTos
+    * const projectTos = await prisma.projectTo.findMany()
+    * ```
+    */
+  get projectTo(): Prisma.ProjectToDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.projectMember`: Exposes CRUD operations for the **ProjectMember** model.
@@ -445,8 +467,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.19.0
-   * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
+   * Prisma Client JS version: 6.13.0
+   * Query Engine version: 361e86d0ea4987e9f53a565309b3eed797a6bcbd
    */
   export type PrismaVersion = {
     client: string
@@ -459,7 +481,6 @@ export namespace Prisma {
    */
 
 
-  export import Bytes = runtime.Bytes
   export import JsonObject = runtime.JsonObject
   export import JsonArray = runtime.JsonArray
   export import JsonValue = runtime.JsonValue
@@ -831,10 +852,11 @@ export namespace Prisma {
     Challenger: 'Challenger',
     ChallengerGisu: 'ChallengerGisu',
     Gisu: 'Gisu',
-    GisuSchool: 'GisuSchool',
+    GisuChapter: 'GisuChapter',
+    ChapterSchool: 'ChapterSchool',
     School: 'School',
-    Chapter: 'Chapter',
     Project: 'Project',
+    ProjectTo: 'ProjectTo',
     ProjectMember: 'ProjectMember',
     ApplicationForm: 'ApplicationForm',
     FormQuestion: 'FormQuestion',
@@ -859,7 +881,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "challenger" | "challengerGisu" | "gisu" | "gisuSchool" | "school" | "chapter" | "project" | "projectMember" | "applicationForm" | "formQuestion" | "application" | "applicationResponse" | "matchingRound"
+      modelProps: "challenger" | "challengerGisu" | "gisu" | "gisuChapter" | "chapterSchool" | "school" | "project" | "projectTo" | "projectMember" | "applicationForm" | "formQuestion" | "application" | "applicationResponse" | "matchingRound"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1085,77 +1107,151 @@ export namespace Prisma {
           }
         }
       }
-      GisuSchool: {
-        payload: Prisma.$GisuSchoolPayload<ExtArgs>
-        fields: Prisma.GisuSchoolFieldRefs
+      GisuChapter: {
+        payload: Prisma.$GisuChapterPayload<ExtArgs>
+        fields: Prisma.GisuChapterFieldRefs
         operations: {
           findUnique: {
-            args: Prisma.GisuSchoolFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GisuSchoolPayload> | null
+            args: Prisma.GisuChapterFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GisuChapterPayload> | null
           }
           findUniqueOrThrow: {
-            args: Prisma.GisuSchoolFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GisuSchoolPayload>
+            args: Prisma.GisuChapterFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GisuChapterPayload>
           }
           findFirst: {
-            args: Prisma.GisuSchoolFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GisuSchoolPayload> | null
+            args: Prisma.GisuChapterFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GisuChapterPayload> | null
           }
           findFirstOrThrow: {
-            args: Prisma.GisuSchoolFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GisuSchoolPayload>
+            args: Prisma.GisuChapterFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GisuChapterPayload>
           }
           findMany: {
-            args: Prisma.GisuSchoolFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GisuSchoolPayload>[]
+            args: Prisma.GisuChapterFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GisuChapterPayload>[]
           }
           create: {
-            args: Prisma.GisuSchoolCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GisuSchoolPayload>
+            args: Prisma.GisuChapterCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GisuChapterPayload>
           }
           createMany: {
-            args: Prisma.GisuSchoolCreateManyArgs<ExtArgs>
+            args: Prisma.GisuChapterCreateManyArgs<ExtArgs>
             result: BatchPayload
           }
           createManyAndReturn: {
-            args: Prisma.GisuSchoolCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GisuSchoolPayload>[]
+            args: Prisma.GisuChapterCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GisuChapterPayload>[]
           }
           delete: {
-            args: Prisma.GisuSchoolDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GisuSchoolPayload>
+            args: Prisma.GisuChapterDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GisuChapterPayload>
           }
           update: {
-            args: Prisma.GisuSchoolUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GisuSchoolPayload>
+            args: Prisma.GisuChapterUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GisuChapterPayload>
           }
           deleteMany: {
-            args: Prisma.GisuSchoolDeleteManyArgs<ExtArgs>
+            args: Prisma.GisuChapterDeleteManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateMany: {
-            args: Prisma.GisuSchoolUpdateManyArgs<ExtArgs>
+            args: Prisma.GisuChapterUpdateManyArgs<ExtArgs>
             result: BatchPayload
           }
           updateManyAndReturn: {
-            args: Prisma.GisuSchoolUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GisuSchoolPayload>[]
+            args: Prisma.GisuChapterUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GisuChapterPayload>[]
           }
           upsert: {
-            args: Prisma.GisuSchoolUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$GisuSchoolPayload>
+            args: Prisma.GisuChapterUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$GisuChapterPayload>
           }
           aggregate: {
-            args: Prisma.GisuSchoolAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateGisuSchool>
+            args: Prisma.GisuChapterAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGisuChapter>
           }
           groupBy: {
-            args: Prisma.GisuSchoolGroupByArgs<ExtArgs>
-            result: $Utils.Optional<GisuSchoolGroupByOutputType>[]
+            args: Prisma.GisuChapterGroupByArgs<ExtArgs>
+            result: $Utils.Optional<GisuChapterGroupByOutputType>[]
           }
           count: {
-            args: Prisma.GisuSchoolCountArgs<ExtArgs>
-            result: $Utils.Optional<GisuSchoolCountAggregateOutputType> | number
+            args: Prisma.GisuChapterCountArgs<ExtArgs>
+            result: $Utils.Optional<GisuChapterCountAggregateOutputType> | number
+          }
+        }
+      }
+      ChapterSchool: {
+        payload: Prisma.$ChapterSchoolPayload<ExtArgs>
+        fields: Prisma.ChapterSchoolFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ChapterSchoolFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterSchoolPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ChapterSchoolFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterSchoolPayload>
+          }
+          findFirst: {
+            args: Prisma.ChapterSchoolFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterSchoolPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ChapterSchoolFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterSchoolPayload>
+          }
+          findMany: {
+            args: Prisma.ChapterSchoolFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterSchoolPayload>[]
+          }
+          create: {
+            args: Prisma.ChapterSchoolCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterSchoolPayload>
+          }
+          createMany: {
+            args: Prisma.ChapterSchoolCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ChapterSchoolCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterSchoolPayload>[]
+          }
+          delete: {
+            args: Prisma.ChapterSchoolDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterSchoolPayload>
+          }
+          update: {
+            args: Prisma.ChapterSchoolUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterSchoolPayload>
+          }
+          deleteMany: {
+            args: Prisma.ChapterSchoolDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ChapterSchoolUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ChapterSchoolUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterSchoolPayload>[]
+          }
+          upsert: {
+            args: Prisma.ChapterSchoolUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ChapterSchoolPayload>
+          }
+          aggregate: {
+            args: Prisma.ChapterSchoolAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateChapterSchool>
+          }
+          groupBy: {
+            args: Prisma.ChapterSchoolGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ChapterSchoolGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ChapterSchoolCountArgs<ExtArgs>
+            result: $Utils.Optional<ChapterSchoolCountAggregateOutputType> | number
           }
         }
       }
@@ -1233,80 +1329,6 @@ export namespace Prisma {
           }
         }
       }
-      Chapter: {
-        payload: Prisma.$ChapterPayload<ExtArgs>
-        fields: Prisma.ChapterFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ChapterFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ChapterPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ChapterFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ChapterPayload>
-          }
-          findFirst: {
-            args: Prisma.ChapterFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ChapterPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ChapterFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ChapterPayload>
-          }
-          findMany: {
-            args: Prisma.ChapterFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ChapterPayload>[]
-          }
-          create: {
-            args: Prisma.ChapterCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ChapterPayload>
-          }
-          createMany: {
-            args: Prisma.ChapterCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ChapterCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ChapterPayload>[]
-          }
-          delete: {
-            args: Prisma.ChapterDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ChapterPayload>
-          }
-          update: {
-            args: Prisma.ChapterUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ChapterPayload>
-          }
-          deleteMany: {
-            args: Prisma.ChapterDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ChapterUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ChapterUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ChapterPayload>[]
-          }
-          upsert: {
-            args: Prisma.ChapterUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ChapterPayload>
-          }
-          aggregate: {
-            args: Prisma.ChapterAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateChapter>
-          }
-          groupBy: {
-            args: Prisma.ChapterGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ChapterGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ChapterCountArgs<ExtArgs>
-            result: $Utils.Optional<ChapterCountAggregateOutputType> | number
-          }
-        }
-      }
       Project: {
         payload: Prisma.$ProjectPayload<ExtArgs>
         fields: Prisma.ProjectFieldRefs
@@ -1378,6 +1400,80 @@ export namespace Prisma {
           count: {
             args: Prisma.ProjectCountArgs<ExtArgs>
             result: $Utils.Optional<ProjectCountAggregateOutputType> | number
+          }
+        }
+      }
+      ProjectTo: {
+        payload: Prisma.$ProjectToPayload<ExtArgs>
+        fields: Prisma.ProjectToFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProjectToFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectToPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProjectToFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectToPayload>
+          }
+          findFirst: {
+            args: Prisma.ProjectToFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectToPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProjectToFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectToPayload>
+          }
+          findMany: {
+            args: Prisma.ProjectToFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectToPayload>[]
+          }
+          create: {
+            args: Prisma.ProjectToCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectToPayload>
+          }
+          createMany: {
+            args: Prisma.ProjectToCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProjectToCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectToPayload>[]
+          }
+          delete: {
+            args: Prisma.ProjectToDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectToPayload>
+          }
+          update: {
+            args: Prisma.ProjectToUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectToPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProjectToDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProjectToUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProjectToUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectToPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProjectToUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectToPayload>
+          }
+          aggregate: {
+            args: Prisma.ProjectToAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProjectTo>
+          }
+          groupBy: {
+            args: Prisma.ProjectToGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProjectToGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProjectToCountArgs<ExtArgs>
+            result: $Utils.Optional<ProjectToCountAggregateOutputType> | number
           }
         }
       }
@@ -1901,10 +1997,6 @@ export namespace Prisma {
       isolationLevel?: Prisma.TransactionIsolationLevel
     }
     /**
-     * Instance of a Driver Adapter, e.g., like one provided by `@prisma/adapter-planetscale`
-     */
-    adapter?: runtime.SqlDriverAdapterFactory | null
-    /**
      * Global configuration for omitting model fields by default.
      * 
      * @example
@@ -1924,10 +2016,11 @@ export namespace Prisma {
     challenger?: ChallengerOmit
     challengerGisu?: ChallengerGisuOmit
     gisu?: GisuOmit
-    gisuSchool?: GisuSchoolOmit
+    gisuChapter?: GisuChapterOmit
+    chapterSchool?: ChapterSchoolOmit
     school?: SchoolOmit
-    chapter?: ChapterOmit
     project?: ProjectOmit
+    projectTo?: ProjectToOmit
     projectMember?: ProjectMemberOmit
     applicationForm?: ApplicationFormOmit
     formQuestion?: FormQuestionOmit
@@ -1992,6 +2085,25 @@ export namespace Prisma {
     | 'findRaw'
     | 'groupBy'
 
+  /**
+   * These options are being passed into the middleware as "params"
+   */
+  export type MiddlewareParams = {
+    model?: ModelName
+    action: PrismaAction
+    args: any
+    dataPath: string[]
+    runInTransaction: boolean
+  }
+
+  /**
+   * The `T` type makes sure, that the `return proceed` is not forgotten in the middleware implementation
+   */
+  export type Middleware<T = any> = (
+    params: MiddlewareParams,
+    next: (params: MiddlewareParams) => $Utils.JsPromise<T>,
+  ) => $Utils.JsPromise<T>
+
   // tested in getLogLevel.test.ts
   export function getLogLevel(log: Array<LogLevel | LogDefinition>): LogLevel | undefined;
 
@@ -2015,16 +2127,16 @@ export namespace Prisma {
 
   export type ChallengerCountOutputType = {
     gisuRoles: number
-    ledGisuSchools: number
-    viceLedGisuSchools: number
+    leaderGisuSchool: number
+    viceLeadGisuSchool: number
     projectMembers: number
     applications: number
   }
 
   export type ChallengerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     gisuRoles?: boolean | ChallengerCountOutputTypeCountGisuRolesArgs
-    ledGisuSchools?: boolean | ChallengerCountOutputTypeCountLedGisuSchoolsArgs
-    viceLedGisuSchools?: boolean | ChallengerCountOutputTypeCountViceLedGisuSchoolsArgs
+    leaderGisuSchool?: boolean | ChallengerCountOutputTypeCountLeaderGisuSchoolArgs
+    viceLeadGisuSchool?: boolean | ChallengerCountOutputTypeCountViceLeadGisuSchoolArgs
     projectMembers?: boolean | ChallengerCountOutputTypeCountProjectMembersArgs
     applications?: boolean | ChallengerCountOutputTypeCountApplicationsArgs
   }
@@ -2050,15 +2162,15 @@ export namespace Prisma {
   /**
    * ChallengerCountOutputType without action
    */
-  export type ChallengerCountOutputTypeCountLedGisuSchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GisuSchoolWhereInput
+  export type ChallengerCountOutputTypeCountLeaderGisuSchoolArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChapterSchoolWhereInput
   }
 
   /**
    * ChallengerCountOutputType without action
    */
-  export type ChallengerCountOutputTypeCountViceLedGisuSchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GisuSchoolWhereInput
+  export type ChallengerCountOutputTypeCountViceLeadGisuSchoolArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChapterSchoolWhereInput
   }
 
   /**
@@ -2081,15 +2193,11 @@ export namespace Prisma {
    */
 
   export type GisuCountOutputType = {
-    gisuSchools: number
     chapters: number
-    challengerGisus: number
   }
 
   export type GisuCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    gisuSchools?: boolean | GisuCountOutputTypeCountGisuSchoolsArgs
     chapters?: boolean | GisuCountOutputTypeCountChaptersArgs
-    challengerGisus?: boolean | GisuCountOutputTypeCountChallengerGisusArgs
   }
 
   // Custom InputTypes
@@ -2106,21 +2214,65 @@ export namespace Prisma {
   /**
    * GisuCountOutputType without action
    */
-  export type GisuCountOutputTypeCountGisuSchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GisuSchoolWhereInput
-  }
-
-  /**
-   * GisuCountOutputType without action
-   */
   export type GisuCountOutputTypeCountChaptersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ChapterWhereInput
+    where?: GisuChapterWhereInput
+  }
+
+
+  /**
+   * Count Type GisuChapterCountOutputType
+   */
+
+  export type GisuChapterCountOutputType = {
+    projects: number
+    chapterMatchingRound: number
+    gisuChapterSchool: number
+    gisuChapterChallenger: number
+  }
+
+  export type GisuChapterCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    projects?: boolean | GisuChapterCountOutputTypeCountProjectsArgs
+    chapterMatchingRound?: boolean | GisuChapterCountOutputTypeCountChapterMatchingRoundArgs
+    gisuChapterSchool?: boolean | GisuChapterCountOutputTypeCountGisuChapterSchoolArgs
+    gisuChapterChallenger?: boolean | GisuChapterCountOutputTypeCountGisuChapterChallengerArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * GisuChapterCountOutputType without action
+   */
+  export type GisuChapterCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GisuChapterCountOutputType
+     */
+    select?: GisuChapterCountOutputTypeSelect<ExtArgs> | null
   }
 
   /**
-   * GisuCountOutputType without action
+   * GisuChapterCountOutputType without action
    */
-  export type GisuCountOutputTypeCountChallengerGisusArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterCountOutputTypeCountProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectWhereInput
+  }
+
+  /**
+   * GisuChapterCountOutputType without action
+   */
+  export type GisuChapterCountOutputTypeCountChapterMatchingRoundArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: MatchingRoundWhereInput
+  }
+
+  /**
+   * GisuChapterCountOutputType without action
+   */
+  export type GisuChapterCountOutputTypeCountGisuChapterSchoolArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChapterSchoolWhereInput
+  }
+
+  /**
+   * GisuChapterCountOutputType without action
+   */
+  export type GisuChapterCountOutputTypeCountGisuChapterChallengerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ChallengerGisuWhereInput
   }
 
@@ -2161,38 +2313,7 @@ export namespace Prisma {
    * SchoolCountOutputType without action
    */
   export type SchoolCountOutputTypeCountGisuSchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GisuSchoolWhereInput
-  }
-
-
-  /**
-   * Count Type ChapterCountOutputType
-   */
-
-  export type ChapterCountOutputType = {
-    projects: number
-  }
-
-  export type ChapterCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    projects?: boolean | ChapterCountOutputTypeCountProjectsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * ChapterCountOutputType without action
-   */
-  export type ChapterCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ChapterCountOutputType
-     */
-    select?: ChapterCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * ChapterCountOutputType without action
-   */
-  export type ChapterCountOutputTypeCountProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ProjectWhereInput
+    where?: ChapterSchoolWhereInput
   }
 
 
@@ -2203,11 +2324,13 @@ export namespace Prisma {
   export type ProjectCountOutputType = {
     members: number
     applicationForms: number
+    to: number
   }
 
   export type ProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     members?: boolean | ProjectCountOutputTypeCountMembersArgs
     applicationForms?: boolean | ProjectCountOutputTypeCountApplicationFormsArgs
+    to?: boolean | ProjectCountOutputTypeCountToArgs
   }
 
   // Custom InputTypes
@@ -2233,6 +2356,13 @@ export namespace Prisma {
    */
   export type ProjectCountOutputTypeCountApplicationFormsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ApplicationFormWhereInput
+  }
+
+  /**
+   * ProjectCountOutputType without action
+   */
+  export type ProjectCountOutputTypeCountToArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectToWhereInput
   }
 
 
@@ -2384,32 +2514,34 @@ export namespace Prisma {
 
   export type ChallengerSumAggregateOutputType = {
     id: bigint | null
-    umsbId: number | null
+    umsbId: bigint | null
     schoolId: bigint | null
   }
 
   export type ChallengerMinAggregateOutputType = {
     id: bigint | null
-    umsbId: number | null
+    umsbId: bigint | null
     name: string | null
     nickname: string | null
     gender: $Enums.GenderEnum | null
     schoolId: bigint | null
     studentId: string | null
     profileImageUrl: string | null
+    passwordHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type ChallengerMaxAggregateOutputType = {
     id: bigint | null
-    umsbId: number | null
+    umsbId: bigint | null
     name: string | null
     nickname: string | null
     gender: $Enums.GenderEnum | null
     schoolId: bigint | null
     studentId: string | null
     profileImageUrl: string | null
+    passwordHash: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2423,6 +2555,7 @@ export namespace Prisma {
     schoolId: number
     studentId: number
     profileImageUrl: number
+    passwordHash: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2450,6 +2583,7 @@ export namespace Prisma {
     schoolId?: true
     studentId?: true
     profileImageUrl?: true
+    passwordHash?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2463,6 +2597,7 @@ export namespace Prisma {
     schoolId?: true
     studentId?: true
     profileImageUrl?: true
+    passwordHash?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2476,6 +2611,7 @@ export namespace Prisma {
     schoolId?: true
     studentId?: true
     profileImageUrl?: true
+    passwordHash?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2569,13 +2705,14 @@ export namespace Prisma {
 
   export type ChallengerGroupByOutputType = {
     id: bigint
-    umsbId: number
+    umsbId: bigint
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     schoolId: bigint
     studentId: string
     profileImageUrl: string | null
+    passwordHash: string
     createdAt: Date
     updatedAt: Date
     _count: ChallengerCountAggregateOutputType | null
@@ -2608,12 +2745,13 @@ export namespace Prisma {
     schoolId?: boolean
     studentId?: boolean
     profileImageUrl?: boolean
+    passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     school?: boolean | SchoolDefaultArgs<ExtArgs>
     gisuRoles?: boolean | Challenger$gisuRolesArgs<ExtArgs>
-    ledGisuSchools?: boolean | Challenger$ledGisuSchoolsArgs<ExtArgs>
-    viceLedGisuSchools?: boolean | Challenger$viceLedGisuSchoolsArgs<ExtArgs>
+    leaderGisuSchool?: boolean | Challenger$leaderGisuSchoolArgs<ExtArgs>
+    viceLeadGisuSchool?: boolean | Challenger$viceLeadGisuSchoolArgs<ExtArgs>
     projectMembers?: boolean | Challenger$projectMembersArgs<ExtArgs>
     applications?: boolean | Challenger$applicationsArgs<ExtArgs>
     _count?: boolean | ChallengerCountOutputTypeDefaultArgs<ExtArgs>
@@ -2628,6 +2766,7 @@ export namespace Prisma {
     schoolId?: boolean
     studentId?: boolean
     profileImageUrl?: boolean
+    passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     school?: boolean | SchoolDefaultArgs<ExtArgs>
@@ -2642,6 +2781,7 @@ export namespace Prisma {
     schoolId?: boolean
     studentId?: boolean
     profileImageUrl?: boolean
+    passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     school?: boolean | SchoolDefaultArgs<ExtArgs>
@@ -2656,16 +2796,17 @@ export namespace Prisma {
     schoolId?: boolean
     studentId?: boolean
     profileImageUrl?: boolean
+    passwordHash?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ChallengerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "umsbId" | "name" | "nickname" | "gender" | "schoolId" | "studentId" | "profileImageUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["challenger"]>
+  export type ChallengerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "umsbId" | "name" | "nickname" | "gender" | "schoolId" | "studentId" | "profileImageUrl" | "passwordHash" | "createdAt" | "updatedAt", ExtArgs["result"]["challenger"]>
   export type ChallengerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     school?: boolean | SchoolDefaultArgs<ExtArgs>
     gisuRoles?: boolean | Challenger$gisuRolesArgs<ExtArgs>
-    ledGisuSchools?: boolean | Challenger$ledGisuSchoolsArgs<ExtArgs>
-    viceLedGisuSchools?: boolean | Challenger$viceLedGisuSchoolsArgs<ExtArgs>
+    leaderGisuSchool?: boolean | Challenger$leaderGisuSchoolArgs<ExtArgs>
+    viceLeadGisuSchool?: boolean | Challenger$viceLeadGisuSchoolArgs<ExtArgs>
     projectMembers?: boolean | Challenger$projectMembersArgs<ExtArgs>
     applications?: boolean | Challenger$applicationsArgs<ExtArgs>
     _count?: boolean | ChallengerCountOutputTypeDefaultArgs<ExtArgs>
@@ -2682,20 +2823,21 @@ export namespace Prisma {
     objects: {
       school: Prisma.$SchoolPayload<ExtArgs>
       gisuRoles: Prisma.$ChallengerGisuPayload<ExtArgs>[]
-      ledGisuSchools: Prisma.$GisuSchoolPayload<ExtArgs>[]
-      viceLedGisuSchools: Prisma.$GisuSchoolPayload<ExtArgs>[]
+      leaderGisuSchool: Prisma.$ChapterSchoolPayload<ExtArgs>[]
+      viceLeadGisuSchool: Prisma.$ChapterSchoolPayload<ExtArgs>[]
       projectMembers: Prisma.$ProjectMemberPayload<ExtArgs>[]
       applications: Prisma.$ApplicationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: bigint
-      umsbId: number
+      umsbId: bigint
       name: string
       nickname: string
       gender: $Enums.GenderEnum
       schoolId: bigint
       studentId: string
       profileImageUrl: string | null
+      passwordHash: string
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["challenger"]>
@@ -3094,8 +3236,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     school<T extends SchoolDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SchoolDefaultArgs<ExtArgs>>): Prisma__SchoolClient<$Result.GetResult<Prisma.$SchoolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     gisuRoles<T extends Challenger$gisuRolesArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$gisuRolesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChallengerGisuPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    ledGisuSchools<T extends Challenger$ledGisuSchoolsArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$ledGisuSchoolsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    viceLedGisuSchools<T extends Challenger$viceLedGisuSchoolsArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$viceLedGisuSchoolsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    leaderGisuSchool<T extends Challenger$leaderGisuSchoolArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$leaderGisuSchoolArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    viceLeadGisuSchool<T extends Challenger$viceLeadGisuSchoolArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$viceLeadGisuSchoolArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     projectMembers<T extends Challenger$projectMembersArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$projectMembersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     applications<T extends Challenger$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, Challenger$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
@@ -3128,13 +3270,14 @@ export namespace Prisma {
    */
   interface ChallengerFieldRefs {
     readonly id: FieldRef<"Challenger", 'BigInt'>
-    readonly umsbId: FieldRef<"Challenger", 'Int'>
+    readonly umsbId: FieldRef<"Challenger", 'BigInt'>
     readonly name: FieldRef<"Challenger", 'String'>
     readonly nickname: FieldRef<"Challenger", 'String'>
     readonly gender: FieldRef<"Challenger", 'GenderEnum'>
     readonly schoolId: FieldRef<"Challenger", 'BigInt'>
     readonly studentId: FieldRef<"Challenger", 'String'>
     readonly profileImageUrl: FieldRef<"Challenger", 'String'>
+    readonly passwordHash: FieldRef<"Challenger", 'String'>
     readonly createdAt: FieldRef<"Challenger", 'DateTime'>
     readonly updatedAt: FieldRef<"Challenger", 'DateTime'>
   }
@@ -3557,51 +3700,51 @@ export namespace Prisma {
   }
 
   /**
-   * Challenger.ledGisuSchools
+   * Challenger.leaderGisuSchool
    */
-  export type Challenger$ledGisuSchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Challenger$leaderGisuSchoolArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the ChapterSchool
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: ChapterSchoolSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the ChapterSchool
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: ChapterSchoolOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
-    where?: GisuSchoolWhereInput
-    orderBy?: GisuSchoolOrderByWithRelationInput | GisuSchoolOrderByWithRelationInput[]
-    cursor?: GisuSchoolWhereUniqueInput
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    where?: ChapterSchoolWhereInput
+    orderBy?: ChapterSchoolOrderByWithRelationInput | ChapterSchoolOrderByWithRelationInput[]
+    cursor?: ChapterSchoolWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: GisuSchoolScalarFieldEnum | GisuSchoolScalarFieldEnum[]
+    distinct?: ChapterSchoolScalarFieldEnum | ChapterSchoolScalarFieldEnum[]
   }
 
   /**
-   * Challenger.viceLedGisuSchools
+   * Challenger.viceLeadGisuSchool
    */
-  export type Challenger$viceLedGisuSchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Challenger$viceLeadGisuSchoolArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the ChapterSchool
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: ChapterSchoolSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the ChapterSchool
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: ChapterSchoolOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
-    where?: GisuSchoolWhereInput
-    orderBy?: GisuSchoolOrderByWithRelationInput | GisuSchoolOrderByWithRelationInput[]
-    cursor?: GisuSchoolWhereUniqueInput
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    where?: ChapterSchoolWhereInput
+    orderBy?: ChapterSchoolOrderByWithRelationInput | ChapterSchoolOrderByWithRelationInput[]
+    cursor?: ChapterSchoolWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: GisuSchoolScalarFieldEnum | GisuSchoolScalarFieldEnum[]
+    distinct?: ChapterSchoolScalarFieldEnum | ChapterSchoolScalarFieldEnum[]
   }
 
   /**
@@ -3686,19 +3829,21 @@ export namespace Prisma {
   export type ChallengerGisuAvgAggregateOutputType = {
     id: number | null
     challengerId: number | null
-    gisuId: number | null
+    chapterSchoolId: number | null
   }
 
   export type ChallengerGisuSumAggregateOutputType = {
     id: bigint | null
     challengerId: bigint | null
-    gisuId: bigint | null
+    chapterSchoolId: bigint | null
   }
 
   export type ChallengerGisuMinAggregateOutputType = {
     id: bigint | null
     challengerId: bigint | null
-    gisuId: bigint | null
+    chapterSchoolId: bigint | null
+    isTerminated: boolean | null
+    part: $Enums.UserPartEnum | null
     isSchoolAdmin: boolean | null
     isChapterAdmin: boolean | null
     isCentralAdmin: boolean | null
@@ -3712,7 +3857,9 @@ export namespace Prisma {
   export type ChallengerGisuMaxAggregateOutputType = {
     id: bigint | null
     challengerId: bigint | null
-    gisuId: bigint | null
+    chapterSchoolId: bigint | null
+    isTerminated: boolean | null
+    part: $Enums.UserPartEnum | null
     isSchoolAdmin: boolean | null
     isChapterAdmin: boolean | null
     isCentralAdmin: boolean | null
@@ -3726,7 +3873,9 @@ export namespace Prisma {
   export type ChallengerGisuCountAggregateOutputType = {
     id: number
     challengerId: number
-    gisuId: number
+    chapterSchoolId: number
+    isTerminated: number
+    part: number
     isSchoolAdmin: number
     isChapterAdmin: number
     isCentralAdmin: number
@@ -3742,19 +3891,21 @@ export namespace Prisma {
   export type ChallengerGisuAvgAggregateInputType = {
     id?: true
     challengerId?: true
-    gisuId?: true
+    chapterSchoolId?: true
   }
 
   export type ChallengerGisuSumAggregateInputType = {
     id?: true
     challengerId?: true
-    gisuId?: true
+    chapterSchoolId?: true
   }
 
   export type ChallengerGisuMinAggregateInputType = {
     id?: true
     challengerId?: true
-    gisuId?: true
+    chapterSchoolId?: true
+    isTerminated?: true
+    part?: true
     isSchoolAdmin?: true
     isChapterAdmin?: true
     isCentralAdmin?: true
@@ -3768,7 +3919,9 @@ export namespace Prisma {
   export type ChallengerGisuMaxAggregateInputType = {
     id?: true
     challengerId?: true
-    gisuId?: true
+    chapterSchoolId?: true
+    isTerminated?: true
+    part?: true
     isSchoolAdmin?: true
     isChapterAdmin?: true
     isCentralAdmin?: true
@@ -3782,7 +3935,9 @@ export namespace Prisma {
   export type ChallengerGisuCountAggregateInputType = {
     id?: true
     challengerId?: true
-    gisuId?: true
+    chapterSchoolId?: true
+    isTerminated?: true
+    part?: true
     isSchoolAdmin?: true
     isChapterAdmin?: true
     isCentralAdmin?: true
@@ -3883,7 +4038,9 @@ export namespace Prisma {
   export type ChallengerGisuGroupByOutputType = {
     id: bigint
     challengerId: bigint
-    gisuId: bigint
+    chapterSchoolId: bigint
+    isTerminated: boolean
+    part: $Enums.UserPartEnum
     isSchoolAdmin: boolean
     isChapterAdmin: boolean
     isCentralAdmin: boolean
@@ -3916,7 +4073,9 @@ export namespace Prisma {
   export type ChallengerGisuSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     challengerId?: boolean
-    gisuId?: boolean
+    chapterSchoolId?: boolean
+    isTerminated?: boolean
+    part?: boolean
     isSchoolAdmin?: boolean
     isChapterAdmin?: boolean
     isCentralAdmin?: boolean
@@ -3926,13 +4085,15 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     challenger?: boolean | ChallengerDefaultArgs<ExtArgs>
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
+    chapterSchool?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["challengerGisu"]>
 
   export type ChallengerGisuSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     challengerId?: boolean
-    gisuId?: boolean
+    chapterSchoolId?: boolean
+    isTerminated?: boolean
+    part?: boolean
     isSchoolAdmin?: boolean
     isChapterAdmin?: boolean
     isCentralAdmin?: boolean
@@ -3942,13 +4103,15 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     challenger?: boolean | ChallengerDefaultArgs<ExtArgs>
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
+    chapterSchool?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["challengerGisu"]>
 
   export type ChallengerGisuSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     challengerId?: boolean
-    gisuId?: boolean
+    chapterSchoolId?: boolean
+    isTerminated?: boolean
+    part?: boolean
     isSchoolAdmin?: boolean
     isChapterAdmin?: boolean
     isCentralAdmin?: boolean
@@ -3958,13 +4121,15 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     challenger?: boolean | ChallengerDefaultArgs<ExtArgs>
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
+    chapterSchool?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["challengerGisu"]>
 
   export type ChallengerGisuSelectScalar = {
     id?: boolean
     challengerId?: boolean
-    gisuId?: boolean
+    chapterSchoolId?: boolean
+    isTerminated?: boolean
+    part?: boolean
     isSchoolAdmin?: boolean
     isChapterAdmin?: boolean
     isCentralAdmin?: boolean
@@ -3975,30 +4140,32 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type ChallengerGisuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "challengerId" | "gisuId" | "isSchoolAdmin" | "isChapterAdmin" | "isCentralAdmin" | "schoolAdminType" | "chapterAdminType" | "centralAdminType" | "createdAt" | "updatedAt", ExtArgs["result"]["challengerGisu"]>
+  export type ChallengerGisuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "challengerId" | "chapterSchoolId" | "isTerminated" | "part" | "isSchoolAdmin" | "isChapterAdmin" | "isCentralAdmin" | "schoolAdminType" | "chapterAdminType" | "centralAdminType" | "createdAt" | "updatedAt", ExtArgs["result"]["challengerGisu"]>
   export type ChallengerGisuInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     challenger?: boolean | ChallengerDefaultArgs<ExtArgs>
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
+    chapterSchool?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }
   export type ChallengerGisuIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     challenger?: boolean | ChallengerDefaultArgs<ExtArgs>
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
+    chapterSchool?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }
   export type ChallengerGisuIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     challenger?: boolean | ChallengerDefaultArgs<ExtArgs>
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
+    chapterSchool?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }
 
   export type $ChallengerGisuPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "ChallengerGisu"
     objects: {
       challenger: Prisma.$ChallengerPayload<ExtArgs>
-      gisu: Prisma.$GisuPayload<ExtArgs>
+      chapterSchool: Prisma.$GisuChapterPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: bigint
       challengerId: bigint
-      gisuId: bigint
+      chapterSchoolId: bigint
+      isTerminated: boolean
+      part: $Enums.UserPartEnum
       isSchoolAdmin: boolean
       isChapterAdmin: boolean
       isCentralAdmin: boolean
@@ -4402,7 +4569,7 @@ export namespace Prisma {
   export interface Prisma__ChallengerGisuClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     challenger<T extends ChallengerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChallengerDefaultArgs<ExtArgs>>): Prisma__ChallengerClient<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    gisu<T extends GisuDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GisuDefaultArgs<ExtArgs>>): Prisma__GisuClient<$Result.GetResult<Prisma.$GisuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chapterSchool<T extends GisuChapterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GisuChapterDefaultArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4434,7 +4601,9 @@ export namespace Prisma {
   interface ChallengerGisuFieldRefs {
     readonly id: FieldRef<"ChallengerGisu", 'BigInt'>
     readonly challengerId: FieldRef<"ChallengerGisu", 'BigInt'>
-    readonly gisuId: FieldRef<"ChallengerGisu", 'BigInt'>
+    readonly chapterSchoolId: FieldRef<"ChallengerGisu", 'BigInt'>
+    readonly isTerminated: FieldRef<"ChallengerGisu", 'Boolean'>
+    readonly part: FieldRef<"ChallengerGisu", 'UserPartEnum'>
     readonly isSchoolAdmin: FieldRef<"ChallengerGisu", 'Boolean'>
     readonly isChapterAdmin: FieldRef<"ChallengerGisu", 'Boolean'>
     readonly isCentralAdmin: FieldRef<"ChallengerGisu", 'Boolean'>
@@ -4881,6 +5050,7 @@ export namespace Prisma {
     id: bigint | null
     name: string | null
     description: string | null
+    isCurrent: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4889,6 +5059,7 @@ export namespace Prisma {
     id: bigint | null
     name: string | null
     description: string | null
+    isCurrent: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -4897,6 +5068,7 @@ export namespace Prisma {
     id: number
     name: number
     description: number
+    isCurrent: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -4915,6 +5087,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    isCurrent?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4923,6 +5096,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    isCurrent?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -4931,6 +5105,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    isCurrent?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -5026,6 +5201,7 @@ export namespace Prisma {
     id: bigint
     name: string
     description: string | null
+    isCurrent: boolean
     createdAt: Date
     updatedAt: Date
     _count: GisuCountAggregateOutputType | null
@@ -5053,11 +5229,10 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    isCurrent?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    gisuSchools?: boolean | Gisu$gisuSchoolsArgs<ExtArgs>
     chapters?: boolean | Gisu$chaptersArgs<ExtArgs>
-    challengerGisus?: boolean | Gisu$challengerGisusArgs<ExtArgs>
     _count?: boolean | GisuCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["gisu"]>
 
@@ -5065,6 +5240,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    isCurrent?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["gisu"]>
@@ -5073,6 +5249,7 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    isCurrent?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["gisu"]>
@@ -5081,15 +5258,14 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    isCurrent?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type GisuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["gisu"]>
+  export type GisuOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "isCurrent" | "createdAt" | "updatedAt", ExtArgs["result"]["gisu"]>
   export type GisuInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    gisuSchools?: boolean | Gisu$gisuSchoolsArgs<ExtArgs>
     chapters?: boolean | Gisu$chaptersArgs<ExtArgs>
-    challengerGisus?: boolean | Gisu$challengerGisusArgs<ExtArgs>
     _count?: boolean | GisuCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type GisuIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -5098,14 +5274,13 @@ export namespace Prisma {
   export type $GisuPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Gisu"
     objects: {
-      gisuSchools: Prisma.$GisuSchoolPayload<ExtArgs>[]
-      chapters: Prisma.$ChapterPayload<ExtArgs>[]
-      challengerGisus: Prisma.$ChallengerGisuPayload<ExtArgs>[]
+      chapters: Prisma.$GisuChapterPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: bigint
       name: string
       description: string | null
+      isCurrent: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["gisu"]>
@@ -5502,9 +5677,7 @@ export namespace Prisma {
    */
   export interface Prisma__GisuClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    gisuSchools<T extends Gisu$gisuSchoolsArgs<ExtArgs> = {}>(args?: Subset<T, Gisu$gisuSchoolsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    chapters<T extends Gisu$chaptersArgs<ExtArgs> = {}>(args?: Subset<T, Gisu$chaptersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    challengerGisus<T extends Gisu$challengerGisusArgs<ExtArgs> = {}>(args?: Subset<T, Gisu$challengerGisusArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChallengerGisuPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    chapters<T extends Gisu$chaptersArgs<ExtArgs> = {}>(args?: Subset<T, Gisu$chaptersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5537,6 +5710,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Gisu", 'BigInt'>
     readonly name: FieldRef<"Gisu", 'String'>
     readonly description: FieldRef<"Gisu", 'String'>
+    readonly isCurrent: FieldRef<"Gisu", 'Boolean'>
     readonly createdAt: FieldRef<"Gisu", 'DateTime'>
     readonly updatedAt: FieldRef<"Gisu", 'DateTime'>
   }
@@ -5927,75 +6101,27 @@ export namespace Prisma {
   }
 
   /**
-   * Gisu.gisuSchools
-   */
-  export type Gisu$gisuSchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the GisuSchool
-     */
-    select?: GisuSchoolSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the GisuSchool
-     */
-    omit?: GisuSchoolOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: GisuSchoolInclude<ExtArgs> | null
-    where?: GisuSchoolWhereInput
-    orderBy?: GisuSchoolOrderByWithRelationInput | GisuSchoolOrderByWithRelationInput[]
-    cursor?: GisuSchoolWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: GisuSchoolScalarFieldEnum | GisuSchoolScalarFieldEnum[]
-  }
-
-  /**
    * Gisu.chapters
    */
   export type Gisu$chaptersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Chapter
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: ChapterSelect<ExtArgs> | null
+    select?: GisuChapterSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the Chapter
+     * Omit specific fields from the GisuChapter
      */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterInclude<ExtArgs> | null
-    where?: ChapterWhereInput
-    orderBy?: ChapterOrderByWithRelationInput | ChapterOrderByWithRelationInput[]
-    cursor?: ChapterWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ChapterScalarFieldEnum | ChapterScalarFieldEnum[]
-  }
-
-  /**
-   * Gisu.challengerGisus
-   */
-  export type Gisu$challengerGisusArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the ChallengerGisu
-     */
-    select?: ChallengerGisuSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the ChallengerGisu
-     */
-    omit?: ChallengerGisuOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: ChallengerGisuInclude<ExtArgs> | null
-    where?: ChallengerGisuWhereInput
-    orderBy?: ChallengerGisuOrderByWithRelationInput | ChallengerGisuOrderByWithRelationInput[]
-    cursor?: ChallengerGisuWhereUniqueInput
+    include?: GisuChapterInclude<ExtArgs> | null
+    where?: GisuChapterWhereInput
+    orderBy?: GisuChapterOrderByWithRelationInput | GisuChapterOrderByWithRelationInput[]
+    cursor?: GisuChapterWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: ChallengerGisuScalarFieldEnum | ChallengerGisuScalarFieldEnum[]
+    distinct?: GisuChapterScalarFieldEnum | GisuChapterScalarFieldEnum[]
   }
 
   /**
@@ -6018,445 +6144,414 @@ export namespace Prisma {
 
 
   /**
-   * Model GisuSchool
+   * Model GisuChapter
    */
 
-  export type AggregateGisuSchool = {
-    _count: GisuSchoolCountAggregateOutputType | null
-    _avg: GisuSchoolAvgAggregateOutputType | null
-    _sum: GisuSchoolSumAggregateOutputType | null
-    _min: GisuSchoolMinAggregateOutputType | null
-    _max: GisuSchoolMaxAggregateOutputType | null
+  export type AggregateGisuChapter = {
+    _count: GisuChapterCountAggregateOutputType | null
+    _avg: GisuChapterAvgAggregateOutputType | null
+    _sum: GisuChapterSumAggregateOutputType | null
+    _min: GisuChapterMinAggregateOutputType | null
+    _max: GisuChapterMaxAggregateOutputType | null
   }
 
-  export type GisuSchoolAvgAggregateOutputType = {
+  export type GisuChapterAvgAggregateOutputType = {
     id: number | null
     gisuId: number | null
-    schoolId: number | null
-    leaderId: number | null
-    viceLeaderId: number | null
   }
 
-  export type GisuSchoolSumAggregateOutputType = {
+  export type GisuChapterSumAggregateOutputType = {
     id: bigint | null
     gisuId: bigint | null
-    schoolId: bigint | null
-    leaderId: bigint | null
-    viceLeaderId: bigint | null
   }
 
-  export type GisuSchoolMinAggregateOutputType = {
+  export type GisuChapterMinAggregateOutputType = {
     id: bigint | null
+    name: string | null
+    description: string | null
     gisuId: bigint | null
-    schoolId: bigint | null
-    leaderId: bigint | null
-    viceLeaderId: bigint | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
-  export type GisuSchoolMaxAggregateOutputType = {
+  export type GisuChapterMaxAggregateOutputType = {
     id: bigint | null
+    name: string | null
+    description: string | null
     gisuId: bigint | null
-    schoolId: bigint | null
-    leaderId: bigint | null
-    viceLeaderId: bigint | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
-  export type GisuSchoolCountAggregateOutputType = {
+  export type GisuChapterCountAggregateOutputType = {
     id: number
+    name: number
+    description: number
     gisuId: number
-    schoolId: number
-    leaderId: number
-    viceLeaderId: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
 
-  export type GisuSchoolAvgAggregateInputType = {
+  export type GisuChapterAvgAggregateInputType = {
     id?: true
     gisuId?: true
-    schoolId?: true
-    leaderId?: true
-    viceLeaderId?: true
   }
 
-  export type GisuSchoolSumAggregateInputType = {
+  export type GisuChapterSumAggregateInputType = {
     id?: true
     gisuId?: true
-    schoolId?: true
-    leaderId?: true
-    viceLeaderId?: true
   }
 
-  export type GisuSchoolMinAggregateInputType = {
+  export type GisuChapterMinAggregateInputType = {
     id?: true
+    name?: true
+    description?: true
     gisuId?: true
-    schoolId?: true
-    leaderId?: true
-    viceLeaderId?: true
     createdAt?: true
     updatedAt?: true
   }
 
-  export type GisuSchoolMaxAggregateInputType = {
+  export type GisuChapterMaxAggregateInputType = {
     id?: true
+    name?: true
+    description?: true
     gisuId?: true
-    schoolId?: true
-    leaderId?: true
-    viceLeaderId?: true
     createdAt?: true
     updatedAt?: true
   }
 
-  export type GisuSchoolCountAggregateInputType = {
+  export type GisuChapterCountAggregateInputType = {
     id?: true
+    name?: true
+    description?: true
     gisuId?: true
-    schoolId?: true
-    leaderId?: true
-    viceLeaderId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
   }
 
-  export type GisuSchoolAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which GisuSchool to aggregate.
+     * Filter which GisuChapter to aggregate.
      */
-    where?: GisuSchoolWhereInput
+    where?: GisuChapterWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of GisuSchools to fetch.
+     * Determine the order of GisuChapters to fetch.
      */
-    orderBy?: GisuSchoolOrderByWithRelationInput | GisuSchoolOrderByWithRelationInput[]
+    orderBy?: GisuChapterOrderByWithRelationInput | GisuChapterOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
      * Sets the start position
      */
-    cursor?: GisuSchoolWhereUniqueInput
+    cursor?: GisuChapterWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` GisuSchools from the position of the cursor.
+     * Take `±n` GisuChapters from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` GisuSchools.
+     * Skip the first `n` GisuChapters.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
-     * Count returned GisuSchools
+     * Count returned GisuChapters
     **/
-    _count?: true | GisuSchoolCountAggregateInputType
+    _count?: true | GisuChapterCountAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to average
     **/
-    _avg?: GisuSchoolAvgAggregateInputType
+    _avg?: GisuChapterAvgAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to sum
     **/
-    _sum?: GisuSchoolSumAggregateInputType
+    _sum?: GisuChapterSumAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the minimum value
     **/
-    _min?: GisuSchoolMinAggregateInputType
+    _min?: GisuChapterMinAggregateInputType
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
      * Select which fields to find the maximum value
     **/
-    _max?: GisuSchoolMaxAggregateInputType
+    _max?: GisuChapterMaxAggregateInputType
   }
 
-  export type GetGisuSchoolAggregateType<T extends GisuSchoolAggregateArgs> = {
-        [P in keyof T & keyof AggregateGisuSchool]: P extends '_count' | 'count'
+  export type GetGisuChapterAggregateType<T extends GisuChapterAggregateArgs> = {
+        [P in keyof T & keyof AggregateGisuChapter]: P extends '_count' | 'count'
       ? T[P] extends true
         ? number
-        : GetScalarType<T[P], AggregateGisuSchool[P]>
-      : GetScalarType<T[P], AggregateGisuSchool[P]>
+        : GetScalarType<T[P], AggregateGisuChapter[P]>
+      : GetScalarType<T[P], AggregateGisuChapter[P]>
   }
 
 
 
 
-  export type GisuSchoolGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: GisuSchoolWhereInput
-    orderBy?: GisuSchoolOrderByWithAggregationInput | GisuSchoolOrderByWithAggregationInput[]
-    by: GisuSchoolScalarFieldEnum[] | GisuSchoolScalarFieldEnum
-    having?: GisuSchoolScalarWhereWithAggregatesInput
+  export type GisuChapterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: GisuChapterWhereInput
+    orderBy?: GisuChapterOrderByWithAggregationInput | GisuChapterOrderByWithAggregationInput[]
+    by: GisuChapterScalarFieldEnum[] | GisuChapterScalarFieldEnum
+    having?: GisuChapterScalarWhereWithAggregatesInput
     take?: number
     skip?: number
-    _count?: GisuSchoolCountAggregateInputType | true
-    _avg?: GisuSchoolAvgAggregateInputType
-    _sum?: GisuSchoolSumAggregateInputType
-    _min?: GisuSchoolMinAggregateInputType
-    _max?: GisuSchoolMaxAggregateInputType
+    _count?: GisuChapterCountAggregateInputType | true
+    _avg?: GisuChapterAvgAggregateInputType
+    _sum?: GisuChapterSumAggregateInputType
+    _min?: GisuChapterMinAggregateInputType
+    _max?: GisuChapterMaxAggregateInputType
   }
 
-  export type GisuSchoolGroupByOutputType = {
+  export type GisuChapterGroupByOutputType = {
     id: bigint
+    name: string
+    description: string | null
     gisuId: bigint
-    schoolId: bigint
-    leaderId: bigint
-    viceLeaderId: bigint | null
     createdAt: Date
     updatedAt: Date
-    _count: GisuSchoolCountAggregateOutputType | null
-    _avg: GisuSchoolAvgAggregateOutputType | null
-    _sum: GisuSchoolSumAggregateOutputType | null
-    _min: GisuSchoolMinAggregateOutputType | null
-    _max: GisuSchoolMaxAggregateOutputType | null
+    _count: GisuChapterCountAggregateOutputType | null
+    _avg: GisuChapterAvgAggregateOutputType | null
+    _sum: GisuChapterSumAggregateOutputType | null
+    _min: GisuChapterMinAggregateOutputType | null
+    _max: GisuChapterMaxAggregateOutputType | null
   }
 
-  type GetGisuSchoolGroupByPayload<T extends GisuSchoolGroupByArgs> = Prisma.PrismaPromise<
+  type GetGisuChapterGroupByPayload<T extends GisuChapterGroupByArgs> = Prisma.PrismaPromise<
     Array<
-      PickEnumerable<GisuSchoolGroupByOutputType, T['by']> &
+      PickEnumerable<GisuChapterGroupByOutputType, T['by']> &
         {
-          [P in ((keyof T) & (keyof GisuSchoolGroupByOutputType))]: P extends '_count'
+          [P in ((keyof T) & (keyof GisuChapterGroupByOutputType))]: P extends '_count'
             ? T[P] extends boolean
               ? number
-              : GetScalarType<T[P], GisuSchoolGroupByOutputType[P]>
-            : GetScalarType<T[P], GisuSchoolGroupByOutputType[P]>
+              : GetScalarType<T[P], GisuChapterGroupByOutputType[P]>
+            : GetScalarType<T[P], GisuChapterGroupByOutputType[P]>
         }
       >
     >
 
 
-  export type GisuSchoolSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type GisuChapterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    name?: boolean
+    description?: boolean
     gisuId?: boolean
-    schoolId?: boolean
-    leaderId?: boolean
-    viceLeaderId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     gisu?: boolean | GisuDefaultArgs<ExtArgs>
-    school?: boolean | SchoolDefaultArgs<ExtArgs>
-    leader?: boolean | ChallengerDefaultArgs<ExtArgs>
-    viceLeader?: boolean | GisuSchool$viceLeaderArgs<ExtArgs>
-  }, ExtArgs["result"]["gisuSchool"]>
+    projects?: boolean | GisuChapter$projectsArgs<ExtArgs>
+    chapterMatchingRound?: boolean | GisuChapter$chapterMatchingRoundArgs<ExtArgs>
+    gisuChapterSchool?: boolean | GisuChapter$gisuChapterSchoolArgs<ExtArgs>
+    gisuChapterChallenger?: boolean | GisuChapter$gisuChapterChallengerArgs<ExtArgs>
+    _count?: boolean | GisuChapterCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["gisuChapter"]>
 
-  export type GisuSchoolSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type GisuChapterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    name?: boolean
+    description?: boolean
     gisuId?: boolean
-    schoolId?: boolean
-    leaderId?: boolean
-    viceLeaderId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     gisu?: boolean | GisuDefaultArgs<ExtArgs>
-    school?: boolean | SchoolDefaultArgs<ExtArgs>
-    leader?: boolean | ChallengerDefaultArgs<ExtArgs>
-    viceLeader?: boolean | GisuSchool$viceLeaderArgs<ExtArgs>
-  }, ExtArgs["result"]["gisuSchool"]>
+  }, ExtArgs["result"]["gisuChapter"]>
 
-  export type GisuSchoolSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+  export type GisuChapterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
+    name?: boolean
+    description?: boolean
     gisuId?: boolean
-    schoolId?: boolean
-    leaderId?: boolean
-    viceLeaderId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     gisu?: boolean | GisuDefaultArgs<ExtArgs>
-    school?: boolean | SchoolDefaultArgs<ExtArgs>
-    leader?: boolean | ChallengerDefaultArgs<ExtArgs>
-    viceLeader?: boolean | GisuSchool$viceLeaderArgs<ExtArgs>
-  }, ExtArgs["result"]["gisuSchool"]>
+  }, ExtArgs["result"]["gisuChapter"]>
 
-  export type GisuSchoolSelectScalar = {
+  export type GisuChapterSelectScalar = {
     id?: boolean
+    name?: boolean
+    description?: boolean
     gisuId?: boolean
-    schoolId?: boolean
-    leaderId?: boolean
-    viceLeaderId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type GisuSchoolOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "gisuId" | "schoolId" | "leaderId" | "viceLeaderId" | "createdAt" | "updatedAt", ExtArgs["result"]["gisuSchool"]>
-  export type GisuSchoolInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "gisuId" | "createdAt" | "updatedAt", ExtArgs["result"]["gisuChapter"]>
+  export type GisuChapterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     gisu?: boolean | GisuDefaultArgs<ExtArgs>
-    school?: boolean | SchoolDefaultArgs<ExtArgs>
-    leader?: boolean | ChallengerDefaultArgs<ExtArgs>
-    viceLeader?: boolean | GisuSchool$viceLeaderArgs<ExtArgs>
+    projects?: boolean | GisuChapter$projectsArgs<ExtArgs>
+    chapterMatchingRound?: boolean | GisuChapter$chapterMatchingRoundArgs<ExtArgs>
+    gisuChapterSchool?: boolean | GisuChapter$gisuChapterSchoolArgs<ExtArgs>
+    gisuChapterChallenger?: boolean | GisuChapter$gisuChapterChallengerArgs<ExtArgs>
+    _count?: boolean | GisuChapterCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type GisuSchoolIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     gisu?: boolean | GisuDefaultArgs<ExtArgs>
-    school?: boolean | SchoolDefaultArgs<ExtArgs>
-    leader?: boolean | ChallengerDefaultArgs<ExtArgs>
-    viceLeader?: boolean | GisuSchool$viceLeaderArgs<ExtArgs>
   }
-  export type GisuSchoolIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     gisu?: boolean | GisuDefaultArgs<ExtArgs>
-    school?: boolean | SchoolDefaultArgs<ExtArgs>
-    leader?: boolean | ChallengerDefaultArgs<ExtArgs>
-    viceLeader?: boolean | GisuSchool$viceLeaderArgs<ExtArgs>
   }
 
-  export type $GisuSchoolPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "GisuSchool"
+  export type $GisuChapterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "GisuChapter"
     objects: {
       gisu: Prisma.$GisuPayload<ExtArgs>
-      school: Prisma.$SchoolPayload<ExtArgs>
-      leader: Prisma.$ChallengerPayload<ExtArgs>
-      viceLeader: Prisma.$ChallengerPayload<ExtArgs> | null
+      projects: Prisma.$ProjectPayload<ExtArgs>[]
+      chapterMatchingRound: Prisma.$MatchingRoundPayload<ExtArgs>[]
+      gisuChapterSchool: Prisma.$ChapterSchoolPayload<ExtArgs>[]
+      gisuChapterChallenger: Prisma.$ChallengerGisuPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: bigint
+      name: string
+      description: string | null
       gisuId: bigint
-      schoolId: bigint
-      leaderId: bigint
-      viceLeaderId: bigint | null
       createdAt: Date
       updatedAt: Date
-    }, ExtArgs["result"]["gisuSchool"]>
+    }, ExtArgs["result"]["gisuChapter"]>
     composites: {}
   }
 
-  type GisuSchoolGetPayload<S extends boolean | null | undefined | GisuSchoolDefaultArgs> = $Result.GetResult<Prisma.$GisuSchoolPayload, S>
+  type GisuChapterGetPayload<S extends boolean | null | undefined | GisuChapterDefaultArgs> = $Result.GetResult<Prisma.$GisuChapterPayload, S>
 
-  type GisuSchoolCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<GisuSchoolFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: GisuSchoolCountAggregateInputType | true
+  type GisuChapterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<GisuChapterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: GisuChapterCountAggregateInputType | true
     }
 
-  export interface GisuSchoolDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GisuSchool'], meta: { name: 'GisuSchool' } }
+  export interface GisuChapterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['GisuChapter'], meta: { name: 'GisuChapter' } }
     /**
-     * Find zero or one GisuSchool that matches the filter.
-     * @param {GisuSchoolFindUniqueArgs} args - Arguments to find a GisuSchool
+     * Find zero or one GisuChapter that matches the filter.
+     * @param {GisuChapterFindUniqueArgs} args - Arguments to find a GisuChapter
      * @example
-     * // Get one GisuSchool
-     * const gisuSchool = await prisma.gisuSchool.findUnique({
+     * // Get one GisuChapter
+     * const gisuChapter = await prisma.gisuChapter.findUnique({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUnique<T extends GisuSchoolFindUniqueArgs>(args: SelectSubset<T, GisuSchoolFindUniqueArgs<ExtArgs>>): Prisma__GisuSchoolClient<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findUnique<T extends GisuChapterFindUniqueArgs>(args: SelectSubset<T, GisuChapterFindUniqueArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find one GisuSchool that matches the filter or throw an error with `error.code='P2025'`
+     * Find one GisuChapter that matches the filter or throw an error with `error.code='P2025'`
      * if no matches were found.
-     * @param {GisuSchoolFindUniqueOrThrowArgs} args - Arguments to find a GisuSchool
+     * @param {GisuChapterFindUniqueOrThrowArgs} args - Arguments to find a GisuChapter
      * @example
-     * // Get one GisuSchool
-     * const gisuSchool = await prisma.gisuSchool.findUniqueOrThrow({
+     * // Get one GisuChapter
+     * const gisuChapter = await prisma.gisuChapter.findUniqueOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findUniqueOrThrow<T extends GisuSchoolFindUniqueOrThrowArgs>(args: SelectSubset<T, GisuSchoolFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GisuSchoolClient<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findUniqueOrThrow<T extends GisuChapterFindUniqueOrThrowArgs>(args: SelectSubset<T, GisuChapterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first GisuSchool that matches the filter.
+     * Find the first GisuChapter that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GisuSchoolFindFirstArgs} args - Arguments to find a GisuSchool
+     * @param {GisuChapterFindFirstArgs} args - Arguments to find a GisuChapter
      * @example
-     * // Get one GisuSchool
-     * const gisuSchool = await prisma.gisuSchool.findFirst({
+     * // Get one GisuChapter
+     * const gisuChapter = await prisma.gisuChapter.findFirst({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirst<T extends GisuSchoolFindFirstArgs>(args?: SelectSubset<T, GisuSchoolFindFirstArgs<ExtArgs>>): Prisma__GisuSchoolClient<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    findFirst<T extends GisuChapterFindFirstArgs>(args?: SelectSubset<T, GisuChapterFindFirstArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find the first GisuSchool that matches the filter or
+     * Find the first GisuChapter that matches the filter or
      * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GisuSchoolFindFirstOrThrowArgs} args - Arguments to find a GisuSchool
+     * @param {GisuChapterFindFirstOrThrowArgs} args - Arguments to find a GisuChapter
      * @example
-     * // Get one GisuSchool
-     * const gisuSchool = await prisma.gisuSchool.findFirstOrThrow({
+     * // Get one GisuChapter
+     * const gisuChapter = await prisma.gisuChapter.findFirstOrThrow({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      */
-    findFirstOrThrow<T extends GisuSchoolFindFirstOrThrowArgs>(args?: SelectSubset<T, GisuSchoolFindFirstOrThrowArgs<ExtArgs>>): Prisma__GisuSchoolClient<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    findFirstOrThrow<T extends GisuChapterFindFirstOrThrowArgs>(args?: SelectSubset<T, GisuChapterFindFirstOrThrowArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Find zero or more GisuSchools that matches the filter.
+     * Find zero or more GisuChapters that matches the filter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GisuSchoolFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @param {GisuChapterFindManyArgs} args - Arguments to filter and select certain fields only.
      * @example
-     * // Get all GisuSchools
-     * const gisuSchools = await prisma.gisuSchool.findMany()
+     * // Get all GisuChapters
+     * const gisuChapters = await prisma.gisuChapter.findMany()
      * 
-     * // Get first 10 GisuSchools
-     * const gisuSchools = await prisma.gisuSchool.findMany({ take: 10 })
+     * // Get first 10 GisuChapters
+     * const gisuChapters = await prisma.gisuChapter.findMany({ take: 10 })
      * 
      * // Only select the `id`
-     * const gisuSchoolWithIdOnly = await prisma.gisuSchool.findMany({ select: { id: true } })
+     * const gisuChapterWithIdOnly = await prisma.gisuChapter.findMany({ select: { id: true } })
      * 
      */
-    findMany<T extends GisuSchoolFindManyArgs>(args?: SelectSubset<T, GisuSchoolFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+    findMany<T extends GisuChapterFindManyArgs>(args?: SelectSubset<T, GisuChapterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
 
     /**
-     * Create a GisuSchool.
-     * @param {GisuSchoolCreateArgs} args - Arguments to create a GisuSchool.
+     * Create a GisuChapter.
+     * @param {GisuChapterCreateArgs} args - Arguments to create a GisuChapter.
      * @example
-     * // Create one GisuSchool
-     * const GisuSchool = await prisma.gisuSchool.create({
+     * // Create one GisuChapter
+     * const GisuChapter = await prisma.gisuChapter.create({
      *   data: {
-     *     // ... data to create a GisuSchool
+     *     // ... data to create a GisuChapter
      *   }
      * })
      * 
      */
-    create<T extends GisuSchoolCreateArgs>(args: SelectSubset<T, GisuSchoolCreateArgs<ExtArgs>>): Prisma__GisuSchoolClient<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    create<T extends GisuChapterCreateArgs>(args: SelectSubset<T, GisuChapterCreateArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Create many GisuSchools.
-     * @param {GisuSchoolCreateManyArgs} args - Arguments to create many GisuSchools.
+     * Create many GisuChapters.
+     * @param {GisuChapterCreateManyArgs} args - Arguments to create many GisuChapters.
      * @example
-     * // Create many GisuSchools
-     * const gisuSchool = await prisma.gisuSchool.createMany({
+     * // Create many GisuChapters
+     * const gisuChapter = await prisma.gisuChapter.createMany({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      *     
      */
-    createMany<T extends GisuSchoolCreateManyArgs>(args?: SelectSubset<T, GisuSchoolCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    createMany<T extends GisuChapterCreateManyArgs>(args?: SelectSubset<T, GisuChapterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Create many GisuSchools and returns the data saved in the database.
-     * @param {GisuSchoolCreateManyAndReturnArgs} args - Arguments to create many GisuSchools.
+     * Create many GisuChapters and returns the data saved in the database.
+     * @param {GisuChapterCreateManyAndReturnArgs} args - Arguments to create many GisuChapters.
      * @example
-     * // Create many GisuSchools
-     * const gisuSchool = await prisma.gisuSchool.createManyAndReturn({
+     * // Create many GisuChapters
+     * const gisuChapter = await prisma.gisuChapter.createManyAndReturn({
      *   data: [
      *     // ... provide data here
      *   ]
      * })
      * 
-     * // Create many GisuSchools and only return the `id`
-     * const gisuSchoolWithIdOnly = await prisma.gisuSchool.createManyAndReturn({
+     * // Create many GisuChapters and only return the `id`
+     * const gisuChapterWithIdOnly = await prisma.gisuChapter.createManyAndReturn({
      *   select: { id: true },
      *   data: [
      *     // ... provide data here
@@ -6466,28 +6561,28 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    createManyAndReturn<T extends GisuSchoolCreateManyAndReturnArgs>(args?: SelectSubset<T, GisuSchoolCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+    createManyAndReturn<T extends GisuChapterCreateManyAndReturnArgs>(args?: SelectSubset<T, GisuChapterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Delete a GisuSchool.
-     * @param {GisuSchoolDeleteArgs} args - Arguments to delete one GisuSchool.
+     * Delete a GisuChapter.
+     * @param {GisuChapterDeleteArgs} args - Arguments to delete one GisuChapter.
      * @example
-     * // Delete one GisuSchool
-     * const GisuSchool = await prisma.gisuSchool.delete({
+     * // Delete one GisuChapter
+     * const GisuChapter = await prisma.gisuChapter.delete({
      *   where: {
-     *     // ... filter to delete one GisuSchool
+     *     // ... filter to delete one GisuChapter
      *   }
      * })
      * 
      */
-    delete<T extends GisuSchoolDeleteArgs>(args: SelectSubset<T, GisuSchoolDeleteArgs<ExtArgs>>): Prisma__GisuSchoolClient<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    delete<T extends GisuChapterDeleteArgs>(args: SelectSubset<T, GisuChapterDeleteArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Update one GisuSchool.
-     * @param {GisuSchoolUpdateArgs} args - Arguments to update one GisuSchool.
+     * Update one GisuChapter.
+     * @param {GisuChapterUpdateArgs} args - Arguments to update one GisuChapter.
      * @example
-     * // Update one GisuSchool
-     * const gisuSchool = await prisma.gisuSchool.update({
+     * // Update one GisuChapter
+     * const gisuChapter = await prisma.gisuChapter.update({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6497,30 +6592,30 @@ export namespace Prisma {
      * })
      * 
      */
-    update<T extends GisuSchoolUpdateArgs>(args: SelectSubset<T, GisuSchoolUpdateArgs<ExtArgs>>): Prisma__GisuSchoolClient<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    update<T extends GisuChapterUpdateArgs>(args: SelectSubset<T, GisuChapterUpdateArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
     /**
-     * Delete zero or more GisuSchools.
-     * @param {GisuSchoolDeleteManyArgs} args - Arguments to filter GisuSchools to delete.
+     * Delete zero or more GisuChapters.
+     * @param {GisuChapterDeleteManyArgs} args - Arguments to filter GisuChapters to delete.
      * @example
-     * // Delete a few GisuSchools
-     * const { count } = await prisma.gisuSchool.deleteMany({
+     * // Delete a few GisuChapters
+     * const { count } = await prisma.gisuChapter.deleteMany({
      *   where: {
      *     // ... provide filter here
      *   }
      * })
      * 
      */
-    deleteMany<T extends GisuSchoolDeleteManyArgs>(args?: SelectSubset<T, GisuSchoolDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    deleteMany<T extends GisuChapterDeleteManyArgs>(args?: SelectSubset<T, GisuChapterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more GisuSchools.
+     * Update zero or more GisuChapters.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GisuSchoolUpdateManyArgs} args - Arguments to update one or more rows.
+     * @param {GisuChapterUpdateManyArgs} args - Arguments to update one or more rows.
      * @example
-     * // Update many GisuSchools
-     * const gisuSchool = await prisma.gisuSchool.updateMany({
+     * // Update many GisuChapters
+     * const gisuChapter = await prisma.gisuChapter.updateMany({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6530,14 +6625,14 @@ export namespace Prisma {
      * })
      * 
      */
-    updateMany<T extends GisuSchoolUpdateManyArgs>(args: SelectSubset<T, GisuSchoolUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+    updateMany<T extends GisuChapterUpdateManyArgs>(args: SelectSubset<T, GisuChapterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
 
     /**
-     * Update zero or more GisuSchools and returns the data updated in the database.
-     * @param {GisuSchoolUpdateManyAndReturnArgs} args - Arguments to update many GisuSchools.
+     * Update zero or more GisuChapters and returns the data updated in the database.
+     * @param {GisuChapterUpdateManyAndReturnArgs} args - Arguments to update many GisuChapters.
      * @example
-     * // Update many GisuSchools
-     * const gisuSchool = await prisma.gisuSchool.updateManyAndReturn({
+     * // Update many GisuChapters
+     * const gisuChapter = await prisma.gisuChapter.updateManyAndReturn({
      *   where: {
      *     // ... provide filter here
      *   },
@@ -6546,8 +6641,8 @@ export namespace Prisma {
      *   ]
      * })
      * 
-     * // Update zero or more GisuSchools and only return the `id`
-     * const gisuSchoolWithIdOnly = await prisma.gisuSchool.updateManyAndReturn({
+     * // Update zero or more GisuChapters and only return the `id`
+     * const gisuChapterWithIdOnly = await prisma.gisuChapter.updateManyAndReturn({
      *   select: { id: true },
      *   where: {
      *     // ... provide filter here
@@ -6560,56 +6655,56 @@ export namespace Prisma {
      * Read more here: https://pris.ly/d/null-undefined
      * 
      */
-    updateManyAndReturn<T extends GisuSchoolUpdateManyAndReturnArgs>(args: SelectSubset<T, GisuSchoolUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+    updateManyAndReturn<T extends GisuChapterUpdateManyAndReturnArgs>(args: SelectSubset<T, GisuChapterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
 
     /**
-     * Create or update one GisuSchool.
-     * @param {GisuSchoolUpsertArgs} args - Arguments to update or create a GisuSchool.
+     * Create or update one GisuChapter.
+     * @param {GisuChapterUpsertArgs} args - Arguments to update or create a GisuChapter.
      * @example
-     * // Update or create a GisuSchool
-     * const gisuSchool = await prisma.gisuSchool.upsert({
+     * // Update or create a GisuChapter
+     * const gisuChapter = await prisma.gisuChapter.upsert({
      *   create: {
-     *     // ... data to create a GisuSchool
+     *     // ... data to create a GisuChapter
      *   },
      *   update: {
      *     // ... in case it already exists, update
      *   },
      *   where: {
-     *     // ... the filter for the GisuSchool we want to update
+     *     // ... the filter for the GisuChapter we want to update
      *   }
      * })
      */
-    upsert<T extends GisuSchoolUpsertArgs>(args: SelectSubset<T, GisuSchoolUpsertArgs<ExtArgs>>): Prisma__GisuSchoolClient<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+    upsert<T extends GisuChapterUpsertArgs>(args: SelectSubset<T, GisuChapterUpsertArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
 
 
     /**
-     * Count the number of GisuSchools.
+     * Count the number of GisuChapters.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GisuSchoolCountArgs} args - Arguments to filter GisuSchools to count.
+     * @param {GisuChapterCountArgs} args - Arguments to filter GisuChapters to count.
      * @example
-     * // Count the number of GisuSchools
-     * const count = await prisma.gisuSchool.count({
+     * // Count the number of GisuChapters
+     * const count = await prisma.gisuChapter.count({
      *   where: {
-     *     // ... the filter for the GisuSchools we want to count
+     *     // ... the filter for the GisuChapters we want to count
      *   }
      * })
     **/
-    count<T extends GisuSchoolCountArgs>(
-      args?: Subset<T, GisuSchoolCountArgs>,
+    count<T extends GisuChapterCountArgs>(
+      args?: Subset<T, GisuChapterCountArgs>,
     ): Prisma.PrismaPromise<
       T extends $Utils.Record<'select', any>
         ? T['select'] extends true
           ? number
-          : GetScalarType<T['select'], GisuSchoolCountAggregateOutputType>
+          : GetScalarType<T['select'], GisuChapterCountAggregateOutputType>
         : number
     >
 
     /**
-     * Allows you to perform aggregations operations on a GisuSchool.
+     * Allows you to perform aggregations operations on a GisuChapter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GisuSchoolAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @param {GisuChapterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
      * @example
      * // Ordered by age ascending
      * // Where email contains prisma.io
@@ -6629,13 +6724,13 @@ export namespace Prisma {
      *   take: 10,
      * })
     **/
-    aggregate<T extends GisuSchoolAggregateArgs>(args: Subset<T, GisuSchoolAggregateArgs>): Prisma.PrismaPromise<GetGisuSchoolAggregateType<T>>
+    aggregate<T extends GisuChapterAggregateArgs>(args: Subset<T, GisuChapterAggregateArgs>): Prisma.PrismaPromise<GetGisuChapterAggregateType<T>>
 
     /**
-     * Group by GisuSchool.
+     * Group by GisuChapter.
      * Note, that providing `undefined` is treated as the value not being there.
      * Read more here: https://pris.ly/d/null-undefined
-     * @param {GisuSchoolGroupByArgs} args - Group by arguments.
+     * @param {GisuChapterGroupByArgs} args - Group by arguments.
      * @example
      * // Group by city, order by createdAt, get count
      * const result = await prisma.user.groupBy({
@@ -6650,14 +6745,14 @@ export namespace Prisma {
      * 
     **/
     groupBy<
-      T extends GisuSchoolGroupByArgs,
+      T extends GisuChapterGroupByArgs,
       HasSelectOrTake extends Or<
         Extends<'skip', Keys<T>>,
         Extends<'take', Keys<T>>
       >,
       OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: GisuSchoolGroupByArgs['orderBy'] }
-        : { orderBy?: GisuSchoolGroupByArgs['orderBy'] },
+        ? { orderBy: GisuChapterGroupByArgs['orderBy'] }
+        : { orderBy?: GisuChapterGroupByArgs['orderBy'] },
       OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
       ByFields extends MaybeTupleToUnion<T['by']>,
       ByValid extends Has<ByFields, OrderFields>,
@@ -6706,25 +6801,26 @@ export namespace Prisma {
             ? never
             : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
         }[OrderFields]
-    >(args: SubsetIntersection<T, GisuSchoolGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGisuSchoolGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+    >(args: SubsetIntersection<T, GisuChapterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGisuChapterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
   /**
-   * Fields of the GisuSchool model
+   * Fields of the GisuChapter model
    */
-  readonly fields: GisuSchoolFieldRefs;
+  readonly fields: GisuChapterFieldRefs;
   }
 
   /**
-   * The delegate class that acts as a "Promise-like" for GisuSchool.
+   * The delegate class that acts as a "Promise-like" for GisuChapter.
    * Why is this prefixed with `Prisma__`?
    * Because we want to prevent naming conflicts as mentioned in
    * https://github.com/prisma/prisma-client-js/issues/707
    */
-  export interface Prisma__GisuSchoolClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+  export interface Prisma__GisuChapterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     gisu<T extends GisuDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GisuDefaultArgs<ExtArgs>>): Prisma__GisuClient<$Result.GetResult<Prisma.$GisuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    school<T extends SchoolDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SchoolDefaultArgs<ExtArgs>>): Prisma__SchoolClient<$Result.GetResult<Prisma.$SchoolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    leader<T extends ChallengerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChallengerDefaultArgs<ExtArgs>>): Prisma__ChallengerClient<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    viceLeader<T extends GisuSchool$viceLeaderArgs<ExtArgs> = {}>(args?: Subset<T, GisuSchool$viceLeaderArgs<ExtArgs>>): Prisma__ChallengerClient<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    projects<T extends GisuChapter$projectsArgs<ExtArgs> = {}>(args?: Subset<T, GisuChapter$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    chapterMatchingRound<T extends GisuChapter$chapterMatchingRoundArgs<ExtArgs> = {}>(args?: Subset<T, GisuChapter$chapterMatchingRoundArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MatchingRoundPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    gisuChapterSchool<T extends GisuChapter$gisuChapterSchoolArgs<ExtArgs> = {}>(args?: Subset<T, GisuChapter$gisuChapterSchoolArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    gisuChapterChallenger<T extends GisuChapter$gisuChapterChallengerArgs<ExtArgs> = {}>(args?: Subset<T, GisuChapter$gisuChapterChallengerArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChallengerGisuPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6751,415 +6847,1668 @@ export namespace Prisma {
 
 
   /**
-   * Fields of the GisuSchool model
+   * Fields of the GisuChapter model
    */
-  interface GisuSchoolFieldRefs {
-    readonly id: FieldRef<"GisuSchool", 'BigInt'>
-    readonly gisuId: FieldRef<"GisuSchool", 'BigInt'>
-    readonly schoolId: FieldRef<"GisuSchool", 'BigInt'>
-    readonly leaderId: FieldRef<"GisuSchool", 'BigInt'>
-    readonly viceLeaderId: FieldRef<"GisuSchool", 'BigInt'>
-    readonly createdAt: FieldRef<"GisuSchool", 'DateTime'>
-    readonly updatedAt: FieldRef<"GisuSchool", 'DateTime'>
+  interface GisuChapterFieldRefs {
+    readonly id: FieldRef<"GisuChapter", 'BigInt'>
+    readonly name: FieldRef<"GisuChapter", 'String'>
+    readonly description: FieldRef<"GisuChapter", 'String'>
+    readonly gisuId: FieldRef<"GisuChapter", 'BigInt'>
+    readonly createdAt: FieldRef<"GisuChapter", 'DateTime'>
+    readonly updatedAt: FieldRef<"GisuChapter", 'DateTime'>
   }
     
 
   // Custom InputTypes
   /**
-   * GisuSchool findUnique
+   * GisuChapter findUnique
    */
-  export type GisuSchoolFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: GisuChapterSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the GisuChapter
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
+    include?: GisuChapterInclude<ExtArgs> | null
     /**
-     * Filter, which GisuSchool to fetch.
+     * Filter, which GisuChapter to fetch.
      */
-    where: GisuSchoolWhereUniqueInput
+    where: GisuChapterWhereUniqueInput
   }
 
   /**
-   * GisuSchool findUniqueOrThrow
+   * GisuChapter findUniqueOrThrow
    */
-  export type GisuSchoolFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: GisuChapterSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the GisuChapter
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
+    include?: GisuChapterInclude<ExtArgs> | null
     /**
-     * Filter, which GisuSchool to fetch.
+     * Filter, which GisuChapter to fetch.
      */
-    where: GisuSchoolWhereUniqueInput
+    where: GisuChapterWhereUniqueInput
   }
 
   /**
-   * GisuSchool findFirst
+   * GisuChapter findFirst
    */
-  export type GisuSchoolFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: GisuChapterSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the GisuChapter
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
+    include?: GisuChapterInclude<ExtArgs> | null
     /**
-     * Filter, which GisuSchool to fetch.
+     * Filter, which GisuChapter to fetch.
      */
-    where?: GisuSchoolWhereInput
+    where?: GisuChapterWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of GisuSchools to fetch.
+     * Determine the order of GisuChapters to fetch.
      */
-    orderBy?: GisuSchoolOrderByWithRelationInput | GisuSchoolOrderByWithRelationInput[]
+    orderBy?: GisuChapterOrderByWithRelationInput | GisuChapterOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for GisuSchools.
+     * Sets the position for searching for GisuChapters.
      */
-    cursor?: GisuSchoolWhereUniqueInput
+    cursor?: GisuChapterWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` GisuSchools from the position of the cursor.
+     * Take `±n` GisuChapters from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` GisuSchools.
+     * Skip the first `n` GisuChapters.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of GisuSchools.
+     * Filter by unique combinations of GisuChapters.
      */
-    distinct?: GisuSchoolScalarFieldEnum | GisuSchoolScalarFieldEnum[]
+    distinct?: GisuChapterScalarFieldEnum | GisuChapterScalarFieldEnum[]
   }
 
   /**
-   * GisuSchool findFirstOrThrow
+   * GisuChapter findFirstOrThrow
    */
-  export type GisuSchoolFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: GisuChapterSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the GisuChapter
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
+    include?: GisuChapterInclude<ExtArgs> | null
     /**
-     * Filter, which GisuSchool to fetch.
+     * Filter, which GisuChapter to fetch.
      */
-    where?: GisuSchoolWhereInput
+    where?: GisuChapterWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of GisuSchools to fetch.
+     * Determine the order of GisuChapters to fetch.
      */
-    orderBy?: GisuSchoolOrderByWithRelationInput | GisuSchoolOrderByWithRelationInput[]
+    orderBy?: GisuChapterOrderByWithRelationInput | GisuChapterOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for searching for GisuSchools.
+     * Sets the position for searching for GisuChapters.
      */
-    cursor?: GisuSchoolWhereUniqueInput
+    cursor?: GisuChapterWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` GisuSchools from the position of the cursor.
+     * Take `±n` GisuChapters from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` GisuSchools.
+     * Skip the first `n` GisuChapters.
      */
     skip?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
      * 
-     * Filter by unique combinations of GisuSchools.
+     * Filter by unique combinations of GisuChapters.
      */
-    distinct?: GisuSchoolScalarFieldEnum | GisuSchoolScalarFieldEnum[]
+    distinct?: GisuChapterScalarFieldEnum | GisuChapterScalarFieldEnum[]
   }
 
   /**
-   * GisuSchool findMany
+   * GisuChapter findMany
    */
-  export type GisuSchoolFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: GisuChapterSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the GisuChapter
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
+    include?: GisuChapterInclude<ExtArgs> | null
     /**
-     * Filter, which GisuSchools to fetch.
+     * Filter, which GisuChapters to fetch.
      */
-    where?: GisuSchoolWhereInput
+    where?: GisuChapterWhereInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
      * 
-     * Determine the order of GisuSchools to fetch.
+     * Determine the order of GisuChapters to fetch.
      */
-    orderBy?: GisuSchoolOrderByWithRelationInput | GisuSchoolOrderByWithRelationInput[]
+    orderBy?: GisuChapterOrderByWithRelationInput | GisuChapterOrderByWithRelationInput[]
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
      * 
-     * Sets the position for listing GisuSchools.
+     * Sets the position for listing GisuChapters.
      */
-    cursor?: GisuSchoolWhereUniqueInput
+    cursor?: GisuChapterWhereUniqueInput
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Take `±n` GisuSchools from the position of the cursor.
+     * Take `±n` GisuChapters from the position of the cursor.
      */
     take?: number
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
      * 
-     * Skip the first `n` GisuSchools.
+     * Skip the first `n` GisuChapters.
      */
     skip?: number
-    distinct?: GisuSchoolScalarFieldEnum | GisuSchoolScalarFieldEnum[]
+    distinct?: GisuChapterScalarFieldEnum | GisuChapterScalarFieldEnum[]
   }
 
   /**
-   * GisuSchool create
+   * GisuChapter create
    */
-  export type GisuSchoolCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: GisuChapterSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the GisuChapter
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
+    include?: GisuChapterInclude<ExtArgs> | null
     /**
-     * The data needed to create a GisuSchool.
+     * The data needed to create a GisuChapter.
      */
-    data: XOR<GisuSchoolCreateInput, GisuSchoolUncheckedCreateInput>
+    data: XOR<GisuChapterCreateInput, GisuChapterUncheckedCreateInput>
   }
 
   /**
-   * GisuSchool createMany
+   * GisuChapter createMany
    */
-  export type GisuSchoolCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to create many GisuSchools.
+     * The data used to create many GisuChapters.
      */
-    data: GisuSchoolCreateManyInput | GisuSchoolCreateManyInput[]
+    data: GisuChapterCreateManyInput | GisuChapterCreateManyInput[]
     skipDuplicates?: boolean
   }
 
   /**
-   * GisuSchool createManyAndReturn
+   * GisuChapter createManyAndReturn
    */
-  export type GisuSchoolCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: GisuSchoolSelectCreateManyAndReturn<ExtArgs> | null
+    select?: GisuChapterSelectCreateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the GisuChapter
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
-     * The data used to create many GisuSchools.
+     * The data used to create many GisuChapters.
      */
-    data: GisuSchoolCreateManyInput | GisuSchoolCreateManyInput[]
+    data: GisuChapterCreateManyInput | GisuChapterCreateManyInput[]
     skipDuplicates?: boolean
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolIncludeCreateManyAndReturn<ExtArgs> | null
+    include?: GisuChapterIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * GisuSchool update
+   * GisuChapter update
    */
-  export type GisuSchoolUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: GisuChapterSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the GisuChapter
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
+    include?: GisuChapterInclude<ExtArgs> | null
     /**
-     * The data needed to update a GisuSchool.
+     * The data needed to update a GisuChapter.
      */
-    data: XOR<GisuSchoolUpdateInput, GisuSchoolUncheckedUpdateInput>
+    data: XOR<GisuChapterUpdateInput, GisuChapterUncheckedUpdateInput>
     /**
-     * Choose, which GisuSchool to update.
+     * Choose, which GisuChapter to update.
      */
-    where: GisuSchoolWhereUniqueInput
+    where: GisuChapterWhereUniqueInput
   }
 
   /**
-   * GisuSchool updateMany
+   * GisuChapter updateMany
    */
-  export type GisuSchoolUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * The data used to update GisuSchools.
+     * The data used to update GisuChapters.
      */
-    data: XOR<GisuSchoolUpdateManyMutationInput, GisuSchoolUncheckedUpdateManyInput>
+    data: XOR<GisuChapterUpdateManyMutationInput, GisuChapterUncheckedUpdateManyInput>
     /**
-     * Filter which GisuSchools to update
+     * Filter which GisuChapters to update
      */
-    where?: GisuSchoolWhereInput
+    where?: GisuChapterWhereInput
     /**
-     * Limit how many GisuSchools to update.
+     * Limit how many GisuChapters to update.
      */
     limit?: number
   }
 
   /**
-   * GisuSchool updateManyAndReturn
+   * GisuChapter updateManyAndReturn
    */
-  export type GisuSchoolUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: GisuSchoolSelectUpdateManyAndReturn<ExtArgs> | null
+    select?: GisuChapterSelectUpdateManyAndReturn<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the GisuChapter
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
-     * The data used to update GisuSchools.
+     * The data used to update GisuChapters.
      */
-    data: XOR<GisuSchoolUpdateManyMutationInput, GisuSchoolUncheckedUpdateManyInput>
+    data: XOR<GisuChapterUpdateManyMutationInput, GisuChapterUncheckedUpdateManyInput>
     /**
-     * Filter which GisuSchools to update
+     * Filter which GisuChapters to update
      */
-    where?: GisuSchoolWhereInput
+    where?: GisuChapterWhereInput
     /**
-     * Limit how many GisuSchools to update.
+     * Limit how many GisuChapters to update.
      */
     limit?: number
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolIncludeUpdateManyAndReturn<ExtArgs> | null
+    include?: GisuChapterIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
-   * GisuSchool upsert
+   * GisuChapter upsert
    */
-  export type GisuSchoolUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: GisuChapterSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the GisuChapter
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
+    include?: GisuChapterInclude<ExtArgs> | null
     /**
-     * The filter to search for the GisuSchool to update in case it exists.
+     * The filter to search for the GisuChapter to update in case it exists.
      */
-    where: GisuSchoolWhereUniqueInput
+    where: GisuChapterWhereUniqueInput
     /**
-     * In case the GisuSchool found by the `where` argument doesn't exist, create a new GisuSchool with this data.
+     * In case the GisuChapter found by the `where` argument doesn't exist, create a new GisuChapter with this data.
      */
-    create: XOR<GisuSchoolCreateInput, GisuSchoolUncheckedCreateInput>
+    create: XOR<GisuChapterCreateInput, GisuChapterUncheckedCreateInput>
     /**
-     * In case the GisuSchool was found with the provided `where` argument, update it with this data.
+     * In case the GisuChapter was found with the provided `where` argument, update it with this data.
      */
-    update: XOR<GisuSchoolUpdateInput, GisuSchoolUncheckedUpdateInput>
+    update: XOR<GisuChapterUpdateInput, GisuChapterUncheckedUpdateInput>
   }
 
   /**
-   * GisuSchool delete
+   * GisuChapter delete
    */
-  export type GisuSchoolDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the GisuChapter
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: GisuChapterSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the GisuChapter
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: GisuChapterOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
+    include?: GisuChapterInclude<ExtArgs> | null
     /**
-     * Filter which GisuSchool to delete.
+     * Filter which GisuChapter to delete.
      */
-    where: GisuSchoolWhereUniqueInput
+    where: GisuChapterWhereUniqueInput
   }
 
   /**
-   * GisuSchool deleteMany
+   * GisuChapter deleteMany
    */
-  export type GisuSchoolDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Filter which GisuSchools to delete
+     * Filter which GisuChapters to delete
      */
-    where?: GisuSchoolWhereInput
+    where?: GisuChapterWhereInput
     /**
-     * Limit how many GisuSchools to delete.
+     * Limit how many GisuChapters to delete.
      */
     limit?: number
   }
 
   /**
-   * GisuSchool.viceLeader
+   * GisuChapter.projects
    */
-  export type GisuSchool$viceLeaderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type GisuChapter$projectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Project
+     */
+    select?: ProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Project
+     */
+    omit?: ProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectInclude<ExtArgs> | null
+    where?: ProjectWhereInput
+    orderBy?: ProjectOrderByWithRelationInput | ProjectOrderByWithRelationInput[]
+    cursor?: ProjectWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProjectScalarFieldEnum | ProjectScalarFieldEnum[]
+  }
+
+  /**
+   * GisuChapter.chapterMatchingRound
+   */
+  export type GisuChapter$chapterMatchingRoundArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the MatchingRound
+     */
+    select?: MatchingRoundSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MatchingRound
+     */
+    omit?: MatchingRoundOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MatchingRoundInclude<ExtArgs> | null
+    where?: MatchingRoundWhereInput
+    orderBy?: MatchingRoundOrderByWithRelationInput | MatchingRoundOrderByWithRelationInput[]
+    cursor?: MatchingRoundWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MatchingRoundScalarFieldEnum | MatchingRoundScalarFieldEnum[]
+  }
+
+  /**
+   * GisuChapter.gisuChapterSchool
+   */
+  export type GisuChapter$gisuChapterSchoolArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    where?: ChapterSchoolWhereInput
+    orderBy?: ChapterSchoolOrderByWithRelationInput | ChapterSchoolOrderByWithRelationInput[]
+    cursor?: ChapterSchoolWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ChapterSchoolScalarFieldEnum | ChapterSchoolScalarFieldEnum[]
+  }
+
+  /**
+   * GisuChapter.gisuChapterChallenger
+   */
+  export type GisuChapter$gisuChapterChallengerArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChallengerGisu
+     */
+    select?: ChallengerGisuSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChallengerGisu
+     */
+    omit?: ChallengerGisuOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChallengerGisuInclude<ExtArgs> | null
+    where?: ChallengerGisuWhereInput
+    orderBy?: ChallengerGisuOrderByWithRelationInput | ChallengerGisuOrderByWithRelationInput[]
+    cursor?: ChallengerGisuWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ChallengerGisuScalarFieldEnum | ChallengerGisuScalarFieldEnum[]
+  }
+
+  /**
+   * GisuChapter without action
+   */
+  export type GisuChapterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the GisuChapter
+     */
+    select?: GisuChapterSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the GisuChapter
+     */
+    omit?: GisuChapterOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: GisuChapterInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ChapterSchool
+   */
+
+  export type AggregateChapterSchool = {
+    _count: ChapterSchoolCountAggregateOutputType | null
+    _avg: ChapterSchoolAvgAggregateOutputType | null
+    _sum: ChapterSchoolSumAggregateOutputType | null
+    _min: ChapterSchoolMinAggregateOutputType | null
+    _max: ChapterSchoolMaxAggregateOutputType | null
+  }
+
+  export type ChapterSchoolAvgAggregateOutputType = {
+    id: number | null
+    chapterId: number | null
+    schoolId: number | null
+    leaderId: number | null
+    viceLeaderId: number | null
+  }
+
+  export type ChapterSchoolSumAggregateOutputType = {
+    id: bigint | null
+    chapterId: bigint | null
+    schoolId: bigint | null
+    leaderId: bigint | null
+    viceLeaderId: bigint | null
+  }
+
+  export type ChapterSchoolMinAggregateOutputType = {
+    id: bigint | null
+    chapterId: bigint | null
+    schoolId: bigint | null
+    leaderId: bigint | null
+    viceLeaderId: bigint | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ChapterSchoolMaxAggregateOutputType = {
+    id: bigint | null
+    chapterId: bigint | null
+    schoolId: bigint | null
+    leaderId: bigint | null
+    viceLeaderId: bigint | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ChapterSchoolCountAggregateOutputType = {
+    id: number
+    chapterId: number
+    schoolId: number
+    leaderId: number
+    viceLeaderId: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ChapterSchoolAvgAggregateInputType = {
+    id?: true
+    chapterId?: true
+    schoolId?: true
+    leaderId?: true
+    viceLeaderId?: true
+  }
+
+  export type ChapterSchoolSumAggregateInputType = {
+    id?: true
+    chapterId?: true
+    schoolId?: true
+    leaderId?: true
+    viceLeaderId?: true
+  }
+
+  export type ChapterSchoolMinAggregateInputType = {
+    id?: true
+    chapterId?: true
+    schoolId?: true
+    leaderId?: true
+    viceLeaderId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ChapterSchoolMaxAggregateInputType = {
+    id?: true
+    chapterId?: true
+    schoolId?: true
+    leaderId?: true
+    viceLeaderId?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ChapterSchoolCountAggregateInputType = {
+    id?: true
+    chapterId?: true
+    schoolId?: true
+    leaderId?: true
+    viceLeaderId?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ChapterSchoolAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ChapterSchool to aggregate.
+     */
+    where?: ChapterSchoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChapterSchools to fetch.
+     */
+    orderBy?: ChapterSchoolOrderByWithRelationInput | ChapterSchoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ChapterSchoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChapterSchools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChapterSchools.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ChapterSchools
+    **/
+    _count?: true | ChapterSchoolCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ChapterSchoolAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ChapterSchoolSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ChapterSchoolMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ChapterSchoolMaxAggregateInputType
+  }
+
+  export type GetChapterSchoolAggregateType<T extends ChapterSchoolAggregateArgs> = {
+        [P in keyof T & keyof AggregateChapterSchool]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateChapterSchool[P]>
+      : GetScalarType<T[P], AggregateChapterSchool[P]>
+  }
+
+
+
+
+  export type ChapterSchoolGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ChapterSchoolWhereInput
+    orderBy?: ChapterSchoolOrderByWithAggregationInput | ChapterSchoolOrderByWithAggregationInput[]
+    by: ChapterSchoolScalarFieldEnum[] | ChapterSchoolScalarFieldEnum
+    having?: ChapterSchoolScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ChapterSchoolCountAggregateInputType | true
+    _avg?: ChapterSchoolAvgAggregateInputType
+    _sum?: ChapterSchoolSumAggregateInputType
+    _min?: ChapterSchoolMinAggregateInputType
+    _max?: ChapterSchoolMaxAggregateInputType
+  }
+
+  export type ChapterSchoolGroupByOutputType = {
+    id: bigint
+    chapterId: bigint
+    schoolId: bigint
+    leaderId: bigint | null
+    viceLeaderId: bigint | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ChapterSchoolCountAggregateOutputType | null
+    _avg: ChapterSchoolAvgAggregateOutputType | null
+    _sum: ChapterSchoolSumAggregateOutputType | null
+    _min: ChapterSchoolMinAggregateOutputType | null
+    _max: ChapterSchoolMaxAggregateOutputType | null
+  }
+
+  type GetChapterSchoolGroupByPayload<T extends ChapterSchoolGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ChapterSchoolGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ChapterSchoolGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ChapterSchoolGroupByOutputType[P]>
+            : GetScalarType<T[P], ChapterSchoolGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ChapterSchoolSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    chapterId?: boolean
+    schoolId?: boolean
+    leaderId?: boolean
+    viceLeaderId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+    leader?: boolean | ChapterSchool$leaderArgs<ExtArgs>
+    viceLeader?: boolean | ChapterSchool$viceLeaderArgs<ExtArgs>
+  }, ExtArgs["result"]["chapterSchool"]>
+
+  export type ChapterSchoolSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    chapterId?: boolean
+    schoolId?: boolean
+    leaderId?: boolean
+    viceLeaderId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+    leader?: boolean | ChapterSchool$leaderArgs<ExtArgs>
+    viceLeader?: boolean | ChapterSchool$viceLeaderArgs<ExtArgs>
+  }, ExtArgs["result"]["chapterSchool"]>
+
+  export type ChapterSchoolSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    chapterId?: boolean
+    schoolId?: boolean
+    leaderId?: boolean
+    viceLeaderId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+    leader?: boolean | ChapterSchool$leaderArgs<ExtArgs>
+    viceLeader?: boolean | ChapterSchool$viceLeaderArgs<ExtArgs>
+  }, ExtArgs["result"]["chapterSchool"]>
+
+  export type ChapterSchoolSelectScalar = {
+    id?: boolean
+    chapterId?: boolean
+    schoolId?: boolean
+    leaderId?: boolean
+    viceLeaderId?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ChapterSchoolOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "chapterId" | "schoolId" | "leaderId" | "viceLeaderId" | "createdAt" | "updatedAt", ExtArgs["result"]["chapterSchool"]>
+  export type ChapterSchoolInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+    leader?: boolean | ChapterSchool$leaderArgs<ExtArgs>
+    viceLeader?: boolean | ChapterSchool$viceLeaderArgs<ExtArgs>
+  }
+  export type ChapterSchoolIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+    leader?: boolean | ChapterSchool$leaderArgs<ExtArgs>
+    viceLeader?: boolean | ChapterSchool$viceLeaderArgs<ExtArgs>
+  }
+  export type ChapterSchoolIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
+    school?: boolean | SchoolDefaultArgs<ExtArgs>
+    leader?: boolean | ChapterSchool$leaderArgs<ExtArgs>
+    viceLeader?: boolean | ChapterSchool$viceLeaderArgs<ExtArgs>
+  }
+
+  export type $ChapterSchoolPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ChapterSchool"
+    objects: {
+      chapter: Prisma.$GisuChapterPayload<ExtArgs>
+      school: Prisma.$SchoolPayload<ExtArgs>
+      leader: Prisma.$ChallengerPayload<ExtArgs> | null
+      viceLeader: Prisma.$ChallengerPayload<ExtArgs> | null
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: bigint
+      chapterId: bigint
+      schoolId: bigint
+      leaderId: bigint | null
+      viceLeaderId: bigint | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["chapterSchool"]>
+    composites: {}
+  }
+
+  type ChapterSchoolGetPayload<S extends boolean | null | undefined | ChapterSchoolDefaultArgs> = $Result.GetResult<Prisma.$ChapterSchoolPayload, S>
+
+  type ChapterSchoolCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ChapterSchoolFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ChapterSchoolCountAggregateInputType | true
+    }
+
+  export interface ChapterSchoolDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ChapterSchool'], meta: { name: 'ChapterSchool' } }
+    /**
+     * Find zero or one ChapterSchool that matches the filter.
+     * @param {ChapterSchoolFindUniqueArgs} args - Arguments to find a ChapterSchool
+     * @example
+     * // Get one ChapterSchool
+     * const chapterSchool = await prisma.chapterSchool.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ChapterSchoolFindUniqueArgs>(args: SelectSubset<T, ChapterSchoolFindUniqueArgs<ExtArgs>>): Prisma__ChapterSchoolClient<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ChapterSchool that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ChapterSchoolFindUniqueOrThrowArgs} args - Arguments to find a ChapterSchool
+     * @example
+     * // Get one ChapterSchool
+     * const chapterSchool = await prisma.chapterSchool.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ChapterSchoolFindUniqueOrThrowArgs>(args: SelectSubset<T, ChapterSchoolFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ChapterSchoolClient<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ChapterSchool that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterSchoolFindFirstArgs} args - Arguments to find a ChapterSchool
+     * @example
+     * // Get one ChapterSchool
+     * const chapterSchool = await prisma.chapterSchool.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ChapterSchoolFindFirstArgs>(args?: SelectSubset<T, ChapterSchoolFindFirstArgs<ExtArgs>>): Prisma__ChapterSchoolClient<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ChapterSchool that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterSchoolFindFirstOrThrowArgs} args - Arguments to find a ChapterSchool
+     * @example
+     * // Get one ChapterSchool
+     * const chapterSchool = await prisma.chapterSchool.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ChapterSchoolFindFirstOrThrowArgs>(args?: SelectSubset<T, ChapterSchoolFindFirstOrThrowArgs<ExtArgs>>): Prisma__ChapterSchoolClient<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ChapterSchools that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterSchoolFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ChapterSchools
+     * const chapterSchools = await prisma.chapterSchool.findMany()
+     * 
+     * // Get first 10 ChapterSchools
+     * const chapterSchools = await prisma.chapterSchool.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const chapterSchoolWithIdOnly = await prisma.chapterSchool.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ChapterSchoolFindManyArgs>(args?: SelectSubset<T, ChapterSchoolFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ChapterSchool.
+     * @param {ChapterSchoolCreateArgs} args - Arguments to create a ChapterSchool.
+     * @example
+     * // Create one ChapterSchool
+     * const ChapterSchool = await prisma.chapterSchool.create({
+     *   data: {
+     *     // ... data to create a ChapterSchool
+     *   }
+     * })
+     * 
+     */
+    create<T extends ChapterSchoolCreateArgs>(args: SelectSubset<T, ChapterSchoolCreateArgs<ExtArgs>>): Prisma__ChapterSchoolClient<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ChapterSchools.
+     * @param {ChapterSchoolCreateManyArgs} args - Arguments to create many ChapterSchools.
+     * @example
+     * // Create many ChapterSchools
+     * const chapterSchool = await prisma.chapterSchool.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ChapterSchoolCreateManyArgs>(args?: SelectSubset<T, ChapterSchoolCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ChapterSchools and returns the data saved in the database.
+     * @param {ChapterSchoolCreateManyAndReturnArgs} args - Arguments to create many ChapterSchools.
+     * @example
+     * // Create many ChapterSchools
+     * const chapterSchool = await prisma.chapterSchool.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ChapterSchools and only return the `id`
+     * const chapterSchoolWithIdOnly = await prisma.chapterSchool.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ChapterSchoolCreateManyAndReturnArgs>(args?: SelectSubset<T, ChapterSchoolCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ChapterSchool.
+     * @param {ChapterSchoolDeleteArgs} args - Arguments to delete one ChapterSchool.
+     * @example
+     * // Delete one ChapterSchool
+     * const ChapterSchool = await prisma.chapterSchool.delete({
+     *   where: {
+     *     // ... filter to delete one ChapterSchool
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ChapterSchoolDeleteArgs>(args: SelectSubset<T, ChapterSchoolDeleteArgs<ExtArgs>>): Prisma__ChapterSchoolClient<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ChapterSchool.
+     * @param {ChapterSchoolUpdateArgs} args - Arguments to update one ChapterSchool.
+     * @example
+     * // Update one ChapterSchool
+     * const chapterSchool = await prisma.chapterSchool.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ChapterSchoolUpdateArgs>(args: SelectSubset<T, ChapterSchoolUpdateArgs<ExtArgs>>): Prisma__ChapterSchoolClient<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ChapterSchools.
+     * @param {ChapterSchoolDeleteManyArgs} args - Arguments to filter ChapterSchools to delete.
+     * @example
+     * // Delete a few ChapterSchools
+     * const { count } = await prisma.chapterSchool.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ChapterSchoolDeleteManyArgs>(args?: SelectSubset<T, ChapterSchoolDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ChapterSchools.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterSchoolUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ChapterSchools
+     * const chapterSchool = await prisma.chapterSchool.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ChapterSchoolUpdateManyArgs>(args: SelectSubset<T, ChapterSchoolUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ChapterSchools and returns the data updated in the database.
+     * @param {ChapterSchoolUpdateManyAndReturnArgs} args - Arguments to update many ChapterSchools.
+     * @example
+     * // Update many ChapterSchools
+     * const chapterSchool = await prisma.chapterSchool.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ChapterSchools and only return the `id`
+     * const chapterSchoolWithIdOnly = await prisma.chapterSchool.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ChapterSchoolUpdateManyAndReturnArgs>(args: SelectSubset<T, ChapterSchoolUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ChapterSchool.
+     * @param {ChapterSchoolUpsertArgs} args - Arguments to update or create a ChapterSchool.
+     * @example
+     * // Update or create a ChapterSchool
+     * const chapterSchool = await prisma.chapterSchool.upsert({
+     *   create: {
+     *     // ... data to create a ChapterSchool
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ChapterSchool we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ChapterSchoolUpsertArgs>(args: SelectSubset<T, ChapterSchoolUpsertArgs<ExtArgs>>): Prisma__ChapterSchoolClient<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ChapterSchools.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterSchoolCountArgs} args - Arguments to filter ChapterSchools to count.
+     * @example
+     * // Count the number of ChapterSchools
+     * const count = await prisma.chapterSchool.count({
+     *   where: {
+     *     // ... the filter for the ChapterSchools we want to count
+     *   }
+     * })
+    **/
+    count<T extends ChapterSchoolCountArgs>(
+      args?: Subset<T, ChapterSchoolCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ChapterSchoolCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ChapterSchool.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterSchoolAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ChapterSchoolAggregateArgs>(args: Subset<T, ChapterSchoolAggregateArgs>): Prisma.PrismaPromise<GetChapterSchoolAggregateType<T>>
+
+    /**
+     * Group by ChapterSchool.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ChapterSchoolGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ChapterSchoolGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ChapterSchoolGroupByArgs['orderBy'] }
+        : { orderBy?: ChapterSchoolGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ChapterSchoolGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetChapterSchoolGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ChapterSchool model
+   */
+  readonly fields: ChapterSchoolFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ChapterSchool.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ChapterSchoolClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    chapter<T extends GisuChapterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GisuChapterDefaultArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    school<T extends SchoolDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SchoolDefaultArgs<ExtArgs>>): Prisma__SchoolClient<$Result.GetResult<Prisma.$SchoolPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    leader<T extends ChapterSchool$leaderArgs<ExtArgs> = {}>(args?: Subset<T, ChapterSchool$leaderArgs<ExtArgs>>): Prisma__ChallengerClient<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    viceLeader<T extends ChapterSchool$viceLeaderArgs<ExtArgs> = {}>(args?: Subset<T, ChapterSchool$viceLeaderArgs<ExtArgs>>): Prisma__ChallengerClient<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ChapterSchool model
+   */
+  interface ChapterSchoolFieldRefs {
+    readonly id: FieldRef<"ChapterSchool", 'BigInt'>
+    readonly chapterId: FieldRef<"ChapterSchool", 'BigInt'>
+    readonly schoolId: FieldRef<"ChapterSchool", 'BigInt'>
+    readonly leaderId: FieldRef<"ChapterSchool", 'BigInt'>
+    readonly viceLeaderId: FieldRef<"ChapterSchool", 'BigInt'>
+    readonly createdAt: FieldRef<"ChapterSchool", 'DateTime'>
+    readonly updatedAt: FieldRef<"ChapterSchool", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ChapterSchool findUnique
+   */
+  export type ChapterSchoolFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    /**
+     * Filter, which ChapterSchool to fetch.
+     */
+    where: ChapterSchoolWhereUniqueInput
+  }
+
+  /**
+   * ChapterSchool findUniqueOrThrow
+   */
+  export type ChapterSchoolFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    /**
+     * Filter, which ChapterSchool to fetch.
+     */
+    where: ChapterSchoolWhereUniqueInput
+  }
+
+  /**
+   * ChapterSchool findFirst
+   */
+  export type ChapterSchoolFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    /**
+     * Filter, which ChapterSchool to fetch.
+     */
+    where?: ChapterSchoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChapterSchools to fetch.
+     */
+    orderBy?: ChapterSchoolOrderByWithRelationInput | ChapterSchoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ChapterSchools.
+     */
+    cursor?: ChapterSchoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChapterSchools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChapterSchools.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ChapterSchools.
+     */
+    distinct?: ChapterSchoolScalarFieldEnum | ChapterSchoolScalarFieldEnum[]
+  }
+
+  /**
+   * ChapterSchool findFirstOrThrow
+   */
+  export type ChapterSchoolFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    /**
+     * Filter, which ChapterSchool to fetch.
+     */
+    where?: ChapterSchoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChapterSchools to fetch.
+     */
+    orderBy?: ChapterSchoolOrderByWithRelationInput | ChapterSchoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ChapterSchools.
+     */
+    cursor?: ChapterSchoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChapterSchools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChapterSchools.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ChapterSchools.
+     */
+    distinct?: ChapterSchoolScalarFieldEnum | ChapterSchoolScalarFieldEnum[]
+  }
+
+  /**
+   * ChapterSchool findMany
+   */
+  export type ChapterSchoolFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    /**
+     * Filter, which ChapterSchools to fetch.
+     */
+    where?: ChapterSchoolWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ChapterSchools to fetch.
+     */
+    orderBy?: ChapterSchoolOrderByWithRelationInput | ChapterSchoolOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ChapterSchools.
+     */
+    cursor?: ChapterSchoolWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ChapterSchools from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ChapterSchools.
+     */
+    skip?: number
+    distinct?: ChapterSchoolScalarFieldEnum | ChapterSchoolScalarFieldEnum[]
+  }
+
+  /**
+   * ChapterSchool create
+   */
+  export type ChapterSchoolCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ChapterSchool.
+     */
+    data: XOR<ChapterSchoolCreateInput, ChapterSchoolUncheckedCreateInput>
+  }
+
+  /**
+   * ChapterSchool createMany
+   */
+  export type ChapterSchoolCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ChapterSchools.
+     */
+    data: ChapterSchoolCreateManyInput | ChapterSchoolCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ChapterSchool createManyAndReturn
+   */
+  export type ChapterSchoolCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * The data used to create many ChapterSchools.
+     */
+    data: ChapterSchoolCreateManyInput | ChapterSchoolCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ChapterSchool update
+   */
+  export type ChapterSchoolUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ChapterSchool.
+     */
+    data: XOR<ChapterSchoolUpdateInput, ChapterSchoolUncheckedUpdateInput>
+    /**
+     * Choose, which ChapterSchool to update.
+     */
+    where: ChapterSchoolWhereUniqueInput
+  }
+
+  /**
+   * ChapterSchool updateMany
+   */
+  export type ChapterSchoolUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ChapterSchools.
+     */
+    data: XOR<ChapterSchoolUpdateManyMutationInput, ChapterSchoolUncheckedUpdateManyInput>
+    /**
+     * Filter which ChapterSchools to update
+     */
+    where?: ChapterSchoolWhereInput
+    /**
+     * Limit how many ChapterSchools to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ChapterSchool updateManyAndReturn
+   */
+  export type ChapterSchoolUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * The data used to update ChapterSchools.
+     */
+    data: XOR<ChapterSchoolUpdateManyMutationInput, ChapterSchoolUncheckedUpdateManyInput>
+    /**
+     * Filter which ChapterSchools to update
+     */
+    where?: ChapterSchoolWhereInput
+    /**
+     * Limit how many ChapterSchools to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ChapterSchool upsert
+   */
+  export type ChapterSchoolUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ChapterSchool to update in case it exists.
+     */
+    where: ChapterSchoolWhereUniqueInput
+    /**
+     * In case the ChapterSchool found by the `where` argument doesn't exist, create a new ChapterSchool with this data.
+     */
+    create: XOR<ChapterSchoolCreateInput, ChapterSchoolUncheckedCreateInput>
+    /**
+     * In case the ChapterSchool was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ChapterSchoolUpdateInput, ChapterSchoolUncheckedUpdateInput>
+  }
+
+  /**
+   * ChapterSchool delete
+   */
+  export type ChapterSchoolDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    /**
+     * Filter which ChapterSchool to delete.
+     */
+    where: ChapterSchoolWhereUniqueInput
+  }
+
+  /**
+   * ChapterSchool deleteMany
+   */
+  export type ChapterSchoolDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ChapterSchools to delete
+     */
+    where?: ChapterSchoolWhereInput
+    /**
+     * Limit how many ChapterSchools to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ChapterSchool.leader
+   */
+  export type ChapterSchool$leaderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
      * Select specific fields to fetch from the Challenger
      */
@@ -7176,21 +8525,40 @@ export namespace Prisma {
   }
 
   /**
-   * GisuSchool without action
+   * ChapterSchool.viceLeader
    */
-  export type GisuSchoolDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type ChapterSchool$viceLeaderArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the Challenger
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: ChallengerSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the Challenger
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: ChallengerOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
+    include?: ChallengerInclude<ExtArgs> | null
+    where?: ChallengerWhereInput
+  }
+
+  /**
+   * ChapterSchool without action
+   */
+  export type ChapterSchoolDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ChapterSchool
+     */
+    select?: ChapterSchoolSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ChapterSchool
+     */
+    omit?: ChapterSchoolOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ChapterSchoolInclude<ExtArgs> | null
   }
 
 
@@ -7445,7 +8813,7 @@ export namespace Prisma {
     name: "School"
     objects: {
       challengers: Prisma.$ChallengerPayload<ExtArgs>[]
-      gisuSchools: Prisma.$GisuSchoolPayload<ExtArgs>[]
+      gisuSchools: Prisma.$ChapterSchoolPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: bigint
@@ -7849,7 +9217,7 @@ export namespace Prisma {
   export interface Prisma__SchoolClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     challengers<T extends School$challengersArgs<ExtArgs> = {}>(args?: Subset<T, School$challengersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChallengerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    gisuSchools<T extends School$gisuSchoolsArgs<ExtArgs> = {}>(args?: Subset<T, School$gisuSchoolsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GisuSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    gisuSchools<T extends School$gisuSchoolsArgs<ExtArgs> = {}>(args?: Subset<T, School$gisuSchoolsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterSchoolPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8301,23 +9669,23 @@ export namespace Prisma {
    */
   export type School$gisuSchoolsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the GisuSchool
+     * Select specific fields to fetch from the ChapterSchool
      */
-    select?: GisuSchoolSelect<ExtArgs> | null
+    select?: ChapterSchoolSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the GisuSchool
+     * Omit specific fields from the ChapterSchool
      */
-    omit?: GisuSchoolOmit<ExtArgs> | null
+    omit?: ChapterSchoolOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: GisuSchoolInclude<ExtArgs> | null
-    where?: GisuSchoolWhereInput
-    orderBy?: GisuSchoolOrderByWithRelationInput | GisuSchoolOrderByWithRelationInput[]
-    cursor?: GisuSchoolWhereUniqueInput
+    include?: ChapterSchoolInclude<ExtArgs> | null
+    where?: ChapterSchoolWhereInput
+    orderBy?: ChapterSchoolOrderByWithRelationInput | ChapterSchoolOrderByWithRelationInput[]
+    cursor?: ChapterSchoolWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: GisuSchoolScalarFieldEnum | GisuSchoolScalarFieldEnum[]
+    distinct?: ChapterSchoolScalarFieldEnum | ChapterSchoolScalarFieldEnum[]
   }
 
   /**
@@ -8340,1145 +9708,6 @@ export namespace Prisma {
 
 
   /**
-   * Model Chapter
-   */
-
-  export type AggregateChapter = {
-    _count: ChapterCountAggregateOutputType | null
-    _avg: ChapterAvgAggregateOutputType | null
-    _sum: ChapterSumAggregateOutputType | null
-    _min: ChapterMinAggregateOutputType | null
-    _max: ChapterMaxAggregateOutputType | null
-  }
-
-  export type ChapterAvgAggregateOutputType = {
-    id: number | null
-    gisuId: number | null
-  }
-
-  export type ChapterSumAggregateOutputType = {
-    id: bigint | null
-    gisuId: bigint | null
-  }
-
-  export type ChapterMinAggregateOutputType = {
-    id: bigint | null
-    name: string | null
-    description: string | null
-    gisuId: bigint | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type ChapterMaxAggregateOutputType = {
-    id: bigint | null
-    name: string | null
-    description: string | null
-    gisuId: bigint | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type ChapterCountAggregateOutputType = {
-    id: number
-    name: number
-    description: number
-    gisuId: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type ChapterAvgAggregateInputType = {
-    id?: true
-    gisuId?: true
-  }
-
-  export type ChapterSumAggregateInputType = {
-    id?: true
-    gisuId?: true
-  }
-
-  export type ChapterMinAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    gisuId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type ChapterMaxAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    gisuId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type ChapterCountAggregateInputType = {
-    id?: true
-    name?: true
-    description?: true
-    gisuId?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type ChapterAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Chapter to aggregate.
-     */
-    where?: ChapterWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Chapters to fetch.
-     */
-    orderBy?: ChapterOrderByWithRelationInput | ChapterOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: ChapterWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Chapters from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Chapters.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Chapters
-    **/
-    _count?: true | ChapterCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: ChapterAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: ChapterSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: ChapterMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: ChapterMaxAggregateInputType
-  }
-
-  export type GetChapterAggregateType<T extends ChapterAggregateArgs> = {
-        [P in keyof T & keyof AggregateChapter]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateChapter[P]>
-      : GetScalarType<T[P], AggregateChapter[P]>
-  }
-
-
-
-
-  export type ChapterGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: ChapterWhereInput
-    orderBy?: ChapterOrderByWithAggregationInput | ChapterOrderByWithAggregationInput[]
-    by: ChapterScalarFieldEnum[] | ChapterScalarFieldEnum
-    having?: ChapterScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ChapterCountAggregateInputType | true
-    _avg?: ChapterAvgAggregateInputType
-    _sum?: ChapterSumAggregateInputType
-    _min?: ChapterMinAggregateInputType
-    _max?: ChapterMaxAggregateInputType
-  }
-
-  export type ChapterGroupByOutputType = {
-    id: bigint
-    name: string
-    description: string | null
-    gisuId: bigint
-    createdAt: Date
-    updatedAt: Date
-    _count: ChapterCountAggregateOutputType | null
-    _avg: ChapterAvgAggregateOutputType | null
-    _sum: ChapterSumAggregateOutputType | null
-    _min: ChapterMinAggregateOutputType | null
-    _max: ChapterMaxAggregateOutputType | null
-  }
-
-  type GetChapterGroupByPayload<T extends ChapterGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<ChapterGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof ChapterGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ChapterGroupByOutputType[P]>
-            : GetScalarType<T[P], ChapterGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type ChapterSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    gisuId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
-    projects?: boolean | Chapter$projectsArgs<ExtArgs>
-    _count?: boolean | ChapterCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["chapter"]>
-
-  export type ChapterSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    gisuId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["chapter"]>
-
-  export type ChapterSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    gisuId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["chapter"]>
-
-  export type ChapterSelectScalar = {
-    id?: boolean
-    name?: boolean
-    description?: boolean
-    gisuId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type ChapterOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "gisuId" | "createdAt" | "updatedAt", ExtArgs["result"]["chapter"]>
-  export type ChapterInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
-    projects?: boolean | Chapter$projectsArgs<ExtArgs>
-    _count?: boolean | ChapterCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type ChapterIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
-  }
-  export type ChapterIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    gisu?: boolean | GisuDefaultArgs<ExtArgs>
-  }
-
-  export type $ChapterPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Chapter"
-    objects: {
-      gisu: Prisma.$GisuPayload<ExtArgs>
-      projects: Prisma.$ProjectPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: bigint
-      name: string
-      description: string | null
-      gisuId: bigint
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["chapter"]>
-    composites: {}
-  }
-
-  type ChapterGetPayload<S extends boolean | null | undefined | ChapterDefaultArgs> = $Result.GetResult<Prisma.$ChapterPayload, S>
-
-  type ChapterCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<ChapterFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: ChapterCountAggregateInputType | true
-    }
-
-  export interface ChapterDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Chapter'], meta: { name: 'Chapter' } }
-    /**
-     * Find zero or one Chapter that matches the filter.
-     * @param {ChapterFindUniqueArgs} args - Arguments to find a Chapter
-     * @example
-     * // Get one Chapter
-     * const chapter = await prisma.chapter.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ChapterFindUniqueArgs>(args: SelectSubset<T, ChapterFindUniqueArgs<ExtArgs>>): Prisma__ChapterClient<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Chapter that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ChapterFindUniqueOrThrowArgs} args - Arguments to find a Chapter
-     * @example
-     * // Get one Chapter
-     * const chapter = await prisma.chapter.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ChapterFindUniqueOrThrowArgs>(args: SelectSubset<T, ChapterFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ChapterClient<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Chapter that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ChapterFindFirstArgs} args - Arguments to find a Chapter
-     * @example
-     * // Get one Chapter
-     * const chapter = await prisma.chapter.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ChapterFindFirstArgs>(args?: SelectSubset<T, ChapterFindFirstArgs<ExtArgs>>): Prisma__ChapterClient<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Chapter that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ChapterFindFirstOrThrowArgs} args - Arguments to find a Chapter
-     * @example
-     * // Get one Chapter
-     * const chapter = await prisma.chapter.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ChapterFindFirstOrThrowArgs>(args?: SelectSubset<T, ChapterFindFirstOrThrowArgs<ExtArgs>>): Prisma__ChapterClient<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Chapters that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ChapterFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Chapters
-     * const chapters = await prisma.chapter.findMany()
-     * 
-     * // Get first 10 Chapters
-     * const chapters = await prisma.chapter.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const chapterWithIdOnly = await prisma.chapter.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends ChapterFindManyArgs>(args?: SelectSubset<T, ChapterFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Chapter.
-     * @param {ChapterCreateArgs} args - Arguments to create a Chapter.
-     * @example
-     * // Create one Chapter
-     * const Chapter = await prisma.chapter.create({
-     *   data: {
-     *     // ... data to create a Chapter
-     *   }
-     * })
-     * 
-     */
-    create<T extends ChapterCreateArgs>(args: SelectSubset<T, ChapterCreateArgs<ExtArgs>>): Prisma__ChapterClient<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Chapters.
-     * @param {ChapterCreateManyArgs} args - Arguments to create many Chapters.
-     * @example
-     * // Create many Chapters
-     * const chapter = await prisma.chapter.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends ChapterCreateManyArgs>(args?: SelectSubset<T, ChapterCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Chapters and returns the data saved in the database.
-     * @param {ChapterCreateManyAndReturnArgs} args - Arguments to create many Chapters.
-     * @example
-     * // Create many Chapters
-     * const chapter = await prisma.chapter.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Chapters and only return the `id`
-     * const chapterWithIdOnly = await prisma.chapter.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends ChapterCreateManyAndReturnArgs>(args?: SelectSubset<T, ChapterCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Chapter.
-     * @param {ChapterDeleteArgs} args - Arguments to delete one Chapter.
-     * @example
-     * // Delete one Chapter
-     * const Chapter = await prisma.chapter.delete({
-     *   where: {
-     *     // ... filter to delete one Chapter
-     *   }
-     * })
-     * 
-     */
-    delete<T extends ChapterDeleteArgs>(args: SelectSubset<T, ChapterDeleteArgs<ExtArgs>>): Prisma__ChapterClient<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Chapter.
-     * @param {ChapterUpdateArgs} args - Arguments to update one Chapter.
-     * @example
-     * // Update one Chapter
-     * const chapter = await prisma.chapter.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends ChapterUpdateArgs>(args: SelectSubset<T, ChapterUpdateArgs<ExtArgs>>): Prisma__ChapterClient<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Chapters.
-     * @param {ChapterDeleteManyArgs} args - Arguments to filter Chapters to delete.
-     * @example
-     * // Delete a few Chapters
-     * const { count } = await prisma.chapter.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends ChapterDeleteManyArgs>(args?: SelectSubset<T, ChapterDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Chapters.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ChapterUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Chapters
-     * const chapter = await prisma.chapter.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends ChapterUpdateManyArgs>(args: SelectSubset<T, ChapterUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Chapters and returns the data updated in the database.
-     * @param {ChapterUpdateManyAndReturnArgs} args - Arguments to update many Chapters.
-     * @example
-     * // Update many Chapters
-     * const chapter = await prisma.chapter.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Chapters and only return the `id`
-     * const chapterWithIdOnly = await prisma.chapter.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends ChapterUpdateManyAndReturnArgs>(args: SelectSubset<T, ChapterUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Chapter.
-     * @param {ChapterUpsertArgs} args - Arguments to update or create a Chapter.
-     * @example
-     * // Update or create a Chapter
-     * const chapter = await prisma.chapter.upsert({
-     *   create: {
-     *     // ... data to create a Chapter
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Chapter we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ChapterUpsertArgs>(args: SelectSubset<T, ChapterUpsertArgs<ExtArgs>>): Prisma__ChapterClient<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Chapters.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ChapterCountArgs} args - Arguments to filter Chapters to count.
-     * @example
-     * // Count the number of Chapters
-     * const count = await prisma.chapter.count({
-     *   where: {
-     *     // ... the filter for the Chapters we want to count
-     *   }
-     * })
-    **/
-    count<T extends ChapterCountArgs>(
-      args?: Subset<T, ChapterCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], ChapterCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Chapter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ChapterAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends ChapterAggregateArgs>(args: Subset<T, ChapterAggregateArgs>): Prisma.PrismaPromise<GetChapterAggregateType<T>>
-
-    /**
-     * Group by Chapter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ChapterGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends ChapterGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ChapterGroupByArgs['orderBy'] }
-        : { orderBy?: ChapterGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, ChapterGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetChapterGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Chapter model
-   */
-  readonly fields: ChapterFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Chapter.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ChapterClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    gisu<T extends GisuDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GisuDefaultArgs<ExtArgs>>): Prisma__GisuClient<$Result.GetResult<Prisma.$GisuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    projects<T extends Chapter$projectsArgs<ExtArgs> = {}>(args?: Subset<T, Chapter$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Chapter model
-   */
-  interface ChapterFieldRefs {
-    readonly id: FieldRef<"Chapter", 'BigInt'>
-    readonly name: FieldRef<"Chapter", 'String'>
-    readonly description: FieldRef<"Chapter", 'String'>
-    readonly gisuId: FieldRef<"Chapter", 'BigInt'>
-    readonly createdAt: FieldRef<"Chapter", 'DateTime'>
-    readonly updatedAt: FieldRef<"Chapter", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Chapter findUnique
-   */
-  export type ChapterFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterInclude<ExtArgs> | null
-    /**
-     * Filter, which Chapter to fetch.
-     */
-    where: ChapterWhereUniqueInput
-  }
-
-  /**
-   * Chapter findUniqueOrThrow
-   */
-  export type ChapterFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterInclude<ExtArgs> | null
-    /**
-     * Filter, which Chapter to fetch.
-     */
-    where: ChapterWhereUniqueInput
-  }
-
-  /**
-   * Chapter findFirst
-   */
-  export type ChapterFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterInclude<ExtArgs> | null
-    /**
-     * Filter, which Chapter to fetch.
-     */
-    where?: ChapterWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Chapters to fetch.
-     */
-    orderBy?: ChapterOrderByWithRelationInput | ChapterOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Chapters.
-     */
-    cursor?: ChapterWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Chapters from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Chapters.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Chapters.
-     */
-    distinct?: ChapterScalarFieldEnum | ChapterScalarFieldEnum[]
-  }
-
-  /**
-   * Chapter findFirstOrThrow
-   */
-  export type ChapterFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterInclude<ExtArgs> | null
-    /**
-     * Filter, which Chapter to fetch.
-     */
-    where?: ChapterWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Chapters to fetch.
-     */
-    orderBy?: ChapterOrderByWithRelationInput | ChapterOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Chapters.
-     */
-    cursor?: ChapterWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Chapters from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Chapters.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Chapters.
-     */
-    distinct?: ChapterScalarFieldEnum | ChapterScalarFieldEnum[]
-  }
-
-  /**
-   * Chapter findMany
-   */
-  export type ChapterFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterInclude<ExtArgs> | null
-    /**
-     * Filter, which Chapters to fetch.
-     */
-    where?: ChapterWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Chapters to fetch.
-     */
-    orderBy?: ChapterOrderByWithRelationInput | ChapterOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Chapters.
-     */
-    cursor?: ChapterWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Chapters from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Chapters.
-     */
-    skip?: number
-    distinct?: ChapterScalarFieldEnum | ChapterScalarFieldEnum[]
-  }
-
-  /**
-   * Chapter create
-   */
-  export type ChapterCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Chapter.
-     */
-    data: XOR<ChapterCreateInput, ChapterUncheckedCreateInput>
-  }
-
-  /**
-   * Chapter createMany
-   */
-  export type ChapterCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Chapters.
-     */
-    data: ChapterCreateManyInput | ChapterCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Chapter createManyAndReturn
-   */
-  export type ChapterCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * The data used to create many Chapters.
-     */
-    data: ChapterCreateManyInput | ChapterCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Chapter update
-   */
-  export type ChapterUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Chapter.
-     */
-    data: XOR<ChapterUpdateInput, ChapterUncheckedUpdateInput>
-    /**
-     * Choose, which Chapter to update.
-     */
-    where: ChapterWhereUniqueInput
-  }
-
-  /**
-   * Chapter updateMany
-   */
-  export type ChapterUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Chapters.
-     */
-    data: XOR<ChapterUpdateManyMutationInput, ChapterUncheckedUpdateManyInput>
-    /**
-     * Filter which Chapters to update
-     */
-    where?: ChapterWhereInput
-    /**
-     * Limit how many Chapters to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Chapter updateManyAndReturn
-   */
-  export type ChapterUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * The data used to update Chapters.
-     */
-    data: XOR<ChapterUpdateManyMutationInput, ChapterUncheckedUpdateManyInput>
-    /**
-     * Filter which Chapters to update
-     */
-    where?: ChapterWhereInput
-    /**
-     * Limit how many Chapters to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Chapter upsert
-   */
-  export type ChapterUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Chapter to update in case it exists.
-     */
-    where: ChapterWhereUniqueInput
-    /**
-     * In case the Chapter found by the `where` argument doesn't exist, create a new Chapter with this data.
-     */
-    create: XOR<ChapterCreateInput, ChapterUncheckedCreateInput>
-    /**
-     * In case the Chapter was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ChapterUpdateInput, ChapterUncheckedUpdateInput>
-  }
-
-  /**
-   * Chapter delete
-   */
-  export type ChapterDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterInclude<ExtArgs> | null
-    /**
-     * Filter which Chapter to delete.
-     */
-    where: ChapterWhereUniqueInput
-  }
-
-  /**
-   * Chapter deleteMany
-   */
-  export type ChapterDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Chapters to delete
-     */
-    where?: ChapterWhereInput
-    /**
-     * Limit how many Chapters to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Chapter.projects
-   */
-  export type Chapter$projectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Project
-     */
-    select?: ProjectSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Project
-     */
-    omit?: ProjectOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProjectInclude<ExtArgs> | null
-    where?: ProjectWhereInput
-    orderBy?: ProjectOrderByWithRelationInput | ProjectOrderByWithRelationInput[]
-    cursor?: ProjectWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ProjectScalarFieldEnum | ProjectScalarFieldEnum[]
-  }
-
-  /**
-   * Chapter without action
-   */
-  export type ChapterDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Chapter
-     */
-    select?: ChapterSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Chapter
-     */
-    omit?: ChapterOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ChapterInclude<ExtArgs> | null
-  }
-
-
-  /**
    * Model Project
    */
 
@@ -9493,25 +9722,11 @@ export namespace Prisma {
   export type ProjectAvgAggregateOutputType = {
     id: number | null
     chapterId: number | null
-    planTo: number | null
-    designTo: number | null
-    webTo: number | null
-    androidTo: number | null
-    iosTo: number | null
-    springbootTo: number | null
-    nodejsTo: number | null
   }
 
   export type ProjectSumAggregateOutputType = {
     id: bigint | null
     chapterId: bigint | null
-    planTo: number | null
-    designTo: number | null
-    webTo: number | null
-    androidTo: number | null
-    iosTo: number | null
-    springbootTo: number | null
-    nodejsTo: number | null
   }
 
   export type ProjectMinAggregateOutputType = {
@@ -9521,13 +9736,6 @@ export namespace Prisma {
     chapterId: bigint | null
     logoImageUrl: string | null
     bannerImageUrl: string | null
-    planTo: number | null
-    designTo: number | null
-    webTo: number | null
-    androidTo: number | null
-    iosTo: number | null
-    springbootTo: number | null
-    nodejsTo: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9539,13 +9747,6 @@ export namespace Prisma {
     chapterId: bigint | null
     logoImageUrl: string | null
     bannerImageUrl: string | null
-    planTo: number | null
-    designTo: number | null
-    webTo: number | null
-    androidTo: number | null
-    iosTo: number | null
-    springbootTo: number | null
-    nodejsTo: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9557,13 +9758,6 @@ export namespace Prisma {
     chapterId: number
     logoImageUrl: number
     bannerImageUrl: number
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9573,25 +9767,11 @@ export namespace Prisma {
   export type ProjectAvgAggregateInputType = {
     id?: true
     chapterId?: true
-    planTo?: true
-    designTo?: true
-    webTo?: true
-    androidTo?: true
-    iosTo?: true
-    springbootTo?: true
-    nodejsTo?: true
   }
 
   export type ProjectSumAggregateInputType = {
     id?: true
     chapterId?: true
-    planTo?: true
-    designTo?: true
-    webTo?: true
-    androidTo?: true
-    iosTo?: true
-    springbootTo?: true
-    nodejsTo?: true
   }
 
   export type ProjectMinAggregateInputType = {
@@ -9601,13 +9781,6 @@ export namespace Prisma {
     chapterId?: true
     logoImageUrl?: true
     bannerImageUrl?: true
-    planTo?: true
-    designTo?: true
-    webTo?: true
-    androidTo?: true
-    iosTo?: true
-    springbootTo?: true
-    nodejsTo?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9619,13 +9792,6 @@ export namespace Prisma {
     chapterId?: true
     logoImageUrl?: true
     bannerImageUrl?: true
-    planTo?: true
-    designTo?: true
-    webTo?: true
-    androidTo?: true
-    iosTo?: true
-    springbootTo?: true
-    nodejsTo?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9637,13 +9803,6 @@ export namespace Prisma {
     chapterId?: true
     logoImageUrl?: true
     bannerImageUrl?: true
-    planTo?: true
-    designTo?: true
-    webTo?: true
-    androidTo?: true
-    iosTo?: true
-    springbootTo?: true
-    nodejsTo?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9742,13 +9901,6 @@ export namespace Prisma {
     chapterId: bigint
     logoImageUrl: string | null
     bannerImageUrl: string | null
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
     createdAt: Date
     updatedAt: Date
     _count: ProjectCountAggregateOutputType | null
@@ -9779,18 +9931,12 @@ export namespace Prisma {
     chapterId?: boolean
     logoImageUrl?: boolean
     bannerImageUrl?: boolean
-    planTo?: boolean
-    designTo?: boolean
-    webTo?: boolean
-    androidTo?: boolean
-    iosTo?: boolean
-    springbootTo?: boolean
-    nodejsTo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
     members?: boolean | Project$membersArgs<ExtArgs>
     applicationForms?: boolean | Project$applicationFormsArgs<ExtArgs>
+    to?: boolean | Project$toArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
@@ -9801,16 +9947,9 @@ export namespace Prisma {
     chapterId?: boolean
     logoImageUrl?: boolean
     bannerImageUrl?: boolean
-    planTo?: boolean
-    designTo?: boolean
-    webTo?: boolean
-    androidTo?: boolean
-    iosTo?: boolean
-    springbootTo?: boolean
-    nodejsTo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
   export type ProjectSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -9820,16 +9959,9 @@ export namespace Prisma {
     chapterId?: boolean
     logoImageUrl?: boolean
     bannerImageUrl?: boolean
-    planTo?: boolean
-    designTo?: boolean
-    webTo?: boolean
-    androidTo?: boolean
-    iosTo?: boolean
-    springbootTo?: boolean
-    nodejsTo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
   export type ProjectSelectScalar = {
@@ -9839,37 +9971,32 @@ export namespace Prisma {
     chapterId?: boolean
     logoImageUrl?: boolean
     bannerImageUrl?: boolean
-    planTo?: boolean
-    designTo?: boolean
-    webTo?: boolean
-    androidTo?: boolean
-    iosTo?: boolean
-    springbootTo?: boolean
-    nodejsTo?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "chapterId" | "logoImageUrl" | "bannerImageUrl" | "planTo" | "designTo" | "webTo" | "androidTo" | "iosTo" | "springbootTo" | "nodejsTo" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "chapterId" | "logoImageUrl" | "bannerImageUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
     members?: boolean | Project$membersArgs<ExtArgs>
     applicationForms?: boolean | Project$applicationFormsArgs<ExtArgs>
+    to?: boolean | Project$toArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }
   export type ProjectIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    chapter?: boolean | ChapterDefaultArgs<ExtArgs>
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }
 
   export type $ProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Project"
     objects: {
-      chapter: Prisma.$ChapterPayload<ExtArgs>
+      chapter: Prisma.$GisuChapterPayload<ExtArgs>
       members: Prisma.$ProjectMemberPayload<ExtArgs>[]
       applicationForms: Prisma.$ApplicationFormPayload<ExtArgs>[]
+      to: Prisma.$ProjectToPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: bigint
@@ -9878,13 +10005,6 @@ export namespace Prisma {
       chapterId: bigint
       logoImageUrl: string | null
       bannerImageUrl: string | null
-      planTo: number
-      designTo: number
-      webTo: number
-      androidTo: number
-      iosTo: number
-      springbootTo: number
-      nodejsTo: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["project"]>
@@ -10281,9 +10401,10 @@ export namespace Prisma {
    */
   export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    chapter<T extends ChapterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChapterDefaultArgs<ExtArgs>>): Prisma__ChapterClient<$Result.GetResult<Prisma.$ChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    chapter<T extends GisuChapterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GisuChapterDefaultArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     members<T extends Project$membersArgs<ExtArgs> = {}>(args?: Subset<T, Project$membersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     applicationForms<T extends Project$applicationFormsArgs<ExtArgs> = {}>(args?: Subset<T, Project$applicationFormsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationFormPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    to<T extends Project$toArgs<ExtArgs> = {}>(args?: Subset<T, Project$toArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10319,13 +10440,6 @@ export namespace Prisma {
     readonly chapterId: FieldRef<"Project", 'BigInt'>
     readonly logoImageUrl: FieldRef<"Project", 'String'>
     readonly bannerImageUrl: FieldRef<"Project", 'String'>
-    readonly planTo: FieldRef<"Project", 'Int'>
-    readonly designTo: FieldRef<"Project", 'Int'>
-    readonly webTo: FieldRef<"Project", 'Int'>
-    readonly androidTo: FieldRef<"Project", 'Int'>
-    readonly iosTo: FieldRef<"Project", 'Int'>
-    readonly springbootTo: FieldRef<"Project", 'Int'>
-    readonly nodejsTo: FieldRef<"Project", 'Int'>
     readonly createdAt: FieldRef<"Project", 'DateTime'>
     readonly updatedAt: FieldRef<"Project", 'DateTime'>
   }
@@ -10772,6 +10886,30 @@ export namespace Prisma {
   }
 
   /**
+   * Project.to
+   */
+  export type Project$toArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToInclude<ExtArgs> | null
+    where?: ProjectToWhereInput
+    orderBy?: ProjectToOrderByWithRelationInput | ProjectToOrderByWithRelationInput[]
+    cursor?: ProjectToWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProjectToScalarFieldEnum | ProjectToScalarFieldEnum[]
+  }
+
+  /**
    * Project without action
    */
   export type ProjectDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10787,6 +10925,1119 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ProjectInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ProjectTo
+   */
+
+  export type AggregateProjectTo = {
+    _count: ProjectToCountAggregateOutputType | null
+    _avg: ProjectToAvgAggregateOutputType | null
+    _sum: ProjectToSumAggregateOutputType | null
+    _min: ProjectToMinAggregateOutputType | null
+    _max: ProjectToMaxAggregateOutputType | null
+  }
+
+  export type ProjectToAvgAggregateOutputType = {
+    id: number | null
+    projectId: number | null
+    to: number | null
+  }
+
+  export type ProjectToSumAggregateOutputType = {
+    id: bigint | null
+    projectId: bigint | null
+    to: number | null
+  }
+
+  export type ProjectToMinAggregateOutputType = {
+    id: bigint | null
+    projectId: bigint | null
+    part: $Enums.UserPartEnum | null
+    to: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProjectToMaxAggregateOutputType = {
+    id: bigint | null
+    projectId: bigint | null
+    part: $Enums.UserPartEnum | null
+    to: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProjectToCountAggregateOutputType = {
+    id: number
+    projectId: number
+    part: number
+    to: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProjectToAvgAggregateInputType = {
+    id?: true
+    projectId?: true
+    to?: true
+  }
+
+  export type ProjectToSumAggregateInputType = {
+    id?: true
+    projectId?: true
+    to?: true
+  }
+
+  export type ProjectToMinAggregateInputType = {
+    id?: true
+    projectId?: true
+    part?: true
+    to?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProjectToMaxAggregateInputType = {
+    id?: true
+    projectId?: true
+    part?: true
+    to?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProjectToCountAggregateInputType = {
+    id?: true
+    projectId?: true
+    part?: true
+    to?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProjectToAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectTo to aggregate.
+     */
+    where?: ProjectToWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectTos to fetch.
+     */
+    orderBy?: ProjectToOrderByWithRelationInput | ProjectToOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProjectToWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectTos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectTos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProjectTos
+    **/
+    _count?: true | ProjectToCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProjectToAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProjectToSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProjectToMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProjectToMaxAggregateInputType
+  }
+
+  export type GetProjectToAggregateType<T extends ProjectToAggregateArgs> = {
+        [P in keyof T & keyof AggregateProjectTo]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProjectTo[P]>
+      : GetScalarType<T[P], AggregateProjectTo[P]>
+  }
+
+
+
+
+  export type ProjectToGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectToWhereInput
+    orderBy?: ProjectToOrderByWithAggregationInput | ProjectToOrderByWithAggregationInput[]
+    by: ProjectToScalarFieldEnum[] | ProjectToScalarFieldEnum
+    having?: ProjectToScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProjectToCountAggregateInputType | true
+    _avg?: ProjectToAvgAggregateInputType
+    _sum?: ProjectToSumAggregateInputType
+    _min?: ProjectToMinAggregateInputType
+    _max?: ProjectToMaxAggregateInputType
+  }
+
+  export type ProjectToGroupByOutputType = {
+    id: bigint
+    projectId: bigint
+    part: $Enums.UserPartEnum
+    to: number
+    createdAt: Date
+    updatedAt: Date
+    _count: ProjectToCountAggregateOutputType | null
+    _avg: ProjectToAvgAggregateOutputType | null
+    _sum: ProjectToSumAggregateOutputType | null
+    _min: ProjectToMinAggregateOutputType | null
+    _max: ProjectToMaxAggregateOutputType | null
+  }
+
+  type GetProjectToGroupByPayload<T extends ProjectToGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProjectToGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProjectToGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProjectToGroupByOutputType[P]>
+            : GetScalarType<T[P], ProjectToGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProjectToSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    part?: boolean
+    to?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectTo"]>
+
+  export type ProjectToSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    part?: boolean
+    to?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectTo"]>
+
+  export type ProjectToSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    part?: boolean
+    to?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectTo"]>
+
+  export type ProjectToSelectScalar = {
+    id?: boolean
+    projectId?: boolean
+    part?: boolean
+    to?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProjectToOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "part" | "to" | "createdAt" | "updatedAt", ExtArgs["result"]["projectTo"]>
+  export type ProjectToInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+  export type ProjectToIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+  export type ProjectToIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+  }
+
+  export type $ProjectToPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProjectTo"
+    objects: {
+      project: Prisma.$ProjectPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: bigint
+      projectId: bigint
+      part: $Enums.UserPartEnum
+      to: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["projectTo"]>
+    composites: {}
+  }
+
+  type ProjectToGetPayload<S extends boolean | null | undefined | ProjectToDefaultArgs> = $Result.GetResult<Prisma.$ProjectToPayload, S>
+
+  type ProjectToCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProjectToFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProjectToCountAggregateInputType | true
+    }
+
+  export interface ProjectToDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProjectTo'], meta: { name: 'ProjectTo' } }
+    /**
+     * Find zero or one ProjectTo that matches the filter.
+     * @param {ProjectToFindUniqueArgs} args - Arguments to find a ProjectTo
+     * @example
+     * // Get one ProjectTo
+     * const projectTo = await prisma.projectTo.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProjectToFindUniqueArgs>(args: SelectSubset<T, ProjectToFindUniqueArgs<ExtArgs>>): Prisma__ProjectToClient<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProjectTo that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProjectToFindUniqueOrThrowArgs} args - Arguments to find a ProjectTo
+     * @example
+     * // Get one ProjectTo
+     * const projectTo = await prisma.projectTo.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProjectToFindUniqueOrThrowArgs>(args: SelectSubset<T, ProjectToFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProjectToClient<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectTo that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectToFindFirstArgs} args - Arguments to find a ProjectTo
+     * @example
+     * // Get one ProjectTo
+     * const projectTo = await prisma.projectTo.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProjectToFindFirstArgs>(args?: SelectSubset<T, ProjectToFindFirstArgs<ExtArgs>>): Prisma__ProjectToClient<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectTo that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectToFindFirstOrThrowArgs} args - Arguments to find a ProjectTo
+     * @example
+     * // Get one ProjectTo
+     * const projectTo = await prisma.projectTo.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProjectToFindFirstOrThrowArgs>(args?: SelectSubset<T, ProjectToFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProjectToClient<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProjectTos that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectToFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProjectTos
+     * const projectTos = await prisma.projectTo.findMany()
+     * 
+     * // Get first 10 ProjectTos
+     * const projectTos = await prisma.projectTo.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const projectToWithIdOnly = await prisma.projectTo.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProjectToFindManyArgs>(args?: SelectSubset<T, ProjectToFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProjectTo.
+     * @param {ProjectToCreateArgs} args - Arguments to create a ProjectTo.
+     * @example
+     * // Create one ProjectTo
+     * const ProjectTo = await prisma.projectTo.create({
+     *   data: {
+     *     // ... data to create a ProjectTo
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProjectToCreateArgs>(args: SelectSubset<T, ProjectToCreateArgs<ExtArgs>>): Prisma__ProjectToClient<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProjectTos.
+     * @param {ProjectToCreateManyArgs} args - Arguments to create many ProjectTos.
+     * @example
+     * // Create many ProjectTos
+     * const projectTo = await prisma.projectTo.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProjectToCreateManyArgs>(args?: SelectSubset<T, ProjectToCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProjectTos and returns the data saved in the database.
+     * @param {ProjectToCreateManyAndReturnArgs} args - Arguments to create many ProjectTos.
+     * @example
+     * // Create many ProjectTos
+     * const projectTo = await prisma.projectTo.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProjectTos and only return the `id`
+     * const projectToWithIdOnly = await prisma.projectTo.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProjectToCreateManyAndReturnArgs>(args?: SelectSubset<T, ProjectToCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProjectTo.
+     * @param {ProjectToDeleteArgs} args - Arguments to delete one ProjectTo.
+     * @example
+     * // Delete one ProjectTo
+     * const ProjectTo = await prisma.projectTo.delete({
+     *   where: {
+     *     // ... filter to delete one ProjectTo
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProjectToDeleteArgs>(args: SelectSubset<T, ProjectToDeleteArgs<ExtArgs>>): Prisma__ProjectToClient<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProjectTo.
+     * @param {ProjectToUpdateArgs} args - Arguments to update one ProjectTo.
+     * @example
+     * // Update one ProjectTo
+     * const projectTo = await prisma.projectTo.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProjectToUpdateArgs>(args: SelectSubset<T, ProjectToUpdateArgs<ExtArgs>>): Prisma__ProjectToClient<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProjectTos.
+     * @param {ProjectToDeleteManyArgs} args - Arguments to filter ProjectTos to delete.
+     * @example
+     * // Delete a few ProjectTos
+     * const { count } = await prisma.projectTo.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProjectToDeleteManyArgs>(args?: SelectSubset<T, ProjectToDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectTos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectToUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProjectTos
+     * const projectTo = await prisma.projectTo.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProjectToUpdateManyArgs>(args: SelectSubset<T, ProjectToUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectTos and returns the data updated in the database.
+     * @param {ProjectToUpdateManyAndReturnArgs} args - Arguments to update many ProjectTos.
+     * @example
+     * // Update many ProjectTos
+     * const projectTo = await prisma.projectTo.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProjectTos and only return the `id`
+     * const projectToWithIdOnly = await prisma.projectTo.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProjectToUpdateManyAndReturnArgs>(args: SelectSubset<T, ProjectToUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProjectTo.
+     * @param {ProjectToUpsertArgs} args - Arguments to update or create a ProjectTo.
+     * @example
+     * // Update or create a ProjectTo
+     * const projectTo = await prisma.projectTo.upsert({
+     *   create: {
+     *     // ... data to create a ProjectTo
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProjectTo we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProjectToUpsertArgs>(args: SelectSubset<T, ProjectToUpsertArgs<ExtArgs>>): Prisma__ProjectToClient<$Result.GetResult<Prisma.$ProjectToPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProjectTos.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectToCountArgs} args - Arguments to filter ProjectTos to count.
+     * @example
+     * // Count the number of ProjectTos
+     * const count = await prisma.projectTo.count({
+     *   where: {
+     *     // ... the filter for the ProjectTos we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProjectToCountArgs>(
+      args?: Subset<T, ProjectToCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProjectToCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProjectTo.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectToAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProjectToAggregateArgs>(args: Subset<T, ProjectToAggregateArgs>): Prisma.PrismaPromise<GetProjectToAggregateType<T>>
+
+    /**
+     * Group by ProjectTo.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectToGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProjectToGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProjectToGroupByArgs['orderBy'] }
+        : { orderBy?: ProjectToGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProjectToGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProjectToGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProjectTo model
+   */
+  readonly fields: ProjectToFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProjectTo.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProjectToClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProjectTo model
+   */
+  interface ProjectToFieldRefs {
+    readonly id: FieldRef<"ProjectTo", 'BigInt'>
+    readonly projectId: FieldRef<"ProjectTo", 'BigInt'>
+    readonly part: FieldRef<"ProjectTo", 'UserPartEnum'>
+    readonly to: FieldRef<"ProjectTo", 'Int'>
+    readonly createdAt: FieldRef<"ProjectTo", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProjectTo", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProjectTo findUnique
+   */
+  export type ProjectToFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectTo to fetch.
+     */
+    where: ProjectToWhereUniqueInput
+  }
+
+  /**
+   * ProjectTo findUniqueOrThrow
+   */
+  export type ProjectToFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectTo to fetch.
+     */
+    where: ProjectToWhereUniqueInput
+  }
+
+  /**
+   * ProjectTo findFirst
+   */
+  export type ProjectToFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectTo to fetch.
+     */
+    where?: ProjectToWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectTos to fetch.
+     */
+    orderBy?: ProjectToOrderByWithRelationInput | ProjectToOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectTos.
+     */
+    cursor?: ProjectToWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectTos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectTos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectTos.
+     */
+    distinct?: ProjectToScalarFieldEnum | ProjectToScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectTo findFirstOrThrow
+   */
+  export type ProjectToFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectTo to fetch.
+     */
+    where?: ProjectToWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectTos to fetch.
+     */
+    orderBy?: ProjectToOrderByWithRelationInput | ProjectToOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectTos.
+     */
+    cursor?: ProjectToWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectTos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectTos.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectTos.
+     */
+    distinct?: ProjectToScalarFieldEnum | ProjectToScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectTo findMany
+   */
+  export type ProjectToFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectTos to fetch.
+     */
+    where?: ProjectToWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectTos to fetch.
+     */
+    orderBy?: ProjectToOrderByWithRelationInput | ProjectToOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProjectTos.
+     */
+    cursor?: ProjectToWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectTos from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectTos.
+     */
+    skip?: number
+    distinct?: ProjectToScalarFieldEnum | ProjectToScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectTo create
+   */
+  export type ProjectToCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProjectTo.
+     */
+    data: XOR<ProjectToCreateInput, ProjectToUncheckedCreateInput>
+  }
+
+  /**
+   * ProjectTo createMany
+   */
+  export type ProjectToCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProjectTos.
+     */
+    data: ProjectToCreateManyInput | ProjectToCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProjectTo createManyAndReturn
+   */
+  export type ProjectToCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProjectTos.
+     */
+    data: ProjectToCreateManyInput | ProjectToCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProjectTo update
+   */
+  export type ProjectToUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProjectTo.
+     */
+    data: XOR<ProjectToUpdateInput, ProjectToUncheckedUpdateInput>
+    /**
+     * Choose, which ProjectTo to update.
+     */
+    where: ProjectToWhereUniqueInput
+  }
+
+  /**
+   * ProjectTo updateMany
+   */
+  export type ProjectToUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProjectTos.
+     */
+    data: XOR<ProjectToUpdateManyMutationInput, ProjectToUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectTos to update
+     */
+    where?: ProjectToWhereInput
+    /**
+     * Limit how many ProjectTos to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectTo updateManyAndReturn
+   */
+  export type ProjectToUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * The data used to update ProjectTos.
+     */
+    data: XOR<ProjectToUpdateManyMutationInput, ProjectToUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectTos to update
+     */
+    where?: ProjectToWhereInput
+    /**
+     * Limit how many ProjectTos to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProjectTo upsert
+   */
+  export type ProjectToUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProjectTo to update in case it exists.
+     */
+    where: ProjectToWhereUniqueInput
+    /**
+     * In case the ProjectTo found by the `where` argument doesn't exist, create a new ProjectTo with this data.
+     */
+    create: XOR<ProjectToCreateInput, ProjectToUncheckedCreateInput>
+    /**
+     * In case the ProjectTo was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProjectToUpdateInput, ProjectToUncheckedUpdateInput>
+  }
+
+  /**
+   * ProjectTo delete
+   */
+  export type ProjectToDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToInclude<ExtArgs> | null
+    /**
+     * Filter which ProjectTo to delete.
+     */
+    where: ProjectToWhereUniqueInput
+  }
+
+  /**
+   * ProjectTo deleteMany
+   */
+  export type ProjectToDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectTos to delete
+     */
+    where?: ProjectToWhereInput
+    /**
+     * Limit how many ProjectTos to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectTo without action
+   */
+  export type ProjectToDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectTo
+     */
+    select?: ProjectToSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectTo
+     */
+    omit?: ProjectToOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectToInclude<ExtArgs> | null
   }
 
 
@@ -10818,7 +12069,6 @@ export namespace Prisma {
     id: bigint | null
     projectId: bigint | null
     challengerId: bigint | null
-    role: $Enums.UserPartEnum | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -10828,7 +12078,6 @@ export namespace Prisma {
     id: bigint | null
     projectId: bigint | null
     challengerId: bigint | null
-    role: $Enums.UserPartEnum | null
     isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -10838,7 +12087,6 @@ export namespace Prisma {
     id: number
     projectId: number
     challengerId: number
-    role: number
     isActive: number
     createdAt: number
     updatedAt: number
@@ -10862,7 +12110,6 @@ export namespace Prisma {
     id?: true
     projectId?: true
     challengerId?: true
-    role?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -10872,7 +12119,6 @@ export namespace Prisma {
     id?: true
     projectId?: true
     challengerId?: true
-    role?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -10882,7 +12128,6 @@ export namespace Prisma {
     id?: true
     projectId?: true
     challengerId?: true
-    role?: true
     isActive?: true
     createdAt?: true
     updatedAt?: true
@@ -10979,7 +12224,6 @@ export namespace Prisma {
     id: bigint
     projectId: bigint
     challengerId: bigint
-    role: $Enums.UserPartEnum
     isActive: boolean
     createdAt: Date
     updatedAt: Date
@@ -11008,7 +12252,6 @@ export namespace Prisma {
     id?: boolean
     projectId?: boolean
     challengerId?: boolean
-    role?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -11020,7 +12263,6 @@ export namespace Prisma {
     id?: boolean
     projectId?: boolean
     challengerId?: boolean
-    role?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -11032,7 +12274,6 @@ export namespace Prisma {
     id?: boolean
     projectId?: boolean
     challengerId?: boolean
-    role?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -11044,13 +12285,12 @@ export namespace Prisma {
     id?: boolean
     projectId?: boolean
     challengerId?: boolean
-    role?: boolean
     isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProjectMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "challengerId" | "role" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["projectMember"]>
+  export type ProjectMemberOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "challengerId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["projectMember"]>
   export type ProjectMemberInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     challenger?: boolean | ChallengerDefaultArgs<ExtArgs>
@@ -11074,7 +12314,6 @@ export namespace Prisma {
       id: bigint
       projectId: bigint
       challengerId: bigint
-      role: $Enums.UserPartEnum
       isActive: boolean
       createdAt: Date
       updatedAt: Date
@@ -11506,7 +12745,6 @@ export namespace Prisma {
     readonly id: FieldRef<"ProjectMember", 'BigInt'>
     readonly projectId: FieldRef<"ProjectMember", 'BigInt'>
     readonly challengerId: FieldRef<"ProjectMember", 'BigInt'>
-    readonly role: FieldRef<"ProjectMember", 'UserPartEnum'>
     readonly isActive: FieldRef<"ProjectMember", 'Boolean'>
     readonly createdAt: FieldRef<"ProjectMember", 'DateTime'>
     readonly updatedAt: FieldRef<"ProjectMember", 'DateTime'>
@@ -11951,7 +13189,6 @@ export namespace Prisma {
     projectId: bigint | null
     title: string | null
     description: string | null
-    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11961,7 +13198,6 @@ export namespace Prisma {
     projectId: bigint | null
     title: string | null
     description: string | null
-    isActive: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11971,7 +13207,6 @@ export namespace Prisma {
     projectId: number
     title: number
     description: number
-    isActive: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -11993,7 +13228,6 @@ export namespace Prisma {
     projectId?: true
     title?: true
     description?: true
-    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12003,7 +13237,6 @@ export namespace Prisma {
     projectId?: true
     title?: true
     description?: true
-    isActive?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -12013,7 +13246,6 @@ export namespace Prisma {
     projectId?: true
     title?: true
     description?: true
-    isActive?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -12110,7 +13342,6 @@ export namespace Prisma {
     projectId: bigint
     title: string
     description: string | null
-    isActive: boolean
     createdAt: Date
     updatedAt: Date
     _count: ApplicationFormCountAggregateOutputType | null
@@ -12139,7 +13370,6 @@ export namespace Prisma {
     projectId?: boolean
     title?: boolean
     description?: boolean
-    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
@@ -12152,7 +13382,6 @@ export namespace Prisma {
     projectId?: boolean
     title?: boolean
     description?: boolean
-    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
@@ -12163,7 +13392,6 @@ export namespace Prisma {
     projectId?: boolean
     title?: boolean
     description?: boolean
-    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
@@ -12174,12 +13402,11 @@ export namespace Prisma {
     projectId?: boolean
     title?: boolean
     description?: boolean
-    isActive?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ApplicationFormOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "title" | "description" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["applicationForm"]>
+  export type ApplicationFormOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "title" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["applicationForm"]>
   export type ApplicationFormInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     questions?: boolean | ApplicationForm$questionsArgs<ExtArgs>
@@ -12203,7 +13430,6 @@ export namespace Prisma {
       projectId: bigint
       title: string
       description: string | null
-      isActive: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["applicationForm"]>
@@ -12635,7 +13861,6 @@ export namespace Prisma {
     readonly projectId: FieldRef<"ApplicationForm", 'BigInt'>
     readonly title: FieldRef<"ApplicationForm", 'String'>
     readonly description: FieldRef<"ApplicationForm", 'String'>
-    readonly isActive: FieldRef<"ApplicationForm", 'Boolean'>
     readonly createdAt: FieldRef<"ApplicationForm", 'DateTime'>
     readonly updatedAt: FieldRef<"ApplicationForm", 'DateTime'>
   }
@@ -16562,16 +17787,19 @@ export namespace Prisma {
 
   export type MatchingRoundAvgAggregateOutputType = {
     id: number | null
+    chapterId: number | null
   }
 
   export type MatchingRoundSumAggregateOutputType = {
     id: bigint | null
+    chapterId: bigint | null
   }
 
   export type MatchingRoundMinAggregateOutputType = {
     id: bigint | null
     name: string | null
     description: string | null
+    chapterId: bigint | null
     startAt: Date | null
     endAt: Date | null
     createdAt: Date | null
@@ -16582,6 +17810,7 @@ export namespace Prisma {
     id: bigint | null
     name: string | null
     description: string | null
+    chapterId: bigint | null
     startAt: Date | null
     endAt: Date | null
     createdAt: Date | null
@@ -16592,6 +17821,7 @@ export namespace Prisma {
     id: number
     name: number
     description: number
+    chapterId: number
     startAt: number
     endAt: number
     createdAt: number
@@ -16602,16 +17832,19 @@ export namespace Prisma {
 
   export type MatchingRoundAvgAggregateInputType = {
     id?: true
+    chapterId?: true
   }
 
   export type MatchingRoundSumAggregateInputType = {
     id?: true
+    chapterId?: true
   }
 
   export type MatchingRoundMinAggregateInputType = {
     id?: true
     name?: true
     description?: true
+    chapterId?: true
     startAt?: true
     endAt?: true
     createdAt?: true
@@ -16622,6 +17855,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    chapterId?: true
     startAt?: true
     endAt?: true
     createdAt?: true
@@ -16632,6 +17866,7 @@ export namespace Prisma {
     id?: true
     name?: true
     description?: true
+    chapterId?: true
     startAt?: true
     endAt?: true
     createdAt?: true
@@ -16729,6 +17964,7 @@ export namespace Prisma {
     id: bigint
     name: string
     description: string | null
+    chapterId: bigint
     startAt: Date
     endAt: Date
     createdAt: Date
@@ -16758,11 +17994,13 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    chapterId?: boolean
     startAt?: boolean
     endAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     applications?: boolean | MatchingRound$applicationsArgs<ExtArgs>
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
     _count?: boolean | MatchingRoundCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["matchingRound"]>
 
@@ -16770,49 +18008,61 @@ export namespace Prisma {
     id?: boolean
     name?: boolean
     description?: boolean
+    chapterId?: boolean
     startAt?: boolean
     endAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["matchingRound"]>
 
   export type MatchingRoundSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
     description?: boolean
+    chapterId?: boolean
     startAt?: boolean
     endAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["matchingRound"]>
 
   export type MatchingRoundSelectScalar = {
     id?: boolean
     name?: boolean
     description?: boolean
+    chapterId?: boolean
     startAt?: boolean
     endAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type MatchingRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "startAt" | "endAt" | "createdAt" | "updatedAt", ExtArgs["result"]["matchingRound"]>
+  export type MatchingRoundOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "chapterId" | "startAt" | "endAt" | "createdAt" | "updatedAt", ExtArgs["result"]["matchingRound"]>
   export type MatchingRoundInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     applications?: boolean | MatchingRound$applicationsArgs<ExtArgs>
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
     _count?: boolean | MatchingRoundCountOutputTypeDefaultArgs<ExtArgs>
   }
-  export type MatchingRoundIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
-  export type MatchingRoundIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+  export type MatchingRoundIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
+  }
+  export type MatchingRoundIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    chapter?: boolean | GisuChapterDefaultArgs<ExtArgs>
+  }
 
   export type $MatchingRoundPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "MatchingRound"
     objects: {
       applications: Prisma.$ApplicationPayload<ExtArgs>[]
+      chapter: Prisma.$GisuChapterPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: bigint
       name: string
       description: string | null
+      chapterId: bigint
       startAt: Date
       endAt: Date
       createdAt: Date
@@ -17212,6 +18462,7 @@ export namespace Prisma {
   export interface Prisma__MatchingRoundClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     applications<T extends MatchingRound$applicationsArgs<ExtArgs> = {}>(args?: Subset<T, MatchingRound$applicationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    chapter<T extends GisuChapterDefaultArgs<ExtArgs> = {}>(args?: Subset<T, GisuChapterDefaultArgs<ExtArgs>>): Prisma__GisuChapterClient<$Result.GetResult<Prisma.$GisuChapterPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17244,6 +18495,7 @@ export namespace Prisma {
     readonly id: FieldRef<"MatchingRound", 'BigInt'>
     readonly name: FieldRef<"MatchingRound", 'String'>
     readonly description: FieldRef<"MatchingRound", 'String'>
+    readonly chapterId: FieldRef<"MatchingRound", 'BigInt'>
     readonly startAt: FieldRef<"MatchingRound", 'DateTime'>
     readonly endAt: FieldRef<"MatchingRound", 'DateTime'>
     readonly createdAt: FieldRef<"MatchingRound", 'DateTime'>
@@ -17497,6 +18749,10 @@ export namespace Prisma {
      */
     data: MatchingRoundCreateManyInput | MatchingRoundCreateManyInput[]
     skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MatchingRoundIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -17567,6 +18823,10 @@ export namespace Prisma {
      * Limit how many MatchingRounds to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MatchingRoundIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -17701,6 +18961,7 @@ export namespace Prisma {
     schoolId: 'schoolId',
     studentId: 'studentId',
     profileImageUrl: 'profileImageUrl',
+    passwordHash: 'passwordHash',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -17711,7 +18972,9 @@ export namespace Prisma {
   export const ChallengerGisuScalarFieldEnum: {
     id: 'id',
     challengerId: 'challengerId',
-    gisuId: 'gisuId',
+    chapterSchoolId: 'chapterSchoolId',
+    isTerminated: 'isTerminated',
+    part: 'part',
     isSchoolAdmin: 'isSchoolAdmin',
     isChapterAdmin: 'isChapterAdmin',
     isCentralAdmin: 'isCentralAdmin',
@@ -17729,6 +18992,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     description: 'description',
+    isCurrent: 'isCurrent',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -17736,9 +19000,21 @@ export namespace Prisma {
   export type GisuScalarFieldEnum = (typeof GisuScalarFieldEnum)[keyof typeof GisuScalarFieldEnum]
 
 
-  export const GisuSchoolScalarFieldEnum: {
+  export const GisuChapterScalarFieldEnum: {
     id: 'id',
+    name: 'name',
+    description: 'description',
     gisuId: 'gisuId',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type GisuChapterScalarFieldEnum = (typeof GisuChapterScalarFieldEnum)[keyof typeof GisuChapterScalarFieldEnum]
+
+
+  export const ChapterSchoolScalarFieldEnum: {
+    id: 'id',
+    chapterId: 'chapterId',
     schoolId: 'schoolId',
     leaderId: 'leaderId',
     viceLeaderId: 'viceLeaderId',
@@ -17746,7 +19022,7 @@ export namespace Prisma {
     updatedAt: 'updatedAt'
   };
 
-  export type GisuSchoolScalarFieldEnum = (typeof GisuSchoolScalarFieldEnum)[keyof typeof GisuSchoolScalarFieldEnum]
+  export type ChapterSchoolScalarFieldEnum = (typeof ChapterSchoolScalarFieldEnum)[keyof typeof ChapterSchoolScalarFieldEnum]
 
 
   export const SchoolScalarFieldEnum: {
@@ -17761,18 +19037,6 @@ export namespace Prisma {
   export type SchoolScalarFieldEnum = (typeof SchoolScalarFieldEnum)[keyof typeof SchoolScalarFieldEnum]
 
 
-  export const ChapterScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
-    description: 'description',
-    gisuId: 'gisuId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type ChapterScalarFieldEnum = (typeof ChapterScalarFieldEnum)[keyof typeof ChapterScalarFieldEnum]
-
-
   export const ProjectScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -17780,13 +19044,6 @@ export namespace Prisma {
     chapterId: 'chapterId',
     logoImageUrl: 'logoImageUrl',
     bannerImageUrl: 'bannerImageUrl',
-    planTo: 'planTo',
-    designTo: 'designTo',
-    webTo: 'webTo',
-    androidTo: 'androidTo',
-    iosTo: 'iosTo',
-    springbootTo: 'springbootTo',
-    nodejsTo: 'nodejsTo',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -17794,11 +19051,22 @@ export namespace Prisma {
   export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
 
 
+  export const ProjectToScalarFieldEnum: {
+    id: 'id',
+    projectId: 'projectId',
+    part: 'part',
+    to: 'to',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProjectToScalarFieldEnum = (typeof ProjectToScalarFieldEnum)[keyof typeof ProjectToScalarFieldEnum]
+
+
   export const ProjectMemberScalarFieldEnum: {
     id: 'id',
     projectId: 'projectId',
     challengerId: 'challengerId',
-    role: 'role',
     isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -17812,7 +19080,6 @@ export namespace Prisma {
     projectId: 'projectId',
     title: 'title',
     description: 'description',
-    isActive: 'isActive',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -17865,6 +19132,7 @@ export namespace Prisma {
     id: 'id',
     name: 'name',
     description: 'description',
+    chapterId: 'chapterId',
     startAt: 'startAt',
     endAt: 'endAt',
     createdAt: 'createdAt',
@@ -17914,20 +19182,6 @@ export namespace Prisma {
    * Reference to a field of type 'BigInt[]'
    */
   export type ListBigIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BigInt[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
     
 
 
@@ -17995,6 +19249,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'QuestionTypeEnum'
    */
   export type EnumQuestionTypeEnumFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QuestionTypeEnum'>
@@ -18044,19 +19312,20 @@ export namespace Prisma {
     OR?: ChallengerWhereInput[]
     NOT?: ChallengerWhereInput | ChallengerWhereInput[]
     id?: BigIntFilter<"Challenger"> | bigint | number
-    umsbId?: IntFilter<"Challenger"> | number
+    umsbId?: BigIntFilter<"Challenger"> | bigint | number
     name?: StringFilter<"Challenger"> | string
     nickname?: StringFilter<"Challenger"> | string
     gender?: EnumGenderEnumFilter<"Challenger"> | $Enums.GenderEnum
     schoolId?: BigIntFilter<"Challenger"> | bigint | number
     studentId?: StringFilter<"Challenger"> | string
     profileImageUrl?: StringNullableFilter<"Challenger"> | string | null
+    passwordHash?: StringFilter<"Challenger"> | string
     createdAt?: DateTimeFilter<"Challenger"> | Date | string
     updatedAt?: DateTimeFilter<"Challenger"> | Date | string
     school?: XOR<SchoolScalarRelationFilter, SchoolWhereInput>
     gisuRoles?: ChallengerGisuListRelationFilter
-    ledGisuSchools?: GisuSchoolListRelationFilter
-    viceLedGisuSchools?: GisuSchoolListRelationFilter
+    leaderGisuSchool?: ChapterSchoolListRelationFilter
+    viceLeadGisuSchool?: ChapterSchoolListRelationFilter
     projectMembers?: ProjectMemberListRelationFilter
     applications?: ApplicationListRelationFilter
   }
@@ -18070,12 +19339,13 @@ export namespace Prisma {
     schoolId?: SortOrder
     studentId?: SortOrder
     profileImageUrl?: SortOrderInput | SortOrder
+    passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     school?: SchoolOrderByWithRelationInput
     gisuRoles?: ChallengerGisuOrderByRelationAggregateInput
-    ledGisuSchools?: GisuSchoolOrderByRelationAggregateInput
-    viceLedGisuSchools?: GisuSchoolOrderByRelationAggregateInput
+    leaderGisuSchool?: ChapterSchoolOrderByRelationAggregateInput
+    viceLeadGisuSchool?: ChapterSchoolOrderByRelationAggregateInput
     projectMembers?: ProjectMemberOrderByRelationAggregateInput
     applications?: ApplicationOrderByRelationAggregateInput
   }
@@ -18085,19 +19355,20 @@ export namespace Prisma {
     AND?: ChallengerWhereInput | ChallengerWhereInput[]
     OR?: ChallengerWhereInput[]
     NOT?: ChallengerWhereInput | ChallengerWhereInput[]
-    umsbId?: IntFilter<"Challenger"> | number
+    umsbId?: BigIntFilter<"Challenger"> | bigint | number
     name?: StringFilter<"Challenger"> | string
     nickname?: StringFilter<"Challenger"> | string
     gender?: EnumGenderEnumFilter<"Challenger"> | $Enums.GenderEnum
     schoolId?: BigIntFilter<"Challenger"> | bigint | number
     studentId?: StringFilter<"Challenger"> | string
     profileImageUrl?: StringNullableFilter<"Challenger"> | string | null
+    passwordHash?: StringFilter<"Challenger"> | string
     createdAt?: DateTimeFilter<"Challenger"> | Date | string
     updatedAt?: DateTimeFilter<"Challenger"> | Date | string
     school?: XOR<SchoolScalarRelationFilter, SchoolWhereInput>
     gisuRoles?: ChallengerGisuListRelationFilter
-    ledGisuSchools?: GisuSchoolListRelationFilter
-    viceLedGisuSchools?: GisuSchoolListRelationFilter
+    leaderGisuSchool?: ChapterSchoolListRelationFilter
+    viceLeadGisuSchool?: ChapterSchoolListRelationFilter
     projectMembers?: ProjectMemberListRelationFilter
     applications?: ApplicationListRelationFilter
   }, "id">
@@ -18111,6 +19382,7 @@ export namespace Prisma {
     schoolId?: SortOrder
     studentId?: SortOrder
     profileImageUrl?: SortOrderInput | SortOrder
+    passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ChallengerCountOrderByAggregateInput
@@ -18125,13 +19397,14 @@ export namespace Prisma {
     OR?: ChallengerScalarWhereWithAggregatesInput[]
     NOT?: ChallengerScalarWhereWithAggregatesInput | ChallengerScalarWhereWithAggregatesInput[]
     id?: BigIntWithAggregatesFilter<"Challenger"> | bigint | number
-    umsbId?: IntWithAggregatesFilter<"Challenger"> | number
+    umsbId?: BigIntWithAggregatesFilter<"Challenger"> | bigint | number
     name?: StringWithAggregatesFilter<"Challenger"> | string
     nickname?: StringWithAggregatesFilter<"Challenger"> | string
     gender?: EnumGenderEnumWithAggregatesFilter<"Challenger"> | $Enums.GenderEnum
     schoolId?: BigIntWithAggregatesFilter<"Challenger"> | bigint | number
     studentId?: StringWithAggregatesFilter<"Challenger"> | string
     profileImageUrl?: StringNullableWithAggregatesFilter<"Challenger"> | string | null
+    passwordHash?: StringWithAggregatesFilter<"Challenger"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Challenger"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Challenger"> | Date | string
   }
@@ -18142,7 +19415,9 @@ export namespace Prisma {
     NOT?: ChallengerGisuWhereInput | ChallengerGisuWhereInput[]
     id?: BigIntFilter<"ChallengerGisu"> | bigint | number
     challengerId?: BigIntFilter<"ChallengerGisu"> | bigint | number
-    gisuId?: BigIntFilter<"ChallengerGisu"> | bigint | number
+    chapterSchoolId?: BigIntFilter<"ChallengerGisu"> | bigint | number
+    isTerminated?: BoolFilter<"ChallengerGisu"> | boolean
+    part?: EnumUserPartEnumFilter<"ChallengerGisu"> | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFilter<"ChallengerGisu"> | boolean
     isChapterAdmin?: BoolFilter<"ChallengerGisu"> | boolean
     isCentralAdmin?: BoolFilter<"ChallengerGisu"> | boolean
@@ -18152,13 +19427,15 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ChallengerGisu"> | Date | string
     updatedAt?: DateTimeFilter<"ChallengerGisu"> | Date | string
     challenger?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
-    gisu?: XOR<GisuScalarRelationFilter, GisuWhereInput>
+    chapterSchool?: XOR<GisuChapterScalarRelationFilter, GisuChapterWhereInput>
   }
 
   export type ChallengerGisuOrderByWithRelationInput = {
     id?: SortOrder
     challengerId?: SortOrder
-    gisuId?: SortOrder
+    chapterSchoolId?: SortOrder
+    isTerminated?: SortOrder
+    part?: SortOrder
     isSchoolAdmin?: SortOrder
     isChapterAdmin?: SortOrder
     isCentralAdmin?: SortOrder
@@ -18168,7 +19445,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     challenger?: ChallengerOrderByWithRelationInput
-    gisu?: GisuOrderByWithRelationInput
+    chapterSchool?: GisuChapterOrderByWithRelationInput
   }
 
   export type ChallengerGisuWhereUniqueInput = Prisma.AtLeast<{
@@ -18177,7 +19454,9 @@ export namespace Prisma {
     OR?: ChallengerGisuWhereInput[]
     NOT?: ChallengerGisuWhereInput | ChallengerGisuWhereInput[]
     challengerId?: BigIntFilter<"ChallengerGisu"> | bigint | number
-    gisuId?: BigIntFilter<"ChallengerGisu"> | bigint | number
+    chapterSchoolId?: BigIntFilter<"ChallengerGisu"> | bigint | number
+    isTerminated?: BoolFilter<"ChallengerGisu"> | boolean
+    part?: EnumUserPartEnumFilter<"ChallengerGisu"> | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFilter<"ChallengerGisu"> | boolean
     isChapterAdmin?: BoolFilter<"ChallengerGisu"> | boolean
     isCentralAdmin?: BoolFilter<"ChallengerGisu"> | boolean
@@ -18187,13 +19466,15 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"ChallengerGisu"> | Date | string
     updatedAt?: DateTimeFilter<"ChallengerGisu"> | Date | string
     challenger?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
-    gisu?: XOR<GisuScalarRelationFilter, GisuWhereInput>
+    chapterSchool?: XOR<GisuChapterScalarRelationFilter, GisuChapterWhereInput>
   }, "id">
 
   export type ChallengerGisuOrderByWithAggregationInput = {
     id?: SortOrder
     challengerId?: SortOrder
-    gisuId?: SortOrder
+    chapterSchoolId?: SortOrder
+    isTerminated?: SortOrder
+    part?: SortOrder
     isSchoolAdmin?: SortOrder
     isChapterAdmin?: SortOrder
     isCentralAdmin?: SortOrder
@@ -18215,7 +19496,9 @@ export namespace Prisma {
     NOT?: ChallengerGisuScalarWhereWithAggregatesInput | ChallengerGisuScalarWhereWithAggregatesInput[]
     id?: BigIntWithAggregatesFilter<"ChallengerGisu"> | bigint | number
     challengerId?: BigIntWithAggregatesFilter<"ChallengerGisu"> | bigint | number
-    gisuId?: BigIntWithAggregatesFilter<"ChallengerGisu"> | bigint | number
+    chapterSchoolId?: BigIntWithAggregatesFilter<"ChallengerGisu"> | bigint | number
+    isTerminated?: BoolWithAggregatesFilter<"ChallengerGisu"> | boolean
+    part?: EnumUserPartEnumWithAggregatesFilter<"ChallengerGisu"> | $Enums.UserPartEnum
     isSchoolAdmin?: BoolWithAggregatesFilter<"ChallengerGisu"> | boolean
     isChapterAdmin?: BoolWithAggregatesFilter<"ChallengerGisu"> | boolean
     isCentralAdmin?: BoolWithAggregatesFilter<"ChallengerGisu"> | boolean
@@ -18233,22 +19516,20 @@ export namespace Prisma {
     id?: BigIntFilter<"Gisu"> | bigint | number
     name?: StringFilter<"Gisu"> | string
     description?: StringNullableFilter<"Gisu"> | string | null
+    isCurrent?: BoolFilter<"Gisu"> | boolean
     createdAt?: DateTimeFilter<"Gisu"> | Date | string
     updatedAt?: DateTimeFilter<"Gisu"> | Date | string
-    gisuSchools?: GisuSchoolListRelationFilter
-    chapters?: ChapterListRelationFilter
-    challengerGisus?: ChallengerGisuListRelationFilter
+    chapters?: GisuChapterListRelationFilter
   }
 
   export type GisuOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    isCurrent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    gisuSchools?: GisuSchoolOrderByRelationAggregateInput
-    chapters?: ChapterOrderByRelationAggregateInput
-    challengerGisus?: ChallengerGisuOrderByRelationAggregateInput
+    chapters?: GisuChapterOrderByRelationAggregateInput
   }
 
   export type GisuWhereUniqueInput = Prisma.AtLeast<{
@@ -18258,17 +19539,17 @@ export namespace Prisma {
     NOT?: GisuWhereInput | GisuWhereInput[]
     name?: StringFilter<"Gisu"> | string
     description?: StringNullableFilter<"Gisu"> | string | null
+    isCurrent?: BoolFilter<"Gisu"> | boolean
     createdAt?: DateTimeFilter<"Gisu"> | Date | string
     updatedAt?: DateTimeFilter<"Gisu"> | Date | string
-    gisuSchools?: GisuSchoolListRelationFilter
-    chapters?: ChapterListRelationFilter
-    challengerGisus?: ChallengerGisuListRelationFilter
+    chapters?: GisuChapterListRelationFilter
   }, "id">
 
   export type GisuOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    isCurrent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: GisuCountOrderByAggregateInput
@@ -18285,84 +19566,159 @@ export namespace Prisma {
     id?: BigIntWithAggregatesFilter<"Gisu"> | bigint | number
     name?: StringWithAggregatesFilter<"Gisu"> | string
     description?: StringNullableWithAggregatesFilter<"Gisu"> | string | null
+    isCurrent?: BoolWithAggregatesFilter<"Gisu"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Gisu"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Gisu"> | Date | string
   }
 
-  export type GisuSchoolWhereInput = {
-    AND?: GisuSchoolWhereInput | GisuSchoolWhereInput[]
-    OR?: GisuSchoolWhereInput[]
-    NOT?: GisuSchoolWhereInput | GisuSchoolWhereInput[]
-    id?: BigIntFilter<"GisuSchool"> | bigint | number
-    gisuId?: BigIntFilter<"GisuSchool"> | bigint | number
-    schoolId?: BigIntFilter<"GisuSchool"> | bigint | number
-    leaderId?: BigIntFilter<"GisuSchool"> | bigint | number
-    viceLeaderId?: BigIntNullableFilter<"GisuSchool"> | bigint | number | null
-    createdAt?: DateTimeFilter<"GisuSchool"> | Date | string
-    updatedAt?: DateTimeFilter<"GisuSchool"> | Date | string
+  export type GisuChapterWhereInput = {
+    AND?: GisuChapterWhereInput | GisuChapterWhereInput[]
+    OR?: GisuChapterWhereInput[]
+    NOT?: GisuChapterWhereInput | GisuChapterWhereInput[]
+    id?: BigIntFilter<"GisuChapter"> | bigint | number
+    name?: StringFilter<"GisuChapter"> | string
+    description?: StringNullableFilter<"GisuChapter"> | string | null
+    gisuId?: BigIntFilter<"GisuChapter"> | bigint | number
+    createdAt?: DateTimeFilter<"GisuChapter"> | Date | string
+    updatedAt?: DateTimeFilter<"GisuChapter"> | Date | string
     gisu?: XOR<GisuScalarRelationFilter, GisuWhereInput>
-    school?: XOR<SchoolScalarRelationFilter, SchoolWhereInput>
-    leader?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
-    viceLeader?: XOR<ChallengerNullableScalarRelationFilter, ChallengerWhereInput> | null
+    projects?: ProjectListRelationFilter
+    chapterMatchingRound?: MatchingRoundListRelationFilter
+    gisuChapterSchool?: ChapterSchoolListRelationFilter
+    gisuChapterChallenger?: ChallengerGisuListRelationFilter
   }
 
-  export type GisuSchoolOrderByWithRelationInput = {
+  export type GisuChapterOrderByWithRelationInput = {
     id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
     gisuId?: SortOrder
-    schoolId?: SortOrder
-    leaderId?: SortOrder
-    viceLeaderId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     gisu?: GisuOrderByWithRelationInput
+    projects?: ProjectOrderByRelationAggregateInput
+    chapterMatchingRound?: MatchingRoundOrderByRelationAggregateInput
+    gisuChapterSchool?: ChapterSchoolOrderByRelationAggregateInput
+    gisuChapterChallenger?: ChallengerGisuOrderByRelationAggregateInput
+  }
+
+  export type GisuChapterWhereUniqueInput = Prisma.AtLeast<{
+    id?: bigint | number
+    AND?: GisuChapterWhereInput | GisuChapterWhereInput[]
+    OR?: GisuChapterWhereInput[]
+    NOT?: GisuChapterWhereInput | GisuChapterWhereInput[]
+    name?: StringFilter<"GisuChapter"> | string
+    description?: StringNullableFilter<"GisuChapter"> | string | null
+    gisuId?: BigIntFilter<"GisuChapter"> | bigint | number
+    createdAt?: DateTimeFilter<"GisuChapter"> | Date | string
+    updatedAt?: DateTimeFilter<"GisuChapter"> | Date | string
+    gisu?: XOR<GisuScalarRelationFilter, GisuWhereInput>
+    projects?: ProjectListRelationFilter
+    chapterMatchingRound?: MatchingRoundListRelationFilter
+    gisuChapterSchool?: ChapterSchoolListRelationFilter
+    gisuChapterChallenger?: ChallengerGisuListRelationFilter
+  }, "id">
+
+  export type GisuChapterOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    gisuId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: GisuChapterCountOrderByAggregateInput
+    _avg?: GisuChapterAvgOrderByAggregateInput
+    _max?: GisuChapterMaxOrderByAggregateInput
+    _min?: GisuChapterMinOrderByAggregateInput
+    _sum?: GisuChapterSumOrderByAggregateInput
+  }
+
+  export type GisuChapterScalarWhereWithAggregatesInput = {
+    AND?: GisuChapterScalarWhereWithAggregatesInput | GisuChapterScalarWhereWithAggregatesInput[]
+    OR?: GisuChapterScalarWhereWithAggregatesInput[]
+    NOT?: GisuChapterScalarWhereWithAggregatesInput | GisuChapterScalarWhereWithAggregatesInput[]
+    id?: BigIntWithAggregatesFilter<"GisuChapter"> | bigint | number
+    name?: StringWithAggregatesFilter<"GisuChapter"> | string
+    description?: StringNullableWithAggregatesFilter<"GisuChapter"> | string | null
+    gisuId?: BigIntWithAggregatesFilter<"GisuChapter"> | bigint | number
+    createdAt?: DateTimeWithAggregatesFilter<"GisuChapter"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"GisuChapter"> | Date | string
+  }
+
+  export type ChapterSchoolWhereInput = {
+    AND?: ChapterSchoolWhereInput | ChapterSchoolWhereInput[]
+    OR?: ChapterSchoolWhereInput[]
+    NOT?: ChapterSchoolWhereInput | ChapterSchoolWhereInput[]
+    id?: BigIntFilter<"ChapterSchool"> | bigint | number
+    chapterId?: BigIntFilter<"ChapterSchool"> | bigint | number
+    schoolId?: BigIntFilter<"ChapterSchool"> | bigint | number
+    leaderId?: BigIntNullableFilter<"ChapterSchool"> | bigint | number | null
+    viceLeaderId?: BigIntNullableFilter<"ChapterSchool"> | bigint | number | null
+    createdAt?: DateTimeFilter<"ChapterSchool"> | Date | string
+    updatedAt?: DateTimeFilter<"ChapterSchool"> | Date | string
+    chapter?: XOR<GisuChapterScalarRelationFilter, GisuChapterWhereInput>
+    school?: XOR<SchoolScalarRelationFilter, SchoolWhereInput>
+    leader?: XOR<ChallengerNullableScalarRelationFilter, ChallengerWhereInput> | null
+    viceLeader?: XOR<ChallengerNullableScalarRelationFilter, ChallengerWhereInput> | null
+  }
+
+  export type ChapterSchoolOrderByWithRelationInput = {
+    id?: SortOrder
+    chapterId?: SortOrder
+    schoolId?: SortOrder
+    leaderId?: SortOrderInput | SortOrder
+    viceLeaderId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    chapter?: GisuChapterOrderByWithRelationInput
     school?: SchoolOrderByWithRelationInput
     leader?: ChallengerOrderByWithRelationInput
     viceLeader?: ChallengerOrderByWithRelationInput
   }
 
-  export type GisuSchoolWhereUniqueInput = Prisma.AtLeast<{
+  export type ChapterSchoolWhereUniqueInput = Prisma.AtLeast<{
     id?: bigint | number
-    AND?: GisuSchoolWhereInput | GisuSchoolWhereInput[]
-    OR?: GisuSchoolWhereInput[]
-    NOT?: GisuSchoolWhereInput | GisuSchoolWhereInput[]
-    gisuId?: BigIntFilter<"GisuSchool"> | bigint | number
-    schoolId?: BigIntFilter<"GisuSchool"> | bigint | number
-    leaderId?: BigIntFilter<"GisuSchool"> | bigint | number
-    viceLeaderId?: BigIntNullableFilter<"GisuSchool"> | bigint | number | null
-    createdAt?: DateTimeFilter<"GisuSchool"> | Date | string
-    updatedAt?: DateTimeFilter<"GisuSchool"> | Date | string
-    gisu?: XOR<GisuScalarRelationFilter, GisuWhereInput>
+    AND?: ChapterSchoolWhereInput | ChapterSchoolWhereInput[]
+    OR?: ChapterSchoolWhereInput[]
+    NOT?: ChapterSchoolWhereInput | ChapterSchoolWhereInput[]
+    chapterId?: BigIntFilter<"ChapterSchool"> | bigint | number
+    schoolId?: BigIntFilter<"ChapterSchool"> | bigint | number
+    leaderId?: BigIntNullableFilter<"ChapterSchool"> | bigint | number | null
+    viceLeaderId?: BigIntNullableFilter<"ChapterSchool"> | bigint | number | null
+    createdAt?: DateTimeFilter<"ChapterSchool"> | Date | string
+    updatedAt?: DateTimeFilter<"ChapterSchool"> | Date | string
+    chapter?: XOR<GisuChapterScalarRelationFilter, GisuChapterWhereInput>
     school?: XOR<SchoolScalarRelationFilter, SchoolWhereInput>
-    leader?: XOR<ChallengerScalarRelationFilter, ChallengerWhereInput>
+    leader?: XOR<ChallengerNullableScalarRelationFilter, ChallengerWhereInput> | null
     viceLeader?: XOR<ChallengerNullableScalarRelationFilter, ChallengerWhereInput> | null
   }, "id">
 
-  export type GisuSchoolOrderByWithAggregationInput = {
+  export type ChapterSchoolOrderByWithAggregationInput = {
     id?: SortOrder
-    gisuId?: SortOrder
+    chapterId?: SortOrder
     schoolId?: SortOrder
-    leaderId?: SortOrder
+    leaderId?: SortOrderInput | SortOrder
     viceLeaderId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    _count?: GisuSchoolCountOrderByAggregateInput
-    _avg?: GisuSchoolAvgOrderByAggregateInput
-    _max?: GisuSchoolMaxOrderByAggregateInput
-    _min?: GisuSchoolMinOrderByAggregateInput
-    _sum?: GisuSchoolSumOrderByAggregateInput
+    _count?: ChapterSchoolCountOrderByAggregateInput
+    _avg?: ChapterSchoolAvgOrderByAggregateInput
+    _max?: ChapterSchoolMaxOrderByAggregateInput
+    _min?: ChapterSchoolMinOrderByAggregateInput
+    _sum?: ChapterSchoolSumOrderByAggregateInput
   }
 
-  export type GisuSchoolScalarWhereWithAggregatesInput = {
-    AND?: GisuSchoolScalarWhereWithAggregatesInput | GisuSchoolScalarWhereWithAggregatesInput[]
-    OR?: GisuSchoolScalarWhereWithAggregatesInput[]
-    NOT?: GisuSchoolScalarWhereWithAggregatesInput | GisuSchoolScalarWhereWithAggregatesInput[]
-    id?: BigIntWithAggregatesFilter<"GisuSchool"> | bigint | number
-    gisuId?: BigIntWithAggregatesFilter<"GisuSchool"> | bigint | number
-    schoolId?: BigIntWithAggregatesFilter<"GisuSchool"> | bigint | number
-    leaderId?: BigIntWithAggregatesFilter<"GisuSchool"> | bigint | number
-    viceLeaderId?: BigIntNullableWithAggregatesFilter<"GisuSchool"> | bigint | number | null
-    createdAt?: DateTimeWithAggregatesFilter<"GisuSchool"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"GisuSchool"> | Date | string
+  export type ChapterSchoolScalarWhereWithAggregatesInput = {
+    AND?: ChapterSchoolScalarWhereWithAggregatesInput | ChapterSchoolScalarWhereWithAggregatesInput[]
+    OR?: ChapterSchoolScalarWhereWithAggregatesInput[]
+    NOT?: ChapterSchoolScalarWhereWithAggregatesInput | ChapterSchoolScalarWhereWithAggregatesInput[]
+    id?: BigIntWithAggregatesFilter<"ChapterSchool"> | bigint | number
+    chapterId?: BigIntWithAggregatesFilter<"ChapterSchool"> | bigint | number
+    schoolId?: BigIntWithAggregatesFilter<"ChapterSchool"> | bigint | number
+    leaderId?: BigIntNullableWithAggregatesFilter<"ChapterSchool"> | bigint | number | null
+    viceLeaderId?: BigIntNullableWithAggregatesFilter<"ChapterSchool"> | bigint | number | null
+    createdAt?: DateTimeWithAggregatesFilter<"ChapterSchool"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ChapterSchool"> | Date | string
   }
 
   export type SchoolWhereInput = {
@@ -18376,7 +19732,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"School"> | Date | string
     updatedAt?: DateTimeFilter<"School"> | Date | string
     challengers?: ChallengerListRelationFilter
-    gisuSchools?: GisuSchoolListRelationFilter
+    gisuSchools?: ChapterSchoolListRelationFilter
   }
 
   export type SchoolOrderByWithRelationInput = {
@@ -18387,7 +19743,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     challengers?: ChallengerOrderByRelationAggregateInput
-    gisuSchools?: GisuSchoolOrderByRelationAggregateInput
+    gisuSchools?: ChapterSchoolOrderByRelationAggregateInput
   }
 
   export type SchoolWhereUniqueInput = Prisma.AtLeast<{
@@ -18401,7 +19757,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"School"> | Date | string
     updatedAt?: DateTimeFilter<"School"> | Date | string
     challengers?: ChallengerListRelationFilter
-    gisuSchools?: GisuSchoolListRelationFilter
+    gisuSchools?: ChapterSchoolListRelationFilter
   }, "id">
 
   export type SchoolOrderByWithAggregationInput = {
@@ -18430,71 +19786,6 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"School"> | Date | string
   }
 
-  export type ChapterWhereInput = {
-    AND?: ChapterWhereInput | ChapterWhereInput[]
-    OR?: ChapterWhereInput[]
-    NOT?: ChapterWhereInput | ChapterWhereInput[]
-    id?: BigIntFilter<"Chapter"> | bigint | number
-    name?: StringFilter<"Chapter"> | string
-    description?: StringNullableFilter<"Chapter"> | string | null
-    gisuId?: BigIntFilter<"Chapter"> | bigint | number
-    createdAt?: DateTimeFilter<"Chapter"> | Date | string
-    updatedAt?: DateTimeFilter<"Chapter"> | Date | string
-    gisu?: XOR<GisuScalarRelationFilter, GisuWhereInput>
-    projects?: ProjectListRelationFilter
-  }
-
-  export type ChapterOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
-    gisuId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    gisu?: GisuOrderByWithRelationInput
-    projects?: ProjectOrderByRelationAggregateInput
-  }
-
-  export type ChapterWhereUniqueInput = Prisma.AtLeast<{
-    id?: bigint | number
-    AND?: ChapterWhereInput | ChapterWhereInput[]
-    OR?: ChapterWhereInput[]
-    NOT?: ChapterWhereInput | ChapterWhereInput[]
-    name?: StringFilter<"Chapter"> | string
-    description?: StringNullableFilter<"Chapter"> | string | null
-    gisuId?: BigIntFilter<"Chapter"> | bigint | number
-    createdAt?: DateTimeFilter<"Chapter"> | Date | string
-    updatedAt?: DateTimeFilter<"Chapter"> | Date | string
-    gisu?: XOR<GisuScalarRelationFilter, GisuWhereInput>
-    projects?: ProjectListRelationFilter
-  }, "id">
-
-  export type ChapterOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrderInput | SortOrder
-    gisuId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: ChapterCountOrderByAggregateInput
-    _avg?: ChapterAvgOrderByAggregateInput
-    _max?: ChapterMaxOrderByAggregateInput
-    _min?: ChapterMinOrderByAggregateInput
-    _sum?: ChapterSumOrderByAggregateInput
-  }
-
-  export type ChapterScalarWhereWithAggregatesInput = {
-    AND?: ChapterScalarWhereWithAggregatesInput | ChapterScalarWhereWithAggregatesInput[]
-    OR?: ChapterScalarWhereWithAggregatesInput[]
-    NOT?: ChapterScalarWhereWithAggregatesInput | ChapterScalarWhereWithAggregatesInput[]
-    id?: BigIntWithAggregatesFilter<"Chapter"> | bigint | number
-    name?: StringWithAggregatesFilter<"Chapter"> | string
-    description?: StringNullableWithAggregatesFilter<"Chapter"> | string | null
-    gisuId?: BigIntWithAggregatesFilter<"Chapter"> | bigint | number
-    createdAt?: DateTimeWithAggregatesFilter<"Chapter"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Chapter"> | Date | string
-  }
-
   export type ProjectWhereInput = {
     AND?: ProjectWhereInput | ProjectWhereInput[]
     OR?: ProjectWhereInput[]
@@ -18505,18 +19796,12 @@ export namespace Prisma {
     chapterId?: BigIntFilter<"Project"> | bigint | number
     logoImageUrl?: StringNullableFilter<"Project"> | string | null
     bannerImageUrl?: StringNullableFilter<"Project"> | string | null
-    planTo?: IntFilter<"Project"> | number
-    designTo?: IntFilter<"Project"> | number
-    webTo?: IntFilter<"Project"> | number
-    androidTo?: IntFilter<"Project"> | number
-    iosTo?: IntFilter<"Project"> | number
-    springbootTo?: IntFilter<"Project"> | number
-    nodejsTo?: IntFilter<"Project"> | number
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
-    chapter?: XOR<ChapterScalarRelationFilter, ChapterWhereInput>
+    chapter?: XOR<GisuChapterScalarRelationFilter, GisuChapterWhereInput>
     members?: ProjectMemberListRelationFilter
     applicationForms?: ApplicationFormListRelationFilter
+    to?: ProjectToListRelationFilter
   }
 
   export type ProjectOrderByWithRelationInput = {
@@ -18526,18 +19811,12 @@ export namespace Prisma {
     chapterId?: SortOrder
     logoImageUrl?: SortOrderInput | SortOrder
     bannerImageUrl?: SortOrderInput | SortOrder
-    planTo?: SortOrder
-    designTo?: SortOrder
-    webTo?: SortOrder
-    androidTo?: SortOrder
-    iosTo?: SortOrder
-    springbootTo?: SortOrder
-    nodejsTo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    chapter?: ChapterOrderByWithRelationInput
+    chapter?: GisuChapterOrderByWithRelationInput
     members?: ProjectMemberOrderByRelationAggregateInput
     applicationForms?: ApplicationFormOrderByRelationAggregateInput
+    to?: ProjectToOrderByRelationAggregateInput
   }
 
   export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -18550,18 +19829,12 @@ export namespace Prisma {
     chapterId?: BigIntFilter<"Project"> | bigint | number
     logoImageUrl?: StringNullableFilter<"Project"> | string | null
     bannerImageUrl?: StringNullableFilter<"Project"> | string | null
-    planTo?: IntFilter<"Project"> | number
-    designTo?: IntFilter<"Project"> | number
-    webTo?: IntFilter<"Project"> | number
-    androidTo?: IntFilter<"Project"> | number
-    iosTo?: IntFilter<"Project"> | number
-    springbootTo?: IntFilter<"Project"> | number
-    nodejsTo?: IntFilter<"Project"> | number
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
-    chapter?: XOR<ChapterScalarRelationFilter, ChapterWhereInput>
+    chapter?: XOR<GisuChapterScalarRelationFilter, GisuChapterWhereInput>
     members?: ProjectMemberListRelationFilter
     applicationForms?: ApplicationFormListRelationFilter
+    to?: ProjectToListRelationFilter
   }, "id">
 
   export type ProjectOrderByWithAggregationInput = {
@@ -18571,13 +19844,6 @@ export namespace Prisma {
     chapterId?: SortOrder
     logoImageUrl?: SortOrderInput | SortOrder
     bannerImageUrl?: SortOrderInput | SortOrder
-    planTo?: SortOrder
-    designTo?: SortOrder
-    webTo?: SortOrder
-    androidTo?: SortOrder
-    iosTo?: SortOrder
-    springbootTo?: SortOrder
-    nodejsTo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProjectCountOrderByAggregateInput
@@ -18597,15 +19863,70 @@ export namespace Prisma {
     chapterId?: BigIntWithAggregatesFilter<"Project"> | bigint | number
     logoImageUrl?: StringNullableWithAggregatesFilter<"Project"> | string | null
     bannerImageUrl?: StringNullableWithAggregatesFilter<"Project"> | string | null
-    planTo?: IntWithAggregatesFilter<"Project"> | number
-    designTo?: IntWithAggregatesFilter<"Project"> | number
-    webTo?: IntWithAggregatesFilter<"Project"> | number
-    androidTo?: IntWithAggregatesFilter<"Project"> | number
-    iosTo?: IntWithAggregatesFilter<"Project"> | number
-    springbootTo?: IntWithAggregatesFilter<"Project"> | number
-    nodejsTo?: IntWithAggregatesFilter<"Project"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
+  }
+
+  export type ProjectToWhereInput = {
+    AND?: ProjectToWhereInput | ProjectToWhereInput[]
+    OR?: ProjectToWhereInput[]
+    NOT?: ProjectToWhereInput | ProjectToWhereInput[]
+    id?: BigIntFilter<"ProjectTo"> | bigint | number
+    projectId?: BigIntFilter<"ProjectTo"> | bigint | number
+    part?: EnumUserPartEnumFilter<"ProjectTo"> | $Enums.UserPartEnum
+    to?: IntFilter<"ProjectTo"> | number
+    createdAt?: DateTimeFilter<"ProjectTo"> | Date | string
+    updatedAt?: DateTimeFilter<"ProjectTo"> | Date | string
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  }
+
+  export type ProjectToOrderByWithRelationInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    part?: SortOrder
+    to?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    project?: ProjectOrderByWithRelationInput
+  }
+
+  export type ProjectToWhereUniqueInput = Prisma.AtLeast<{
+    id?: bigint | number
+    AND?: ProjectToWhereInput | ProjectToWhereInput[]
+    OR?: ProjectToWhereInput[]
+    NOT?: ProjectToWhereInput | ProjectToWhereInput[]
+    projectId?: BigIntFilter<"ProjectTo"> | bigint | number
+    part?: EnumUserPartEnumFilter<"ProjectTo"> | $Enums.UserPartEnum
+    to?: IntFilter<"ProjectTo"> | number
+    createdAt?: DateTimeFilter<"ProjectTo"> | Date | string
+    updatedAt?: DateTimeFilter<"ProjectTo"> | Date | string
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+  }, "id">
+
+  export type ProjectToOrderByWithAggregationInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    part?: SortOrder
+    to?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProjectToCountOrderByAggregateInput
+    _avg?: ProjectToAvgOrderByAggregateInput
+    _max?: ProjectToMaxOrderByAggregateInput
+    _min?: ProjectToMinOrderByAggregateInput
+    _sum?: ProjectToSumOrderByAggregateInput
+  }
+
+  export type ProjectToScalarWhereWithAggregatesInput = {
+    AND?: ProjectToScalarWhereWithAggregatesInput | ProjectToScalarWhereWithAggregatesInput[]
+    OR?: ProjectToScalarWhereWithAggregatesInput[]
+    NOT?: ProjectToScalarWhereWithAggregatesInput | ProjectToScalarWhereWithAggregatesInput[]
+    id?: BigIntWithAggregatesFilter<"ProjectTo"> | bigint | number
+    projectId?: BigIntWithAggregatesFilter<"ProjectTo"> | bigint | number
+    part?: EnumUserPartEnumWithAggregatesFilter<"ProjectTo"> | $Enums.UserPartEnum
+    to?: IntWithAggregatesFilter<"ProjectTo"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"ProjectTo"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProjectTo"> | Date | string
   }
 
   export type ProjectMemberWhereInput = {
@@ -18615,7 +19936,6 @@ export namespace Prisma {
     id?: BigIntFilter<"ProjectMember"> | bigint | number
     projectId?: BigIntFilter<"ProjectMember"> | bigint | number
     challengerId?: BigIntFilter<"ProjectMember"> | bigint | number
-    role?: EnumUserPartEnumFilter<"ProjectMember"> | $Enums.UserPartEnum
     isActive?: BoolFilter<"ProjectMember"> | boolean
     createdAt?: DateTimeFilter<"ProjectMember"> | Date | string
     updatedAt?: DateTimeFilter<"ProjectMember"> | Date | string
@@ -18627,7 +19947,6 @@ export namespace Prisma {
     id?: SortOrder
     projectId?: SortOrder
     challengerId?: SortOrder
-    role?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -18642,7 +19961,6 @@ export namespace Prisma {
     NOT?: ProjectMemberWhereInput | ProjectMemberWhereInput[]
     projectId?: BigIntFilter<"ProjectMember"> | bigint | number
     challengerId?: BigIntFilter<"ProjectMember"> | bigint | number
-    role?: EnumUserPartEnumFilter<"ProjectMember"> | $Enums.UserPartEnum
     isActive?: BoolFilter<"ProjectMember"> | boolean
     createdAt?: DateTimeFilter<"ProjectMember"> | Date | string
     updatedAt?: DateTimeFilter<"ProjectMember"> | Date | string
@@ -18654,7 +19972,6 @@ export namespace Prisma {
     id?: SortOrder
     projectId?: SortOrder
     challengerId?: SortOrder
-    role?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -18672,7 +19989,6 @@ export namespace Prisma {
     id?: BigIntWithAggregatesFilter<"ProjectMember"> | bigint | number
     projectId?: BigIntWithAggregatesFilter<"ProjectMember"> | bigint | number
     challengerId?: BigIntWithAggregatesFilter<"ProjectMember"> | bigint | number
-    role?: EnumUserPartEnumWithAggregatesFilter<"ProjectMember"> | $Enums.UserPartEnum
     isActive?: BoolWithAggregatesFilter<"ProjectMember"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ProjectMember"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ProjectMember"> | Date | string
@@ -18686,7 +20002,6 @@ export namespace Prisma {
     projectId?: BigIntFilter<"ApplicationForm"> | bigint | number
     title?: StringFilter<"ApplicationForm"> | string
     description?: StringNullableFilter<"ApplicationForm"> | string | null
-    isActive?: BoolFilter<"ApplicationForm"> | boolean
     createdAt?: DateTimeFilter<"ApplicationForm"> | Date | string
     updatedAt?: DateTimeFilter<"ApplicationForm"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
@@ -18698,7 +20013,6 @@ export namespace Prisma {
     projectId?: SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
-    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     project?: ProjectOrderByWithRelationInput
@@ -18713,7 +20027,6 @@ export namespace Prisma {
     projectId?: BigIntFilter<"ApplicationForm"> | bigint | number
     title?: StringFilter<"ApplicationForm"> | string
     description?: StringNullableFilter<"ApplicationForm"> | string | null
-    isActive?: BoolFilter<"ApplicationForm"> | boolean
     createdAt?: DateTimeFilter<"ApplicationForm"> | Date | string
     updatedAt?: DateTimeFilter<"ApplicationForm"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
@@ -18725,7 +20038,6 @@ export namespace Prisma {
     projectId?: SortOrder
     title?: SortOrder
     description?: SortOrderInput | SortOrder
-    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ApplicationFormCountOrderByAggregateInput
@@ -18743,7 +20055,6 @@ export namespace Prisma {
     projectId?: BigIntWithAggregatesFilter<"ApplicationForm"> | bigint | number
     title?: StringWithAggregatesFilter<"ApplicationForm"> | string
     description?: StringNullableWithAggregatesFilter<"ApplicationForm"> | string | null
-    isActive?: BoolWithAggregatesFilter<"ApplicationForm"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"ApplicationForm"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ApplicationForm"> | Date | string
   }
@@ -18978,22 +20289,26 @@ export namespace Prisma {
     id?: BigIntFilter<"MatchingRound"> | bigint | number
     name?: StringFilter<"MatchingRound"> | string
     description?: StringNullableFilter<"MatchingRound"> | string | null
+    chapterId?: BigIntFilter<"MatchingRound"> | bigint | number
     startAt?: DateTimeFilter<"MatchingRound"> | Date | string
     endAt?: DateTimeFilter<"MatchingRound"> | Date | string
     createdAt?: DateTimeFilter<"MatchingRound"> | Date | string
     updatedAt?: DateTimeFilter<"MatchingRound"> | Date | string
     applications?: ApplicationListRelationFilter
+    chapter?: XOR<GisuChapterScalarRelationFilter, GisuChapterWhereInput>
   }
 
   export type MatchingRoundOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    chapterId?: SortOrder
     startAt?: SortOrder
     endAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     applications?: ApplicationOrderByRelationAggregateInput
+    chapter?: GisuChapterOrderByWithRelationInput
   }
 
   export type MatchingRoundWhereUniqueInput = Prisma.AtLeast<{
@@ -19003,17 +20318,20 @@ export namespace Prisma {
     NOT?: MatchingRoundWhereInput | MatchingRoundWhereInput[]
     name?: StringFilter<"MatchingRound"> | string
     description?: StringNullableFilter<"MatchingRound"> | string | null
+    chapterId?: BigIntFilter<"MatchingRound"> | bigint | number
     startAt?: DateTimeFilter<"MatchingRound"> | Date | string
     endAt?: DateTimeFilter<"MatchingRound"> | Date | string
     createdAt?: DateTimeFilter<"MatchingRound"> | Date | string
     updatedAt?: DateTimeFilter<"MatchingRound"> | Date | string
     applications?: ApplicationListRelationFilter
+    chapter?: XOR<GisuChapterScalarRelationFilter, GisuChapterWhereInput>
   }, "id">
 
   export type MatchingRoundOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrderInput | SortOrder
+    chapterId?: SortOrder
     startAt?: SortOrder
     endAt?: SortOrder
     createdAt?: SortOrder
@@ -19032,6 +20350,7 @@ export namespace Prisma {
     id?: BigIntWithAggregatesFilter<"MatchingRound"> | bigint | number
     name?: StringWithAggregatesFilter<"MatchingRound"> | string
     description?: StringNullableWithAggregatesFilter<"MatchingRound"> | string | null
+    chapterId?: BigIntWithAggregatesFilter<"MatchingRound"> | bigint | number
     startAt?: DateTimeWithAggregatesFilter<"MatchingRound"> | Date | string
     endAt?: DateTimeWithAggregatesFilter<"MatchingRound"> | Date | string
     createdAt?: DateTimeWithAggregatesFilter<"MatchingRound"> | Date | string
@@ -19040,116 +20359,125 @@ export namespace Prisma {
 
   export type ChallengerCreateInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     school: SchoolCreateNestedOneWithoutChallengersInput
     gisuRoles?: ChallengerGisuCreateNestedManyWithoutChallengerInput
-    ledGisuSchools?: GisuSchoolCreateNestedManyWithoutLeaderInput
-    viceLedGisuSchools?: GisuSchoolCreateNestedManyWithoutViceLeaderInput
+    leaderGisuSchool?: ChapterSchoolCreateNestedManyWithoutLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolCreateNestedManyWithoutViceLeaderInput
     projectMembers?: ProjectMemberCreateNestedManyWithoutChallengerInput
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
   }
 
   export type ChallengerUncheckedCreateInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     schoolId: bigint | number
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     gisuRoles?: ChallengerGisuUncheckedCreateNestedManyWithoutChallengerInput
-    ledGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutLeaderInput
-    viceLedGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
+    leaderGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
     projectMembers?: ProjectMemberUncheckedCreateNestedManyWithoutChallengerInput
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
   }
 
   export type ChallengerUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     school?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
     gisuRoles?: ChallengerGisuUpdateManyWithoutChallengerNestedInput
-    ledGisuSchools?: GisuSchoolUpdateManyWithoutLeaderNestedInput
-    viceLedGisuSchools?: GisuSchoolUpdateManyWithoutViceLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUpdateManyWithoutLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUpdateManyWithoutViceLeaderNestedInput
     projectMembers?: ProjectMemberUpdateManyWithoutChallengerNestedInput
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
   }
 
   export type ChallengerUncheckedUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gisuRoles?: ChallengerGisuUncheckedUpdateManyWithoutChallengerNestedInput
-    ledGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutLeaderNestedInput
-    viceLedGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
     projectMembers?: ProjectMemberUncheckedUpdateManyWithoutChallengerNestedInput
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
   export type ChallengerCreateManyInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     schoolId: bigint | number
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ChallengerUpdateManyMutationInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ChallengerUncheckedUpdateManyInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ChallengerGisuCreateInput = {
     id?: bigint | number
+    isTerminated?: boolean
+    part: $Enums.UserPartEnum
     isSchoolAdmin: boolean
     isChapterAdmin: boolean
     isCentralAdmin: boolean
@@ -19159,13 +20487,15 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     challenger: ChallengerCreateNestedOneWithoutGisuRolesInput
-    gisu: GisuCreateNestedOneWithoutChallengerGisusInput
+    chapterSchool: GisuChapterCreateNestedOneWithoutGisuChapterChallengerInput
   }
 
   export type ChallengerGisuUncheckedCreateInput = {
     id?: bigint | number
     challengerId: bigint | number
-    gisuId: bigint | number
+    chapterSchoolId: bigint | number
+    isTerminated?: boolean
+    part: $Enums.UserPartEnum
     isSchoolAdmin: boolean
     isChapterAdmin: boolean
     isCentralAdmin: boolean
@@ -19178,6 +20508,8 @@ export namespace Prisma {
 
   export type ChallengerGisuUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
+    isTerminated?: BoolFieldUpdateOperationsInput | boolean
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFieldUpdateOperationsInput | boolean
     isChapterAdmin?: BoolFieldUpdateOperationsInput | boolean
     isCentralAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -19187,13 +20519,15 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     challenger?: ChallengerUpdateOneRequiredWithoutGisuRolesNestedInput
-    gisu?: GisuUpdateOneRequiredWithoutChallengerGisusNestedInput
+    chapterSchool?: GisuChapterUpdateOneRequiredWithoutGisuChapterChallengerNestedInput
   }
 
   export type ChallengerGisuUncheckedUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     challengerId?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterSchoolId?: BigIntFieldUpdateOperationsInput | bigint | number
+    isTerminated?: BoolFieldUpdateOperationsInput | boolean
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFieldUpdateOperationsInput | boolean
     isChapterAdmin?: BoolFieldUpdateOperationsInput | boolean
     isCentralAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -19207,7 +20541,9 @@ export namespace Prisma {
   export type ChallengerGisuCreateManyInput = {
     id?: bigint | number
     challengerId: bigint | number
-    gisuId: bigint | number
+    chapterSchoolId: bigint | number
+    isTerminated?: boolean
+    part: $Enums.UserPartEnum
     isSchoolAdmin: boolean
     isChapterAdmin: boolean
     isCentralAdmin: boolean
@@ -19220,6 +20556,8 @@ export namespace Prisma {
 
   export type ChallengerGisuUpdateManyMutationInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
+    isTerminated?: BoolFieldUpdateOperationsInput | boolean
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFieldUpdateOperationsInput | boolean
     isChapterAdmin?: BoolFieldUpdateOperationsInput | boolean
     isCentralAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -19233,7 +20571,9 @@ export namespace Prisma {
   export type ChallengerGisuUncheckedUpdateManyInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     challengerId?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterSchoolId?: BigIntFieldUpdateOperationsInput | bigint | number
+    isTerminated?: BoolFieldUpdateOperationsInput | boolean
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFieldUpdateOperationsInput | boolean
     isChapterAdmin?: BoolFieldUpdateOperationsInput | boolean
     isCentralAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -19248,50 +20588,47 @@ export namespace Prisma {
     id?: bigint | number
     name: string
     description?: string | null
+    isCurrent?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    gisuSchools?: GisuSchoolCreateNestedManyWithoutGisuInput
-    chapters?: ChapterCreateNestedManyWithoutGisuInput
-    challengerGisus?: ChallengerGisuCreateNestedManyWithoutGisuInput
+    chapters?: GisuChapterCreateNestedManyWithoutGisuInput
   }
 
   export type GisuUncheckedCreateInput = {
     id?: bigint | number
     name: string
     description?: string | null
+    isCurrent?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    gisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutGisuInput
-    chapters?: ChapterUncheckedCreateNestedManyWithoutGisuInput
-    challengerGisus?: ChallengerGisuUncheckedCreateNestedManyWithoutGisuInput
+    chapters?: GisuChapterUncheckedCreateNestedManyWithoutGisuInput
   }
 
   export type GisuUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isCurrent?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisuSchools?: GisuSchoolUpdateManyWithoutGisuNestedInput
-    chapters?: ChapterUpdateManyWithoutGisuNestedInput
-    challengerGisus?: ChallengerGisuUpdateManyWithoutGisuNestedInput
+    chapters?: GisuChapterUpdateManyWithoutGisuNestedInput
   }
 
   export type GisuUncheckedUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isCurrent?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisuSchools?: GisuSchoolUncheckedUpdateManyWithoutGisuNestedInput
-    chapters?: ChapterUncheckedUpdateManyWithoutGisuNestedInput
-    challengerGisus?: ChallengerGisuUncheckedUpdateManyWithoutGisuNestedInput
+    chapters?: GisuChapterUncheckedUpdateManyWithoutGisuNestedInput
   }
 
   export type GisuCreateManyInput = {
     id?: bigint | number
     name: string
     description?: string | null
+    isCurrent?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19300,6 +20637,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isCurrent?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19308,71 +20646,150 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isCurrent?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GisuSchoolCreateInput = {
+  export type GisuChapterCreateInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gisu: GisuCreateNestedOneWithoutChaptersInput
+    projects?: ProjectCreateNestedManyWithoutChapterInput
+    chapterMatchingRound?: MatchingRoundCreateNestedManyWithoutChapterInput
+    gisuChapterSchool?: ChapterSchoolCreateNestedManyWithoutChapterInput
+    gisuChapterChallenger?: ChallengerGisuCreateNestedManyWithoutChapterSchoolInput
+  }
+
+  export type GisuChapterUncheckedCreateInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    gisuId: bigint | number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectUncheckedCreateNestedManyWithoutChapterInput
+    chapterMatchingRound?: MatchingRoundUncheckedCreateNestedManyWithoutChapterInput
+    gisuChapterSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutChapterInput
+    gisuChapterChallenger?: ChallengerGisuUncheckedCreateNestedManyWithoutChapterSchoolInput
+  }
+
+  export type GisuChapterUpdateInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gisu?: GisuUpdateOneRequiredWithoutChaptersNestedInput
+    projects?: ProjectUpdateManyWithoutChapterNestedInput
+    chapterMatchingRound?: MatchingRoundUpdateManyWithoutChapterNestedInput
+    gisuChapterSchool?: ChapterSchoolUpdateManyWithoutChapterNestedInput
+    gisuChapterChallenger?: ChallengerGisuUpdateManyWithoutChapterSchoolNestedInput
+  }
+
+  export type GisuChapterUncheckedUpdateInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutChapterNestedInput
+    chapterMatchingRound?: MatchingRoundUncheckedUpdateManyWithoutChapterNestedInput
+    gisuChapterSchool?: ChapterSchoolUncheckedUpdateManyWithoutChapterNestedInput
+    gisuChapterChallenger?: ChallengerGisuUncheckedUpdateManyWithoutChapterSchoolNestedInput
+  }
+
+  export type GisuChapterCreateManyInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    gisuId: bigint | number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GisuChapterUpdateManyMutationInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type GisuChapterUncheckedUpdateManyInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChapterSchoolCreateInput = {
     id?: bigint | number
     createdAt?: Date | string
     updatedAt?: Date | string
-    gisu: GisuCreateNestedOneWithoutGisuSchoolsInput
+    chapter: GisuChapterCreateNestedOneWithoutGisuChapterSchoolInput
     school: SchoolCreateNestedOneWithoutGisuSchoolsInput
-    leader: ChallengerCreateNestedOneWithoutLedGisuSchoolsInput
-    viceLeader?: ChallengerCreateNestedOneWithoutViceLedGisuSchoolsInput
+    leader?: ChallengerCreateNestedOneWithoutLeaderGisuSchoolInput
+    viceLeader?: ChallengerCreateNestedOneWithoutViceLeadGisuSchoolInput
   }
 
-  export type GisuSchoolUncheckedCreateInput = {
+  export type ChapterSchoolUncheckedCreateInput = {
     id?: bigint | number
-    gisuId: bigint | number
+    chapterId: bigint | number
     schoolId: bigint | number
-    leaderId: bigint | number
+    leaderId?: bigint | number | null
     viceLeaderId?: bigint | number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type GisuSchoolUpdateInput = {
+  export type ChapterSchoolUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisu?: GisuUpdateOneRequiredWithoutGisuSchoolsNestedInput
+    chapter?: GisuChapterUpdateOneRequiredWithoutGisuChapterSchoolNestedInput
     school?: SchoolUpdateOneRequiredWithoutGisuSchoolsNestedInput
-    leader?: ChallengerUpdateOneRequiredWithoutLedGisuSchoolsNestedInput
-    viceLeader?: ChallengerUpdateOneWithoutViceLedGisuSchoolsNestedInput
+    leader?: ChallengerUpdateOneWithoutLeaderGisuSchoolNestedInput
+    viceLeader?: ChallengerUpdateOneWithoutViceLeadGisuSchoolNestedInput
   }
 
-  export type GisuSchoolUncheckedUpdateInput = {
+  export type ChapterSchoolUncheckedUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
-    leaderId?: BigIntFieldUpdateOperationsInput | bigint | number
+    leaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     viceLeaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GisuSchoolCreateManyInput = {
+  export type ChapterSchoolCreateManyInput = {
     id?: bigint | number
-    gisuId: bigint | number
+    chapterId: bigint | number
     schoolId: bigint | number
-    leaderId: bigint | number
+    leaderId?: bigint | number | null
     viceLeaderId?: bigint | number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type GisuSchoolUpdateManyMutationInput = {
+  export type ChapterSchoolUpdateManyMutationInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GisuSchoolUncheckedUpdateManyInput = {
+  export type ChapterSchoolUncheckedUpdateManyInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
-    leaderId?: BigIntFieldUpdateOperationsInput | bigint | number
+    leaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     viceLeaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19386,7 +20803,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     challengers?: ChallengerCreateNestedManyWithoutSchoolInput
-    gisuSchools?: GisuSchoolCreateNestedManyWithoutSchoolInput
+    gisuSchools?: ChapterSchoolCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolUncheckedCreateInput = {
@@ -19397,7 +20814,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     challengers?: ChallengerUncheckedCreateNestedManyWithoutSchoolInput
-    gisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutSchoolInput
+    gisuSchools?: ChapterSchoolUncheckedCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolUpdateInput = {
@@ -19408,7 +20825,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     challengers?: ChallengerUpdateManyWithoutSchoolNestedInput
-    gisuSchools?: GisuSchoolUpdateManyWithoutSchoolNestedInput
+    gisuSchools?: ChapterSchoolUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolUncheckedUpdateInput = {
@@ -19419,7 +20836,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     challengers?: ChallengerUncheckedUpdateManyWithoutSchoolNestedInput
-    gisuSchools?: GisuSchoolUncheckedUpdateManyWithoutSchoolNestedInput
+    gisuSchools?: ChapterSchoolUncheckedUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolCreateManyInput = {
@@ -19449,90 +20866,18 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ChapterCreateInput = {
-    id?: bigint | number
-    name: string
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    gisu: GisuCreateNestedOneWithoutChaptersInput
-    projects?: ProjectCreateNestedManyWithoutChapterInput
-  }
-
-  export type ChapterUncheckedCreateInput = {
-    id?: bigint | number
-    name: string
-    description?: string | null
-    gisuId: bigint | number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    projects?: ProjectUncheckedCreateNestedManyWithoutChapterInput
-  }
-
-  export type ChapterUpdateInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisu?: GisuUpdateOneRequiredWithoutChaptersNestedInput
-    projects?: ProjectUpdateManyWithoutChapterNestedInput
-  }
-
-  export type ChapterUncheckedUpdateInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUncheckedUpdateManyWithoutChapterNestedInput
-  }
-
-  export type ChapterCreateManyInput = {
-    id?: bigint | number
-    name: string
-    description?: string | null
-    gisuId: bigint | number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ChapterUpdateManyMutationInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ChapterUncheckedUpdateManyInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type ProjectCreateInput = {
     id?: bigint | number
     name: string
     description?: string | null
     logoImageUrl?: string | null
     bannerImageUrl?: string | null
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    chapter: ChapterCreateNestedOneWithoutProjectsInput
+    chapter: GisuChapterCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
     applicationForms?: ApplicationFormCreateNestedManyWithoutProjectInput
+    to?: ProjectToCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateInput = {
@@ -19542,17 +20887,11 @@ export namespace Prisma {
     chapterId: bigint | number
     logoImageUrl?: string | null
     bannerImageUrl?: string | null
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
     applicationForms?: ApplicationFormUncheckedCreateNestedManyWithoutProjectInput
+    to?: ProjectToUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUpdateInput = {
@@ -19561,18 +20900,12 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    planTo?: IntFieldUpdateOperationsInput | number
-    designTo?: IntFieldUpdateOperationsInput | number
-    webTo?: IntFieldUpdateOperationsInput | number
-    androidTo?: IntFieldUpdateOperationsInput | number
-    iosTo?: IntFieldUpdateOperationsInput | number
-    springbootTo?: IntFieldUpdateOperationsInput | number
-    nodejsTo?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    chapter?: ChapterUpdateOneRequiredWithoutProjectsNestedInput
+    chapter?: GisuChapterUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
     applicationForms?: ApplicationFormUpdateManyWithoutProjectNestedInput
+    to?: ProjectToUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateInput = {
@@ -19582,17 +20915,11 @@ export namespace Prisma {
     chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    planTo?: IntFieldUpdateOperationsInput | number
-    designTo?: IntFieldUpdateOperationsInput | number
-    webTo?: IntFieldUpdateOperationsInput | number
-    androidTo?: IntFieldUpdateOperationsInput | number
-    iosTo?: IntFieldUpdateOperationsInput | number
-    springbootTo?: IntFieldUpdateOperationsInput | number
-    nodejsTo?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
     applicationForms?: ApplicationFormUncheckedUpdateManyWithoutProjectNestedInput
+    to?: ProjectToUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectCreateManyInput = {
@@ -19602,13 +20929,6 @@ export namespace Prisma {
     chapterId: bigint | number
     logoImageUrl?: string | null
     bannerImageUrl?: string | null
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19619,13 +20939,6 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    planTo?: IntFieldUpdateOperationsInput | number
-    designTo?: IntFieldUpdateOperationsInput | number
-    webTo?: IntFieldUpdateOperationsInput | number
-    androidTo?: IntFieldUpdateOperationsInput | number
-    iosTo?: IntFieldUpdateOperationsInput | number
-    springbootTo?: IntFieldUpdateOperationsInput | number
-    nodejsTo?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19637,20 +20950,74 @@ export namespace Prisma {
     chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    planTo?: IntFieldUpdateOperationsInput | number
-    designTo?: IntFieldUpdateOperationsInput | number
-    webTo?: IntFieldUpdateOperationsInput | number
-    androidTo?: IntFieldUpdateOperationsInput | number
-    iosTo?: IntFieldUpdateOperationsInput | number
-    springbootTo?: IntFieldUpdateOperationsInput | number
-    nodejsTo?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectToCreateInput = {
+    id?: bigint | number
+    part: $Enums.UserPartEnum
+    to: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutToInput
+  }
+
+  export type ProjectToUncheckedCreateInput = {
+    id?: bigint | number
+    projectId: bigint | number
+    part: $Enums.UserPartEnum
+    to: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectToUpdateInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
+    to?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutToNestedInput
+  }
+
+  export type ProjectToUncheckedUpdateInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    projectId?: BigIntFieldUpdateOperationsInput | bigint | number
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
+    to?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectToCreateManyInput = {
+    id?: bigint | number
+    projectId: bigint | number
+    part: $Enums.UserPartEnum
+    to: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectToUpdateManyMutationInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
+    to?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectToUncheckedUpdateManyInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    projectId?: BigIntFieldUpdateOperationsInput | bigint | number
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
+    to?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectMemberCreateInput = {
     id?: bigint | number
-    role: $Enums.UserPartEnum
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19662,7 +21029,6 @@ export namespace Prisma {
     id?: bigint | number
     projectId: bigint | number
     challengerId: bigint | number
-    role: $Enums.UserPartEnum
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19670,7 +21036,6 @@ export namespace Prisma {
 
   export type ProjectMemberUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    role?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19682,7 +21047,6 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     projectId?: BigIntFieldUpdateOperationsInput | bigint | number
     challengerId?: BigIntFieldUpdateOperationsInput | bigint | number
-    role?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19692,7 +21056,6 @@ export namespace Prisma {
     id?: bigint | number
     projectId: bigint | number
     challengerId: bigint | number
-    role: $Enums.UserPartEnum
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -19700,7 +21063,6 @@ export namespace Prisma {
 
   export type ProjectMemberUpdateManyMutationInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    role?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19710,7 +21072,6 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     projectId?: BigIntFieldUpdateOperationsInput | bigint | number
     challengerId?: BigIntFieldUpdateOperationsInput | bigint | number
-    role?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -19720,7 +21081,6 @@ export namespace Prisma {
     id?: bigint | number
     title: string
     description?: string | null
-    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutApplicationFormsInput
@@ -19732,7 +21092,6 @@ export namespace Prisma {
     projectId: bigint | number
     title: string
     description?: string | null
-    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     questions?: FormQuestionUncheckedCreateNestedManyWithoutFormInput
@@ -19742,7 +21101,6 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutApplicationFormsNestedInput
@@ -19754,7 +21112,6 @@ export namespace Prisma {
     projectId?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     questions?: FormQuestionUncheckedUpdateManyWithoutFormNestedInput
@@ -19765,7 +21122,6 @@ export namespace Prisma {
     projectId: bigint | number
     title: string
     description?: string | null
-    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -19774,7 +21130,6 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -19784,7 +21139,6 @@ export namespace Prisma {
     projectId?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -20025,12 +21379,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     applications?: ApplicationCreateNestedManyWithoutMatchingRoundInput
+    chapter: GisuChapterCreateNestedOneWithoutChapterMatchingRoundInput
   }
 
   export type MatchingRoundUncheckedCreateInput = {
     id?: bigint | number
     name: string
     description?: string | null
+    chapterId: bigint | number
     startAt: Date | string
     endAt: Date | string
     createdAt?: Date | string
@@ -20047,12 +21403,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applications?: ApplicationUpdateManyWithoutMatchingRoundNestedInput
+    chapter?: GisuChapterUpdateOneRequiredWithoutChapterMatchingRoundNestedInput
   }
 
   export type MatchingRoundUncheckedUpdateInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     startAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20064,6 +21422,7 @@ export namespace Prisma {
     id?: bigint | number
     name: string
     description?: string | null
+    chapterId: bigint | number
     startAt: Date | string
     endAt: Date | string
     createdAt?: Date | string
@@ -20084,6 +21443,7 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     startAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -20099,17 +21459,6 @@ export namespace Prisma {
     gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     not?: NestedBigIntFilter<$PrismaModel> | bigint | number
-  }
-
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -20171,10 +21520,10 @@ export namespace Prisma {
     none?: ChallengerGisuWhereInput
   }
 
-  export type GisuSchoolListRelationFilter = {
-    every?: GisuSchoolWhereInput
-    some?: GisuSchoolWhereInput
-    none?: GisuSchoolWhereInput
+  export type ChapterSchoolListRelationFilter = {
+    every?: ChapterSchoolWhereInput
+    some?: ChapterSchoolWhereInput
+    none?: ChapterSchoolWhereInput
   }
 
   export type ProjectMemberListRelationFilter = {
@@ -20198,7 +21547,7 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type GisuSchoolOrderByRelationAggregateInput = {
+  export type ChapterSchoolOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20219,6 +21568,7 @@ export namespace Prisma {
     schoolId?: SortOrder
     studentId?: SortOrder
     profileImageUrl?: SortOrder
+    passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20238,6 +21588,7 @@ export namespace Prisma {
     schoolId?: SortOrder
     studentId?: SortOrder
     profileImageUrl?: SortOrder
+    passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20251,6 +21602,7 @@ export namespace Prisma {
     schoolId?: SortOrder
     studentId?: SortOrder
     profileImageUrl?: SortOrder
+    passwordHash?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20275,22 +21627,6 @@ export namespace Prisma {
     _sum?: NestedBigIntFilter<$PrismaModel>
     _min?: NestedBigIntFilter<$PrismaModel>
     _max?: NestedBigIntFilter<$PrismaModel>
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -20358,20 +21694,29 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type EnumUserPartEnumFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserPartEnum | EnumUserPartEnumFieldRefInput<$PrismaModel>
+    in?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserPartEnumFilter<$PrismaModel> | $Enums.UserPartEnum
+  }
+
   export type ChallengerScalarRelationFilter = {
     is?: ChallengerWhereInput
     isNot?: ChallengerWhereInput
   }
 
-  export type GisuScalarRelationFilter = {
-    is?: GisuWhereInput
-    isNot?: GisuWhereInput
+  export type GisuChapterScalarRelationFilter = {
+    is?: GisuChapterWhereInput
+    isNot?: GisuChapterWhereInput
   }
 
   export type ChallengerGisuCountOrderByAggregateInput = {
     id?: SortOrder
     challengerId?: SortOrder
-    gisuId?: SortOrder
+    chapterSchoolId?: SortOrder
+    isTerminated?: SortOrder
+    part?: SortOrder
     isSchoolAdmin?: SortOrder
     isChapterAdmin?: SortOrder
     isCentralAdmin?: SortOrder
@@ -20385,13 +21730,15 @@ export namespace Prisma {
   export type ChallengerGisuAvgOrderByAggregateInput = {
     id?: SortOrder
     challengerId?: SortOrder
-    gisuId?: SortOrder
+    chapterSchoolId?: SortOrder
   }
 
   export type ChallengerGisuMaxOrderByAggregateInput = {
     id?: SortOrder
     challengerId?: SortOrder
-    gisuId?: SortOrder
+    chapterSchoolId?: SortOrder
+    isTerminated?: SortOrder
+    part?: SortOrder
     isSchoolAdmin?: SortOrder
     isChapterAdmin?: SortOrder
     isCentralAdmin?: SortOrder
@@ -20405,7 +21752,9 @@ export namespace Prisma {
   export type ChallengerGisuMinOrderByAggregateInput = {
     id?: SortOrder
     challengerId?: SortOrder
-    gisuId?: SortOrder
+    chapterSchoolId?: SortOrder
+    isTerminated?: SortOrder
+    part?: SortOrder
     isSchoolAdmin?: SortOrder
     isChapterAdmin?: SortOrder
     isCentralAdmin?: SortOrder
@@ -20419,7 +21768,7 @@ export namespace Prisma {
   export type ChallengerGisuSumOrderByAggregateInput = {
     id?: SortOrder
     challengerId?: SortOrder
-    gisuId?: SortOrder
+    chapterSchoolId?: SortOrder
   }
 
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -20430,13 +21779,23 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type ChapterListRelationFilter = {
-    every?: ChapterWhereInput
-    some?: ChapterWhereInput
-    none?: ChapterWhereInput
+  export type EnumUserPartEnumWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserPartEnum | EnumUserPartEnumFieldRefInput<$PrismaModel>
+    in?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserPartEnumWithAggregatesFilter<$PrismaModel> | $Enums.UserPartEnum
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserPartEnumFilter<$PrismaModel>
+    _max?: NestedEnumUserPartEnumFilter<$PrismaModel>
   }
 
-  export type ChapterOrderByRelationAggregateInput = {
+  export type GisuChapterListRelationFilter = {
+    every?: GisuChapterWhereInput
+    some?: GisuChapterWhereInput
+    none?: GisuChapterWhereInput
+  }
+
+  export type GisuChapterOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20444,6 +21803,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    isCurrent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20456,6 +21816,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    isCurrent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20464,12 +21825,75 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    isCurrent?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type GisuSumOrderByAggregateInput = {
     id?: SortOrder
+  }
+
+  export type GisuScalarRelationFilter = {
+    is?: GisuWhereInput
+    isNot?: GisuWhereInput
+  }
+
+  export type ProjectListRelationFilter = {
+    every?: ProjectWhereInput
+    some?: ProjectWhereInput
+    none?: ProjectWhereInput
+  }
+
+  export type MatchingRoundListRelationFilter = {
+    every?: MatchingRoundWhereInput
+    some?: MatchingRoundWhereInput
+    none?: MatchingRoundWhereInput
+  }
+
+  export type ProjectOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MatchingRoundOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type GisuChapterCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    gisuId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GisuChapterAvgOrderByAggregateInput = {
+    id?: SortOrder
+    gisuId?: SortOrder
+  }
+
+  export type GisuChapterMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    gisuId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GisuChapterMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    gisuId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type GisuChapterSumOrderByAggregateInput = {
+    id?: SortOrder
+    gisuId?: SortOrder
   }
 
   export type BigIntNullableFilter<$PrismaModel = never> = {
@@ -20488,9 +21912,9 @@ export namespace Prisma {
     isNot?: ChallengerWhereInput | null
   }
 
-  export type GisuSchoolCountOrderByAggregateInput = {
+  export type ChapterSchoolCountOrderByAggregateInput = {
     id?: SortOrder
-    gisuId?: SortOrder
+    chapterId?: SortOrder
     schoolId?: SortOrder
     leaderId?: SortOrder
     viceLeaderId?: SortOrder
@@ -20498,27 +21922,17 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type GisuSchoolAvgOrderByAggregateInput = {
+  export type ChapterSchoolAvgOrderByAggregateInput = {
     id?: SortOrder
-    gisuId?: SortOrder
+    chapterId?: SortOrder
     schoolId?: SortOrder
     leaderId?: SortOrder
     viceLeaderId?: SortOrder
   }
 
-  export type GisuSchoolMaxOrderByAggregateInput = {
+  export type ChapterSchoolMaxOrderByAggregateInput = {
     id?: SortOrder
-    gisuId?: SortOrder
-    schoolId?: SortOrder
-    leaderId?: SortOrder
-    viceLeaderId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type GisuSchoolMinOrderByAggregateInput = {
-    id?: SortOrder
-    gisuId?: SortOrder
+    chapterId?: SortOrder
     schoolId?: SortOrder
     leaderId?: SortOrder
     viceLeaderId?: SortOrder
@@ -20526,9 +21940,19 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type GisuSchoolSumOrderByAggregateInput = {
+  export type ChapterSchoolMinOrderByAggregateInput = {
     id?: SortOrder
-    gisuId?: SortOrder
+    chapterId?: SortOrder
+    schoolId?: SortOrder
+    leaderId?: SortOrder
+    viceLeaderId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ChapterSchoolSumOrderByAggregateInput = {
+    id?: SortOrder
+    chapterId?: SortOrder
     schoolId?: SortOrder
     leaderId?: SortOrder
     viceLeaderId?: SortOrder
@@ -20595,65 +22019,23 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type ProjectListRelationFilter = {
-    every?: ProjectWhereInput
-    some?: ProjectWhereInput
-    none?: ProjectWhereInput
-  }
-
-  export type ProjectOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type ChapterCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    gisuId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type ChapterAvgOrderByAggregateInput = {
-    id?: SortOrder
-    gisuId?: SortOrder
-  }
-
-  export type ChapterMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    gisuId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type ChapterMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    gisuId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type ChapterSumOrderByAggregateInput = {
-    id?: SortOrder
-    gisuId?: SortOrder
-  }
-
-  export type ChapterScalarRelationFilter = {
-    is?: ChapterWhereInput
-    isNot?: ChapterWhereInput
-  }
-
   export type ApplicationFormListRelationFilter = {
     every?: ApplicationFormWhereInput
     some?: ApplicationFormWhereInput
     none?: ApplicationFormWhereInput
   }
 
+  export type ProjectToListRelationFilter = {
+    every?: ProjectToWhereInput
+    some?: ProjectToWhereInput
+    none?: ProjectToWhereInput
+  }
+
   export type ApplicationFormOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProjectToOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -20664,13 +22046,6 @@ export namespace Prisma {
     chapterId?: SortOrder
     logoImageUrl?: SortOrder
     bannerImageUrl?: SortOrder
-    planTo?: SortOrder
-    designTo?: SortOrder
-    webTo?: SortOrder
-    androidTo?: SortOrder
-    iosTo?: SortOrder
-    springbootTo?: SortOrder
-    nodejsTo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20678,13 +22053,6 @@ export namespace Prisma {
   export type ProjectAvgOrderByAggregateInput = {
     id?: SortOrder
     chapterId?: SortOrder
-    planTo?: SortOrder
-    designTo?: SortOrder
-    webTo?: SortOrder
-    androidTo?: SortOrder
-    iosTo?: SortOrder
-    springbootTo?: SortOrder
-    nodejsTo?: SortOrder
   }
 
   export type ProjectMaxOrderByAggregateInput = {
@@ -20694,13 +22062,6 @@ export namespace Prisma {
     chapterId?: SortOrder
     logoImageUrl?: SortOrder
     bannerImageUrl?: SortOrder
-    planTo?: SortOrder
-    designTo?: SortOrder
-    webTo?: SortOrder
-    androidTo?: SortOrder
-    iosTo?: SortOrder
-    springbootTo?: SortOrder
-    nodejsTo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20712,13 +22073,6 @@ export namespace Prisma {
     chapterId?: SortOrder
     logoImageUrl?: SortOrder
     bannerImageUrl?: SortOrder
-    planTo?: SortOrder
-    designTo?: SortOrder
-    webTo?: SortOrder
-    androidTo?: SortOrder
-    iosTo?: SortOrder
-    springbootTo?: SortOrder
-    nodejsTo?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20726,20 +22080,17 @@ export namespace Prisma {
   export type ProjectSumOrderByAggregateInput = {
     id?: SortOrder
     chapterId?: SortOrder
-    planTo?: SortOrder
-    designTo?: SortOrder
-    webTo?: SortOrder
-    androidTo?: SortOrder
-    iosTo?: SortOrder
-    springbootTo?: SortOrder
-    nodejsTo?: SortOrder
   }
 
-  export type EnumUserPartEnumFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserPartEnum | EnumUserPartEnumFieldRefInput<$PrismaModel>
-    in?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserPartEnumFilter<$PrismaModel> | $Enums.UserPartEnum
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type ProjectScalarRelationFilter = {
@@ -20747,11 +22098,65 @@ export namespace Prisma {
     isNot?: ProjectWhereInput
   }
 
+  export type ProjectToCountOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    part?: SortOrder
+    to?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectToAvgOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    to?: SortOrder
+  }
+
+  export type ProjectToMaxOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    part?: SortOrder
+    to?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectToMinOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    part?: SortOrder
+    to?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectToSumOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    to?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type ProjectMemberCountOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
     challengerId?: SortOrder
-    role?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20767,7 +22172,6 @@ export namespace Prisma {
     id?: SortOrder
     projectId?: SortOrder
     challengerId?: SortOrder
-    role?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20777,7 +22181,6 @@ export namespace Prisma {
     id?: SortOrder
     projectId?: SortOrder
     challengerId?: SortOrder
-    role?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -20787,16 +22190,6 @@ export namespace Prisma {
     id?: SortOrder
     projectId?: SortOrder
     challengerId?: SortOrder
-  }
-
-  export type EnumUserPartEnumWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserPartEnum | EnumUserPartEnumFieldRefInput<$PrismaModel>
-    in?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserPartEnumWithAggregatesFilter<$PrismaModel> | $Enums.UserPartEnum
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUserPartEnumFilter<$PrismaModel>
-    _max?: NestedEnumUserPartEnumFilter<$PrismaModel>
   }
 
   export type FormQuestionListRelationFilter = {
@@ -20814,7 +22207,6 @@ export namespace Prisma {
     projectId?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20829,7 +22221,6 @@ export namespace Prisma {
     projectId?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20839,7 +22230,6 @@ export namespace Prisma {
     projectId?: SortOrder
     title?: SortOrder
     description?: SortOrder
-    isActive?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -21053,6 +22443,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    chapterId?: SortOrder
     startAt?: SortOrder
     endAt?: SortOrder
     createdAt?: SortOrder
@@ -21061,12 +22452,14 @@ export namespace Prisma {
 
   export type MatchingRoundAvgOrderByAggregateInput = {
     id?: SortOrder
+    chapterId?: SortOrder
   }
 
   export type MatchingRoundMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    chapterId?: SortOrder
     startAt?: SortOrder
     endAt?: SortOrder
     createdAt?: SortOrder
@@ -21077,6 +22470,7 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     description?: SortOrder
+    chapterId?: SortOrder
     startAt?: SortOrder
     endAt?: SortOrder
     createdAt?: SortOrder
@@ -21085,6 +22479,7 @@ export namespace Prisma {
 
   export type MatchingRoundSumOrderByAggregateInput = {
     id?: SortOrder
+    chapterId?: SortOrder
   }
 
   export type SchoolCreateNestedOneWithoutChallengersInput = {
@@ -21100,18 +22495,18 @@ export namespace Prisma {
     connect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
   }
 
-  export type GisuSchoolCreateNestedManyWithoutLeaderInput = {
-    create?: XOR<GisuSchoolCreateWithoutLeaderInput, GisuSchoolUncheckedCreateWithoutLeaderInput> | GisuSchoolCreateWithoutLeaderInput[] | GisuSchoolUncheckedCreateWithoutLeaderInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutLeaderInput | GisuSchoolCreateOrConnectWithoutLeaderInput[]
-    createMany?: GisuSchoolCreateManyLeaderInputEnvelope
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
+  export type ChapterSchoolCreateNestedManyWithoutLeaderInput = {
+    create?: XOR<ChapterSchoolCreateWithoutLeaderInput, ChapterSchoolUncheckedCreateWithoutLeaderInput> | ChapterSchoolCreateWithoutLeaderInput[] | ChapterSchoolUncheckedCreateWithoutLeaderInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutLeaderInput | ChapterSchoolCreateOrConnectWithoutLeaderInput[]
+    createMany?: ChapterSchoolCreateManyLeaderInputEnvelope
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
   }
 
-  export type GisuSchoolCreateNestedManyWithoutViceLeaderInput = {
-    create?: XOR<GisuSchoolCreateWithoutViceLeaderInput, GisuSchoolUncheckedCreateWithoutViceLeaderInput> | GisuSchoolCreateWithoutViceLeaderInput[] | GisuSchoolUncheckedCreateWithoutViceLeaderInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutViceLeaderInput | GisuSchoolCreateOrConnectWithoutViceLeaderInput[]
-    createMany?: GisuSchoolCreateManyViceLeaderInputEnvelope
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
+  export type ChapterSchoolCreateNestedManyWithoutViceLeaderInput = {
+    create?: XOR<ChapterSchoolCreateWithoutViceLeaderInput, ChapterSchoolUncheckedCreateWithoutViceLeaderInput> | ChapterSchoolCreateWithoutViceLeaderInput[] | ChapterSchoolUncheckedCreateWithoutViceLeaderInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutViceLeaderInput | ChapterSchoolCreateOrConnectWithoutViceLeaderInput[]
+    createMany?: ChapterSchoolCreateManyViceLeaderInputEnvelope
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
   }
 
   export type ProjectMemberCreateNestedManyWithoutChallengerInput = {
@@ -21135,18 +22530,18 @@ export namespace Prisma {
     connect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
   }
 
-  export type GisuSchoolUncheckedCreateNestedManyWithoutLeaderInput = {
-    create?: XOR<GisuSchoolCreateWithoutLeaderInput, GisuSchoolUncheckedCreateWithoutLeaderInput> | GisuSchoolCreateWithoutLeaderInput[] | GisuSchoolUncheckedCreateWithoutLeaderInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutLeaderInput | GisuSchoolCreateOrConnectWithoutLeaderInput[]
-    createMany?: GisuSchoolCreateManyLeaderInputEnvelope
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
+  export type ChapterSchoolUncheckedCreateNestedManyWithoutLeaderInput = {
+    create?: XOR<ChapterSchoolCreateWithoutLeaderInput, ChapterSchoolUncheckedCreateWithoutLeaderInput> | ChapterSchoolCreateWithoutLeaderInput[] | ChapterSchoolUncheckedCreateWithoutLeaderInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutLeaderInput | ChapterSchoolCreateOrConnectWithoutLeaderInput[]
+    createMany?: ChapterSchoolCreateManyLeaderInputEnvelope
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
   }
 
-  export type GisuSchoolUncheckedCreateNestedManyWithoutViceLeaderInput = {
-    create?: XOR<GisuSchoolCreateWithoutViceLeaderInput, GisuSchoolUncheckedCreateWithoutViceLeaderInput> | GisuSchoolCreateWithoutViceLeaderInput[] | GisuSchoolUncheckedCreateWithoutViceLeaderInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutViceLeaderInput | GisuSchoolCreateOrConnectWithoutViceLeaderInput[]
-    createMany?: GisuSchoolCreateManyViceLeaderInputEnvelope
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
+  export type ChapterSchoolUncheckedCreateNestedManyWithoutViceLeaderInput = {
+    create?: XOR<ChapterSchoolCreateWithoutViceLeaderInput, ChapterSchoolUncheckedCreateWithoutViceLeaderInput> | ChapterSchoolCreateWithoutViceLeaderInput[] | ChapterSchoolUncheckedCreateWithoutViceLeaderInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutViceLeaderInput | ChapterSchoolCreateOrConnectWithoutViceLeaderInput[]
+    createMany?: ChapterSchoolCreateManyViceLeaderInputEnvelope
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
   }
 
   export type ProjectMemberUncheckedCreateNestedManyWithoutChallengerInput = {
@@ -21169,14 +22564,6 @@ export namespace Prisma {
     decrement?: bigint | number
     multiply?: bigint | number
     divide?: bigint | number
-  }
-
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -21217,32 +22604,32 @@ export namespace Prisma {
     deleteMany?: ChallengerGisuScalarWhereInput | ChallengerGisuScalarWhereInput[]
   }
 
-  export type GisuSchoolUpdateManyWithoutLeaderNestedInput = {
-    create?: XOR<GisuSchoolCreateWithoutLeaderInput, GisuSchoolUncheckedCreateWithoutLeaderInput> | GisuSchoolCreateWithoutLeaderInput[] | GisuSchoolUncheckedCreateWithoutLeaderInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutLeaderInput | GisuSchoolCreateOrConnectWithoutLeaderInput[]
-    upsert?: GisuSchoolUpsertWithWhereUniqueWithoutLeaderInput | GisuSchoolUpsertWithWhereUniqueWithoutLeaderInput[]
-    createMany?: GisuSchoolCreateManyLeaderInputEnvelope
-    set?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    disconnect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    delete?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    update?: GisuSchoolUpdateWithWhereUniqueWithoutLeaderInput | GisuSchoolUpdateWithWhereUniqueWithoutLeaderInput[]
-    updateMany?: GisuSchoolUpdateManyWithWhereWithoutLeaderInput | GisuSchoolUpdateManyWithWhereWithoutLeaderInput[]
-    deleteMany?: GisuSchoolScalarWhereInput | GisuSchoolScalarWhereInput[]
+  export type ChapterSchoolUpdateManyWithoutLeaderNestedInput = {
+    create?: XOR<ChapterSchoolCreateWithoutLeaderInput, ChapterSchoolUncheckedCreateWithoutLeaderInput> | ChapterSchoolCreateWithoutLeaderInput[] | ChapterSchoolUncheckedCreateWithoutLeaderInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutLeaderInput | ChapterSchoolCreateOrConnectWithoutLeaderInput[]
+    upsert?: ChapterSchoolUpsertWithWhereUniqueWithoutLeaderInput | ChapterSchoolUpsertWithWhereUniqueWithoutLeaderInput[]
+    createMany?: ChapterSchoolCreateManyLeaderInputEnvelope
+    set?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    disconnect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    delete?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    update?: ChapterSchoolUpdateWithWhereUniqueWithoutLeaderInput | ChapterSchoolUpdateWithWhereUniqueWithoutLeaderInput[]
+    updateMany?: ChapterSchoolUpdateManyWithWhereWithoutLeaderInput | ChapterSchoolUpdateManyWithWhereWithoutLeaderInput[]
+    deleteMany?: ChapterSchoolScalarWhereInput | ChapterSchoolScalarWhereInput[]
   }
 
-  export type GisuSchoolUpdateManyWithoutViceLeaderNestedInput = {
-    create?: XOR<GisuSchoolCreateWithoutViceLeaderInput, GisuSchoolUncheckedCreateWithoutViceLeaderInput> | GisuSchoolCreateWithoutViceLeaderInput[] | GisuSchoolUncheckedCreateWithoutViceLeaderInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutViceLeaderInput | GisuSchoolCreateOrConnectWithoutViceLeaderInput[]
-    upsert?: GisuSchoolUpsertWithWhereUniqueWithoutViceLeaderInput | GisuSchoolUpsertWithWhereUniqueWithoutViceLeaderInput[]
-    createMany?: GisuSchoolCreateManyViceLeaderInputEnvelope
-    set?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    disconnect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    delete?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    update?: GisuSchoolUpdateWithWhereUniqueWithoutViceLeaderInput | GisuSchoolUpdateWithWhereUniqueWithoutViceLeaderInput[]
-    updateMany?: GisuSchoolUpdateManyWithWhereWithoutViceLeaderInput | GisuSchoolUpdateManyWithWhereWithoutViceLeaderInput[]
-    deleteMany?: GisuSchoolScalarWhereInput | GisuSchoolScalarWhereInput[]
+  export type ChapterSchoolUpdateManyWithoutViceLeaderNestedInput = {
+    create?: XOR<ChapterSchoolCreateWithoutViceLeaderInput, ChapterSchoolUncheckedCreateWithoutViceLeaderInput> | ChapterSchoolCreateWithoutViceLeaderInput[] | ChapterSchoolUncheckedCreateWithoutViceLeaderInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutViceLeaderInput | ChapterSchoolCreateOrConnectWithoutViceLeaderInput[]
+    upsert?: ChapterSchoolUpsertWithWhereUniqueWithoutViceLeaderInput | ChapterSchoolUpsertWithWhereUniqueWithoutViceLeaderInput[]
+    createMany?: ChapterSchoolCreateManyViceLeaderInputEnvelope
+    set?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    disconnect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    delete?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    update?: ChapterSchoolUpdateWithWhereUniqueWithoutViceLeaderInput | ChapterSchoolUpdateWithWhereUniqueWithoutViceLeaderInput[]
+    updateMany?: ChapterSchoolUpdateManyWithWhereWithoutViceLeaderInput | ChapterSchoolUpdateManyWithWhereWithoutViceLeaderInput[]
+    deleteMany?: ChapterSchoolScalarWhereInput | ChapterSchoolScalarWhereInput[]
   }
 
   export type ProjectMemberUpdateManyWithoutChallengerNestedInput = {
@@ -21287,32 +22674,32 @@ export namespace Prisma {
     deleteMany?: ChallengerGisuScalarWhereInput | ChallengerGisuScalarWhereInput[]
   }
 
-  export type GisuSchoolUncheckedUpdateManyWithoutLeaderNestedInput = {
-    create?: XOR<GisuSchoolCreateWithoutLeaderInput, GisuSchoolUncheckedCreateWithoutLeaderInput> | GisuSchoolCreateWithoutLeaderInput[] | GisuSchoolUncheckedCreateWithoutLeaderInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutLeaderInput | GisuSchoolCreateOrConnectWithoutLeaderInput[]
-    upsert?: GisuSchoolUpsertWithWhereUniqueWithoutLeaderInput | GisuSchoolUpsertWithWhereUniqueWithoutLeaderInput[]
-    createMany?: GisuSchoolCreateManyLeaderInputEnvelope
-    set?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    disconnect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    delete?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    update?: GisuSchoolUpdateWithWhereUniqueWithoutLeaderInput | GisuSchoolUpdateWithWhereUniqueWithoutLeaderInput[]
-    updateMany?: GisuSchoolUpdateManyWithWhereWithoutLeaderInput | GisuSchoolUpdateManyWithWhereWithoutLeaderInput[]
-    deleteMany?: GisuSchoolScalarWhereInput | GisuSchoolScalarWhereInput[]
+  export type ChapterSchoolUncheckedUpdateManyWithoutLeaderNestedInput = {
+    create?: XOR<ChapterSchoolCreateWithoutLeaderInput, ChapterSchoolUncheckedCreateWithoutLeaderInput> | ChapterSchoolCreateWithoutLeaderInput[] | ChapterSchoolUncheckedCreateWithoutLeaderInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutLeaderInput | ChapterSchoolCreateOrConnectWithoutLeaderInput[]
+    upsert?: ChapterSchoolUpsertWithWhereUniqueWithoutLeaderInput | ChapterSchoolUpsertWithWhereUniqueWithoutLeaderInput[]
+    createMany?: ChapterSchoolCreateManyLeaderInputEnvelope
+    set?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    disconnect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    delete?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    update?: ChapterSchoolUpdateWithWhereUniqueWithoutLeaderInput | ChapterSchoolUpdateWithWhereUniqueWithoutLeaderInput[]
+    updateMany?: ChapterSchoolUpdateManyWithWhereWithoutLeaderInput | ChapterSchoolUpdateManyWithWhereWithoutLeaderInput[]
+    deleteMany?: ChapterSchoolScalarWhereInput | ChapterSchoolScalarWhereInput[]
   }
 
-  export type GisuSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput = {
-    create?: XOR<GisuSchoolCreateWithoutViceLeaderInput, GisuSchoolUncheckedCreateWithoutViceLeaderInput> | GisuSchoolCreateWithoutViceLeaderInput[] | GisuSchoolUncheckedCreateWithoutViceLeaderInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutViceLeaderInput | GisuSchoolCreateOrConnectWithoutViceLeaderInput[]
-    upsert?: GisuSchoolUpsertWithWhereUniqueWithoutViceLeaderInput | GisuSchoolUpsertWithWhereUniqueWithoutViceLeaderInput[]
-    createMany?: GisuSchoolCreateManyViceLeaderInputEnvelope
-    set?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    disconnect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    delete?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    update?: GisuSchoolUpdateWithWhereUniqueWithoutViceLeaderInput | GisuSchoolUpdateWithWhereUniqueWithoutViceLeaderInput[]
-    updateMany?: GisuSchoolUpdateManyWithWhereWithoutViceLeaderInput | GisuSchoolUpdateManyWithWhereWithoutViceLeaderInput[]
-    deleteMany?: GisuSchoolScalarWhereInput | GisuSchoolScalarWhereInput[]
+  export type ChapterSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput = {
+    create?: XOR<ChapterSchoolCreateWithoutViceLeaderInput, ChapterSchoolUncheckedCreateWithoutViceLeaderInput> | ChapterSchoolCreateWithoutViceLeaderInput[] | ChapterSchoolUncheckedCreateWithoutViceLeaderInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutViceLeaderInput | ChapterSchoolCreateOrConnectWithoutViceLeaderInput[]
+    upsert?: ChapterSchoolUpsertWithWhereUniqueWithoutViceLeaderInput | ChapterSchoolUpsertWithWhereUniqueWithoutViceLeaderInput[]
+    createMany?: ChapterSchoolCreateManyViceLeaderInputEnvelope
+    set?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    disconnect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    delete?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    update?: ChapterSchoolUpdateWithWhereUniqueWithoutViceLeaderInput | ChapterSchoolUpdateWithWhereUniqueWithoutViceLeaderInput[]
+    updateMany?: ChapterSchoolUpdateManyWithWhereWithoutViceLeaderInput | ChapterSchoolUpdateManyWithWhereWithoutViceLeaderInput[]
+    deleteMany?: ChapterSchoolScalarWhereInput | ChapterSchoolScalarWhereInput[]
   }
 
   export type ProjectMemberUncheckedUpdateManyWithoutChallengerNestedInput = {
@@ -21349,14 +22736,18 @@ export namespace Prisma {
     connect?: ChallengerWhereUniqueInput
   }
 
-  export type GisuCreateNestedOneWithoutChallengerGisusInput = {
-    create?: XOR<GisuCreateWithoutChallengerGisusInput, GisuUncheckedCreateWithoutChallengerGisusInput>
-    connectOrCreate?: GisuCreateOrConnectWithoutChallengerGisusInput
-    connect?: GisuWhereUniqueInput
+  export type GisuChapterCreateNestedOneWithoutGisuChapterChallengerInput = {
+    create?: XOR<GisuChapterCreateWithoutGisuChapterChallengerInput, GisuChapterUncheckedCreateWithoutGisuChapterChallengerInput>
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutGisuChapterChallengerInput
+    connect?: GisuChapterWhereUniqueInput
   }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
+  }
+
+  export type EnumUserPartEnumFieldUpdateOperationsInput = {
+    set?: $Enums.UserPartEnum
   }
 
   export type ChallengerUpdateOneRequiredWithoutGisuRolesNestedInput = {
@@ -21367,288 +22758,54 @@ export namespace Prisma {
     update?: XOR<XOR<ChallengerUpdateToOneWithWhereWithoutGisuRolesInput, ChallengerUpdateWithoutGisuRolesInput>, ChallengerUncheckedUpdateWithoutGisuRolesInput>
   }
 
-  export type GisuUpdateOneRequiredWithoutChallengerGisusNestedInput = {
-    create?: XOR<GisuCreateWithoutChallengerGisusInput, GisuUncheckedCreateWithoutChallengerGisusInput>
-    connectOrCreate?: GisuCreateOrConnectWithoutChallengerGisusInput
-    upsert?: GisuUpsertWithoutChallengerGisusInput
-    connect?: GisuWhereUniqueInput
-    update?: XOR<XOR<GisuUpdateToOneWithWhereWithoutChallengerGisusInput, GisuUpdateWithoutChallengerGisusInput>, GisuUncheckedUpdateWithoutChallengerGisusInput>
+  export type GisuChapterUpdateOneRequiredWithoutGisuChapterChallengerNestedInput = {
+    create?: XOR<GisuChapterCreateWithoutGisuChapterChallengerInput, GisuChapterUncheckedCreateWithoutGisuChapterChallengerInput>
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutGisuChapterChallengerInput
+    upsert?: GisuChapterUpsertWithoutGisuChapterChallengerInput
+    connect?: GisuChapterWhereUniqueInput
+    update?: XOR<XOR<GisuChapterUpdateToOneWithWhereWithoutGisuChapterChallengerInput, GisuChapterUpdateWithoutGisuChapterChallengerInput>, GisuChapterUncheckedUpdateWithoutGisuChapterChallengerInput>
   }
 
-  export type GisuSchoolCreateNestedManyWithoutGisuInput = {
-    create?: XOR<GisuSchoolCreateWithoutGisuInput, GisuSchoolUncheckedCreateWithoutGisuInput> | GisuSchoolCreateWithoutGisuInput[] | GisuSchoolUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutGisuInput | GisuSchoolCreateOrConnectWithoutGisuInput[]
-    createMany?: GisuSchoolCreateManyGisuInputEnvelope
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
+  export type GisuChapterCreateNestedManyWithoutGisuInput = {
+    create?: XOR<GisuChapterCreateWithoutGisuInput, GisuChapterUncheckedCreateWithoutGisuInput> | GisuChapterCreateWithoutGisuInput[] | GisuChapterUncheckedCreateWithoutGisuInput[]
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutGisuInput | GisuChapterCreateOrConnectWithoutGisuInput[]
+    createMany?: GisuChapterCreateManyGisuInputEnvelope
+    connect?: GisuChapterWhereUniqueInput | GisuChapterWhereUniqueInput[]
   }
 
-  export type ChapterCreateNestedManyWithoutGisuInput = {
-    create?: XOR<ChapterCreateWithoutGisuInput, ChapterUncheckedCreateWithoutGisuInput> | ChapterCreateWithoutGisuInput[] | ChapterUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: ChapterCreateOrConnectWithoutGisuInput | ChapterCreateOrConnectWithoutGisuInput[]
-    createMany?: ChapterCreateManyGisuInputEnvelope
-    connect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
+  export type GisuChapterUncheckedCreateNestedManyWithoutGisuInput = {
+    create?: XOR<GisuChapterCreateWithoutGisuInput, GisuChapterUncheckedCreateWithoutGisuInput> | GisuChapterCreateWithoutGisuInput[] | GisuChapterUncheckedCreateWithoutGisuInput[]
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutGisuInput | GisuChapterCreateOrConnectWithoutGisuInput[]
+    createMany?: GisuChapterCreateManyGisuInputEnvelope
+    connect?: GisuChapterWhereUniqueInput | GisuChapterWhereUniqueInput[]
   }
 
-  export type ChallengerGisuCreateNestedManyWithoutGisuInput = {
-    create?: XOR<ChallengerGisuCreateWithoutGisuInput, ChallengerGisuUncheckedCreateWithoutGisuInput> | ChallengerGisuCreateWithoutGisuInput[] | ChallengerGisuUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: ChallengerGisuCreateOrConnectWithoutGisuInput | ChallengerGisuCreateOrConnectWithoutGisuInput[]
-    createMany?: ChallengerGisuCreateManyGisuInputEnvelope
-    connect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
+  export type GisuChapterUpdateManyWithoutGisuNestedInput = {
+    create?: XOR<GisuChapterCreateWithoutGisuInput, GisuChapterUncheckedCreateWithoutGisuInput> | GisuChapterCreateWithoutGisuInput[] | GisuChapterUncheckedCreateWithoutGisuInput[]
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutGisuInput | GisuChapterCreateOrConnectWithoutGisuInput[]
+    upsert?: GisuChapterUpsertWithWhereUniqueWithoutGisuInput | GisuChapterUpsertWithWhereUniqueWithoutGisuInput[]
+    createMany?: GisuChapterCreateManyGisuInputEnvelope
+    set?: GisuChapterWhereUniqueInput | GisuChapterWhereUniqueInput[]
+    disconnect?: GisuChapterWhereUniqueInput | GisuChapterWhereUniqueInput[]
+    delete?: GisuChapterWhereUniqueInput | GisuChapterWhereUniqueInput[]
+    connect?: GisuChapterWhereUniqueInput | GisuChapterWhereUniqueInput[]
+    update?: GisuChapterUpdateWithWhereUniqueWithoutGisuInput | GisuChapterUpdateWithWhereUniqueWithoutGisuInput[]
+    updateMany?: GisuChapterUpdateManyWithWhereWithoutGisuInput | GisuChapterUpdateManyWithWhereWithoutGisuInput[]
+    deleteMany?: GisuChapterScalarWhereInput | GisuChapterScalarWhereInput[]
   }
 
-  export type GisuSchoolUncheckedCreateNestedManyWithoutGisuInput = {
-    create?: XOR<GisuSchoolCreateWithoutGisuInput, GisuSchoolUncheckedCreateWithoutGisuInput> | GisuSchoolCreateWithoutGisuInput[] | GisuSchoolUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutGisuInput | GisuSchoolCreateOrConnectWithoutGisuInput[]
-    createMany?: GisuSchoolCreateManyGisuInputEnvelope
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-  }
-
-  export type ChapterUncheckedCreateNestedManyWithoutGisuInput = {
-    create?: XOR<ChapterCreateWithoutGisuInput, ChapterUncheckedCreateWithoutGisuInput> | ChapterCreateWithoutGisuInput[] | ChapterUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: ChapterCreateOrConnectWithoutGisuInput | ChapterCreateOrConnectWithoutGisuInput[]
-    createMany?: ChapterCreateManyGisuInputEnvelope
-    connect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
-  }
-
-  export type ChallengerGisuUncheckedCreateNestedManyWithoutGisuInput = {
-    create?: XOR<ChallengerGisuCreateWithoutGisuInput, ChallengerGisuUncheckedCreateWithoutGisuInput> | ChallengerGisuCreateWithoutGisuInput[] | ChallengerGisuUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: ChallengerGisuCreateOrConnectWithoutGisuInput | ChallengerGisuCreateOrConnectWithoutGisuInput[]
-    createMany?: ChallengerGisuCreateManyGisuInputEnvelope
-    connect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
-  }
-
-  export type GisuSchoolUpdateManyWithoutGisuNestedInput = {
-    create?: XOR<GisuSchoolCreateWithoutGisuInput, GisuSchoolUncheckedCreateWithoutGisuInput> | GisuSchoolCreateWithoutGisuInput[] | GisuSchoolUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutGisuInput | GisuSchoolCreateOrConnectWithoutGisuInput[]
-    upsert?: GisuSchoolUpsertWithWhereUniqueWithoutGisuInput | GisuSchoolUpsertWithWhereUniqueWithoutGisuInput[]
-    createMany?: GisuSchoolCreateManyGisuInputEnvelope
-    set?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    disconnect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    delete?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    update?: GisuSchoolUpdateWithWhereUniqueWithoutGisuInput | GisuSchoolUpdateWithWhereUniqueWithoutGisuInput[]
-    updateMany?: GisuSchoolUpdateManyWithWhereWithoutGisuInput | GisuSchoolUpdateManyWithWhereWithoutGisuInput[]
-    deleteMany?: GisuSchoolScalarWhereInput | GisuSchoolScalarWhereInput[]
-  }
-
-  export type ChapterUpdateManyWithoutGisuNestedInput = {
-    create?: XOR<ChapterCreateWithoutGisuInput, ChapterUncheckedCreateWithoutGisuInput> | ChapterCreateWithoutGisuInput[] | ChapterUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: ChapterCreateOrConnectWithoutGisuInput | ChapterCreateOrConnectWithoutGisuInput[]
-    upsert?: ChapterUpsertWithWhereUniqueWithoutGisuInput | ChapterUpsertWithWhereUniqueWithoutGisuInput[]
-    createMany?: ChapterCreateManyGisuInputEnvelope
-    set?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
-    disconnect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
-    delete?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
-    connect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
-    update?: ChapterUpdateWithWhereUniqueWithoutGisuInput | ChapterUpdateWithWhereUniqueWithoutGisuInput[]
-    updateMany?: ChapterUpdateManyWithWhereWithoutGisuInput | ChapterUpdateManyWithWhereWithoutGisuInput[]
-    deleteMany?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
-  }
-
-  export type ChallengerGisuUpdateManyWithoutGisuNestedInput = {
-    create?: XOR<ChallengerGisuCreateWithoutGisuInput, ChallengerGisuUncheckedCreateWithoutGisuInput> | ChallengerGisuCreateWithoutGisuInput[] | ChallengerGisuUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: ChallengerGisuCreateOrConnectWithoutGisuInput | ChallengerGisuCreateOrConnectWithoutGisuInput[]
-    upsert?: ChallengerGisuUpsertWithWhereUniqueWithoutGisuInput | ChallengerGisuUpsertWithWhereUniqueWithoutGisuInput[]
-    createMany?: ChallengerGisuCreateManyGisuInputEnvelope
-    set?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
-    disconnect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
-    delete?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
-    connect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
-    update?: ChallengerGisuUpdateWithWhereUniqueWithoutGisuInput | ChallengerGisuUpdateWithWhereUniqueWithoutGisuInput[]
-    updateMany?: ChallengerGisuUpdateManyWithWhereWithoutGisuInput | ChallengerGisuUpdateManyWithWhereWithoutGisuInput[]
-    deleteMany?: ChallengerGisuScalarWhereInput | ChallengerGisuScalarWhereInput[]
-  }
-
-  export type GisuSchoolUncheckedUpdateManyWithoutGisuNestedInput = {
-    create?: XOR<GisuSchoolCreateWithoutGisuInput, GisuSchoolUncheckedCreateWithoutGisuInput> | GisuSchoolCreateWithoutGisuInput[] | GisuSchoolUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutGisuInput | GisuSchoolCreateOrConnectWithoutGisuInput[]
-    upsert?: GisuSchoolUpsertWithWhereUniqueWithoutGisuInput | GisuSchoolUpsertWithWhereUniqueWithoutGisuInput[]
-    createMany?: GisuSchoolCreateManyGisuInputEnvelope
-    set?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    disconnect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    delete?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    update?: GisuSchoolUpdateWithWhereUniqueWithoutGisuInput | GisuSchoolUpdateWithWhereUniqueWithoutGisuInput[]
-    updateMany?: GisuSchoolUpdateManyWithWhereWithoutGisuInput | GisuSchoolUpdateManyWithWhereWithoutGisuInput[]
-    deleteMany?: GisuSchoolScalarWhereInput | GisuSchoolScalarWhereInput[]
-  }
-
-  export type ChapterUncheckedUpdateManyWithoutGisuNestedInput = {
-    create?: XOR<ChapterCreateWithoutGisuInput, ChapterUncheckedCreateWithoutGisuInput> | ChapterCreateWithoutGisuInput[] | ChapterUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: ChapterCreateOrConnectWithoutGisuInput | ChapterCreateOrConnectWithoutGisuInput[]
-    upsert?: ChapterUpsertWithWhereUniqueWithoutGisuInput | ChapterUpsertWithWhereUniqueWithoutGisuInput[]
-    createMany?: ChapterCreateManyGisuInputEnvelope
-    set?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
-    disconnect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
-    delete?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
-    connect?: ChapterWhereUniqueInput | ChapterWhereUniqueInput[]
-    update?: ChapterUpdateWithWhereUniqueWithoutGisuInput | ChapterUpdateWithWhereUniqueWithoutGisuInput[]
-    updateMany?: ChapterUpdateManyWithWhereWithoutGisuInput | ChapterUpdateManyWithWhereWithoutGisuInput[]
-    deleteMany?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
-  }
-
-  export type ChallengerGisuUncheckedUpdateManyWithoutGisuNestedInput = {
-    create?: XOR<ChallengerGisuCreateWithoutGisuInput, ChallengerGisuUncheckedCreateWithoutGisuInput> | ChallengerGisuCreateWithoutGisuInput[] | ChallengerGisuUncheckedCreateWithoutGisuInput[]
-    connectOrCreate?: ChallengerGisuCreateOrConnectWithoutGisuInput | ChallengerGisuCreateOrConnectWithoutGisuInput[]
-    upsert?: ChallengerGisuUpsertWithWhereUniqueWithoutGisuInput | ChallengerGisuUpsertWithWhereUniqueWithoutGisuInput[]
-    createMany?: ChallengerGisuCreateManyGisuInputEnvelope
-    set?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
-    disconnect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
-    delete?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
-    connect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
-    update?: ChallengerGisuUpdateWithWhereUniqueWithoutGisuInput | ChallengerGisuUpdateWithWhereUniqueWithoutGisuInput[]
-    updateMany?: ChallengerGisuUpdateManyWithWhereWithoutGisuInput | ChallengerGisuUpdateManyWithWhereWithoutGisuInput[]
-    deleteMany?: ChallengerGisuScalarWhereInput | ChallengerGisuScalarWhereInput[]
-  }
-
-  export type GisuCreateNestedOneWithoutGisuSchoolsInput = {
-    create?: XOR<GisuCreateWithoutGisuSchoolsInput, GisuUncheckedCreateWithoutGisuSchoolsInput>
-    connectOrCreate?: GisuCreateOrConnectWithoutGisuSchoolsInput
-    connect?: GisuWhereUniqueInput
-  }
-
-  export type SchoolCreateNestedOneWithoutGisuSchoolsInput = {
-    create?: XOR<SchoolCreateWithoutGisuSchoolsInput, SchoolUncheckedCreateWithoutGisuSchoolsInput>
-    connectOrCreate?: SchoolCreateOrConnectWithoutGisuSchoolsInput
-    connect?: SchoolWhereUniqueInput
-  }
-
-  export type ChallengerCreateNestedOneWithoutLedGisuSchoolsInput = {
-    create?: XOR<ChallengerCreateWithoutLedGisuSchoolsInput, ChallengerUncheckedCreateWithoutLedGisuSchoolsInput>
-    connectOrCreate?: ChallengerCreateOrConnectWithoutLedGisuSchoolsInput
-    connect?: ChallengerWhereUniqueInput
-  }
-
-  export type ChallengerCreateNestedOneWithoutViceLedGisuSchoolsInput = {
-    create?: XOR<ChallengerCreateWithoutViceLedGisuSchoolsInput, ChallengerUncheckedCreateWithoutViceLedGisuSchoolsInput>
-    connectOrCreate?: ChallengerCreateOrConnectWithoutViceLedGisuSchoolsInput
-    connect?: ChallengerWhereUniqueInput
-  }
-
-  export type GisuUpdateOneRequiredWithoutGisuSchoolsNestedInput = {
-    create?: XOR<GisuCreateWithoutGisuSchoolsInput, GisuUncheckedCreateWithoutGisuSchoolsInput>
-    connectOrCreate?: GisuCreateOrConnectWithoutGisuSchoolsInput
-    upsert?: GisuUpsertWithoutGisuSchoolsInput
-    connect?: GisuWhereUniqueInput
-    update?: XOR<XOR<GisuUpdateToOneWithWhereWithoutGisuSchoolsInput, GisuUpdateWithoutGisuSchoolsInput>, GisuUncheckedUpdateWithoutGisuSchoolsInput>
-  }
-
-  export type SchoolUpdateOneRequiredWithoutGisuSchoolsNestedInput = {
-    create?: XOR<SchoolCreateWithoutGisuSchoolsInput, SchoolUncheckedCreateWithoutGisuSchoolsInput>
-    connectOrCreate?: SchoolCreateOrConnectWithoutGisuSchoolsInput
-    upsert?: SchoolUpsertWithoutGisuSchoolsInput
-    connect?: SchoolWhereUniqueInput
-    update?: XOR<XOR<SchoolUpdateToOneWithWhereWithoutGisuSchoolsInput, SchoolUpdateWithoutGisuSchoolsInput>, SchoolUncheckedUpdateWithoutGisuSchoolsInput>
-  }
-
-  export type ChallengerUpdateOneRequiredWithoutLedGisuSchoolsNestedInput = {
-    create?: XOR<ChallengerCreateWithoutLedGisuSchoolsInput, ChallengerUncheckedCreateWithoutLedGisuSchoolsInput>
-    connectOrCreate?: ChallengerCreateOrConnectWithoutLedGisuSchoolsInput
-    upsert?: ChallengerUpsertWithoutLedGisuSchoolsInput
-    connect?: ChallengerWhereUniqueInput
-    update?: XOR<XOR<ChallengerUpdateToOneWithWhereWithoutLedGisuSchoolsInput, ChallengerUpdateWithoutLedGisuSchoolsInput>, ChallengerUncheckedUpdateWithoutLedGisuSchoolsInput>
-  }
-
-  export type ChallengerUpdateOneWithoutViceLedGisuSchoolsNestedInput = {
-    create?: XOR<ChallengerCreateWithoutViceLedGisuSchoolsInput, ChallengerUncheckedCreateWithoutViceLedGisuSchoolsInput>
-    connectOrCreate?: ChallengerCreateOrConnectWithoutViceLedGisuSchoolsInput
-    upsert?: ChallengerUpsertWithoutViceLedGisuSchoolsInput
-    disconnect?: ChallengerWhereInput | boolean
-    delete?: ChallengerWhereInput | boolean
-    connect?: ChallengerWhereUniqueInput
-    update?: XOR<XOR<ChallengerUpdateToOneWithWhereWithoutViceLedGisuSchoolsInput, ChallengerUpdateWithoutViceLedGisuSchoolsInput>, ChallengerUncheckedUpdateWithoutViceLedGisuSchoolsInput>
-  }
-
-  export type NullableBigIntFieldUpdateOperationsInput = {
-    set?: bigint | number | null
-    increment?: bigint | number
-    decrement?: bigint | number
-    multiply?: bigint | number
-    divide?: bigint | number
-  }
-
-  export type ChallengerCreateNestedManyWithoutSchoolInput = {
-    create?: XOR<ChallengerCreateWithoutSchoolInput, ChallengerUncheckedCreateWithoutSchoolInput> | ChallengerCreateWithoutSchoolInput[] | ChallengerUncheckedCreateWithoutSchoolInput[]
-    connectOrCreate?: ChallengerCreateOrConnectWithoutSchoolInput | ChallengerCreateOrConnectWithoutSchoolInput[]
-    createMany?: ChallengerCreateManySchoolInputEnvelope
-    connect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
-  }
-
-  export type GisuSchoolCreateNestedManyWithoutSchoolInput = {
-    create?: XOR<GisuSchoolCreateWithoutSchoolInput, GisuSchoolUncheckedCreateWithoutSchoolInput> | GisuSchoolCreateWithoutSchoolInput[] | GisuSchoolUncheckedCreateWithoutSchoolInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutSchoolInput | GisuSchoolCreateOrConnectWithoutSchoolInput[]
-    createMany?: GisuSchoolCreateManySchoolInputEnvelope
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-  }
-
-  export type ChallengerUncheckedCreateNestedManyWithoutSchoolInput = {
-    create?: XOR<ChallengerCreateWithoutSchoolInput, ChallengerUncheckedCreateWithoutSchoolInput> | ChallengerCreateWithoutSchoolInput[] | ChallengerUncheckedCreateWithoutSchoolInput[]
-    connectOrCreate?: ChallengerCreateOrConnectWithoutSchoolInput | ChallengerCreateOrConnectWithoutSchoolInput[]
-    createMany?: ChallengerCreateManySchoolInputEnvelope
-    connect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
-  }
-
-  export type GisuSchoolUncheckedCreateNestedManyWithoutSchoolInput = {
-    create?: XOR<GisuSchoolCreateWithoutSchoolInput, GisuSchoolUncheckedCreateWithoutSchoolInput> | GisuSchoolCreateWithoutSchoolInput[] | GisuSchoolUncheckedCreateWithoutSchoolInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutSchoolInput | GisuSchoolCreateOrConnectWithoutSchoolInput[]
-    createMany?: GisuSchoolCreateManySchoolInputEnvelope
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-  }
-
-  export type ChallengerUpdateManyWithoutSchoolNestedInput = {
-    create?: XOR<ChallengerCreateWithoutSchoolInput, ChallengerUncheckedCreateWithoutSchoolInput> | ChallengerCreateWithoutSchoolInput[] | ChallengerUncheckedCreateWithoutSchoolInput[]
-    connectOrCreate?: ChallengerCreateOrConnectWithoutSchoolInput | ChallengerCreateOrConnectWithoutSchoolInput[]
-    upsert?: ChallengerUpsertWithWhereUniqueWithoutSchoolInput | ChallengerUpsertWithWhereUniqueWithoutSchoolInput[]
-    createMany?: ChallengerCreateManySchoolInputEnvelope
-    set?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
-    disconnect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
-    delete?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
-    connect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
-    update?: ChallengerUpdateWithWhereUniqueWithoutSchoolInput | ChallengerUpdateWithWhereUniqueWithoutSchoolInput[]
-    updateMany?: ChallengerUpdateManyWithWhereWithoutSchoolInput | ChallengerUpdateManyWithWhereWithoutSchoolInput[]
-    deleteMany?: ChallengerScalarWhereInput | ChallengerScalarWhereInput[]
-  }
-
-  export type GisuSchoolUpdateManyWithoutSchoolNestedInput = {
-    create?: XOR<GisuSchoolCreateWithoutSchoolInput, GisuSchoolUncheckedCreateWithoutSchoolInput> | GisuSchoolCreateWithoutSchoolInput[] | GisuSchoolUncheckedCreateWithoutSchoolInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutSchoolInput | GisuSchoolCreateOrConnectWithoutSchoolInput[]
-    upsert?: GisuSchoolUpsertWithWhereUniqueWithoutSchoolInput | GisuSchoolUpsertWithWhereUniqueWithoutSchoolInput[]
-    createMany?: GisuSchoolCreateManySchoolInputEnvelope
-    set?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    disconnect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    delete?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    update?: GisuSchoolUpdateWithWhereUniqueWithoutSchoolInput | GisuSchoolUpdateWithWhereUniqueWithoutSchoolInput[]
-    updateMany?: GisuSchoolUpdateManyWithWhereWithoutSchoolInput | GisuSchoolUpdateManyWithWhereWithoutSchoolInput[]
-    deleteMany?: GisuSchoolScalarWhereInput | GisuSchoolScalarWhereInput[]
-  }
-
-  export type ChallengerUncheckedUpdateManyWithoutSchoolNestedInput = {
-    create?: XOR<ChallengerCreateWithoutSchoolInput, ChallengerUncheckedCreateWithoutSchoolInput> | ChallengerCreateWithoutSchoolInput[] | ChallengerUncheckedCreateWithoutSchoolInput[]
-    connectOrCreate?: ChallengerCreateOrConnectWithoutSchoolInput | ChallengerCreateOrConnectWithoutSchoolInput[]
-    upsert?: ChallengerUpsertWithWhereUniqueWithoutSchoolInput | ChallengerUpsertWithWhereUniqueWithoutSchoolInput[]
-    createMany?: ChallengerCreateManySchoolInputEnvelope
-    set?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
-    disconnect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
-    delete?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
-    connect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
-    update?: ChallengerUpdateWithWhereUniqueWithoutSchoolInput | ChallengerUpdateWithWhereUniqueWithoutSchoolInput[]
-    updateMany?: ChallengerUpdateManyWithWhereWithoutSchoolInput | ChallengerUpdateManyWithWhereWithoutSchoolInput[]
-    deleteMany?: ChallengerScalarWhereInput | ChallengerScalarWhereInput[]
-  }
-
-  export type GisuSchoolUncheckedUpdateManyWithoutSchoolNestedInput = {
-    create?: XOR<GisuSchoolCreateWithoutSchoolInput, GisuSchoolUncheckedCreateWithoutSchoolInput> | GisuSchoolCreateWithoutSchoolInput[] | GisuSchoolUncheckedCreateWithoutSchoolInput[]
-    connectOrCreate?: GisuSchoolCreateOrConnectWithoutSchoolInput | GisuSchoolCreateOrConnectWithoutSchoolInput[]
-    upsert?: GisuSchoolUpsertWithWhereUniqueWithoutSchoolInput | GisuSchoolUpsertWithWhereUniqueWithoutSchoolInput[]
-    createMany?: GisuSchoolCreateManySchoolInputEnvelope
-    set?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    disconnect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    delete?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    connect?: GisuSchoolWhereUniqueInput | GisuSchoolWhereUniqueInput[]
-    update?: GisuSchoolUpdateWithWhereUniqueWithoutSchoolInput | GisuSchoolUpdateWithWhereUniqueWithoutSchoolInput[]
-    updateMany?: GisuSchoolUpdateManyWithWhereWithoutSchoolInput | GisuSchoolUpdateManyWithWhereWithoutSchoolInput[]
-    deleteMany?: GisuSchoolScalarWhereInput | GisuSchoolScalarWhereInput[]
+  export type GisuChapterUncheckedUpdateManyWithoutGisuNestedInput = {
+    create?: XOR<GisuChapterCreateWithoutGisuInput, GisuChapterUncheckedCreateWithoutGisuInput> | GisuChapterCreateWithoutGisuInput[] | GisuChapterUncheckedCreateWithoutGisuInput[]
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutGisuInput | GisuChapterCreateOrConnectWithoutGisuInput[]
+    upsert?: GisuChapterUpsertWithWhereUniqueWithoutGisuInput | GisuChapterUpsertWithWhereUniqueWithoutGisuInput[]
+    createMany?: GisuChapterCreateManyGisuInputEnvelope
+    set?: GisuChapterWhereUniqueInput | GisuChapterWhereUniqueInput[]
+    disconnect?: GisuChapterWhereUniqueInput | GisuChapterWhereUniqueInput[]
+    delete?: GisuChapterWhereUniqueInput | GisuChapterWhereUniqueInput[]
+    connect?: GisuChapterWhereUniqueInput | GisuChapterWhereUniqueInput[]
+    update?: GisuChapterUpdateWithWhereUniqueWithoutGisuInput | GisuChapterUpdateWithWhereUniqueWithoutGisuInput[]
+    updateMany?: GisuChapterUpdateManyWithWhereWithoutGisuInput | GisuChapterUpdateManyWithWhereWithoutGisuInput[]
+    deleteMany?: GisuChapterScalarWhereInput | GisuChapterScalarWhereInput[]
   }
 
   export type GisuCreateNestedOneWithoutChaptersInput = {
@@ -21664,11 +22821,53 @@ export namespace Prisma {
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
   }
 
+  export type MatchingRoundCreateNestedManyWithoutChapterInput = {
+    create?: XOR<MatchingRoundCreateWithoutChapterInput, MatchingRoundUncheckedCreateWithoutChapterInput> | MatchingRoundCreateWithoutChapterInput[] | MatchingRoundUncheckedCreateWithoutChapterInput[]
+    connectOrCreate?: MatchingRoundCreateOrConnectWithoutChapterInput | MatchingRoundCreateOrConnectWithoutChapterInput[]
+    createMany?: MatchingRoundCreateManyChapterInputEnvelope
+    connect?: MatchingRoundWhereUniqueInput | MatchingRoundWhereUniqueInput[]
+  }
+
+  export type ChapterSchoolCreateNestedManyWithoutChapterInput = {
+    create?: XOR<ChapterSchoolCreateWithoutChapterInput, ChapterSchoolUncheckedCreateWithoutChapterInput> | ChapterSchoolCreateWithoutChapterInput[] | ChapterSchoolUncheckedCreateWithoutChapterInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutChapterInput | ChapterSchoolCreateOrConnectWithoutChapterInput[]
+    createMany?: ChapterSchoolCreateManyChapterInputEnvelope
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+  }
+
+  export type ChallengerGisuCreateNestedManyWithoutChapterSchoolInput = {
+    create?: XOR<ChallengerGisuCreateWithoutChapterSchoolInput, ChallengerGisuUncheckedCreateWithoutChapterSchoolInput> | ChallengerGisuCreateWithoutChapterSchoolInput[] | ChallengerGisuUncheckedCreateWithoutChapterSchoolInput[]
+    connectOrCreate?: ChallengerGisuCreateOrConnectWithoutChapterSchoolInput | ChallengerGisuCreateOrConnectWithoutChapterSchoolInput[]
+    createMany?: ChallengerGisuCreateManyChapterSchoolInputEnvelope
+    connect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutChapterInput = {
     create?: XOR<ProjectCreateWithoutChapterInput, ProjectUncheckedCreateWithoutChapterInput> | ProjectCreateWithoutChapterInput[] | ProjectUncheckedCreateWithoutChapterInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutChapterInput | ProjectCreateOrConnectWithoutChapterInput[]
     createMany?: ProjectCreateManyChapterInputEnvelope
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+  }
+
+  export type MatchingRoundUncheckedCreateNestedManyWithoutChapterInput = {
+    create?: XOR<MatchingRoundCreateWithoutChapterInput, MatchingRoundUncheckedCreateWithoutChapterInput> | MatchingRoundCreateWithoutChapterInput[] | MatchingRoundUncheckedCreateWithoutChapterInput[]
+    connectOrCreate?: MatchingRoundCreateOrConnectWithoutChapterInput | MatchingRoundCreateOrConnectWithoutChapterInput[]
+    createMany?: MatchingRoundCreateManyChapterInputEnvelope
+    connect?: MatchingRoundWhereUniqueInput | MatchingRoundWhereUniqueInput[]
+  }
+
+  export type ChapterSchoolUncheckedCreateNestedManyWithoutChapterInput = {
+    create?: XOR<ChapterSchoolCreateWithoutChapterInput, ChapterSchoolUncheckedCreateWithoutChapterInput> | ChapterSchoolCreateWithoutChapterInput[] | ChapterSchoolUncheckedCreateWithoutChapterInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutChapterInput | ChapterSchoolCreateOrConnectWithoutChapterInput[]
+    createMany?: ChapterSchoolCreateManyChapterInputEnvelope
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+  }
+
+  export type ChallengerGisuUncheckedCreateNestedManyWithoutChapterSchoolInput = {
+    create?: XOR<ChallengerGisuCreateWithoutChapterSchoolInput, ChallengerGisuUncheckedCreateWithoutChapterSchoolInput> | ChallengerGisuCreateWithoutChapterSchoolInput[] | ChallengerGisuUncheckedCreateWithoutChapterSchoolInput[]
+    connectOrCreate?: ChallengerGisuCreateOrConnectWithoutChapterSchoolInput | ChallengerGisuCreateOrConnectWithoutChapterSchoolInput[]
+    createMany?: ChallengerGisuCreateManyChapterSchoolInputEnvelope
+    connect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
   }
 
   export type GisuUpdateOneRequiredWithoutChaptersNestedInput = {
@@ -21693,6 +22892,48 @@ export namespace Prisma {
     deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
   }
 
+  export type MatchingRoundUpdateManyWithoutChapterNestedInput = {
+    create?: XOR<MatchingRoundCreateWithoutChapterInput, MatchingRoundUncheckedCreateWithoutChapterInput> | MatchingRoundCreateWithoutChapterInput[] | MatchingRoundUncheckedCreateWithoutChapterInput[]
+    connectOrCreate?: MatchingRoundCreateOrConnectWithoutChapterInput | MatchingRoundCreateOrConnectWithoutChapterInput[]
+    upsert?: MatchingRoundUpsertWithWhereUniqueWithoutChapterInput | MatchingRoundUpsertWithWhereUniqueWithoutChapterInput[]
+    createMany?: MatchingRoundCreateManyChapterInputEnvelope
+    set?: MatchingRoundWhereUniqueInput | MatchingRoundWhereUniqueInput[]
+    disconnect?: MatchingRoundWhereUniqueInput | MatchingRoundWhereUniqueInput[]
+    delete?: MatchingRoundWhereUniqueInput | MatchingRoundWhereUniqueInput[]
+    connect?: MatchingRoundWhereUniqueInput | MatchingRoundWhereUniqueInput[]
+    update?: MatchingRoundUpdateWithWhereUniqueWithoutChapterInput | MatchingRoundUpdateWithWhereUniqueWithoutChapterInput[]
+    updateMany?: MatchingRoundUpdateManyWithWhereWithoutChapterInput | MatchingRoundUpdateManyWithWhereWithoutChapterInput[]
+    deleteMany?: MatchingRoundScalarWhereInput | MatchingRoundScalarWhereInput[]
+  }
+
+  export type ChapterSchoolUpdateManyWithoutChapterNestedInput = {
+    create?: XOR<ChapterSchoolCreateWithoutChapterInput, ChapterSchoolUncheckedCreateWithoutChapterInput> | ChapterSchoolCreateWithoutChapterInput[] | ChapterSchoolUncheckedCreateWithoutChapterInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutChapterInput | ChapterSchoolCreateOrConnectWithoutChapterInput[]
+    upsert?: ChapterSchoolUpsertWithWhereUniqueWithoutChapterInput | ChapterSchoolUpsertWithWhereUniqueWithoutChapterInput[]
+    createMany?: ChapterSchoolCreateManyChapterInputEnvelope
+    set?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    disconnect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    delete?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    update?: ChapterSchoolUpdateWithWhereUniqueWithoutChapterInput | ChapterSchoolUpdateWithWhereUniqueWithoutChapterInput[]
+    updateMany?: ChapterSchoolUpdateManyWithWhereWithoutChapterInput | ChapterSchoolUpdateManyWithWhereWithoutChapterInput[]
+    deleteMany?: ChapterSchoolScalarWhereInput | ChapterSchoolScalarWhereInput[]
+  }
+
+  export type ChallengerGisuUpdateManyWithoutChapterSchoolNestedInput = {
+    create?: XOR<ChallengerGisuCreateWithoutChapterSchoolInput, ChallengerGisuUncheckedCreateWithoutChapterSchoolInput> | ChallengerGisuCreateWithoutChapterSchoolInput[] | ChallengerGisuUncheckedCreateWithoutChapterSchoolInput[]
+    connectOrCreate?: ChallengerGisuCreateOrConnectWithoutChapterSchoolInput | ChallengerGisuCreateOrConnectWithoutChapterSchoolInput[]
+    upsert?: ChallengerGisuUpsertWithWhereUniqueWithoutChapterSchoolInput | ChallengerGisuUpsertWithWhereUniqueWithoutChapterSchoolInput[]
+    createMany?: ChallengerGisuCreateManyChapterSchoolInputEnvelope
+    set?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
+    disconnect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
+    delete?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
+    connect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
+    update?: ChallengerGisuUpdateWithWhereUniqueWithoutChapterSchoolInput | ChallengerGisuUpdateWithWhereUniqueWithoutChapterSchoolInput[]
+    updateMany?: ChallengerGisuUpdateManyWithWhereWithoutChapterSchoolInput | ChallengerGisuUpdateManyWithWhereWithoutChapterSchoolInput[]
+    deleteMany?: ChallengerGisuScalarWhereInput | ChallengerGisuScalarWhereInput[]
+  }
+
   export type ProjectUncheckedUpdateManyWithoutChapterNestedInput = {
     create?: XOR<ProjectCreateWithoutChapterInput, ProjectUncheckedCreateWithoutChapterInput> | ProjectCreateWithoutChapterInput[] | ProjectUncheckedCreateWithoutChapterInput[]
     connectOrCreate?: ProjectCreateOrConnectWithoutChapterInput | ProjectCreateOrConnectWithoutChapterInput[]
@@ -21707,10 +22948,204 @@ export namespace Prisma {
     deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
   }
 
-  export type ChapterCreateNestedOneWithoutProjectsInput = {
-    create?: XOR<ChapterCreateWithoutProjectsInput, ChapterUncheckedCreateWithoutProjectsInput>
-    connectOrCreate?: ChapterCreateOrConnectWithoutProjectsInput
-    connect?: ChapterWhereUniqueInput
+  export type MatchingRoundUncheckedUpdateManyWithoutChapterNestedInput = {
+    create?: XOR<MatchingRoundCreateWithoutChapterInput, MatchingRoundUncheckedCreateWithoutChapterInput> | MatchingRoundCreateWithoutChapterInput[] | MatchingRoundUncheckedCreateWithoutChapterInput[]
+    connectOrCreate?: MatchingRoundCreateOrConnectWithoutChapterInput | MatchingRoundCreateOrConnectWithoutChapterInput[]
+    upsert?: MatchingRoundUpsertWithWhereUniqueWithoutChapterInput | MatchingRoundUpsertWithWhereUniqueWithoutChapterInput[]
+    createMany?: MatchingRoundCreateManyChapterInputEnvelope
+    set?: MatchingRoundWhereUniqueInput | MatchingRoundWhereUniqueInput[]
+    disconnect?: MatchingRoundWhereUniqueInput | MatchingRoundWhereUniqueInput[]
+    delete?: MatchingRoundWhereUniqueInput | MatchingRoundWhereUniqueInput[]
+    connect?: MatchingRoundWhereUniqueInput | MatchingRoundWhereUniqueInput[]
+    update?: MatchingRoundUpdateWithWhereUniqueWithoutChapterInput | MatchingRoundUpdateWithWhereUniqueWithoutChapterInput[]
+    updateMany?: MatchingRoundUpdateManyWithWhereWithoutChapterInput | MatchingRoundUpdateManyWithWhereWithoutChapterInput[]
+    deleteMany?: MatchingRoundScalarWhereInput | MatchingRoundScalarWhereInput[]
+  }
+
+  export type ChapterSchoolUncheckedUpdateManyWithoutChapterNestedInput = {
+    create?: XOR<ChapterSchoolCreateWithoutChapterInput, ChapterSchoolUncheckedCreateWithoutChapterInput> | ChapterSchoolCreateWithoutChapterInput[] | ChapterSchoolUncheckedCreateWithoutChapterInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutChapterInput | ChapterSchoolCreateOrConnectWithoutChapterInput[]
+    upsert?: ChapterSchoolUpsertWithWhereUniqueWithoutChapterInput | ChapterSchoolUpsertWithWhereUniqueWithoutChapterInput[]
+    createMany?: ChapterSchoolCreateManyChapterInputEnvelope
+    set?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    disconnect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    delete?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    update?: ChapterSchoolUpdateWithWhereUniqueWithoutChapterInput | ChapterSchoolUpdateWithWhereUniqueWithoutChapterInput[]
+    updateMany?: ChapterSchoolUpdateManyWithWhereWithoutChapterInput | ChapterSchoolUpdateManyWithWhereWithoutChapterInput[]
+    deleteMany?: ChapterSchoolScalarWhereInput | ChapterSchoolScalarWhereInput[]
+  }
+
+  export type ChallengerGisuUncheckedUpdateManyWithoutChapterSchoolNestedInput = {
+    create?: XOR<ChallengerGisuCreateWithoutChapterSchoolInput, ChallengerGisuUncheckedCreateWithoutChapterSchoolInput> | ChallengerGisuCreateWithoutChapterSchoolInput[] | ChallengerGisuUncheckedCreateWithoutChapterSchoolInput[]
+    connectOrCreate?: ChallengerGisuCreateOrConnectWithoutChapterSchoolInput | ChallengerGisuCreateOrConnectWithoutChapterSchoolInput[]
+    upsert?: ChallengerGisuUpsertWithWhereUniqueWithoutChapterSchoolInput | ChallengerGisuUpsertWithWhereUniqueWithoutChapterSchoolInput[]
+    createMany?: ChallengerGisuCreateManyChapterSchoolInputEnvelope
+    set?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
+    disconnect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
+    delete?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
+    connect?: ChallengerGisuWhereUniqueInput | ChallengerGisuWhereUniqueInput[]
+    update?: ChallengerGisuUpdateWithWhereUniqueWithoutChapterSchoolInput | ChallengerGisuUpdateWithWhereUniqueWithoutChapterSchoolInput[]
+    updateMany?: ChallengerGisuUpdateManyWithWhereWithoutChapterSchoolInput | ChallengerGisuUpdateManyWithWhereWithoutChapterSchoolInput[]
+    deleteMany?: ChallengerGisuScalarWhereInput | ChallengerGisuScalarWhereInput[]
+  }
+
+  export type GisuChapterCreateNestedOneWithoutGisuChapterSchoolInput = {
+    create?: XOR<GisuChapterCreateWithoutGisuChapterSchoolInput, GisuChapterUncheckedCreateWithoutGisuChapterSchoolInput>
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutGisuChapterSchoolInput
+    connect?: GisuChapterWhereUniqueInput
+  }
+
+  export type SchoolCreateNestedOneWithoutGisuSchoolsInput = {
+    create?: XOR<SchoolCreateWithoutGisuSchoolsInput, SchoolUncheckedCreateWithoutGisuSchoolsInput>
+    connectOrCreate?: SchoolCreateOrConnectWithoutGisuSchoolsInput
+    connect?: SchoolWhereUniqueInput
+  }
+
+  export type ChallengerCreateNestedOneWithoutLeaderGisuSchoolInput = {
+    create?: XOR<ChallengerCreateWithoutLeaderGisuSchoolInput, ChallengerUncheckedCreateWithoutLeaderGisuSchoolInput>
+    connectOrCreate?: ChallengerCreateOrConnectWithoutLeaderGisuSchoolInput
+    connect?: ChallengerWhereUniqueInput
+  }
+
+  export type ChallengerCreateNestedOneWithoutViceLeadGisuSchoolInput = {
+    create?: XOR<ChallengerCreateWithoutViceLeadGisuSchoolInput, ChallengerUncheckedCreateWithoutViceLeadGisuSchoolInput>
+    connectOrCreate?: ChallengerCreateOrConnectWithoutViceLeadGisuSchoolInput
+    connect?: ChallengerWhereUniqueInput
+  }
+
+  export type GisuChapterUpdateOneRequiredWithoutGisuChapterSchoolNestedInput = {
+    create?: XOR<GisuChapterCreateWithoutGisuChapterSchoolInput, GisuChapterUncheckedCreateWithoutGisuChapterSchoolInput>
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutGisuChapterSchoolInput
+    upsert?: GisuChapterUpsertWithoutGisuChapterSchoolInput
+    connect?: GisuChapterWhereUniqueInput
+    update?: XOR<XOR<GisuChapterUpdateToOneWithWhereWithoutGisuChapterSchoolInput, GisuChapterUpdateWithoutGisuChapterSchoolInput>, GisuChapterUncheckedUpdateWithoutGisuChapterSchoolInput>
+  }
+
+  export type SchoolUpdateOneRequiredWithoutGisuSchoolsNestedInput = {
+    create?: XOR<SchoolCreateWithoutGisuSchoolsInput, SchoolUncheckedCreateWithoutGisuSchoolsInput>
+    connectOrCreate?: SchoolCreateOrConnectWithoutGisuSchoolsInput
+    upsert?: SchoolUpsertWithoutGisuSchoolsInput
+    connect?: SchoolWhereUniqueInput
+    update?: XOR<XOR<SchoolUpdateToOneWithWhereWithoutGisuSchoolsInput, SchoolUpdateWithoutGisuSchoolsInput>, SchoolUncheckedUpdateWithoutGisuSchoolsInput>
+  }
+
+  export type ChallengerUpdateOneWithoutLeaderGisuSchoolNestedInput = {
+    create?: XOR<ChallengerCreateWithoutLeaderGisuSchoolInput, ChallengerUncheckedCreateWithoutLeaderGisuSchoolInput>
+    connectOrCreate?: ChallengerCreateOrConnectWithoutLeaderGisuSchoolInput
+    upsert?: ChallengerUpsertWithoutLeaderGisuSchoolInput
+    disconnect?: ChallengerWhereInput | boolean
+    delete?: ChallengerWhereInput | boolean
+    connect?: ChallengerWhereUniqueInput
+    update?: XOR<XOR<ChallengerUpdateToOneWithWhereWithoutLeaderGisuSchoolInput, ChallengerUpdateWithoutLeaderGisuSchoolInput>, ChallengerUncheckedUpdateWithoutLeaderGisuSchoolInput>
+  }
+
+  export type ChallengerUpdateOneWithoutViceLeadGisuSchoolNestedInput = {
+    create?: XOR<ChallengerCreateWithoutViceLeadGisuSchoolInput, ChallengerUncheckedCreateWithoutViceLeadGisuSchoolInput>
+    connectOrCreate?: ChallengerCreateOrConnectWithoutViceLeadGisuSchoolInput
+    upsert?: ChallengerUpsertWithoutViceLeadGisuSchoolInput
+    disconnect?: ChallengerWhereInput | boolean
+    delete?: ChallengerWhereInput | boolean
+    connect?: ChallengerWhereUniqueInput
+    update?: XOR<XOR<ChallengerUpdateToOneWithWhereWithoutViceLeadGisuSchoolInput, ChallengerUpdateWithoutViceLeadGisuSchoolInput>, ChallengerUncheckedUpdateWithoutViceLeadGisuSchoolInput>
+  }
+
+  export type NullableBigIntFieldUpdateOperationsInput = {
+    set?: bigint | number | null
+    increment?: bigint | number
+    decrement?: bigint | number
+    multiply?: bigint | number
+    divide?: bigint | number
+  }
+
+  export type ChallengerCreateNestedManyWithoutSchoolInput = {
+    create?: XOR<ChallengerCreateWithoutSchoolInput, ChallengerUncheckedCreateWithoutSchoolInput> | ChallengerCreateWithoutSchoolInput[] | ChallengerUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ChallengerCreateOrConnectWithoutSchoolInput | ChallengerCreateOrConnectWithoutSchoolInput[]
+    createMany?: ChallengerCreateManySchoolInputEnvelope
+    connect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
+  }
+
+  export type ChapterSchoolCreateNestedManyWithoutSchoolInput = {
+    create?: XOR<ChapterSchoolCreateWithoutSchoolInput, ChapterSchoolUncheckedCreateWithoutSchoolInput> | ChapterSchoolCreateWithoutSchoolInput[] | ChapterSchoolUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutSchoolInput | ChapterSchoolCreateOrConnectWithoutSchoolInput[]
+    createMany?: ChapterSchoolCreateManySchoolInputEnvelope
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+  }
+
+  export type ChallengerUncheckedCreateNestedManyWithoutSchoolInput = {
+    create?: XOR<ChallengerCreateWithoutSchoolInput, ChallengerUncheckedCreateWithoutSchoolInput> | ChallengerCreateWithoutSchoolInput[] | ChallengerUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ChallengerCreateOrConnectWithoutSchoolInput | ChallengerCreateOrConnectWithoutSchoolInput[]
+    createMany?: ChallengerCreateManySchoolInputEnvelope
+    connect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
+  }
+
+  export type ChapterSchoolUncheckedCreateNestedManyWithoutSchoolInput = {
+    create?: XOR<ChapterSchoolCreateWithoutSchoolInput, ChapterSchoolUncheckedCreateWithoutSchoolInput> | ChapterSchoolCreateWithoutSchoolInput[] | ChapterSchoolUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutSchoolInput | ChapterSchoolCreateOrConnectWithoutSchoolInput[]
+    createMany?: ChapterSchoolCreateManySchoolInputEnvelope
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+  }
+
+  export type ChallengerUpdateManyWithoutSchoolNestedInput = {
+    create?: XOR<ChallengerCreateWithoutSchoolInput, ChallengerUncheckedCreateWithoutSchoolInput> | ChallengerCreateWithoutSchoolInput[] | ChallengerUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ChallengerCreateOrConnectWithoutSchoolInput | ChallengerCreateOrConnectWithoutSchoolInput[]
+    upsert?: ChallengerUpsertWithWhereUniqueWithoutSchoolInput | ChallengerUpsertWithWhereUniqueWithoutSchoolInput[]
+    createMany?: ChallengerCreateManySchoolInputEnvelope
+    set?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
+    disconnect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
+    delete?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
+    connect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
+    update?: ChallengerUpdateWithWhereUniqueWithoutSchoolInput | ChallengerUpdateWithWhereUniqueWithoutSchoolInput[]
+    updateMany?: ChallengerUpdateManyWithWhereWithoutSchoolInput | ChallengerUpdateManyWithWhereWithoutSchoolInput[]
+    deleteMany?: ChallengerScalarWhereInput | ChallengerScalarWhereInput[]
+  }
+
+  export type ChapterSchoolUpdateManyWithoutSchoolNestedInput = {
+    create?: XOR<ChapterSchoolCreateWithoutSchoolInput, ChapterSchoolUncheckedCreateWithoutSchoolInput> | ChapterSchoolCreateWithoutSchoolInput[] | ChapterSchoolUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutSchoolInput | ChapterSchoolCreateOrConnectWithoutSchoolInput[]
+    upsert?: ChapterSchoolUpsertWithWhereUniqueWithoutSchoolInput | ChapterSchoolUpsertWithWhereUniqueWithoutSchoolInput[]
+    createMany?: ChapterSchoolCreateManySchoolInputEnvelope
+    set?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    disconnect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    delete?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    update?: ChapterSchoolUpdateWithWhereUniqueWithoutSchoolInput | ChapterSchoolUpdateWithWhereUniqueWithoutSchoolInput[]
+    updateMany?: ChapterSchoolUpdateManyWithWhereWithoutSchoolInput | ChapterSchoolUpdateManyWithWhereWithoutSchoolInput[]
+    deleteMany?: ChapterSchoolScalarWhereInput | ChapterSchoolScalarWhereInput[]
+  }
+
+  export type ChallengerUncheckedUpdateManyWithoutSchoolNestedInput = {
+    create?: XOR<ChallengerCreateWithoutSchoolInput, ChallengerUncheckedCreateWithoutSchoolInput> | ChallengerCreateWithoutSchoolInput[] | ChallengerUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ChallengerCreateOrConnectWithoutSchoolInput | ChallengerCreateOrConnectWithoutSchoolInput[]
+    upsert?: ChallengerUpsertWithWhereUniqueWithoutSchoolInput | ChallengerUpsertWithWhereUniqueWithoutSchoolInput[]
+    createMany?: ChallengerCreateManySchoolInputEnvelope
+    set?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
+    disconnect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
+    delete?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
+    connect?: ChallengerWhereUniqueInput | ChallengerWhereUniqueInput[]
+    update?: ChallengerUpdateWithWhereUniqueWithoutSchoolInput | ChallengerUpdateWithWhereUniqueWithoutSchoolInput[]
+    updateMany?: ChallengerUpdateManyWithWhereWithoutSchoolInput | ChallengerUpdateManyWithWhereWithoutSchoolInput[]
+    deleteMany?: ChallengerScalarWhereInput | ChallengerScalarWhereInput[]
+  }
+
+  export type ChapterSchoolUncheckedUpdateManyWithoutSchoolNestedInput = {
+    create?: XOR<ChapterSchoolCreateWithoutSchoolInput, ChapterSchoolUncheckedCreateWithoutSchoolInput> | ChapterSchoolCreateWithoutSchoolInput[] | ChapterSchoolUncheckedCreateWithoutSchoolInput[]
+    connectOrCreate?: ChapterSchoolCreateOrConnectWithoutSchoolInput | ChapterSchoolCreateOrConnectWithoutSchoolInput[]
+    upsert?: ChapterSchoolUpsertWithWhereUniqueWithoutSchoolInput | ChapterSchoolUpsertWithWhereUniqueWithoutSchoolInput[]
+    createMany?: ChapterSchoolCreateManySchoolInputEnvelope
+    set?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    disconnect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    delete?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    connect?: ChapterSchoolWhereUniqueInput | ChapterSchoolWhereUniqueInput[]
+    update?: ChapterSchoolUpdateWithWhereUniqueWithoutSchoolInput | ChapterSchoolUpdateWithWhereUniqueWithoutSchoolInput[]
+    updateMany?: ChapterSchoolUpdateManyWithWhereWithoutSchoolInput | ChapterSchoolUpdateManyWithWhereWithoutSchoolInput[]
+    deleteMany?: ChapterSchoolScalarWhereInput | ChapterSchoolScalarWhereInput[]
+  }
+
+  export type GisuChapterCreateNestedOneWithoutProjectsInput = {
+    create?: XOR<GisuChapterCreateWithoutProjectsInput, GisuChapterUncheckedCreateWithoutProjectsInput>
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutProjectsInput
+    connect?: GisuChapterWhereUniqueInput
   }
 
   export type ProjectMemberCreateNestedManyWithoutProjectInput = {
@@ -21727,6 +23162,13 @@ export namespace Prisma {
     connect?: ApplicationFormWhereUniqueInput | ApplicationFormWhereUniqueInput[]
   }
 
+  export type ProjectToCreateNestedManyWithoutProjectInput = {
+    create?: XOR<ProjectToCreateWithoutProjectInput, ProjectToUncheckedCreateWithoutProjectInput> | ProjectToCreateWithoutProjectInput[] | ProjectToUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: ProjectToCreateOrConnectWithoutProjectInput | ProjectToCreateOrConnectWithoutProjectInput[]
+    createMany?: ProjectToCreateManyProjectInputEnvelope
+    connect?: ProjectToWhereUniqueInput | ProjectToWhereUniqueInput[]
+  }
+
   export type ProjectMemberUncheckedCreateNestedManyWithoutProjectInput = {
     create?: XOR<ProjectMemberCreateWithoutProjectInput, ProjectMemberUncheckedCreateWithoutProjectInput> | ProjectMemberCreateWithoutProjectInput[] | ProjectMemberUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: ProjectMemberCreateOrConnectWithoutProjectInput | ProjectMemberCreateOrConnectWithoutProjectInput[]
@@ -21741,12 +23183,19 @@ export namespace Prisma {
     connect?: ApplicationFormWhereUniqueInput | ApplicationFormWhereUniqueInput[]
   }
 
-  export type ChapterUpdateOneRequiredWithoutProjectsNestedInput = {
-    create?: XOR<ChapterCreateWithoutProjectsInput, ChapterUncheckedCreateWithoutProjectsInput>
-    connectOrCreate?: ChapterCreateOrConnectWithoutProjectsInput
-    upsert?: ChapterUpsertWithoutProjectsInput
-    connect?: ChapterWhereUniqueInput
-    update?: XOR<XOR<ChapterUpdateToOneWithWhereWithoutProjectsInput, ChapterUpdateWithoutProjectsInput>, ChapterUncheckedUpdateWithoutProjectsInput>
+  export type ProjectToUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<ProjectToCreateWithoutProjectInput, ProjectToUncheckedCreateWithoutProjectInput> | ProjectToCreateWithoutProjectInput[] | ProjectToUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: ProjectToCreateOrConnectWithoutProjectInput | ProjectToCreateOrConnectWithoutProjectInput[]
+    createMany?: ProjectToCreateManyProjectInputEnvelope
+    connect?: ProjectToWhereUniqueInput | ProjectToWhereUniqueInput[]
+  }
+
+  export type GisuChapterUpdateOneRequiredWithoutProjectsNestedInput = {
+    create?: XOR<GisuChapterCreateWithoutProjectsInput, GisuChapterUncheckedCreateWithoutProjectsInput>
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutProjectsInput
+    upsert?: GisuChapterUpsertWithoutProjectsInput
+    connect?: GisuChapterWhereUniqueInput
+    update?: XOR<XOR<GisuChapterUpdateToOneWithWhereWithoutProjectsInput, GisuChapterUpdateWithoutProjectsInput>, GisuChapterUncheckedUpdateWithoutProjectsInput>
   }
 
   export type ProjectMemberUpdateManyWithoutProjectNestedInput = {
@@ -21777,6 +23226,20 @@ export namespace Prisma {
     deleteMany?: ApplicationFormScalarWhereInput | ApplicationFormScalarWhereInput[]
   }
 
+  export type ProjectToUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<ProjectToCreateWithoutProjectInput, ProjectToUncheckedCreateWithoutProjectInput> | ProjectToCreateWithoutProjectInput[] | ProjectToUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: ProjectToCreateOrConnectWithoutProjectInput | ProjectToCreateOrConnectWithoutProjectInput[]
+    upsert?: ProjectToUpsertWithWhereUniqueWithoutProjectInput | ProjectToUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: ProjectToCreateManyProjectInputEnvelope
+    set?: ProjectToWhereUniqueInput | ProjectToWhereUniqueInput[]
+    disconnect?: ProjectToWhereUniqueInput | ProjectToWhereUniqueInput[]
+    delete?: ProjectToWhereUniqueInput | ProjectToWhereUniqueInput[]
+    connect?: ProjectToWhereUniqueInput | ProjectToWhereUniqueInput[]
+    update?: ProjectToUpdateWithWhereUniqueWithoutProjectInput | ProjectToUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: ProjectToUpdateManyWithWhereWithoutProjectInput | ProjectToUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: ProjectToScalarWhereInput | ProjectToScalarWhereInput[]
+  }
+
   export type ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput = {
     create?: XOR<ProjectMemberCreateWithoutProjectInput, ProjectMemberUncheckedCreateWithoutProjectInput> | ProjectMemberCreateWithoutProjectInput[] | ProjectMemberUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: ProjectMemberCreateOrConnectWithoutProjectInput | ProjectMemberCreateOrConnectWithoutProjectInput[]
@@ -21805,6 +23268,42 @@ export namespace Prisma {
     deleteMany?: ApplicationFormScalarWhereInput | ApplicationFormScalarWhereInput[]
   }
 
+  export type ProjectToUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<ProjectToCreateWithoutProjectInput, ProjectToUncheckedCreateWithoutProjectInput> | ProjectToCreateWithoutProjectInput[] | ProjectToUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: ProjectToCreateOrConnectWithoutProjectInput | ProjectToCreateOrConnectWithoutProjectInput[]
+    upsert?: ProjectToUpsertWithWhereUniqueWithoutProjectInput | ProjectToUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: ProjectToCreateManyProjectInputEnvelope
+    set?: ProjectToWhereUniqueInput | ProjectToWhereUniqueInput[]
+    disconnect?: ProjectToWhereUniqueInput | ProjectToWhereUniqueInput[]
+    delete?: ProjectToWhereUniqueInput | ProjectToWhereUniqueInput[]
+    connect?: ProjectToWhereUniqueInput | ProjectToWhereUniqueInput[]
+    update?: ProjectToUpdateWithWhereUniqueWithoutProjectInput | ProjectToUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: ProjectToUpdateManyWithWhereWithoutProjectInput | ProjectToUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: ProjectToScalarWhereInput | ProjectToScalarWhereInput[]
+  }
+
+  export type ProjectCreateNestedOneWithoutToInput = {
+    create?: XOR<ProjectCreateWithoutToInput, ProjectUncheckedCreateWithoutToInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutToInput
+    connect?: ProjectWhereUniqueInput
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type ProjectUpdateOneRequiredWithoutToNestedInput = {
+    create?: XOR<ProjectCreateWithoutToInput, ProjectUncheckedCreateWithoutToInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutToInput
+    upsert?: ProjectUpsertWithoutToInput
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutToInput, ProjectUpdateWithoutToInput>, ProjectUncheckedUpdateWithoutToInput>
+  }
+
   export type ProjectCreateNestedOneWithoutMembersInput = {
     create?: XOR<ProjectCreateWithoutMembersInput, ProjectUncheckedCreateWithoutMembersInput>
     connectOrCreate?: ProjectCreateOrConnectWithoutMembersInput
@@ -21815,10 +23314,6 @@ export namespace Prisma {
     create?: XOR<ChallengerCreateWithoutProjectMembersInput, ChallengerUncheckedCreateWithoutProjectMembersInput>
     connectOrCreate?: ChallengerCreateOrConnectWithoutProjectMembersInput
     connect?: ChallengerWhereUniqueInput
-  }
-
-  export type EnumUserPartEnumFieldUpdateOperationsInput = {
-    set?: $Enums.UserPartEnum
   }
 
   export type ProjectUpdateOneRequiredWithoutMembersNestedInput = {
@@ -22080,6 +23575,12 @@ export namespace Prisma {
     connect?: ApplicationWhereUniqueInput | ApplicationWhereUniqueInput[]
   }
 
+  export type GisuChapterCreateNestedOneWithoutChapterMatchingRoundInput = {
+    create?: XOR<GisuChapterCreateWithoutChapterMatchingRoundInput, GisuChapterUncheckedCreateWithoutChapterMatchingRoundInput>
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutChapterMatchingRoundInput
+    connect?: GisuChapterWhereUniqueInput
+  }
+
   export type ApplicationUncheckedCreateNestedManyWithoutMatchingRoundInput = {
     create?: XOR<ApplicationCreateWithoutMatchingRoundInput, ApplicationUncheckedCreateWithoutMatchingRoundInput> | ApplicationCreateWithoutMatchingRoundInput[] | ApplicationUncheckedCreateWithoutMatchingRoundInput[]
     connectOrCreate?: ApplicationCreateOrConnectWithoutMatchingRoundInput | ApplicationCreateOrConnectWithoutMatchingRoundInput[]
@@ -22099,6 +23600,14 @@ export namespace Prisma {
     update?: ApplicationUpdateWithWhereUniqueWithoutMatchingRoundInput | ApplicationUpdateWithWhereUniqueWithoutMatchingRoundInput[]
     updateMany?: ApplicationUpdateManyWithWhereWithoutMatchingRoundInput | ApplicationUpdateManyWithWhereWithoutMatchingRoundInput[]
     deleteMany?: ApplicationScalarWhereInput | ApplicationScalarWhereInput[]
+  }
+
+  export type GisuChapterUpdateOneRequiredWithoutChapterMatchingRoundNestedInput = {
+    create?: XOR<GisuChapterCreateWithoutChapterMatchingRoundInput, GisuChapterUncheckedCreateWithoutChapterMatchingRoundInput>
+    connectOrCreate?: GisuChapterCreateOrConnectWithoutChapterMatchingRoundInput
+    upsert?: GisuChapterUpsertWithoutChapterMatchingRoundInput
+    connect?: GisuChapterWhereUniqueInput
+    update?: XOR<XOR<GisuChapterUpdateToOneWithWhereWithoutChapterMatchingRoundInput, GisuChapterUpdateWithoutChapterMatchingRoundInput>, GisuChapterUncheckedUpdateWithoutChapterMatchingRoundInput>
   }
 
   export type ApplicationUncheckedUpdateManyWithoutMatchingRoundNestedInput = {
@@ -22124,17 +23633,6 @@ export namespace Prisma {
     gt?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     gte?: bigint | number | BigIntFieldRefInput<$PrismaModel>
     not?: NestedBigIntFilter<$PrismaModel> | bigint | number
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -22199,6 +23697,17 @@ export namespace Prisma {
     _max?: NestedBigIntFilter<$PrismaModel>
   }
 
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type NestedFloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -22208,22 +23717,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -22300,12 +23793,29 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
+  export type NestedEnumUserPartEnumFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserPartEnum | EnumUserPartEnumFieldRefInput<$PrismaModel>
+    in?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserPartEnumFilter<$PrismaModel> | $Enums.UserPartEnum
+  }
+
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedEnumUserPartEnumWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserPartEnum | EnumUserPartEnumFieldRefInput<$PrismaModel>
+    in?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserPartEnumWithAggregatesFilter<$PrismaModel> | $Enums.UserPartEnum
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserPartEnumFilter<$PrismaModel>
+    _max?: NestedEnumUserPartEnumFilter<$PrismaModel>
   }
 
   export type NestedBigIntNullableFilter<$PrismaModel = never> = {
@@ -22346,21 +23856,20 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedEnumUserPartEnumFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserPartEnum | EnumUserPartEnumFieldRefInput<$PrismaModel>
-    in?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserPartEnumFilter<$PrismaModel> | $Enums.UserPartEnum
-  }
-
-  export type NestedEnumUserPartEnumWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserPartEnum | EnumUserPartEnumFieldRefInput<$PrismaModel>
-    in?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserPartEnum[] | ListEnumUserPartEnumFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserPartEnumWithAggregatesFilter<$PrismaModel> | $Enums.UserPartEnum
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUserPartEnumFilter<$PrismaModel>
-    _max?: NestedEnumUserPartEnumFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type NestedEnumQuestionTypeEnumFilter<$PrismaModel = never> = {
@@ -22404,7 +23913,7 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    gisuSchools?: GisuSchoolCreateNestedManyWithoutSchoolInput
+    gisuSchools?: ChapterSchoolCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolUncheckedCreateWithoutChallengersInput = {
@@ -22414,7 +23923,7 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    gisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutSchoolInput
+    gisuSchools?: ChapterSchoolUncheckedCreateNestedManyWithoutSchoolInput
   }
 
   export type SchoolCreateOrConnectWithoutChallengersInput = {
@@ -22424,6 +23933,8 @@ export namespace Prisma {
 
   export type ChallengerGisuCreateWithoutChallengerInput = {
     id?: bigint | number
+    isTerminated?: boolean
+    part: $Enums.UserPartEnum
     isSchoolAdmin: boolean
     isChapterAdmin: boolean
     isCentralAdmin: boolean
@@ -22432,12 +23943,14 @@ export namespace Prisma {
     centralAdminType?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    gisu: GisuCreateNestedOneWithoutChallengerGisusInput
+    chapterSchool: GisuChapterCreateNestedOneWithoutGisuChapterChallengerInput
   }
 
   export type ChallengerGisuUncheckedCreateWithoutChallengerInput = {
     id?: bigint | number
-    gisuId: bigint | number
+    chapterSchoolId: bigint | number
+    isTerminated?: boolean
+    part: $Enums.UserPartEnum
     isSchoolAdmin: boolean
     isChapterAdmin: boolean
     isCentralAdmin: boolean
@@ -22458,65 +23971,64 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type GisuSchoolCreateWithoutLeaderInput = {
+  export type ChapterSchoolCreateWithoutLeaderInput = {
     id?: bigint | number
     createdAt?: Date | string
     updatedAt?: Date | string
-    gisu: GisuCreateNestedOneWithoutGisuSchoolsInput
+    chapter: GisuChapterCreateNestedOneWithoutGisuChapterSchoolInput
     school: SchoolCreateNestedOneWithoutGisuSchoolsInput
-    viceLeader?: ChallengerCreateNestedOneWithoutViceLedGisuSchoolsInput
+    viceLeader?: ChallengerCreateNestedOneWithoutViceLeadGisuSchoolInput
   }
 
-  export type GisuSchoolUncheckedCreateWithoutLeaderInput = {
+  export type ChapterSchoolUncheckedCreateWithoutLeaderInput = {
     id?: bigint | number
-    gisuId: bigint | number
+    chapterId: bigint | number
     schoolId: bigint | number
     viceLeaderId?: bigint | number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type GisuSchoolCreateOrConnectWithoutLeaderInput = {
-    where: GisuSchoolWhereUniqueInput
-    create: XOR<GisuSchoolCreateWithoutLeaderInput, GisuSchoolUncheckedCreateWithoutLeaderInput>
+  export type ChapterSchoolCreateOrConnectWithoutLeaderInput = {
+    where: ChapterSchoolWhereUniqueInput
+    create: XOR<ChapterSchoolCreateWithoutLeaderInput, ChapterSchoolUncheckedCreateWithoutLeaderInput>
   }
 
-  export type GisuSchoolCreateManyLeaderInputEnvelope = {
-    data: GisuSchoolCreateManyLeaderInput | GisuSchoolCreateManyLeaderInput[]
+  export type ChapterSchoolCreateManyLeaderInputEnvelope = {
+    data: ChapterSchoolCreateManyLeaderInput | ChapterSchoolCreateManyLeaderInput[]
     skipDuplicates?: boolean
   }
 
-  export type GisuSchoolCreateWithoutViceLeaderInput = {
+  export type ChapterSchoolCreateWithoutViceLeaderInput = {
     id?: bigint | number
     createdAt?: Date | string
     updatedAt?: Date | string
-    gisu: GisuCreateNestedOneWithoutGisuSchoolsInput
+    chapter: GisuChapterCreateNestedOneWithoutGisuChapterSchoolInput
     school: SchoolCreateNestedOneWithoutGisuSchoolsInput
-    leader: ChallengerCreateNestedOneWithoutLedGisuSchoolsInput
+    leader?: ChallengerCreateNestedOneWithoutLeaderGisuSchoolInput
   }
 
-  export type GisuSchoolUncheckedCreateWithoutViceLeaderInput = {
+  export type ChapterSchoolUncheckedCreateWithoutViceLeaderInput = {
     id?: bigint | number
-    gisuId: bigint | number
+    chapterId: bigint | number
     schoolId: bigint | number
-    leaderId: bigint | number
+    leaderId?: bigint | number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type GisuSchoolCreateOrConnectWithoutViceLeaderInput = {
-    where: GisuSchoolWhereUniqueInput
-    create: XOR<GisuSchoolCreateWithoutViceLeaderInput, GisuSchoolUncheckedCreateWithoutViceLeaderInput>
+  export type ChapterSchoolCreateOrConnectWithoutViceLeaderInput = {
+    where: ChapterSchoolWhereUniqueInput
+    create: XOR<ChapterSchoolCreateWithoutViceLeaderInput, ChapterSchoolUncheckedCreateWithoutViceLeaderInput>
   }
 
-  export type GisuSchoolCreateManyViceLeaderInputEnvelope = {
-    data: GisuSchoolCreateManyViceLeaderInput | GisuSchoolCreateManyViceLeaderInput[]
+  export type ChapterSchoolCreateManyViceLeaderInputEnvelope = {
+    data: ChapterSchoolCreateManyViceLeaderInput | ChapterSchoolCreateManyViceLeaderInput[]
     skipDuplicates?: boolean
   }
 
   export type ProjectMemberCreateWithoutChallengerInput = {
     id?: bigint | number
-    role: $Enums.UserPartEnum
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22526,7 +24038,6 @@ export namespace Prisma {
   export type ProjectMemberUncheckedCreateWithoutChallengerInput = {
     id?: bigint | number
     projectId: bigint | number
-    role: $Enums.UserPartEnum
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -22588,7 +24099,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisuSchools?: GisuSchoolUpdateManyWithoutSchoolNestedInput
+    gisuSchools?: ChapterSchoolUpdateManyWithoutSchoolNestedInput
   }
 
   export type SchoolUncheckedUpdateWithoutChallengersInput = {
@@ -22598,7 +24109,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisuSchools?: GisuSchoolUncheckedUpdateManyWithoutSchoolNestedInput
+    gisuSchools?: ChapterSchoolUncheckedUpdateManyWithoutSchoolNestedInput
   }
 
   export type ChallengerGisuUpsertWithWhereUniqueWithoutChallengerInput = {
@@ -22623,7 +24134,9 @@ export namespace Prisma {
     NOT?: ChallengerGisuScalarWhereInput | ChallengerGisuScalarWhereInput[]
     id?: BigIntFilter<"ChallengerGisu"> | bigint | number
     challengerId?: BigIntFilter<"ChallengerGisu"> | bigint | number
-    gisuId?: BigIntFilter<"ChallengerGisu"> | bigint | number
+    chapterSchoolId?: BigIntFilter<"ChallengerGisu"> | bigint | number
+    isTerminated?: BoolFilter<"ChallengerGisu"> | boolean
+    part?: EnumUserPartEnumFilter<"ChallengerGisu"> | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFilter<"ChallengerGisu"> | boolean
     isChapterAdmin?: BoolFilter<"ChallengerGisu"> | boolean
     isCentralAdmin?: BoolFilter<"ChallengerGisu"> | boolean
@@ -22634,49 +24147,49 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ChallengerGisu"> | Date | string
   }
 
-  export type GisuSchoolUpsertWithWhereUniqueWithoutLeaderInput = {
-    where: GisuSchoolWhereUniqueInput
-    update: XOR<GisuSchoolUpdateWithoutLeaderInput, GisuSchoolUncheckedUpdateWithoutLeaderInput>
-    create: XOR<GisuSchoolCreateWithoutLeaderInput, GisuSchoolUncheckedCreateWithoutLeaderInput>
+  export type ChapterSchoolUpsertWithWhereUniqueWithoutLeaderInput = {
+    where: ChapterSchoolWhereUniqueInput
+    update: XOR<ChapterSchoolUpdateWithoutLeaderInput, ChapterSchoolUncheckedUpdateWithoutLeaderInput>
+    create: XOR<ChapterSchoolCreateWithoutLeaderInput, ChapterSchoolUncheckedCreateWithoutLeaderInput>
   }
 
-  export type GisuSchoolUpdateWithWhereUniqueWithoutLeaderInput = {
-    where: GisuSchoolWhereUniqueInput
-    data: XOR<GisuSchoolUpdateWithoutLeaderInput, GisuSchoolUncheckedUpdateWithoutLeaderInput>
+  export type ChapterSchoolUpdateWithWhereUniqueWithoutLeaderInput = {
+    where: ChapterSchoolWhereUniqueInput
+    data: XOR<ChapterSchoolUpdateWithoutLeaderInput, ChapterSchoolUncheckedUpdateWithoutLeaderInput>
   }
 
-  export type GisuSchoolUpdateManyWithWhereWithoutLeaderInput = {
-    where: GisuSchoolScalarWhereInput
-    data: XOR<GisuSchoolUpdateManyMutationInput, GisuSchoolUncheckedUpdateManyWithoutLeaderInput>
+  export type ChapterSchoolUpdateManyWithWhereWithoutLeaderInput = {
+    where: ChapterSchoolScalarWhereInput
+    data: XOR<ChapterSchoolUpdateManyMutationInput, ChapterSchoolUncheckedUpdateManyWithoutLeaderInput>
   }
 
-  export type GisuSchoolScalarWhereInput = {
-    AND?: GisuSchoolScalarWhereInput | GisuSchoolScalarWhereInput[]
-    OR?: GisuSchoolScalarWhereInput[]
-    NOT?: GisuSchoolScalarWhereInput | GisuSchoolScalarWhereInput[]
-    id?: BigIntFilter<"GisuSchool"> | bigint | number
-    gisuId?: BigIntFilter<"GisuSchool"> | bigint | number
-    schoolId?: BigIntFilter<"GisuSchool"> | bigint | number
-    leaderId?: BigIntFilter<"GisuSchool"> | bigint | number
-    viceLeaderId?: BigIntNullableFilter<"GisuSchool"> | bigint | number | null
-    createdAt?: DateTimeFilter<"GisuSchool"> | Date | string
-    updatedAt?: DateTimeFilter<"GisuSchool"> | Date | string
+  export type ChapterSchoolScalarWhereInput = {
+    AND?: ChapterSchoolScalarWhereInput | ChapterSchoolScalarWhereInput[]
+    OR?: ChapterSchoolScalarWhereInput[]
+    NOT?: ChapterSchoolScalarWhereInput | ChapterSchoolScalarWhereInput[]
+    id?: BigIntFilter<"ChapterSchool"> | bigint | number
+    chapterId?: BigIntFilter<"ChapterSchool"> | bigint | number
+    schoolId?: BigIntFilter<"ChapterSchool"> | bigint | number
+    leaderId?: BigIntNullableFilter<"ChapterSchool"> | bigint | number | null
+    viceLeaderId?: BigIntNullableFilter<"ChapterSchool"> | bigint | number | null
+    createdAt?: DateTimeFilter<"ChapterSchool"> | Date | string
+    updatedAt?: DateTimeFilter<"ChapterSchool"> | Date | string
   }
 
-  export type GisuSchoolUpsertWithWhereUniqueWithoutViceLeaderInput = {
-    where: GisuSchoolWhereUniqueInput
-    update: XOR<GisuSchoolUpdateWithoutViceLeaderInput, GisuSchoolUncheckedUpdateWithoutViceLeaderInput>
-    create: XOR<GisuSchoolCreateWithoutViceLeaderInput, GisuSchoolUncheckedCreateWithoutViceLeaderInput>
+  export type ChapterSchoolUpsertWithWhereUniqueWithoutViceLeaderInput = {
+    where: ChapterSchoolWhereUniqueInput
+    update: XOR<ChapterSchoolUpdateWithoutViceLeaderInput, ChapterSchoolUncheckedUpdateWithoutViceLeaderInput>
+    create: XOR<ChapterSchoolCreateWithoutViceLeaderInput, ChapterSchoolUncheckedCreateWithoutViceLeaderInput>
   }
 
-  export type GisuSchoolUpdateWithWhereUniqueWithoutViceLeaderInput = {
-    where: GisuSchoolWhereUniqueInput
-    data: XOR<GisuSchoolUpdateWithoutViceLeaderInput, GisuSchoolUncheckedUpdateWithoutViceLeaderInput>
+  export type ChapterSchoolUpdateWithWhereUniqueWithoutViceLeaderInput = {
+    where: ChapterSchoolWhereUniqueInput
+    data: XOR<ChapterSchoolUpdateWithoutViceLeaderInput, ChapterSchoolUncheckedUpdateWithoutViceLeaderInput>
   }
 
-  export type GisuSchoolUpdateManyWithWhereWithoutViceLeaderInput = {
-    where: GisuSchoolScalarWhereInput
-    data: XOR<GisuSchoolUpdateManyMutationInput, GisuSchoolUncheckedUpdateManyWithoutViceLeaderInput>
+  export type ChapterSchoolUpdateManyWithWhereWithoutViceLeaderInput = {
+    where: ChapterSchoolScalarWhereInput
+    data: XOR<ChapterSchoolUpdateManyMutationInput, ChapterSchoolUncheckedUpdateManyWithoutViceLeaderInput>
   }
 
   export type ProjectMemberUpsertWithWhereUniqueWithoutChallengerInput = {
@@ -22702,7 +24215,6 @@ export namespace Prisma {
     id?: BigIntFilter<"ProjectMember"> | bigint | number
     projectId?: BigIntFilter<"ProjectMember"> | bigint | number
     challengerId?: BigIntFilter<"ProjectMember"> | bigint | number
-    role?: EnumUserPartEnumFilter<"ProjectMember"> | $Enums.UserPartEnum
     isActive?: BoolFilter<"ProjectMember"> | boolean
     createdAt?: DateTimeFilter<"ProjectMember"> | Date | string
     updatedAt?: DateTimeFilter<"ProjectMember"> | Date | string
@@ -22738,34 +24250,36 @@ export namespace Prisma {
 
   export type ChallengerCreateWithoutGisuRolesInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     school: SchoolCreateNestedOneWithoutChallengersInput
-    ledGisuSchools?: GisuSchoolCreateNestedManyWithoutLeaderInput
-    viceLedGisuSchools?: GisuSchoolCreateNestedManyWithoutViceLeaderInput
+    leaderGisuSchool?: ChapterSchoolCreateNestedManyWithoutLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolCreateNestedManyWithoutViceLeaderInput
     projectMembers?: ProjectMemberCreateNestedManyWithoutChallengerInput
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
   }
 
   export type ChallengerUncheckedCreateWithoutGisuRolesInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     schoolId: bigint | number
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    ledGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutLeaderInput
-    viceLedGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
+    leaderGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
     projectMembers?: ProjectMemberUncheckedCreateNestedManyWithoutChallengerInput
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
   }
@@ -22775,29 +24289,33 @@ export namespace Prisma {
     create: XOR<ChallengerCreateWithoutGisuRolesInput, ChallengerUncheckedCreateWithoutGisuRolesInput>
   }
 
-  export type GisuCreateWithoutChallengerGisusInput = {
+  export type GisuChapterCreateWithoutGisuChapterChallengerInput = {
     id?: bigint | number
     name: string
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    gisuSchools?: GisuSchoolCreateNestedManyWithoutGisuInput
-    chapters?: ChapterCreateNestedManyWithoutGisuInput
+    gisu: GisuCreateNestedOneWithoutChaptersInput
+    projects?: ProjectCreateNestedManyWithoutChapterInput
+    chapterMatchingRound?: MatchingRoundCreateNestedManyWithoutChapterInput
+    gisuChapterSchool?: ChapterSchoolCreateNestedManyWithoutChapterInput
   }
 
-  export type GisuUncheckedCreateWithoutChallengerGisusInput = {
+  export type GisuChapterUncheckedCreateWithoutGisuChapterChallengerInput = {
     id?: bigint | number
     name: string
     description?: string | null
+    gisuId: bigint | number
     createdAt?: Date | string
     updatedAt?: Date | string
-    gisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutGisuInput
-    chapters?: ChapterUncheckedCreateNestedManyWithoutGisuInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutChapterInput
+    chapterMatchingRound?: MatchingRoundUncheckedCreateNestedManyWithoutChapterInput
+    gisuChapterSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutChapterInput
   }
 
-  export type GisuCreateOrConnectWithoutChallengerGisusInput = {
-    where: GisuWhereUniqueInput
-    create: XOR<GisuCreateWithoutChallengerGisusInput, GisuUncheckedCreateWithoutChallengerGisusInput>
+  export type GisuChapterCreateOrConnectWithoutGisuChapterChallengerInput = {
+    where: GisuChapterWhereUniqueInput
+    create: XOR<GisuChapterCreateWithoutGisuChapterChallengerInput, GisuChapterUncheckedCreateWithoutGisuChapterChallengerInput>
   }
 
   export type ChallengerUpsertWithoutGisuRolesInput = {
@@ -22813,127 +24331,260 @@ export namespace Prisma {
 
   export type ChallengerUpdateWithoutGisuRolesInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     school?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
-    ledGisuSchools?: GisuSchoolUpdateManyWithoutLeaderNestedInput
-    viceLedGisuSchools?: GisuSchoolUpdateManyWithoutViceLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUpdateManyWithoutLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUpdateManyWithoutViceLeaderNestedInput
     projectMembers?: ProjectMemberUpdateManyWithoutChallengerNestedInput
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
   }
 
   export type ChallengerUncheckedUpdateWithoutGisuRolesInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    ledGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutLeaderNestedInput
-    viceLedGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
     projectMembers?: ProjectMemberUncheckedUpdateManyWithoutChallengerNestedInput
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
-  export type GisuUpsertWithoutChallengerGisusInput = {
-    update: XOR<GisuUpdateWithoutChallengerGisusInput, GisuUncheckedUpdateWithoutChallengerGisusInput>
-    create: XOR<GisuCreateWithoutChallengerGisusInput, GisuUncheckedCreateWithoutChallengerGisusInput>
-    where?: GisuWhereInput
+  export type GisuChapterUpsertWithoutGisuChapterChallengerInput = {
+    update: XOR<GisuChapterUpdateWithoutGisuChapterChallengerInput, GisuChapterUncheckedUpdateWithoutGisuChapterChallengerInput>
+    create: XOR<GisuChapterCreateWithoutGisuChapterChallengerInput, GisuChapterUncheckedCreateWithoutGisuChapterChallengerInput>
+    where?: GisuChapterWhereInput
   }
 
-  export type GisuUpdateToOneWithWhereWithoutChallengerGisusInput = {
-    where?: GisuWhereInput
-    data: XOR<GisuUpdateWithoutChallengerGisusInput, GisuUncheckedUpdateWithoutChallengerGisusInput>
+  export type GisuChapterUpdateToOneWithWhereWithoutGisuChapterChallengerInput = {
+    where?: GisuChapterWhereInput
+    data: XOR<GisuChapterUpdateWithoutGisuChapterChallengerInput, GisuChapterUncheckedUpdateWithoutGisuChapterChallengerInput>
   }
 
-  export type GisuUpdateWithoutChallengerGisusInput = {
+  export type GisuChapterUpdateWithoutGisuChapterChallengerInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisuSchools?: GisuSchoolUpdateManyWithoutGisuNestedInput
-    chapters?: ChapterUpdateManyWithoutGisuNestedInput
+    gisu?: GisuUpdateOneRequiredWithoutChaptersNestedInput
+    projects?: ProjectUpdateManyWithoutChapterNestedInput
+    chapterMatchingRound?: MatchingRoundUpdateManyWithoutChapterNestedInput
+    gisuChapterSchool?: ChapterSchoolUpdateManyWithoutChapterNestedInput
   }
 
-  export type GisuUncheckedUpdateWithoutChallengerGisusInput = {
+  export type GisuChapterUncheckedUpdateWithoutGisuChapterChallengerInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisuSchools?: GisuSchoolUncheckedUpdateManyWithoutGisuNestedInput
-    chapters?: ChapterUncheckedUpdateManyWithoutGisuNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutChapterNestedInput
+    chapterMatchingRound?: MatchingRoundUncheckedUpdateManyWithoutChapterNestedInput
+    gisuChapterSchool?: ChapterSchoolUncheckedUpdateManyWithoutChapterNestedInput
   }
 
-  export type GisuSchoolCreateWithoutGisuInput = {
-    id?: bigint | number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    school: SchoolCreateNestedOneWithoutGisuSchoolsInput
-    leader: ChallengerCreateNestedOneWithoutLedGisuSchoolsInput
-    viceLeader?: ChallengerCreateNestedOneWithoutViceLedGisuSchoolsInput
-  }
-
-  export type GisuSchoolUncheckedCreateWithoutGisuInput = {
-    id?: bigint | number
-    schoolId: bigint | number
-    leaderId: bigint | number
-    viceLeaderId?: bigint | number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type GisuSchoolCreateOrConnectWithoutGisuInput = {
-    where: GisuSchoolWhereUniqueInput
-    create: XOR<GisuSchoolCreateWithoutGisuInput, GisuSchoolUncheckedCreateWithoutGisuInput>
-  }
-
-  export type GisuSchoolCreateManyGisuInputEnvelope = {
-    data: GisuSchoolCreateManyGisuInput | GisuSchoolCreateManyGisuInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ChapterCreateWithoutGisuInput = {
+  export type GisuChapterCreateWithoutGisuInput = {
     id?: bigint | number
     name: string
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutChapterInput
+    chapterMatchingRound?: MatchingRoundCreateNestedManyWithoutChapterInput
+    gisuChapterSchool?: ChapterSchoolCreateNestedManyWithoutChapterInput
+    gisuChapterChallenger?: ChallengerGisuCreateNestedManyWithoutChapterSchoolInput
   }
 
-  export type ChapterUncheckedCreateWithoutGisuInput = {
+  export type GisuChapterUncheckedCreateWithoutGisuInput = {
     id?: bigint | number
     name: string
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutChapterInput
+    chapterMatchingRound?: MatchingRoundUncheckedCreateNestedManyWithoutChapterInput
+    gisuChapterSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutChapterInput
+    gisuChapterChallenger?: ChallengerGisuUncheckedCreateNestedManyWithoutChapterSchoolInput
   }
 
-  export type ChapterCreateOrConnectWithoutGisuInput = {
-    where: ChapterWhereUniqueInput
-    create: XOR<ChapterCreateWithoutGisuInput, ChapterUncheckedCreateWithoutGisuInput>
+  export type GisuChapterCreateOrConnectWithoutGisuInput = {
+    where: GisuChapterWhereUniqueInput
+    create: XOR<GisuChapterCreateWithoutGisuInput, GisuChapterUncheckedCreateWithoutGisuInput>
   }
 
-  export type ChapterCreateManyGisuInputEnvelope = {
-    data: ChapterCreateManyGisuInput | ChapterCreateManyGisuInput[]
+  export type GisuChapterCreateManyGisuInputEnvelope = {
+    data: GisuChapterCreateManyGisuInput | GisuChapterCreateManyGisuInput[]
     skipDuplicates?: boolean
   }
 
-  export type ChallengerGisuCreateWithoutGisuInput = {
+  export type GisuChapterUpsertWithWhereUniqueWithoutGisuInput = {
+    where: GisuChapterWhereUniqueInput
+    update: XOR<GisuChapterUpdateWithoutGisuInput, GisuChapterUncheckedUpdateWithoutGisuInput>
+    create: XOR<GisuChapterCreateWithoutGisuInput, GisuChapterUncheckedCreateWithoutGisuInput>
+  }
+
+  export type GisuChapterUpdateWithWhereUniqueWithoutGisuInput = {
+    where: GisuChapterWhereUniqueInput
+    data: XOR<GisuChapterUpdateWithoutGisuInput, GisuChapterUncheckedUpdateWithoutGisuInput>
+  }
+
+  export type GisuChapterUpdateManyWithWhereWithoutGisuInput = {
+    where: GisuChapterScalarWhereInput
+    data: XOR<GisuChapterUpdateManyMutationInput, GisuChapterUncheckedUpdateManyWithoutGisuInput>
+  }
+
+  export type GisuChapterScalarWhereInput = {
+    AND?: GisuChapterScalarWhereInput | GisuChapterScalarWhereInput[]
+    OR?: GisuChapterScalarWhereInput[]
+    NOT?: GisuChapterScalarWhereInput | GisuChapterScalarWhereInput[]
+    id?: BigIntFilter<"GisuChapter"> | bigint | number
+    name?: StringFilter<"GisuChapter"> | string
+    description?: StringNullableFilter<"GisuChapter"> | string | null
+    gisuId?: BigIntFilter<"GisuChapter"> | bigint | number
+    createdAt?: DateTimeFilter<"GisuChapter"> | Date | string
+    updatedAt?: DateTimeFilter<"GisuChapter"> | Date | string
+  }
+
+  export type GisuCreateWithoutChaptersInput = {
     id?: bigint | number
+    name: string
+    description?: string | null
+    isCurrent?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GisuUncheckedCreateWithoutChaptersInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    isCurrent?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type GisuCreateOrConnectWithoutChaptersInput = {
+    where: GisuWhereUniqueInput
+    create: XOR<GisuCreateWithoutChaptersInput, GisuUncheckedCreateWithoutChaptersInput>
+  }
+
+  export type ProjectCreateWithoutChapterInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    logoImageUrl?: string | null
+    bannerImageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: ProjectMemberCreateNestedManyWithoutProjectInput
+    applicationForms?: ApplicationFormCreateNestedManyWithoutProjectInput
+    to?: ProjectToCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutChapterInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    logoImageUrl?: string | null
+    bannerImageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
+    applicationForms?: ApplicationFormUncheckedCreateNestedManyWithoutProjectInput
+    to?: ProjectToUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutChapterInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutChapterInput, ProjectUncheckedCreateWithoutChapterInput>
+  }
+
+  export type ProjectCreateManyChapterInputEnvelope = {
+    data: ProjectCreateManyChapterInput | ProjectCreateManyChapterInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MatchingRoundCreateWithoutChapterInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    startAt: Date | string
+    endAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    applications?: ApplicationCreateNestedManyWithoutMatchingRoundInput
+  }
+
+  export type MatchingRoundUncheckedCreateWithoutChapterInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    startAt: Date | string
+    endAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    applications?: ApplicationUncheckedCreateNestedManyWithoutMatchingRoundInput
+  }
+
+  export type MatchingRoundCreateOrConnectWithoutChapterInput = {
+    where: MatchingRoundWhereUniqueInput
+    create: XOR<MatchingRoundCreateWithoutChapterInput, MatchingRoundUncheckedCreateWithoutChapterInput>
+  }
+
+  export type MatchingRoundCreateManyChapterInputEnvelope = {
+    data: MatchingRoundCreateManyChapterInput | MatchingRoundCreateManyChapterInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ChapterSchoolCreateWithoutChapterInput = {
+    id?: bigint | number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    school: SchoolCreateNestedOneWithoutGisuSchoolsInput
+    leader?: ChallengerCreateNestedOneWithoutLeaderGisuSchoolInput
+    viceLeader?: ChallengerCreateNestedOneWithoutViceLeadGisuSchoolInput
+  }
+
+  export type ChapterSchoolUncheckedCreateWithoutChapterInput = {
+    id?: bigint | number
+    schoolId: bigint | number
+    leaderId?: bigint | number | null
+    viceLeaderId?: bigint | number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChapterSchoolCreateOrConnectWithoutChapterInput = {
+    where: ChapterSchoolWhereUniqueInput
+    create: XOR<ChapterSchoolCreateWithoutChapterInput, ChapterSchoolUncheckedCreateWithoutChapterInput>
+  }
+
+  export type ChapterSchoolCreateManyChapterInputEnvelope = {
+    data: ChapterSchoolCreateManyChapterInput | ChapterSchoolCreateManyChapterInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ChallengerGisuCreateWithoutChapterSchoolInput = {
+    id?: bigint | number
+    isTerminated?: boolean
+    part: $Enums.UserPartEnum
     isSchoolAdmin: boolean
     isChapterAdmin: boolean
     isCentralAdmin: boolean
@@ -22945,9 +24596,11 @@ export namespace Prisma {
     challenger: ChallengerCreateNestedOneWithoutGisuRolesInput
   }
 
-  export type ChallengerGisuUncheckedCreateWithoutGisuInput = {
+  export type ChallengerGisuUncheckedCreateWithoutChapterSchoolInput = {
     id?: bigint | number
     challengerId: bigint | number
+    isTerminated?: boolean
+    part: $Enums.UserPartEnum
     isSchoolAdmin: boolean
     isChapterAdmin: boolean
     isCentralAdmin: boolean
@@ -22958,99 +24611,164 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ChallengerGisuCreateOrConnectWithoutGisuInput = {
+  export type ChallengerGisuCreateOrConnectWithoutChapterSchoolInput = {
     where: ChallengerGisuWhereUniqueInput
-    create: XOR<ChallengerGisuCreateWithoutGisuInput, ChallengerGisuUncheckedCreateWithoutGisuInput>
+    create: XOR<ChallengerGisuCreateWithoutChapterSchoolInput, ChallengerGisuUncheckedCreateWithoutChapterSchoolInput>
   }
 
-  export type ChallengerGisuCreateManyGisuInputEnvelope = {
-    data: ChallengerGisuCreateManyGisuInput | ChallengerGisuCreateManyGisuInput[]
+  export type ChallengerGisuCreateManyChapterSchoolInputEnvelope = {
+    data: ChallengerGisuCreateManyChapterSchoolInput | ChallengerGisuCreateManyChapterSchoolInput[]
     skipDuplicates?: boolean
   }
 
-  export type GisuSchoolUpsertWithWhereUniqueWithoutGisuInput = {
-    where: GisuSchoolWhereUniqueInput
-    update: XOR<GisuSchoolUpdateWithoutGisuInput, GisuSchoolUncheckedUpdateWithoutGisuInput>
-    create: XOR<GisuSchoolCreateWithoutGisuInput, GisuSchoolUncheckedCreateWithoutGisuInput>
+  export type GisuUpsertWithoutChaptersInput = {
+    update: XOR<GisuUpdateWithoutChaptersInput, GisuUncheckedUpdateWithoutChaptersInput>
+    create: XOR<GisuCreateWithoutChaptersInput, GisuUncheckedCreateWithoutChaptersInput>
+    where?: GisuWhereInput
   }
 
-  export type GisuSchoolUpdateWithWhereUniqueWithoutGisuInput = {
-    where: GisuSchoolWhereUniqueInput
-    data: XOR<GisuSchoolUpdateWithoutGisuInput, GisuSchoolUncheckedUpdateWithoutGisuInput>
+  export type GisuUpdateToOneWithWhereWithoutChaptersInput = {
+    where?: GisuWhereInput
+    data: XOR<GisuUpdateWithoutChaptersInput, GisuUncheckedUpdateWithoutChaptersInput>
   }
 
-  export type GisuSchoolUpdateManyWithWhereWithoutGisuInput = {
-    where: GisuSchoolScalarWhereInput
-    data: XOR<GisuSchoolUpdateManyMutationInput, GisuSchoolUncheckedUpdateManyWithoutGisuInput>
+  export type GisuUpdateWithoutChaptersInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isCurrent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ChapterUpsertWithWhereUniqueWithoutGisuInput = {
-    where: ChapterWhereUniqueInput
-    update: XOR<ChapterUpdateWithoutGisuInput, ChapterUncheckedUpdateWithoutGisuInput>
-    create: XOR<ChapterCreateWithoutGisuInput, ChapterUncheckedCreateWithoutGisuInput>
+  export type GisuUncheckedUpdateWithoutChaptersInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    isCurrent?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ChapterUpdateWithWhereUniqueWithoutGisuInput = {
-    where: ChapterWhereUniqueInput
-    data: XOR<ChapterUpdateWithoutGisuInput, ChapterUncheckedUpdateWithoutGisuInput>
+  export type ProjectUpsertWithWhereUniqueWithoutChapterInput = {
+    where: ProjectWhereUniqueInput
+    update: XOR<ProjectUpdateWithoutChapterInput, ProjectUncheckedUpdateWithoutChapterInput>
+    create: XOR<ProjectCreateWithoutChapterInput, ProjectUncheckedCreateWithoutChapterInput>
   }
 
-  export type ChapterUpdateManyWithWhereWithoutGisuInput = {
-    where: ChapterScalarWhereInput
-    data: XOR<ChapterUpdateManyMutationInput, ChapterUncheckedUpdateManyWithoutGisuInput>
+  export type ProjectUpdateWithWhereUniqueWithoutChapterInput = {
+    where: ProjectWhereUniqueInput
+    data: XOR<ProjectUpdateWithoutChapterInput, ProjectUncheckedUpdateWithoutChapterInput>
   }
 
-  export type ChapterScalarWhereInput = {
-    AND?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
-    OR?: ChapterScalarWhereInput[]
-    NOT?: ChapterScalarWhereInput | ChapterScalarWhereInput[]
-    id?: BigIntFilter<"Chapter"> | bigint | number
-    name?: StringFilter<"Chapter"> | string
-    description?: StringNullableFilter<"Chapter"> | string | null
-    gisuId?: BigIntFilter<"Chapter"> | bigint | number
-    createdAt?: DateTimeFilter<"Chapter"> | Date | string
-    updatedAt?: DateTimeFilter<"Chapter"> | Date | string
+  export type ProjectUpdateManyWithWhereWithoutChapterInput = {
+    where: ProjectScalarWhereInput
+    data: XOR<ProjectUpdateManyMutationInput, ProjectUncheckedUpdateManyWithoutChapterInput>
   }
 
-  export type ChallengerGisuUpsertWithWhereUniqueWithoutGisuInput = {
+  export type ProjectScalarWhereInput = {
+    AND?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
+    OR?: ProjectScalarWhereInput[]
+    NOT?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
+    id?: BigIntFilter<"Project"> | bigint | number
+    name?: StringFilter<"Project"> | string
+    description?: StringNullableFilter<"Project"> | string | null
+    chapterId?: BigIntFilter<"Project"> | bigint | number
+    logoImageUrl?: StringNullableFilter<"Project"> | string | null
+    bannerImageUrl?: StringNullableFilter<"Project"> | string | null
+    createdAt?: DateTimeFilter<"Project"> | Date | string
+    updatedAt?: DateTimeFilter<"Project"> | Date | string
+  }
+
+  export type MatchingRoundUpsertWithWhereUniqueWithoutChapterInput = {
+    where: MatchingRoundWhereUniqueInput
+    update: XOR<MatchingRoundUpdateWithoutChapterInput, MatchingRoundUncheckedUpdateWithoutChapterInput>
+    create: XOR<MatchingRoundCreateWithoutChapterInput, MatchingRoundUncheckedCreateWithoutChapterInput>
+  }
+
+  export type MatchingRoundUpdateWithWhereUniqueWithoutChapterInput = {
+    where: MatchingRoundWhereUniqueInput
+    data: XOR<MatchingRoundUpdateWithoutChapterInput, MatchingRoundUncheckedUpdateWithoutChapterInput>
+  }
+
+  export type MatchingRoundUpdateManyWithWhereWithoutChapterInput = {
+    where: MatchingRoundScalarWhereInput
+    data: XOR<MatchingRoundUpdateManyMutationInput, MatchingRoundUncheckedUpdateManyWithoutChapterInput>
+  }
+
+  export type MatchingRoundScalarWhereInput = {
+    AND?: MatchingRoundScalarWhereInput | MatchingRoundScalarWhereInput[]
+    OR?: MatchingRoundScalarWhereInput[]
+    NOT?: MatchingRoundScalarWhereInput | MatchingRoundScalarWhereInput[]
+    id?: BigIntFilter<"MatchingRound"> | bigint | number
+    name?: StringFilter<"MatchingRound"> | string
+    description?: StringNullableFilter<"MatchingRound"> | string | null
+    chapterId?: BigIntFilter<"MatchingRound"> | bigint | number
+    startAt?: DateTimeFilter<"MatchingRound"> | Date | string
+    endAt?: DateTimeFilter<"MatchingRound"> | Date | string
+    createdAt?: DateTimeFilter<"MatchingRound"> | Date | string
+    updatedAt?: DateTimeFilter<"MatchingRound"> | Date | string
+  }
+
+  export type ChapterSchoolUpsertWithWhereUniqueWithoutChapterInput = {
+    where: ChapterSchoolWhereUniqueInput
+    update: XOR<ChapterSchoolUpdateWithoutChapterInput, ChapterSchoolUncheckedUpdateWithoutChapterInput>
+    create: XOR<ChapterSchoolCreateWithoutChapterInput, ChapterSchoolUncheckedCreateWithoutChapterInput>
+  }
+
+  export type ChapterSchoolUpdateWithWhereUniqueWithoutChapterInput = {
+    where: ChapterSchoolWhereUniqueInput
+    data: XOR<ChapterSchoolUpdateWithoutChapterInput, ChapterSchoolUncheckedUpdateWithoutChapterInput>
+  }
+
+  export type ChapterSchoolUpdateManyWithWhereWithoutChapterInput = {
+    where: ChapterSchoolScalarWhereInput
+    data: XOR<ChapterSchoolUpdateManyMutationInput, ChapterSchoolUncheckedUpdateManyWithoutChapterInput>
+  }
+
+  export type ChallengerGisuUpsertWithWhereUniqueWithoutChapterSchoolInput = {
     where: ChallengerGisuWhereUniqueInput
-    update: XOR<ChallengerGisuUpdateWithoutGisuInput, ChallengerGisuUncheckedUpdateWithoutGisuInput>
-    create: XOR<ChallengerGisuCreateWithoutGisuInput, ChallengerGisuUncheckedCreateWithoutGisuInput>
+    update: XOR<ChallengerGisuUpdateWithoutChapterSchoolInput, ChallengerGisuUncheckedUpdateWithoutChapterSchoolInput>
+    create: XOR<ChallengerGisuCreateWithoutChapterSchoolInput, ChallengerGisuUncheckedCreateWithoutChapterSchoolInput>
   }
 
-  export type ChallengerGisuUpdateWithWhereUniqueWithoutGisuInput = {
+  export type ChallengerGisuUpdateWithWhereUniqueWithoutChapterSchoolInput = {
     where: ChallengerGisuWhereUniqueInput
-    data: XOR<ChallengerGisuUpdateWithoutGisuInput, ChallengerGisuUncheckedUpdateWithoutGisuInput>
+    data: XOR<ChallengerGisuUpdateWithoutChapterSchoolInput, ChallengerGisuUncheckedUpdateWithoutChapterSchoolInput>
   }
 
-  export type ChallengerGisuUpdateManyWithWhereWithoutGisuInput = {
+  export type ChallengerGisuUpdateManyWithWhereWithoutChapterSchoolInput = {
     where: ChallengerGisuScalarWhereInput
-    data: XOR<ChallengerGisuUpdateManyMutationInput, ChallengerGisuUncheckedUpdateManyWithoutGisuInput>
+    data: XOR<ChallengerGisuUpdateManyMutationInput, ChallengerGisuUncheckedUpdateManyWithoutChapterSchoolInput>
   }
 
-  export type GisuCreateWithoutGisuSchoolsInput = {
+  export type GisuChapterCreateWithoutGisuChapterSchoolInput = {
     id?: bigint | number
     name: string
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    chapters?: ChapterCreateNestedManyWithoutGisuInput
-    challengerGisus?: ChallengerGisuCreateNestedManyWithoutGisuInput
+    gisu: GisuCreateNestedOneWithoutChaptersInput
+    projects?: ProjectCreateNestedManyWithoutChapterInput
+    chapterMatchingRound?: MatchingRoundCreateNestedManyWithoutChapterInput
+    gisuChapterChallenger?: ChallengerGisuCreateNestedManyWithoutChapterSchoolInput
   }
 
-  export type GisuUncheckedCreateWithoutGisuSchoolsInput = {
+  export type GisuChapterUncheckedCreateWithoutGisuChapterSchoolInput = {
     id?: bigint | number
     name: string
     description?: string | null
+    gisuId: bigint | number
     createdAt?: Date | string
     updatedAt?: Date | string
-    chapters?: ChapterUncheckedCreateNestedManyWithoutGisuInput
-    challengerGisus?: ChallengerGisuUncheckedCreateNestedManyWithoutGisuInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutChapterInput
+    chapterMatchingRound?: MatchingRoundUncheckedCreateNestedManyWithoutChapterInput
+    gisuChapterChallenger?: ChallengerGisuUncheckedCreateNestedManyWithoutChapterSchoolInput
   }
 
-  export type GisuCreateOrConnectWithoutGisuSchoolsInput = {
-    where: GisuWhereUniqueInput
-    create: XOR<GisuCreateWithoutGisuSchoolsInput, GisuUncheckedCreateWithoutGisuSchoolsInput>
+  export type GisuChapterCreateOrConnectWithoutGisuChapterSchoolInput = {
+    where: GisuChapterWhereUniqueInput
+    create: XOR<GisuChapterCreateWithoutGisuChapterSchoolInput, GisuChapterUncheckedCreateWithoutGisuChapterSchoolInput>
   }
 
   export type SchoolCreateWithoutGisuSchoolsInput = {
@@ -23078,113 +24796,121 @@ export namespace Prisma {
     create: XOR<SchoolCreateWithoutGisuSchoolsInput, SchoolUncheckedCreateWithoutGisuSchoolsInput>
   }
 
-  export type ChallengerCreateWithoutLedGisuSchoolsInput = {
+  export type ChallengerCreateWithoutLeaderGisuSchoolInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     school: SchoolCreateNestedOneWithoutChallengersInput
     gisuRoles?: ChallengerGisuCreateNestedManyWithoutChallengerInput
-    viceLedGisuSchools?: GisuSchoolCreateNestedManyWithoutViceLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolCreateNestedManyWithoutViceLeaderInput
     projectMembers?: ProjectMemberCreateNestedManyWithoutChallengerInput
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
   }
 
-  export type ChallengerUncheckedCreateWithoutLedGisuSchoolsInput = {
+  export type ChallengerUncheckedCreateWithoutLeaderGisuSchoolInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     schoolId: bigint | number
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     gisuRoles?: ChallengerGisuUncheckedCreateNestedManyWithoutChallengerInput
-    viceLedGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
     projectMembers?: ProjectMemberUncheckedCreateNestedManyWithoutChallengerInput
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
   }
 
-  export type ChallengerCreateOrConnectWithoutLedGisuSchoolsInput = {
+  export type ChallengerCreateOrConnectWithoutLeaderGisuSchoolInput = {
     where: ChallengerWhereUniqueInput
-    create: XOR<ChallengerCreateWithoutLedGisuSchoolsInput, ChallengerUncheckedCreateWithoutLedGisuSchoolsInput>
+    create: XOR<ChallengerCreateWithoutLeaderGisuSchoolInput, ChallengerUncheckedCreateWithoutLeaderGisuSchoolInput>
   }
 
-  export type ChallengerCreateWithoutViceLedGisuSchoolsInput = {
+  export type ChallengerCreateWithoutViceLeadGisuSchoolInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     school: SchoolCreateNestedOneWithoutChallengersInput
     gisuRoles?: ChallengerGisuCreateNestedManyWithoutChallengerInput
-    ledGisuSchools?: GisuSchoolCreateNestedManyWithoutLeaderInput
+    leaderGisuSchool?: ChapterSchoolCreateNestedManyWithoutLeaderInput
     projectMembers?: ProjectMemberCreateNestedManyWithoutChallengerInput
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
   }
 
-  export type ChallengerUncheckedCreateWithoutViceLedGisuSchoolsInput = {
+  export type ChallengerUncheckedCreateWithoutViceLeadGisuSchoolInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     schoolId: bigint | number
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     gisuRoles?: ChallengerGisuUncheckedCreateNestedManyWithoutChallengerInput
-    ledGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutLeaderInput
+    leaderGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutLeaderInput
     projectMembers?: ProjectMemberUncheckedCreateNestedManyWithoutChallengerInput
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
   }
 
-  export type ChallengerCreateOrConnectWithoutViceLedGisuSchoolsInput = {
+  export type ChallengerCreateOrConnectWithoutViceLeadGisuSchoolInput = {
     where: ChallengerWhereUniqueInput
-    create: XOR<ChallengerCreateWithoutViceLedGisuSchoolsInput, ChallengerUncheckedCreateWithoutViceLedGisuSchoolsInput>
+    create: XOR<ChallengerCreateWithoutViceLeadGisuSchoolInput, ChallengerUncheckedCreateWithoutViceLeadGisuSchoolInput>
   }
 
-  export type GisuUpsertWithoutGisuSchoolsInput = {
-    update: XOR<GisuUpdateWithoutGisuSchoolsInput, GisuUncheckedUpdateWithoutGisuSchoolsInput>
-    create: XOR<GisuCreateWithoutGisuSchoolsInput, GisuUncheckedCreateWithoutGisuSchoolsInput>
-    where?: GisuWhereInput
+  export type GisuChapterUpsertWithoutGisuChapterSchoolInput = {
+    update: XOR<GisuChapterUpdateWithoutGisuChapterSchoolInput, GisuChapterUncheckedUpdateWithoutGisuChapterSchoolInput>
+    create: XOR<GisuChapterCreateWithoutGisuChapterSchoolInput, GisuChapterUncheckedCreateWithoutGisuChapterSchoolInput>
+    where?: GisuChapterWhereInput
   }
 
-  export type GisuUpdateToOneWithWhereWithoutGisuSchoolsInput = {
-    where?: GisuWhereInput
-    data: XOR<GisuUpdateWithoutGisuSchoolsInput, GisuUncheckedUpdateWithoutGisuSchoolsInput>
+  export type GisuChapterUpdateToOneWithWhereWithoutGisuChapterSchoolInput = {
+    where?: GisuChapterWhereInput
+    data: XOR<GisuChapterUpdateWithoutGisuChapterSchoolInput, GisuChapterUncheckedUpdateWithoutGisuChapterSchoolInput>
   }
 
-  export type GisuUpdateWithoutGisuSchoolsInput = {
+  export type GisuChapterUpdateWithoutGisuChapterSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    chapters?: ChapterUpdateManyWithoutGisuNestedInput
-    challengerGisus?: ChallengerGisuUpdateManyWithoutGisuNestedInput
+    gisu?: GisuUpdateOneRequiredWithoutChaptersNestedInput
+    projects?: ProjectUpdateManyWithoutChapterNestedInput
+    chapterMatchingRound?: MatchingRoundUpdateManyWithoutChapterNestedInput
+    gisuChapterChallenger?: ChallengerGisuUpdateManyWithoutChapterSchoolNestedInput
   }
 
-  export type GisuUncheckedUpdateWithoutGisuSchoolsInput = {
+  export type GisuChapterUncheckedUpdateWithoutGisuChapterSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    chapters?: ChapterUncheckedUpdateManyWithoutGisuNestedInput
-    challengerGisus?: ChallengerGisuUncheckedUpdateManyWithoutGisuNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutChapterNestedInput
+    chapterMatchingRound?: MatchingRoundUncheckedUpdateManyWithoutChapterNestedInput
+    gisuChapterChallenger?: ChallengerGisuUncheckedUpdateManyWithoutChapterSchoolNestedInput
   }
 
   export type SchoolUpsertWithoutGisuSchoolsInput = {
@@ -23218,126 +24944,132 @@ export namespace Prisma {
     challengers?: ChallengerUncheckedUpdateManyWithoutSchoolNestedInput
   }
 
-  export type ChallengerUpsertWithoutLedGisuSchoolsInput = {
-    update: XOR<ChallengerUpdateWithoutLedGisuSchoolsInput, ChallengerUncheckedUpdateWithoutLedGisuSchoolsInput>
-    create: XOR<ChallengerCreateWithoutLedGisuSchoolsInput, ChallengerUncheckedCreateWithoutLedGisuSchoolsInput>
+  export type ChallengerUpsertWithoutLeaderGisuSchoolInput = {
+    update: XOR<ChallengerUpdateWithoutLeaderGisuSchoolInput, ChallengerUncheckedUpdateWithoutLeaderGisuSchoolInput>
+    create: XOR<ChallengerCreateWithoutLeaderGisuSchoolInput, ChallengerUncheckedCreateWithoutLeaderGisuSchoolInput>
     where?: ChallengerWhereInput
   }
 
-  export type ChallengerUpdateToOneWithWhereWithoutLedGisuSchoolsInput = {
+  export type ChallengerUpdateToOneWithWhereWithoutLeaderGisuSchoolInput = {
     where?: ChallengerWhereInput
-    data: XOR<ChallengerUpdateWithoutLedGisuSchoolsInput, ChallengerUncheckedUpdateWithoutLedGisuSchoolsInput>
+    data: XOR<ChallengerUpdateWithoutLeaderGisuSchoolInput, ChallengerUncheckedUpdateWithoutLeaderGisuSchoolInput>
   }
 
-  export type ChallengerUpdateWithoutLedGisuSchoolsInput = {
+  export type ChallengerUpdateWithoutLeaderGisuSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     school?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
     gisuRoles?: ChallengerGisuUpdateManyWithoutChallengerNestedInput
-    viceLedGisuSchools?: GisuSchoolUpdateManyWithoutViceLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUpdateManyWithoutViceLeaderNestedInput
     projectMembers?: ProjectMemberUpdateManyWithoutChallengerNestedInput
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
   }
 
-  export type ChallengerUncheckedUpdateWithoutLedGisuSchoolsInput = {
+  export type ChallengerUncheckedUpdateWithoutLeaderGisuSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gisuRoles?: ChallengerGisuUncheckedUpdateManyWithoutChallengerNestedInput
-    viceLedGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
     projectMembers?: ProjectMemberUncheckedUpdateManyWithoutChallengerNestedInput
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
-  export type ChallengerUpsertWithoutViceLedGisuSchoolsInput = {
-    update: XOR<ChallengerUpdateWithoutViceLedGisuSchoolsInput, ChallengerUncheckedUpdateWithoutViceLedGisuSchoolsInput>
-    create: XOR<ChallengerCreateWithoutViceLedGisuSchoolsInput, ChallengerUncheckedCreateWithoutViceLedGisuSchoolsInput>
+  export type ChallengerUpsertWithoutViceLeadGisuSchoolInput = {
+    update: XOR<ChallengerUpdateWithoutViceLeadGisuSchoolInput, ChallengerUncheckedUpdateWithoutViceLeadGisuSchoolInput>
+    create: XOR<ChallengerCreateWithoutViceLeadGisuSchoolInput, ChallengerUncheckedCreateWithoutViceLeadGisuSchoolInput>
     where?: ChallengerWhereInput
   }
 
-  export type ChallengerUpdateToOneWithWhereWithoutViceLedGisuSchoolsInput = {
+  export type ChallengerUpdateToOneWithWhereWithoutViceLeadGisuSchoolInput = {
     where?: ChallengerWhereInput
-    data: XOR<ChallengerUpdateWithoutViceLedGisuSchoolsInput, ChallengerUncheckedUpdateWithoutViceLedGisuSchoolsInput>
+    data: XOR<ChallengerUpdateWithoutViceLeadGisuSchoolInput, ChallengerUncheckedUpdateWithoutViceLeadGisuSchoolInput>
   }
 
-  export type ChallengerUpdateWithoutViceLedGisuSchoolsInput = {
+  export type ChallengerUpdateWithoutViceLeadGisuSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     school?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
     gisuRoles?: ChallengerGisuUpdateManyWithoutChallengerNestedInput
-    ledGisuSchools?: GisuSchoolUpdateManyWithoutLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUpdateManyWithoutLeaderNestedInput
     projectMembers?: ProjectMemberUpdateManyWithoutChallengerNestedInput
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
   }
 
-  export type ChallengerUncheckedUpdateWithoutViceLedGisuSchoolsInput = {
+  export type ChallengerUncheckedUpdateWithoutViceLeadGisuSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gisuRoles?: ChallengerGisuUncheckedUpdateManyWithoutChallengerNestedInput
-    ledGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutLeaderNestedInput
     projectMembers?: ProjectMemberUncheckedUpdateManyWithoutChallengerNestedInput
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
   export type ChallengerCreateWithoutSchoolInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     gisuRoles?: ChallengerGisuCreateNestedManyWithoutChallengerInput
-    ledGisuSchools?: GisuSchoolCreateNestedManyWithoutLeaderInput
-    viceLedGisuSchools?: GisuSchoolCreateNestedManyWithoutViceLeaderInput
+    leaderGisuSchool?: ChapterSchoolCreateNestedManyWithoutLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolCreateNestedManyWithoutViceLeaderInput
     projectMembers?: ProjectMemberCreateNestedManyWithoutChallengerInput
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
   }
 
   export type ChallengerUncheckedCreateWithoutSchoolInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     gisuRoles?: ChallengerGisuUncheckedCreateNestedManyWithoutChallengerInput
-    ledGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutLeaderInput
-    viceLedGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
+    leaderGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
     projectMembers?: ProjectMemberUncheckedCreateNestedManyWithoutChallengerInput
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
   }
@@ -23352,31 +25084,31 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type GisuSchoolCreateWithoutSchoolInput = {
+  export type ChapterSchoolCreateWithoutSchoolInput = {
     id?: bigint | number
     createdAt?: Date | string
     updatedAt?: Date | string
-    gisu: GisuCreateNestedOneWithoutGisuSchoolsInput
-    leader: ChallengerCreateNestedOneWithoutLedGisuSchoolsInput
-    viceLeader?: ChallengerCreateNestedOneWithoutViceLedGisuSchoolsInput
+    chapter: GisuChapterCreateNestedOneWithoutGisuChapterSchoolInput
+    leader?: ChallengerCreateNestedOneWithoutLeaderGisuSchoolInput
+    viceLeader?: ChallengerCreateNestedOneWithoutViceLeadGisuSchoolInput
   }
 
-  export type GisuSchoolUncheckedCreateWithoutSchoolInput = {
+  export type ChapterSchoolUncheckedCreateWithoutSchoolInput = {
     id?: bigint | number
-    gisuId: bigint | number
-    leaderId: bigint | number
+    chapterId: bigint | number
+    leaderId?: bigint | number | null
     viceLeaderId?: bigint | number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type GisuSchoolCreateOrConnectWithoutSchoolInput = {
-    where: GisuSchoolWhereUniqueInput
-    create: XOR<GisuSchoolCreateWithoutSchoolInput, GisuSchoolUncheckedCreateWithoutSchoolInput>
+  export type ChapterSchoolCreateOrConnectWithoutSchoolInput = {
+    where: ChapterSchoolWhereUniqueInput
+    create: XOR<ChapterSchoolCreateWithoutSchoolInput, ChapterSchoolUncheckedCreateWithoutSchoolInput>
   }
 
-  export type GisuSchoolCreateManySchoolInputEnvelope = {
-    data: GisuSchoolCreateManySchoolInput | GisuSchoolCreateManySchoolInput[]
+  export type ChapterSchoolCreateManySchoolInputEnvelope = {
+    data: ChapterSchoolCreateManySchoolInput | ChapterSchoolCreateManySchoolInput[]
     skipDuplicates?: boolean
   }
 
@@ -23401,200 +25133,65 @@ export namespace Prisma {
     OR?: ChallengerScalarWhereInput[]
     NOT?: ChallengerScalarWhereInput | ChallengerScalarWhereInput[]
     id?: BigIntFilter<"Challenger"> | bigint | number
-    umsbId?: IntFilter<"Challenger"> | number
+    umsbId?: BigIntFilter<"Challenger"> | bigint | number
     name?: StringFilter<"Challenger"> | string
     nickname?: StringFilter<"Challenger"> | string
     gender?: EnumGenderEnumFilter<"Challenger"> | $Enums.GenderEnum
     schoolId?: BigIntFilter<"Challenger"> | bigint | number
     studentId?: StringFilter<"Challenger"> | string
     profileImageUrl?: StringNullableFilter<"Challenger"> | string | null
+    passwordHash?: StringFilter<"Challenger"> | string
     createdAt?: DateTimeFilter<"Challenger"> | Date | string
     updatedAt?: DateTimeFilter<"Challenger"> | Date | string
   }
 
-  export type GisuSchoolUpsertWithWhereUniqueWithoutSchoolInput = {
-    where: GisuSchoolWhereUniqueInput
-    update: XOR<GisuSchoolUpdateWithoutSchoolInput, GisuSchoolUncheckedUpdateWithoutSchoolInput>
-    create: XOR<GisuSchoolCreateWithoutSchoolInput, GisuSchoolUncheckedCreateWithoutSchoolInput>
+  export type ChapterSchoolUpsertWithWhereUniqueWithoutSchoolInput = {
+    where: ChapterSchoolWhereUniqueInput
+    update: XOR<ChapterSchoolUpdateWithoutSchoolInput, ChapterSchoolUncheckedUpdateWithoutSchoolInput>
+    create: XOR<ChapterSchoolCreateWithoutSchoolInput, ChapterSchoolUncheckedCreateWithoutSchoolInput>
   }
 
-  export type GisuSchoolUpdateWithWhereUniqueWithoutSchoolInput = {
-    where: GisuSchoolWhereUniqueInput
-    data: XOR<GisuSchoolUpdateWithoutSchoolInput, GisuSchoolUncheckedUpdateWithoutSchoolInput>
+  export type ChapterSchoolUpdateWithWhereUniqueWithoutSchoolInput = {
+    where: ChapterSchoolWhereUniqueInput
+    data: XOR<ChapterSchoolUpdateWithoutSchoolInput, ChapterSchoolUncheckedUpdateWithoutSchoolInput>
   }
 
-  export type GisuSchoolUpdateManyWithWhereWithoutSchoolInput = {
-    where: GisuSchoolScalarWhereInput
-    data: XOR<GisuSchoolUpdateManyMutationInput, GisuSchoolUncheckedUpdateManyWithoutSchoolInput>
+  export type ChapterSchoolUpdateManyWithWhereWithoutSchoolInput = {
+    where: ChapterSchoolScalarWhereInput
+    data: XOR<ChapterSchoolUpdateManyMutationInput, ChapterSchoolUncheckedUpdateManyWithoutSchoolInput>
   }
 
-  export type GisuCreateWithoutChaptersInput = {
-    id?: bigint | number
-    name: string
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    gisuSchools?: GisuSchoolCreateNestedManyWithoutGisuInput
-    challengerGisus?: ChallengerGisuCreateNestedManyWithoutGisuInput
-  }
-
-  export type GisuUncheckedCreateWithoutChaptersInput = {
-    id?: bigint | number
-    name: string
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    gisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutGisuInput
-    challengerGisus?: ChallengerGisuUncheckedCreateNestedManyWithoutGisuInput
-  }
-
-  export type GisuCreateOrConnectWithoutChaptersInput = {
-    where: GisuWhereUniqueInput
-    create: XOR<GisuCreateWithoutChaptersInput, GisuUncheckedCreateWithoutChaptersInput>
-  }
-
-  export type ProjectCreateWithoutChapterInput = {
-    id?: bigint | number
-    name: string
-    description?: string | null
-    logoImageUrl?: string | null
-    bannerImageUrl?: string | null
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: ProjectMemberCreateNestedManyWithoutProjectInput
-    applicationForms?: ApplicationFormCreateNestedManyWithoutProjectInput
-  }
-
-  export type ProjectUncheckedCreateWithoutChapterInput = {
-    id?: bigint | number
-    name: string
-    description?: string | null
-    logoImageUrl?: string | null
-    bannerImageUrl?: string | null
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
-    applicationForms?: ApplicationFormUncheckedCreateNestedManyWithoutProjectInput
-  }
-
-  export type ProjectCreateOrConnectWithoutChapterInput = {
-    where: ProjectWhereUniqueInput
-    create: XOR<ProjectCreateWithoutChapterInput, ProjectUncheckedCreateWithoutChapterInput>
-  }
-
-  export type ProjectCreateManyChapterInputEnvelope = {
-    data: ProjectCreateManyChapterInput | ProjectCreateManyChapterInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type GisuUpsertWithoutChaptersInput = {
-    update: XOR<GisuUpdateWithoutChaptersInput, GisuUncheckedUpdateWithoutChaptersInput>
-    create: XOR<GisuCreateWithoutChaptersInput, GisuUncheckedCreateWithoutChaptersInput>
-    where?: GisuWhereInput
-  }
-
-  export type GisuUpdateToOneWithWhereWithoutChaptersInput = {
-    where?: GisuWhereInput
-    data: XOR<GisuUpdateWithoutChaptersInput, GisuUncheckedUpdateWithoutChaptersInput>
-  }
-
-  export type GisuUpdateWithoutChaptersInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisuSchools?: GisuSchoolUpdateManyWithoutGisuNestedInput
-    challengerGisus?: ChallengerGisuUpdateManyWithoutGisuNestedInput
-  }
-
-  export type GisuUncheckedUpdateWithoutChaptersInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisuSchools?: GisuSchoolUncheckedUpdateManyWithoutGisuNestedInput
-    challengerGisus?: ChallengerGisuUncheckedUpdateManyWithoutGisuNestedInput
-  }
-
-  export type ProjectUpsertWithWhereUniqueWithoutChapterInput = {
-    where: ProjectWhereUniqueInput
-    update: XOR<ProjectUpdateWithoutChapterInput, ProjectUncheckedUpdateWithoutChapterInput>
-    create: XOR<ProjectCreateWithoutChapterInput, ProjectUncheckedCreateWithoutChapterInput>
-  }
-
-  export type ProjectUpdateWithWhereUniqueWithoutChapterInput = {
-    where: ProjectWhereUniqueInput
-    data: XOR<ProjectUpdateWithoutChapterInput, ProjectUncheckedUpdateWithoutChapterInput>
-  }
-
-  export type ProjectUpdateManyWithWhereWithoutChapterInput = {
-    where: ProjectScalarWhereInput
-    data: XOR<ProjectUpdateManyMutationInput, ProjectUncheckedUpdateManyWithoutChapterInput>
-  }
-
-  export type ProjectScalarWhereInput = {
-    AND?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
-    OR?: ProjectScalarWhereInput[]
-    NOT?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
-    id?: BigIntFilter<"Project"> | bigint | number
-    name?: StringFilter<"Project"> | string
-    description?: StringNullableFilter<"Project"> | string | null
-    chapterId?: BigIntFilter<"Project"> | bigint | number
-    logoImageUrl?: StringNullableFilter<"Project"> | string | null
-    bannerImageUrl?: StringNullableFilter<"Project"> | string | null
-    planTo?: IntFilter<"Project"> | number
-    designTo?: IntFilter<"Project"> | number
-    webTo?: IntFilter<"Project"> | number
-    androidTo?: IntFilter<"Project"> | number
-    iosTo?: IntFilter<"Project"> | number
-    springbootTo?: IntFilter<"Project"> | number
-    nodejsTo?: IntFilter<"Project"> | number
-    createdAt?: DateTimeFilter<"Project"> | Date | string
-    updatedAt?: DateTimeFilter<"Project"> | Date | string
-  }
-
-  export type ChapterCreateWithoutProjectsInput = {
+  export type GisuChapterCreateWithoutProjectsInput = {
     id?: bigint | number
     name: string
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     gisu: GisuCreateNestedOneWithoutChaptersInput
+    chapterMatchingRound?: MatchingRoundCreateNestedManyWithoutChapterInput
+    gisuChapterSchool?: ChapterSchoolCreateNestedManyWithoutChapterInput
+    gisuChapterChallenger?: ChallengerGisuCreateNestedManyWithoutChapterSchoolInput
   }
 
-  export type ChapterUncheckedCreateWithoutProjectsInput = {
+  export type GisuChapterUncheckedCreateWithoutProjectsInput = {
     id?: bigint | number
     name: string
     description?: string | null
     gisuId: bigint | number
     createdAt?: Date | string
     updatedAt?: Date | string
+    chapterMatchingRound?: MatchingRoundUncheckedCreateNestedManyWithoutChapterInput
+    gisuChapterSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutChapterInput
+    gisuChapterChallenger?: ChallengerGisuUncheckedCreateNestedManyWithoutChapterSchoolInput
   }
 
-  export type ChapterCreateOrConnectWithoutProjectsInput = {
-    where: ChapterWhereUniqueInput
-    create: XOR<ChapterCreateWithoutProjectsInput, ChapterUncheckedCreateWithoutProjectsInput>
+  export type GisuChapterCreateOrConnectWithoutProjectsInput = {
+    where: GisuChapterWhereUniqueInput
+    create: XOR<GisuChapterCreateWithoutProjectsInput, GisuChapterUncheckedCreateWithoutProjectsInput>
   }
 
   export type ProjectMemberCreateWithoutProjectInput = {
     id?: bigint | number
-    role: $Enums.UserPartEnum
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23604,7 +25201,6 @@ export namespace Prisma {
   export type ProjectMemberUncheckedCreateWithoutProjectInput = {
     id?: bigint | number
     challengerId: bigint | number
-    role: $Enums.UserPartEnum
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -23624,7 +25220,6 @@ export namespace Prisma {
     id?: bigint | number
     title: string
     description?: string | null
-    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     questions?: FormQuestionCreateNestedManyWithoutFormInput
@@ -23634,7 +25229,6 @@ export namespace Prisma {
     id?: bigint | number
     title: string
     description?: string | null
-    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     questions?: FormQuestionUncheckedCreateNestedManyWithoutFormInput
@@ -23650,33 +25244,65 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ChapterUpsertWithoutProjectsInput = {
-    update: XOR<ChapterUpdateWithoutProjectsInput, ChapterUncheckedUpdateWithoutProjectsInput>
-    create: XOR<ChapterCreateWithoutProjectsInput, ChapterUncheckedCreateWithoutProjectsInput>
-    where?: ChapterWhereInput
+  export type ProjectToCreateWithoutProjectInput = {
+    id?: bigint | number
+    part: $Enums.UserPartEnum
+    to: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type ChapterUpdateToOneWithWhereWithoutProjectsInput = {
-    where?: ChapterWhereInput
-    data: XOR<ChapterUpdateWithoutProjectsInput, ChapterUncheckedUpdateWithoutProjectsInput>
+  export type ProjectToUncheckedCreateWithoutProjectInput = {
+    id?: bigint | number
+    part: $Enums.UserPartEnum
+    to: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
-  export type ChapterUpdateWithoutProjectsInput = {
+  export type ProjectToCreateOrConnectWithoutProjectInput = {
+    where: ProjectToWhereUniqueInput
+    create: XOR<ProjectToCreateWithoutProjectInput, ProjectToUncheckedCreateWithoutProjectInput>
+  }
+
+  export type ProjectToCreateManyProjectInputEnvelope = {
+    data: ProjectToCreateManyProjectInput | ProjectToCreateManyProjectInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type GisuChapterUpsertWithoutProjectsInput = {
+    update: XOR<GisuChapterUpdateWithoutProjectsInput, GisuChapterUncheckedUpdateWithoutProjectsInput>
+    create: XOR<GisuChapterCreateWithoutProjectsInput, GisuChapterUncheckedCreateWithoutProjectsInput>
+    where?: GisuChapterWhereInput
+  }
+
+  export type GisuChapterUpdateToOneWithWhereWithoutProjectsInput = {
+    where?: GisuChapterWhereInput
+    data: XOR<GisuChapterUpdateWithoutProjectsInput, GisuChapterUncheckedUpdateWithoutProjectsInput>
+  }
+
+  export type GisuChapterUpdateWithoutProjectsInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gisu?: GisuUpdateOneRequiredWithoutChaptersNestedInput
+    chapterMatchingRound?: MatchingRoundUpdateManyWithoutChapterNestedInput
+    gisuChapterSchool?: ChapterSchoolUpdateManyWithoutChapterNestedInput
+    gisuChapterChallenger?: ChallengerGisuUpdateManyWithoutChapterSchoolNestedInput
   }
 
-  export type ChapterUncheckedUpdateWithoutProjectsInput = {
+  export type GisuChapterUncheckedUpdateWithoutProjectsInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chapterMatchingRound?: MatchingRoundUncheckedUpdateManyWithoutChapterNestedInput
+    gisuChapterSchool?: ChapterSchoolUncheckedUpdateManyWithoutChapterNestedInput
+    gisuChapterChallenger?: ChallengerGisuUncheckedUpdateManyWithoutChapterSchoolNestedInput
   }
 
   export type ProjectMemberUpsertWithWhereUniqueWithoutProjectInput = {
@@ -23719,9 +25345,104 @@ export namespace Prisma {
     projectId?: BigIntFilter<"ApplicationForm"> | bigint | number
     title?: StringFilter<"ApplicationForm"> | string
     description?: StringNullableFilter<"ApplicationForm"> | string | null
-    isActive?: BoolFilter<"ApplicationForm"> | boolean
     createdAt?: DateTimeFilter<"ApplicationForm"> | Date | string
     updatedAt?: DateTimeFilter<"ApplicationForm"> | Date | string
+  }
+
+  export type ProjectToUpsertWithWhereUniqueWithoutProjectInput = {
+    where: ProjectToWhereUniqueInput
+    update: XOR<ProjectToUpdateWithoutProjectInput, ProjectToUncheckedUpdateWithoutProjectInput>
+    create: XOR<ProjectToCreateWithoutProjectInput, ProjectToUncheckedCreateWithoutProjectInput>
+  }
+
+  export type ProjectToUpdateWithWhereUniqueWithoutProjectInput = {
+    where: ProjectToWhereUniqueInput
+    data: XOR<ProjectToUpdateWithoutProjectInput, ProjectToUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type ProjectToUpdateManyWithWhereWithoutProjectInput = {
+    where: ProjectToScalarWhereInput
+    data: XOR<ProjectToUpdateManyMutationInput, ProjectToUncheckedUpdateManyWithoutProjectInput>
+  }
+
+  export type ProjectToScalarWhereInput = {
+    AND?: ProjectToScalarWhereInput | ProjectToScalarWhereInput[]
+    OR?: ProjectToScalarWhereInput[]
+    NOT?: ProjectToScalarWhereInput | ProjectToScalarWhereInput[]
+    id?: BigIntFilter<"ProjectTo"> | bigint | number
+    projectId?: BigIntFilter<"ProjectTo"> | bigint | number
+    part?: EnumUserPartEnumFilter<"ProjectTo"> | $Enums.UserPartEnum
+    to?: IntFilter<"ProjectTo"> | number
+    createdAt?: DateTimeFilter<"ProjectTo"> | Date | string
+    updatedAt?: DateTimeFilter<"ProjectTo"> | Date | string
+  }
+
+  export type ProjectCreateWithoutToInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    logoImageUrl?: string | null
+    bannerImageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    chapter: GisuChapterCreateNestedOneWithoutProjectsInput
+    members?: ProjectMemberCreateNestedManyWithoutProjectInput
+    applicationForms?: ApplicationFormCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutToInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    chapterId: bigint | number
+    logoImageUrl?: string | null
+    bannerImageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
+    applicationForms?: ApplicationFormUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutToInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutToInput, ProjectUncheckedCreateWithoutToInput>
+  }
+
+  export type ProjectUpsertWithoutToInput = {
+    update: XOR<ProjectUpdateWithoutToInput, ProjectUncheckedUpdateWithoutToInput>
+    create: XOR<ProjectCreateWithoutToInput, ProjectUncheckedCreateWithoutToInput>
+    where?: ProjectWhereInput
+  }
+
+  export type ProjectUpdateToOneWithWhereWithoutToInput = {
+    where?: ProjectWhereInput
+    data: XOR<ProjectUpdateWithoutToInput, ProjectUncheckedUpdateWithoutToInput>
+  }
+
+  export type ProjectUpdateWithoutToInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chapter?: GisuChapterUpdateOneRequiredWithoutProjectsNestedInput
+    members?: ProjectMemberUpdateManyWithoutProjectNestedInput
+    applicationForms?: ApplicationFormUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutToInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
+    logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
+    applicationForms?: ApplicationFormUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectCreateWithoutMembersInput = {
@@ -23730,17 +25451,11 @@ export namespace Prisma {
     description?: string | null
     logoImageUrl?: string | null
     bannerImageUrl?: string | null
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    chapter: ChapterCreateNestedOneWithoutProjectsInput
+    chapter: GisuChapterCreateNestedOneWithoutProjectsInput
     applicationForms?: ApplicationFormCreateNestedManyWithoutProjectInput
+    to?: ProjectToCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutMembersInput = {
@@ -23750,16 +25465,10 @@ export namespace Prisma {
     chapterId: bigint | number
     logoImageUrl?: string | null
     bannerImageUrl?: string | null
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
     createdAt?: Date | string
     updatedAt?: Date | string
     applicationForms?: ApplicationFormUncheckedCreateNestedManyWithoutProjectInput
+    to?: ProjectToUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutMembersInput = {
@@ -23769,35 +25478,37 @@ export namespace Prisma {
 
   export type ChallengerCreateWithoutProjectMembersInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     school: SchoolCreateNestedOneWithoutChallengersInput
     gisuRoles?: ChallengerGisuCreateNestedManyWithoutChallengerInput
-    ledGisuSchools?: GisuSchoolCreateNestedManyWithoutLeaderInput
-    viceLedGisuSchools?: GisuSchoolCreateNestedManyWithoutViceLeaderInput
+    leaderGisuSchool?: ChapterSchoolCreateNestedManyWithoutLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolCreateNestedManyWithoutViceLeaderInput
     applications?: ApplicationCreateNestedManyWithoutApplicantInput
   }
 
   export type ChallengerUncheckedCreateWithoutProjectMembersInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     schoolId: bigint | number
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     gisuRoles?: ChallengerGisuUncheckedCreateNestedManyWithoutChallengerInput
-    ledGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutLeaderInput
-    viceLedGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
+    leaderGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
     applications?: ApplicationUncheckedCreateNestedManyWithoutApplicantInput
   }
 
@@ -23823,17 +25534,11 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    planTo?: IntFieldUpdateOperationsInput | number
-    designTo?: IntFieldUpdateOperationsInput | number
-    webTo?: IntFieldUpdateOperationsInput | number
-    androidTo?: IntFieldUpdateOperationsInput | number
-    iosTo?: IntFieldUpdateOperationsInput | number
-    springbootTo?: IntFieldUpdateOperationsInput | number
-    nodejsTo?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    chapter?: ChapterUpdateOneRequiredWithoutProjectsNestedInput
+    chapter?: GisuChapterUpdateOneRequiredWithoutProjectsNestedInput
     applicationForms?: ApplicationFormUpdateManyWithoutProjectNestedInput
+    to?: ProjectToUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutMembersInput = {
@@ -23843,16 +25548,10 @@ export namespace Prisma {
     chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    planTo?: IntFieldUpdateOperationsInput | number
-    designTo?: IntFieldUpdateOperationsInput | number
-    webTo?: IntFieldUpdateOperationsInput | number
-    androidTo?: IntFieldUpdateOperationsInput | number
-    iosTo?: IntFieldUpdateOperationsInput | number
-    springbootTo?: IntFieldUpdateOperationsInput | number
-    nodejsTo?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     applicationForms?: ApplicationFormUncheckedUpdateManyWithoutProjectNestedInput
+    to?: ProjectToUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ChallengerUpsertWithoutProjectMembersInput = {
@@ -23868,35 +25567,37 @@ export namespace Prisma {
 
   export type ChallengerUpdateWithoutProjectMembersInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     school?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
     gisuRoles?: ChallengerGisuUpdateManyWithoutChallengerNestedInput
-    ledGisuSchools?: GisuSchoolUpdateManyWithoutLeaderNestedInput
-    viceLedGisuSchools?: GisuSchoolUpdateManyWithoutViceLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUpdateManyWithoutLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUpdateManyWithoutViceLeaderNestedInput
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
   }
 
   export type ChallengerUncheckedUpdateWithoutProjectMembersInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gisuRoles?: ChallengerGisuUncheckedUpdateManyWithoutChallengerNestedInput
-    ledGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutLeaderNestedInput
-    viceLedGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
@@ -23906,17 +25607,11 @@ export namespace Prisma {
     description?: string | null
     logoImageUrl?: string | null
     bannerImageUrl?: string | null
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    chapter: ChapterCreateNestedOneWithoutProjectsInput
+    chapter: GisuChapterCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
+    to?: ProjectToCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutApplicationFormsInput = {
@@ -23926,16 +25621,10 @@ export namespace Prisma {
     chapterId: bigint | number
     logoImageUrl?: string | null
     bannerImageUrl?: string | null
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
     createdAt?: Date | string
     updatedAt?: Date | string
     members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
+    to?: ProjectToUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutApplicationFormsInput = {
@@ -23998,17 +25687,11 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    planTo?: IntFieldUpdateOperationsInput | number
-    designTo?: IntFieldUpdateOperationsInput | number
-    webTo?: IntFieldUpdateOperationsInput | number
-    androidTo?: IntFieldUpdateOperationsInput | number
-    iosTo?: IntFieldUpdateOperationsInput | number
-    springbootTo?: IntFieldUpdateOperationsInput | number
-    nodejsTo?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    chapter?: ChapterUpdateOneRequiredWithoutProjectsNestedInput
+    chapter?: GisuChapterUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
+    to?: ProjectToUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutApplicationFormsInput = {
@@ -24018,16 +25701,10 @@ export namespace Prisma {
     chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    planTo?: IntFieldUpdateOperationsInput | number
-    designTo?: IntFieldUpdateOperationsInput | number
-    webTo?: IntFieldUpdateOperationsInput | number
-    androidTo?: IntFieldUpdateOperationsInput | number
-    iosTo?: IntFieldUpdateOperationsInput | number
-    springbootTo?: IntFieldUpdateOperationsInput | number
-    nodejsTo?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
+    to?: ProjectToUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type FormQuestionUpsertWithWhereUniqueWithoutFormInput = {
@@ -24067,7 +25744,6 @@ export namespace Prisma {
     id?: bigint | number
     title: string
     description?: string | null
-    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutApplicationFormsInput
@@ -24078,7 +25754,6 @@ export namespace Prisma {
     projectId: bigint | number
     title: string
     description?: string | null
-    isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -24129,7 +25804,6 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutApplicationFormsNestedInput
@@ -24140,7 +25814,6 @@ export namespace Prisma {
     projectId?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -24175,35 +25848,37 @@ export namespace Prisma {
 
   export type ChallengerCreateWithoutApplicationsInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     school: SchoolCreateNestedOneWithoutChallengersInput
     gisuRoles?: ChallengerGisuCreateNestedManyWithoutChallengerInput
-    ledGisuSchools?: GisuSchoolCreateNestedManyWithoutLeaderInput
-    viceLedGisuSchools?: GisuSchoolCreateNestedManyWithoutViceLeaderInput
+    leaderGisuSchool?: ChapterSchoolCreateNestedManyWithoutLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolCreateNestedManyWithoutViceLeaderInput
     projectMembers?: ProjectMemberCreateNestedManyWithoutChallengerInput
   }
 
   export type ChallengerUncheckedCreateWithoutApplicationsInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     schoolId: bigint | number
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
     gisuRoles?: ChallengerGisuUncheckedCreateNestedManyWithoutChallengerInput
-    ledGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutLeaderInput
-    viceLedGisuSchools?: GisuSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
+    leaderGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutLeaderInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutViceLeaderInput
     projectMembers?: ProjectMemberUncheckedCreateNestedManyWithoutChallengerInput
   }
 
@@ -24220,12 +25895,14 @@ export namespace Prisma {
     endAt: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
+    chapter: GisuChapterCreateNestedOneWithoutChapterMatchingRoundInput
   }
 
   export type MatchingRoundUncheckedCreateWithoutApplicationsInput = {
     id?: bigint | number
     name: string
     description?: string | null
+    chapterId: bigint | number
     startAt: Date | string
     endAt: Date | string
     createdAt?: Date | string
@@ -24276,35 +25953,37 @@ export namespace Prisma {
 
   export type ChallengerUpdateWithoutApplicationsInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     school?: SchoolUpdateOneRequiredWithoutChallengersNestedInput
     gisuRoles?: ChallengerGisuUpdateManyWithoutChallengerNestedInput
-    ledGisuSchools?: GisuSchoolUpdateManyWithoutLeaderNestedInput
-    viceLedGisuSchools?: GisuSchoolUpdateManyWithoutViceLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUpdateManyWithoutLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUpdateManyWithoutViceLeaderNestedInput
     projectMembers?: ProjectMemberUpdateManyWithoutChallengerNestedInput
   }
 
   export type ChallengerUncheckedUpdateWithoutApplicationsInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gisuRoles?: ChallengerGisuUncheckedUpdateManyWithoutChallengerNestedInput
-    ledGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutLeaderNestedInput
-    viceLedGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
     projectMembers?: ProjectMemberUncheckedUpdateManyWithoutChallengerNestedInput
   }
 
@@ -24327,12 +26006,14 @@ export namespace Prisma {
     endAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    chapter?: GisuChapterUpdateOneRequiredWithoutChapterMatchingRoundNestedInput
   }
 
   export type MatchingRoundUncheckedUpdateWithoutApplicationsInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     startAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24507,6 +26188,35 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type GisuChapterCreateWithoutChapterMatchingRoundInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    gisu: GisuCreateNestedOneWithoutChaptersInput
+    projects?: ProjectCreateNestedManyWithoutChapterInput
+    gisuChapterSchool?: ChapterSchoolCreateNestedManyWithoutChapterInput
+    gisuChapterChallenger?: ChallengerGisuCreateNestedManyWithoutChapterSchoolInput
+  }
+
+  export type GisuChapterUncheckedCreateWithoutChapterMatchingRoundInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    gisuId: bigint | number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectUncheckedCreateNestedManyWithoutChapterInput
+    gisuChapterSchool?: ChapterSchoolUncheckedCreateNestedManyWithoutChapterInput
+    gisuChapterChallenger?: ChallengerGisuUncheckedCreateNestedManyWithoutChapterSchoolInput
+  }
+
+  export type GisuChapterCreateOrConnectWithoutChapterMatchingRoundInput = {
+    where: GisuChapterWhereUniqueInput
+    create: XOR<GisuChapterCreateWithoutChapterMatchingRoundInput, GisuChapterUncheckedCreateWithoutChapterMatchingRoundInput>
+  }
+
   export type ApplicationUpsertWithWhereUniqueWithoutMatchingRoundInput = {
     where: ApplicationWhereUniqueInput
     update: XOR<ApplicationUpdateWithoutMatchingRoundInput, ApplicationUncheckedUpdateWithoutMatchingRoundInput>
@@ -24523,9 +26233,46 @@ export namespace Prisma {
     data: XOR<ApplicationUpdateManyMutationInput, ApplicationUncheckedUpdateManyWithoutMatchingRoundInput>
   }
 
+  export type GisuChapterUpsertWithoutChapterMatchingRoundInput = {
+    update: XOR<GisuChapterUpdateWithoutChapterMatchingRoundInput, GisuChapterUncheckedUpdateWithoutChapterMatchingRoundInput>
+    create: XOR<GisuChapterCreateWithoutChapterMatchingRoundInput, GisuChapterUncheckedCreateWithoutChapterMatchingRoundInput>
+    where?: GisuChapterWhereInput
+  }
+
+  export type GisuChapterUpdateToOneWithWhereWithoutChapterMatchingRoundInput = {
+    where?: GisuChapterWhereInput
+    data: XOR<GisuChapterUpdateWithoutChapterMatchingRoundInput, GisuChapterUncheckedUpdateWithoutChapterMatchingRoundInput>
+  }
+
+  export type GisuChapterUpdateWithoutChapterMatchingRoundInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    gisu?: GisuUpdateOneRequiredWithoutChaptersNestedInput
+    projects?: ProjectUpdateManyWithoutChapterNestedInput
+    gisuChapterSchool?: ChapterSchoolUpdateManyWithoutChapterNestedInput
+    gisuChapterChallenger?: ChallengerGisuUpdateManyWithoutChapterSchoolNestedInput
+  }
+
+  export type GisuChapterUncheckedUpdateWithoutChapterMatchingRoundInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutChapterNestedInput
+    gisuChapterSchool?: ChapterSchoolUncheckedUpdateManyWithoutChapterNestedInput
+    gisuChapterChallenger?: ChallengerGisuUncheckedUpdateManyWithoutChapterSchoolNestedInput
+  }
+
   export type ChallengerGisuCreateManyChallengerInput = {
     id?: bigint | number
-    gisuId: bigint | number
+    chapterSchoolId: bigint | number
+    isTerminated?: boolean
+    part: $Enums.UserPartEnum
     isSchoolAdmin: boolean
     isChapterAdmin: boolean
     isCentralAdmin: boolean
@@ -24536,20 +26283,20 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type GisuSchoolCreateManyLeaderInput = {
+  export type ChapterSchoolCreateManyLeaderInput = {
     id?: bigint | number
-    gisuId: bigint | number
+    chapterId: bigint | number
     schoolId: bigint | number
     viceLeaderId?: bigint | number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type GisuSchoolCreateManyViceLeaderInput = {
+  export type ChapterSchoolCreateManyViceLeaderInput = {
     id?: bigint | number
-    gisuId: bigint | number
+    chapterId: bigint | number
     schoolId: bigint | number
-    leaderId: bigint | number
+    leaderId?: bigint | number | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -24557,7 +26304,6 @@ export namespace Prisma {
   export type ProjectMemberCreateManyChallengerInput = {
     id?: bigint | number
     projectId: bigint | number
-    role: $Enums.UserPartEnum
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -24573,6 +26319,8 @@ export namespace Prisma {
 
   export type ChallengerGisuUpdateWithoutChallengerInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
+    isTerminated?: BoolFieldUpdateOperationsInput | boolean
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFieldUpdateOperationsInput | boolean
     isChapterAdmin?: BoolFieldUpdateOperationsInput | boolean
     isCentralAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -24581,12 +26329,14 @@ export namespace Prisma {
     centralAdminType?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisu?: GisuUpdateOneRequiredWithoutChallengerGisusNestedInput
+    chapterSchool?: GisuChapterUpdateOneRequiredWithoutGisuChapterChallengerNestedInput
   }
 
   export type ChallengerGisuUncheckedUpdateWithoutChallengerInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterSchoolId?: BigIntFieldUpdateOperationsInput | bigint | number
+    isTerminated?: BoolFieldUpdateOperationsInput | boolean
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFieldUpdateOperationsInput | boolean
     isChapterAdmin?: BoolFieldUpdateOperationsInput | boolean
     isCentralAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -24599,7 +26349,9 @@ export namespace Prisma {
 
   export type ChallengerGisuUncheckedUpdateManyWithoutChallengerInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterSchoolId?: BigIntFieldUpdateOperationsInput | bigint | number
+    isTerminated?: BoolFieldUpdateOperationsInput | boolean
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFieldUpdateOperationsInput | boolean
     isChapterAdmin?: BoolFieldUpdateOperationsInput | boolean
     isCentralAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -24610,63 +26362,62 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GisuSchoolUpdateWithoutLeaderInput = {
+  export type ChapterSchoolUpdateWithoutLeaderInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisu?: GisuUpdateOneRequiredWithoutGisuSchoolsNestedInput
+    chapter?: GisuChapterUpdateOneRequiredWithoutGisuChapterSchoolNestedInput
     school?: SchoolUpdateOneRequiredWithoutGisuSchoolsNestedInput
-    viceLeader?: ChallengerUpdateOneWithoutViceLedGisuSchoolsNestedInput
+    viceLeader?: ChallengerUpdateOneWithoutViceLeadGisuSchoolNestedInput
   }
 
-  export type GisuSchoolUncheckedUpdateWithoutLeaderInput = {
+  export type ChapterSchoolUncheckedUpdateWithoutLeaderInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
     viceLeaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GisuSchoolUncheckedUpdateManyWithoutLeaderInput = {
+  export type ChapterSchoolUncheckedUpdateManyWithoutLeaderInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
     viceLeaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GisuSchoolUpdateWithoutViceLeaderInput = {
+  export type ChapterSchoolUpdateWithoutViceLeaderInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisu?: GisuUpdateOneRequiredWithoutGisuSchoolsNestedInput
+    chapter?: GisuChapterUpdateOneRequiredWithoutGisuChapterSchoolNestedInput
     school?: SchoolUpdateOneRequiredWithoutGisuSchoolsNestedInput
-    leader?: ChallengerUpdateOneRequiredWithoutLedGisuSchoolsNestedInput
+    leader?: ChallengerUpdateOneWithoutLeaderGisuSchoolNestedInput
   }
 
-  export type GisuSchoolUncheckedUpdateWithoutViceLeaderInput = {
+  export type ChapterSchoolUncheckedUpdateWithoutViceLeaderInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
-    leaderId?: BigIntFieldUpdateOperationsInput | bigint | number
+    leaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GisuSchoolUncheckedUpdateManyWithoutViceLeaderInput = {
+  export type ChapterSchoolUncheckedUpdateManyWithoutViceLeaderInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
-    leaderId?: BigIntFieldUpdateOperationsInput | bigint | number
+    leaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProjectMemberUpdateWithoutChallengerInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    role?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24676,7 +26427,6 @@ export namespace Prisma {
   export type ProjectMemberUncheckedUpdateWithoutChallengerInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     projectId?: BigIntFieldUpdateOperationsInput | bigint | number
-    role?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24685,7 +26435,6 @@ export namespace Prisma {
   export type ProjectMemberUncheckedUpdateManyWithoutChallengerInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     projectId?: BigIntFieldUpdateOperationsInput | bigint | number
-    role?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -24717,16 +26466,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GisuSchoolCreateManyGisuInput = {
-    id?: bigint | number
-    schoolId: bigint | number
-    leaderId: bigint | number
-    viceLeaderId?: bigint | number | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ChapterCreateManyGisuInput = {
+  export type GisuChapterCreateManyGisuInput = {
     id?: bigint | number
     name: string
     description?: string | null
@@ -24734,9 +26474,72 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ChallengerGisuCreateManyGisuInput = {
+  export type GisuChapterUpdateWithoutGisuInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUpdateManyWithoutChapterNestedInput
+    chapterMatchingRound?: MatchingRoundUpdateManyWithoutChapterNestedInput
+    gisuChapterSchool?: ChapterSchoolUpdateManyWithoutChapterNestedInput
+    gisuChapterChallenger?: ChallengerGisuUpdateManyWithoutChapterSchoolNestedInput
+  }
+
+  export type GisuChapterUncheckedUpdateWithoutGisuInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutChapterNestedInput
+    chapterMatchingRound?: MatchingRoundUncheckedUpdateManyWithoutChapterNestedInput
+    gisuChapterSchool?: ChapterSchoolUncheckedUpdateManyWithoutChapterNestedInput
+    gisuChapterChallenger?: ChallengerGisuUncheckedUpdateManyWithoutChapterSchoolNestedInput
+  }
+
+  export type GisuChapterUncheckedUpdateManyWithoutGisuInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectCreateManyChapterInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    logoImageUrl?: string | null
+    bannerImageUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MatchingRoundCreateManyChapterInput = {
+    id?: bigint | number
+    name: string
+    description?: string | null
+    startAt: Date | string
+    endAt: Date | string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChapterSchoolCreateManyChapterInput = {
+    id?: bigint | number
+    schoolId: bigint | number
+    leaderId?: bigint | number | null
+    viceLeaderId?: bigint | number | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ChallengerGisuCreateManyChapterSchoolInput = {
     id?: bigint | number
     challengerId: bigint | number
+    isTerminated?: boolean
+    part: $Enums.UserPartEnum
     isSchoolAdmin: boolean
     isChapterAdmin: boolean
     isCentralAdmin: boolean
@@ -24747,61 +26550,105 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type GisuSchoolUpdateWithoutGisuInput = {
+  export type ProjectUpdateWithoutChapterInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: ProjectMemberUpdateManyWithoutProjectNestedInput
+    applicationForms?: ApplicationFormUpdateManyWithoutProjectNestedInput
+    to?: ProjectToUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutChapterInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
+    applicationForms?: ApplicationFormUncheckedUpdateManyWithoutProjectNestedInput
+    to?: ProjectToUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateManyWithoutChapterInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MatchingRoundUpdateWithoutChapterInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    applications?: ApplicationUpdateManyWithoutMatchingRoundNestedInput
+  }
+
+  export type MatchingRoundUncheckedUpdateWithoutChapterInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    applications?: ApplicationUncheckedUpdateManyWithoutMatchingRoundNestedInput
+  }
+
+  export type MatchingRoundUncheckedUpdateManyWithoutChapterInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ChapterSchoolUpdateWithoutChapterInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     school?: SchoolUpdateOneRequiredWithoutGisuSchoolsNestedInput
-    leader?: ChallengerUpdateOneRequiredWithoutLedGisuSchoolsNestedInput
-    viceLeader?: ChallengerUpdateOneWithoutViceLedGisuSchoolsNestedInput
+    leader?: ChallengerUpdateOneWithoutLeaderGisuSchoolNestedInput
+    viceLeader?: ChallengerUpdateOneWithoutViceLeadGisuSchoolNestedInput
   }
 
-  export type GisuSchoolUncheckedUpdateWithoutGisuInput = {
+  export type ChapterSchoolUncheckedUpdateWithoutChapterInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
-    leaderId?: BigIntFieldUpdateOperationsInput | bigint | number
+    leaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     viceLeaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GisuSchoolUncheckedUpdateManyWithoutGisuInput = {
+  export type ChapterSchoolUncheckedUpdateManyWithoutChapterInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     schoolId?: BigIntFieldUpdateOperationsInput | bigint | number
-    leaderId?: BigIntFieldUpdateOperationsInput | bigint | number
+    leaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     viceLeaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ChapterUpdateWithoutGisuInput = {
+  export type ChallengerGisuUpdateWithoutChapterSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUpdateManyWithoutChapterNestedInput
-  }
-
-  export type ChapterUncheckedUpdateWithoutGisuInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUncheckedUpdateManyWithoutChapterNestedInput
-  }
-
-  export type ChapterUncheckedUpdateManyWithoutGisuInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ChallengerGisuUpdateWithoutGisuInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    isTerminated?: BoolFieldUpdateOperationsInput | boolean
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFieldUpdateOperationsInput | boolean
     isChapterAdmin?: BoolFieldUpdateOperationsInput | boolean
     isCentralAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -24813,9 +26660,11 @@ export namespace Prisma {
     challenger?: ChallengerUpdateOneRequiredWithoutGisuRolesNestedInput
   }
 
-  export type ChallengerGisuUncheckedUpdateWithoutGisuInput = {
+  export type ChallengerGisuUncheckedUpdateWithoutChapterSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     challengerId?: BigIntFieldUpdateOperationsInput | bigint | number
+    isTerminated?: BoolFieldUpdateOperationsInput | boolean
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFieldUpdateOperationsInput | boolean
     isChapterAdmin?: BoolFieldUpdateOperationsInput | boolean
     isCentralAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -24826,9 +26675,11 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ChallengerGisuUncheckedUpdateManyWithoutGisuInput = {
+  export type ChallengerGisuUncheckedUpdateManyWithoutChapterSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     challengerId?: BigIntFieldUpdateOperationsInput | bigint | number
+    isTerminated?: BoolFieldUpdateOperationsInput | boolean
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isSchoolAdmin?: BoolFieldUpdateOperationsInput | boolean
     isChapterAdmin?: BoolFieldUpdateOperationsInput | boolean
     isCentralAdmin?: BoolFieldUpdateOperationsInput | boolean
@@ -24841,20 +26692,21 @@ export namespace Prisma {
 
   export type ChallengerCreateManySchoolInput = {
     id?: bigint | number
-    umsbId: number
+    umsbId: bigint | number
     name: string
     nickname: string
     gender: $Enums.GenderEnum
     studentId: string
     profileImageUrl?: string | null
+    passwordHash: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
-  export type GisuSchoolCreateManySchoolInput = {
+  export type ChapterSchoolCreateManySchoolInput = {
     id?: bigint | number
-    gisuId: bigint | number
-    leaderId: bigint | number
+    chapterId: bigint | number
+    leaderId?: bigint | number | null
     viceLeaderId?: bigint | number | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -24862,145 +26714,76 @@ export namespace Prisma {
 
   export type ChallengerUpdateWithoutSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gisuRoles?: ChallengerGisuUpdateManyWithoutChallengerNestedInput
-    ledGisuSchools?: GisuSchoolUpdateManyWithoutLeaderNestedInput
-    viceLedGisuSchools?: GisuSchoolUpdateManyWithoutViceLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUpdateManyWithoutLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUpdateManyWithoutViceLeaderNestedInput
     projectMembers?: ProjectMemberUpdateManyWithoutChallengerNestedInput
     applications?: ApplicationUpdateManyWithoutApplicantNestedInput
   }
 
   export type ChallengerUncheckedUpdateWithoutSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     gisuRoles?: ChallengerGisuUncheckedUpdateManyWithoutChallengerNestedInput
-    ledGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutLeaderNestedInput
-    viceLedGisuSchools?: GisuSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
+    leaderGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutLeaderNestedInput
+    viceLeadGisuSchool?: ChapterSchoolUncheckedUpdateManyWithoutViceLeaderNestedInput
     projectMembers?: ProjectMemberUncheckedUpdateManyWithoutChallengerNestedInput
     applications?: ApplicationUncheckedUpdateManyWithoutApplicantNestedInput
   }
 
   export type ChallengerUncheckedUpdateManyWithoutSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    umsbId?: IntFieldUpdateOperationsInput | number
+    umsbId?: BigIntFieldUpdateOperationsInput | bigint | number
     name?: StringFieldUpdateOperationsInput | string
     nickname?: StringFieldUpdateOperationsInput | string
     gender?: EnumGenderEnumFieldUpdateOperationsInput | $Enums.GenderEnum
     studentId?: StringFieldUpdateOperationsInput | string
     profileImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    passwordHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GisuSchoolUpdateWithoutSchoolInput = {
+  export type ChapterSchoolUpdateWithoutSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    gisu?: GisuUpdateOneRequiredWithoutGisuSchoolsNestedInput
-    leader?: ChallengerUpdateOneRequiredWithoutLedGisuSchoolsNestedInput
-    viceLeader?: ChallengerUpdateOneWithoutViceLedGisuSchoolsNestedInput
+    chapter?: GisuChapterUpdateOneRequiredWithoutGisuChapterSchoolNestedInput
+    leader?: ChallengerUpdateOneWithoutLeaderGisuSchoolNestedInput
+    viceLeader?: ChallengerUpdateOneWithoutViceLeadGisuSchoolNestedInput
   }
 
-  export type GisuSchoolUncheckedUpdateWithoutSchoolInput = {
+  export type ChapterSchoolUncheckedUpdateWithoutSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
-    leaderId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
+    leaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     viceLeaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type GisuSchoolUncheckedUpdateManyWithoutSchoolInput = {
+  export type ChapterSchoolUncheckedUpdateManyWithoutSchoolInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    gisuId?: BigIntFieldUpdateOperationsInput | bigint | number
-    leaderId?: BigIntFieldUpdateOperationsInput | bigint | number
+    chapterId?: BigIntFieldUpdateOperationsInput | bigint | number
+    leaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
     viceLeaderId?: NullableBigIntFieldUpdateOperationsInput | bigint | number | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ProjectCreateManyChapterInput = {
-    id?: bigint | number
-    name: string
-    description?: string | null
-    logoImageUrl?: string | null
-    bannerImageUrl?: string | null
-    planTo: number
-    designTo: number
-    webTo: number
-    androidTo: number
-    iosTo: number
-    springbootTo: number
-    nodejsTo: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ProjectUpdateWithoutChapterInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    planTo?: IntFieldUpdateOperationsInput | number
-    designTo?: IntFieldUpdateOperationsInput | number
-    webTo?: IntFieldUpdateOperationsInput | number
-    androidTo?: IntFieldUpdateOperationsInput | number
-    iosTo?: IntFieldUpdateOperationsInput | number
-    springbootTo?: IntFieldUpdateOperationsInput | number
-    nodejsTo?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: ProjectMemberUpdateManyWithoutProjectNestedInput
-    applicationForms?: ApplicationFormUpdateManyWithoutProjectNestedInput
-  }
-
-  export type ProjectUncheckedUpdateWithoutChapterInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    planTo?: IntFieldUpdateOperationsInput | number
-    designTo?: IntFieldUpdateOperationsInput | number
-    webTo?: IntFieldUpdateOperationsInput | number
-    androidTo?: IntFieldUpdateOperationsInput | number
-    iosTo?: IntFieldUpdateOperationsInput | number
-    springbootTo?: IntFieldUpdateOperationsInput | number
-    nodejsTo?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
-    applicationForms?: ApplicationFormUncheckedUpdateManyWithoutProjectNestedInput
-  }
-
-  export type ProjectUncheckedUpdateManyWithoutChapterInput = {
-    id?: BigIntFieldUpdateOperationsInput | bigint | number
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    logoImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    bannerImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    planTo?: IntFieldUpdateOperationsInput | number
-    designTo?: IntFieldUpdateOperationsInput | number
-    webTo?: IntFieldUpdateOperationsInput | number
-    androidTo?: IntFieldUpdateOperationsInput | number
-    iosTo?: IntFieldUpdateOperationsInput | number
-    springbootTo?: IntFieldUpdateOperationsInput | number
-    nodejsTo?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -25008,7 +26791,6 @@ export namespace Prisma {
   export type ProjectMemberCreateManyProjectInput = {
     id?: bigint | number
     challengerId: bigint | number
-    role: $Enums.UserPartEnum
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -25018,14 +26800,20 @@ export namespace Prisma {
     id?: bigint | number
     title: string
     description?: string | null
-    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectToCreateManyProjectInput = {
+    id?: bigint | number
+    part: $Enums.UserPartEnum
+    to: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ProjectMemberUpdateWithoutProjectInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
-    role?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25035,7 +26823,6 @@ export namespace Prisma {
   export type ProjectMemberUncheckedUpdateWithoutProjectInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     challengerId?: BigIntFieldUpdateOperationsInput | bigint | number
-    role?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25044,7 +26831,6 @@ export namespace Prisma {
   export type ProjectMemberUncheckedUpdateManyWithoutProjectInput = {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     challengerId?: BigIntFieldUpdateOperationsInput | bigint | number
-    role?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -25054,7 +26840,6 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     questions?: FormQuestionUpdateManyWithoutFormNestedInput
@@ -25064,7 +26849,6 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     questions?: FormQuestionUncheckedUpdateManyWithoutFormNestedInput
@@ -25074,7 +26858,30 @@ export namespace Prisma {
     id?: BigIntFieldUpdateOperationsInput | bigint | number
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectToUpdateWithoutProjectInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
+    to?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectToUncheckedUpdateWithoutProjectInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
+    to?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectToUncheckedUpdateManyWithoutProjectInput = {
+    id?: BigIntFieldUpdateOperationsInput | bigint | number
+    part?: EnumUserPartEnumFieldUpdateOperationsInput | $Enums.UserPartEnum
+    to?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

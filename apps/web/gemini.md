@@ -215,7 +215,7 @@
         "operationId": "AuthV1Controller_dropAll_v1",
         "parameters": [
           {
-            "name": "test/type",
+            "name": "admin/type",
             "required": true,
             "in": "path",
             "description": "삭제할 데이터 타입",
@@ -433,7 +433,7 @@
             "bearer": []
           }
         ],
-        "summary": "[TEST] mongoDB test, 현재 비어있음",
+        "summary": "[TEST] mongoDB admin, 현재 비어있음",
         "tags": ["테스트 API"]
       }
     },

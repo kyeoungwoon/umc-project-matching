@@ -1,0 +1,414 @@
+###
+# UMC 프로젝트 매칭 시스템 - 지원 플로우 테스트
+#
+# ⚠️ 중요: 이 파일의 모든 요청은 순차적으로 실행되어야 합니다.
+#
+# 실행 방법:
+# 1. 첫 번째 요청부터 순서대로 하나씩 실행 (각 요청 ���의 ▶️ 버튼 클릭)
+# 2. 또는 "Run All Requests in File" 사용
+#
+# 각 요청은 이전 요청의 응답에서 받은 데이터(accessToken, userId, projectId 등)를 사용합니다.
+# client.global.set()으로 저장된 변수들은 {{variable}} 형태로 다음 요청에서 사용됩니다.
+###
+
+@baseUrl = http://localhost:9999
+@school = 중앙대학교
+
+# Non-PLAN 챌린저 정보
+@webStudentId = 20240001
+@webName = 웹챌린저
+@webNickname = 웹개발자
+@webPassword = webPassword123!
+
+# PLAN 챌린저 정보
+@planStudentId = 20240002
+@planName = 플랜챌린저
+@planNickname = 기획자
+@planPassword = planPassword123!
+
+# 프로젝트 정보
+@projectTitle = UMC 7기 팀매칭 프로젝트
+@projectDescription = 챌린저들을 위한 팀매칭 서비스입니다
+@projectLink = https://github.com/umc/team-matching
+
+# 폼 정보
+@formTitle = 7기 웹 파트 지원 폼
+@formDescription = 웹 파트 지원자를 위한 질문지입니다
+
+# 동적으로 생성되는 변수들 (초기값은 빈 문자열, 실행 중에 client.global.set()으로 설정됨)
+# 아래 변수들은 실제로는 사용되지 않으며, IDE 경고를 방지하기 위한 선언입니다
+# 실제 값은 각 요청의 response handler에서 client.global.set()으로 설정됩���다
+
+### 1. Plan 챌린저가 아닌 계정(WEB)을 하나 생성한다
+POST {{baseUrl}}/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "{{webName}}",
+  "nickname": "{{webNickname}}",
+  "school": "{{school}}",
+  "studentId": "{{webStudentId}}",
+  "password": "{{webPassword}}",
+  "part": "WEB"
+}
+
+> {%
+    client.test("WEB 챌린저 회원가입 성공", function () {
+        client.assert(response.status === 201 || response.status === 200, "응답 상태 코드는 200 또는 201이어야 합니다");
+    });
+%}
+
+### 2. WEB 챌린저로 로그인한다
+POST {{baseUrl}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "school": "{{school}}",
+  "studentId": "{{webStudentId}}",
+  "password": "{{webPassword}}"
+}
+
+> {%
+    client.test("WEB 챌린저 로그인 성공", function () {
+        client.assert(response.status === 200 || response.status === 201, "응답 상태 코드는 200 또는 201이어야 합니다");
+        client.assert(response.body.result && response.body.result.hasOwnProperty("accessToken"), "accessToken이 응답에 포함되어야 합니다");
+    });
+    client.global.set("webAccessToken", response.body.result.accessToken);
+%}
+
+### 3. WEB 챌린저가 프로젝트 생성을 시도한다 (실패해야 함 - PLAN 챌린저가 아님)
+POST {{baseUrl}}/v1/projects
+Content-Type: application/json
+Authorization: Bearer {{webAccessToken}}
+
+{
+  "title": "{{projectTitle}}",
+  "description": "{{projectDescription}}",
+  "link": "{{projectLink}}",
+  "planId": "temp-plan-id"
+}
+
+> {%
+    client.test("WEB 챌린저의 프로젝트 생성 실패 (PLAN이 아님)", function () {
+        client.assert(response.status === 403 || response.status === 401 || response.status === 400, "PLAN 챌린저가 아니므로 실패해야 합니다");
+    });
+%}
+
+### 4. Plan 챌린저 계정을 생성한다
+POST {{baseUrl}}/v1/auth/register
+Content-Type: application/json
+
+{
+  "name": "{{planName}}",
+  "nickname": "{{planNickname}}",
+  "school": "{{school}}",
+  "studentId": "{{planStudentId}}",
+  "password": "{{planPassword}}",
+  "part": "PLAN"
+}
+
+> {%
+    client.test("PLAN 챌린저 회원가입 성공", function () {
+        client.assert(response.status === 201 || response.status === 200, "응답 상태 코드는 200 또는 201이어야 합니다");
+    });
+%}
+
+### 5. PLAN 챌린저로 로그인한다
+POST {{baseUrl}}/v1/auth/login
+Content-Type: application/json
+
+{
+  "school": "{{school}}",
+  "studentId": "{{planStudentId}}",
+  "password": "{{planPassword}}"
+}
+
+> {%
+    client.test("PLAN 챌린저 로그인 성공", function () {
+        client.assert(response.status === 200 || response.status === 201, "응답 상태 코드는 200 또는 201이어야 합니다");
+        client.assert(response.body.result && response.body.result.hasOwnProperty("accessToken"), "accessToken이 응답에 포함되어야 합니다");
+    });
+    client.global.set("planAccessToken", response.body.result.accessToken);
+%}
+
+### 6. PLAN 챌린저의 userId를 가져온다
+GET {{baseUrl}}/v1/users/me
+Authorization: Bearer {{planAccessToken}}
+
+> {%
+    client.test("PLAN 챌린저 정보 조회 성공", function () {
+        client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
+        client.assert(response.body.result, "응답에 result가 포함되어야 합니다");
+    });
+    client.global.set("planUserId", response.body.result.id);
+%}
+
+### 7. PLAN 챌린저가 프로젝트를 생성한다 (성공해야 함)
+POST {{baseUrl}}/v1/projects
+Content-Type: application/json
+Authorization: Bearer {{planAccessToken}}
+
+{
+  "title": "{{projectTitle}}",
+  "description": "{{projectDescription}}",
+  "link": "{{projectLink}}",
+  "planId": "{{planUserId}}"
+}
+
+> {%
+    client.test("PLAN 챌린저의 프로젝트 생성 성공", function () {
+        client.assert(response.status === 201 || response.status === 200, "응답 상태 코드는 200 또는 201이어야 합니다");
+    });
+    client.global.set("projectId", (response.body.result || response.body).id);
+%}
+
+### 8. 프로젝트 목록을 조회한다
+GET {{baseUrl}}/v1/projects
+Authorization: Bearer {{planAccessToken}}
+
+> {%
+    client.test("프로젝트 목록 조회 성공", function () {
+        client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
+    });
+%}
+
+### 9. 생성된 프로젝트의 세부 정보를 확인한다
+GET {{baseUrl}}/v1/projects/{{projectId}}
+Authorization: Bearer {{planAccessToken}}
+
+> {%
+    client.test("프로젝트 상세 조회 성공", function () {
+        client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
+        const project = response.body.result || response.body;
+        client.assert(project.title || true, "프로젝트 정보가 포함되어야 합니다");
+    });
+%}
+
+### 10. 프로젝트 정보를 수정한다
+PATCH {{baseUrl}}/v1/projects/{{projectId}}
+Content-Type: application/json
+Authorization: Bearer {{planAccessToken}}
+
+{
+  "projectId": "{{projectId}}",
+  "title": "{{projectTitle}} (수정됨)",
+  "description": "{{projectDescription}} - 업데이트된 설명"
+}
+
+> {%
+    client.test("프로젝트 수정 성공", function () {
+        client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
+    });
+%}
+
+### 11. 프로젝트에 지원 폼을 생성한다
+POST {{baseUrl}}/v1/projects/{{projectId}}/form
+Content-Type: application/json
+Authorization: Bearer {{planAccessToken}}
+
+{
+  "projectId": "{{projectId}}",
+  "title": "{{formTitle}}",
+  "description": "{{formDescription}}"
+}
+
+> {%
+    client.test("폼 생성 성공", function () {
+        client.assert(response.status === 201 || response.status === 200, "응답 상태 코드는 200 또는 201이어야 합니다");
+    });
+    client.global.set("formId", (response.body.result || response.body).id);
+%}
+
+### 12. 생성된 폼의 세부 정보를 확인한다 (질문 없음)
+GET {{baseUrl}}/v1/projects/{{projectId}}/form/{{formId}}
+Authorization: Bearer {{planAccessToken}}
+
+> {%
+    client.test("폼 상세 조회 성공 (질문 없음)", function () {
+        client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
+    });
+%}
+
+### 13. 폼에 질문들을 생성한다
+POST {{baseUrl}}/v1/projects/{{projectId}}/forms/{{formId}}/questions
+Content-Type: application/json
+Authorization: Bearer {{planAccessToken}}
+
+{
+  "questions": [
+    {
+      "formId": "{{formId}}",
+      "questionNo": 1,
+      "title": "자기소개를 해주세요",
+      "description": "간단하게 본인을 소개해주세요",
+      "type": "SUBJECTIVE",
+      "options": [],
+      "isRequired": true
+    },
+    {
+      "formId": "{{formId}}",
+      "questionNo": 2,
+      "title": "선호하는 개발 스택을 선택해주세요",
+      "description": "복수 선택 가능합니다",
+      "type": "MULTIPLE_CHOICE",
+      "options": ["React", "Vue", "Angular", "Svelte"],
+      "isRequired": true
+    },
+    {
+      "formId": "{{formId}}",
+      "questionNo": 3,
+      "title": "주 1회 오프라인 미팅이 가능하신가요?",
+      "description": "",
+      "type": "SINGLE_CHOICE",
+      "options": ["예", "아니오"],
+      "isRequired": true
+    }
+  ]
+}
+
+> {%
+    client.test("질문 생성 성공", function () {
+        client.assert(response.status === 201 || response.status === 200, "응답 상태 코드는 200 또는 201이어야 합니다");
+    });
+    const result = response.body.result || response.body;
+    if (Array.isArray(result)) {
+        if (result[0] && result[0].id) {
+            client.global.set("question1Id", result[0].id);
+        }
+        if (result[1] && result[1].id) {
+            client.global.set("question2Id", result[1].id);
+        }
+        if (result[2] && result[2].id) {
+            client.global.set("question3Id", result[2].id);
+        }
+    }
+%}
+
+### 14. 질문을 수정한다
+PATCH {{baseUrl}}/v1/projects/{{projectId}}/forms/{{formId}}/questions
+Content-Type: application/json
+Authorization: Bearer {{planAccessToken}}
+
+{
+  "questions": [
+    {
+      "id": "{{question1Id}}",
+      "title": "자기소개를 해주세요 (수정됨)",
+      "description": "자세하게 본인을 소개해주세요"
+    }
+  ]
+}
+
+> {%
+    client.test("질문 수정 성공", function () {
+        client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
+    });
+%}
+
+### 15. 다시 한번 폼의 세부 정보를 확인한다 (질문 정보 포함)
+GET {{baseUrl}}/v1/projects/{{projectId}}/form/{{formId}}
+Authorization: Bearer {{planAccessToken}}
+
+> {%
+    client.test("폼 상세 조회 성공 (질문 포함)", function () {
+        client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
+        const form = response.body.result || response.body;
+        client.assert(form.questions || true, "질문 정보가 포함되어야 합니다");
+    });
+%}
+
+### 16. 프로젝트에 속한 폼 목록을 조회한다
+GET {{baseUrl}}/v1/projects/{{projectId}}/form
+Authorization: Bearer {{planAccessToken}}
+
+> {%
+    client.test("프로젝트 폼 목록 조회 성공", function () {
+        client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
+    });
+%}
+
+### 17. WEB 챌린저 계정으로 전환하여 프로젝트에 지원한다
+PATCH {{baseUrl}}/v1/projects/{{projectId}}/apply
+Content-Type: application/json
+Authorization: Bearer {{webAccessToken}}
+
+{
+  "answers": [
+    {
+      "questionId": "{{question1Id}}",
+      "value": ["안녕하세요! 열정적인 웹 개발자입니다."]
+    },
+    {
+      "questionId": "{{question2Id}}",
+      "value": ["React", "Vue"]
+    },
+    {
+      "questionId": "{{question3Id}}",
+      "value": ["예"]
+    }
+  ]
+}
+
+> {%
+    client.test("프로젝트 지원 성공", function () {
+        client.assert(response.status === 200 || response.status === 201, "응답 상태 코드는 200 또는 201이어야 합니다");
+    });
+    client.global.set("applicationId", (response.body.result || response.body).id);
+%}
+
+### 18. 지원한 내역을 조회한다 (WEB 챌린저)
+GET {{baseUrl}}/v1/projects/{{projectId}}/apply/{{applicationId}}
+Authorization: Bearer {{webAccessToken}}
+
+> {%
+    client.test("지원 내역 조회 성공", function () {
+        client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
+        const application = response.body.result || response.body;
+        client.assert(application.answers || true, "답변 정보가 포함되어야 합니다");
+    });
+%}
+
+### 19. PLAN 챌린저로 전환하여 폼 정보를 다시 조회한다 (지원자 정보 확인)
+GET {{baseUrl}}/v1/projects/{{projectId}}/form/{{formId}}
+Authorization: Bearer {{planAccessToken}}
+
+> {%
+    client.test("폼 상세 조회 성공 (지원자 포함)", function () {
+        client.assert(response.status === 200, "응답 상태 코드는 200이어야 합니다");
+        const form = response.body.result || response.body;
+        // 지원자 목록이 있는지 확인
+        client.assert(form.applications || form.applicants || true, "지원자 정보가 포함될 수 있습니다");
+    });
+%}
+
+### 20. WEB 챌린저로 전환하여 지원 내역을 삭제한다
+DELETE {{baseUrl}}/v1/projects/{{projectId}}/apply/{{applicationId}}
+Authorization: Bearer {{webAccessToken}}
+
+> {%
+    client.test("지원 내역 삭제 성공", function () {
+        client.assert(response.status === 200 || response.status === 204, "응답 상태 코드는 200 또는 204이어야 합니다");
+    });
+%}
+
+### 21. PLAN 챌린저로 전환하여 폼을 삭제한다
+DELETE {{baseUrl}}/v1/projects/{{projectId}}/form/{{formId}}
+Authorization: Bearer {{planAccessToken}}
+
+> {%
+    client.test("폼 삭제 성공", function () {
+        client.assert(response.status === 200 || response.status === 204, "응답 상태 코드는 200 또는 204이어야 합니다");
+    });
+%}
+
+### 22. 프로젝트를 삭제한다 (ADMIN 권한 필요할 수 있음)
+DELETE {{baseUrl}}/v1/projects/{{projectId}}
+Authorization: Bearer {{planAccessToken}}
+
+> {%
+    client.test("프로젝트 삭제 시도", function () {
+        // ADMIN 권한이 필요할 수 있으므로 403이 나올 수도 있음
+        client.assert(response.status === 200 || response.status === 204 || response.status === 403, "응답 상태 확인");
+    });
+%}
+

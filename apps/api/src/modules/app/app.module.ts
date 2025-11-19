@@ -1,9 +1,5 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  ValidationPipe,
-} from '@nestjs/common';
+import { CacheModule } from '@nestjs/cache-manager';
+import { MiddlewareConsumer, Module, NestModule, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { PassportModule } from '@nestjs/passport';
@@ -15,21 +11,20 @@ import { winstonLoggerOptions } from '@common/configs/winston.config';
 import { AllExceptionsFilter } from '@common/filters/all-exception.filter';
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter';
 import { PrismaExceptionFilter } from '@common/filters/prisma-exception.filter';
+import { EnvGuard } from '@common/guards/env.guard';
 import { ResponseInterceptor } from '@common/interceptors/response.interceptor';
 import { LoggerMiddleware } from '@common/middleware/logger.middleware';
 import { RequestContextMiddleware } from '@common/middleware/request-context.middleware';
 
+import { AdminModule } from '@modules/admin/admin.module';
 import { AlsModule } from '@modules/als/als.module';
 import { AuthModule } from '@modules/auth/auth.module';
 import { JwtConfig } from '@modules/auth/config/jwt.config';
+import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
 import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { PrismaModule } from '@modules/prisma/prisma.module';
-import { TestModule } from '@modules/test/test.module';
-import { UsersModule } from '@modules/users/users.module';
 import { ProjectsModule } from '@modules/projects/projects.module';
-import { ChallengerRoleGuard } from '@modules/auth/guards/challenger-guard';
-import { CacheModule } from '@nestjs/cache-manager';
-import { EnvGuard } from '@common/guards/env.guard';
+import { UsersModule } from '@modules/users/users.module';
 
 @Module({
   imports: [
@@ -37,9 +32,7 @@ import { EnvGuard } from '@common/guards/env.guard';
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env.local', `.env.${process.env.NODE_ENV}`, '.env'],
-      load: [
-        JwtConfig,
-      ],
+      load: [JwtConfig],
       // validate,
     }),
     WinstonModule.forRoot(winstonLoggerOptions),
@@ -51,7 +44,7 @@ import { EnvGuard } from '@common/guards/env.guard';
     AuthModule,
     UsersModule,
     PrismaModule,
-    TestModule,
+    AdminModule,
     ProjectsModule,
   ],
   controllers: [],
@@ -99,8 +92,6 @@ import { EnvGuard } from '@common/guards/env.guard';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(cookieParser(), RequestContextMiddleware, LoggerMiddleware)
-      .forRoutes('*');
+    consumer.apply(cookieParser(), RequestContextMiddleware, LoggerMiddleware).forRoutes('*');
   }
 }

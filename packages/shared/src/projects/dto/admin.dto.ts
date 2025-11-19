@@ -1,14 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+import { APPLICATION_STATUS, ApplicationStatusEnum } from '@projects/enum';
 import { Transform } from 'class-transformer';
 import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-import {
-  APPLICATION_STATUS,
-  ApplicationStatusEnum,
-  USER_PART,
-  UserPartEnum,
-} from '@common/enum/user.enum';
+import { USER_PART, UserPartEnum } from '@/common';
 
 export class ApplicationStatusByProjectRequestQuery {
   @IsNotEmpty()

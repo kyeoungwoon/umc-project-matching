@@ -35,6 +35,15 @@ export class RequestContextService {
     return contextUserId;
   }
 
+  getOrThrowUserIdAsBigInt() {
+    const userId = this.getOrThrowUserId();
+    try {
+      return BigInt(userId);
+    } catch {
+      throw new CustomException(CommonErrorCode.USER_ID_TYPE_ERR);
+    }
+  }
+
   getUserId(): string | null {
     return this.getContext().getUserId();
   }
@@ -42,8 +51,8 @@ export class RequestContextService {
   /**
    * 현재 요청 컨텍스트에 userId를 설정합니다.
    */
-  setUserId(userId: string): void {
-    this.getContext().setUserId(userId);
+  setUserId(userId: string | bigint): void {
+    this.getContext().setUserId(String(userId));
   }
 
   /**

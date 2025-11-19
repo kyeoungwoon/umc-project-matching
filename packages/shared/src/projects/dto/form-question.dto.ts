@@ -1,5 +1,6 @@
 import { ApiProperty, OmitType, PartialType } from '@nestjs/swagger';
 
+import { QUESTION_TYPE, QuestionTypeEnum } from '@projects/enum';
 import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
@@ -11,8 +12,6 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-
-import { QUESTION_TYPE, QuestionTypeEnum } from '@common/enum/user.enum';
 
 export class FormQuestionDto {
   @IsNotEmpty()

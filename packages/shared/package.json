@@ -2,8 +2,9 @@
   "name": "@upms/shared",
   "version": "0.1.0",
   "description": "",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "module": "dist/index.mjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsc -p tsconfig.json --watch",
@@ -26,5 +27,12 @@
     "@nestjs/swagger": "^11.2.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   }
 }

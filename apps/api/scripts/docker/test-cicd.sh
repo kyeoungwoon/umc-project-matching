@@ -1,6 +1,6 @@
 # docker buildx build \
 #   --platform linux/amd64 \
-#   -t my-test-image:amd64 \
+#   -t my-admin-image:amd64 \
 #   -f apps/api/scripts/docker/dockerfile \
 #   --load \
 #   .

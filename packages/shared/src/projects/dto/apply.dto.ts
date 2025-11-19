@@ -1,5 +1,6 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
 
+import { APPLICATION_STATUS, ApplicationStatusEnum } from '@projects/enum';
 import { Type } from 'class-transformer';
 import {
   ArrayNotEmpty,
@@ -10,8 +11,6 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
-
-import { APPLICATION_STATUS, ApplicationStatusEnum } from '@common/enum/user.enum';
 
 export class AnswerDto {
   @IsNotEmpty()
