@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 
-import { ApplicationFormEntityResponseDto, CreateApplicationDtoV2 } from '@upms/shared';
 import {
   ApplicationEntityResponseDto,
+  ApplicationFormEntityResponseDto,
+  ApplicationWithApplicantAndMatchingRoundAndResponsesDto,
+  CreateApplicationDtoV2,
   CreateApplicationWithResponsesDtoV2,
   UpdateApplicationDtoV2,
-} from '@upms/shared/dist/common';
-import { ApplicationWithApplicantAndMatchingRoundAndResponsesDto } from '@upms/shared/dist/common/dto';
+} from '@upms/shared';
 
 import { PostgreSQLPrismaService } from '@modules/prisma/services/postgresql.prisma.service';
 

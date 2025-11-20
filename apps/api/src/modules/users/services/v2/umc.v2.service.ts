@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 
 import {
+  ChapterSchoolEntityResponseDto,
+  CreateChapterSchoolDtoV2,
   CreateGisuChapterDtoV2,
   CreateGisuDtoV2,
   GisuChapterEntityResponseDto,
@@ -8,8 +10,6 @@ import {
   GisuEntityResponseDto,
   GisuWithChaptersResponseDto,
 } from '@upms/shared';
-import { CreateChapterSchoolDtoV2 } from '@upms/shared/dist/common/dto/create-update-entity.dto';
-import { ChapterSchoolEntityResponseDto } from '@upms/shared/dist/common/dto/entity-response.dto';
 
 import { PostgreSQLPrismaService } from '@modules/prisma/services/postgresql.prisma.service';
 

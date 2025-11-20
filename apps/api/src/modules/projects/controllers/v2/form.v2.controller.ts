@@ -12,14 +12,12 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import {
+  CreateApplicationFormDtoV2,
   CreateApplicationFormWithQuestionsDtoV2,
   CreateFormQuestionDtoV2,
-} from '@upms/shared/dist/common';
-import {
-  CreateApplicationFormDtoV2,
   UpdateApplicationFormDtoV2,
-} from '@upms/shared/dist/common/dto';
-import { UpdateFormQuestionDtoV2 } from '@upms/shared/dist/common/dto/create-update-entity.dto';
+  UpdateFormQuestionDtoV2,
+} from '@upms/shared';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';

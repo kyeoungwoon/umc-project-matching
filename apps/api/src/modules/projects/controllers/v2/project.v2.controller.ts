@@ -18,7 +18,7 @@ import {
   ProjectEntityResponseDto,
   ProjectWithToAndMemberResponseDto,
 } from '@upms/shared';
-import { UpdateProjectDtoV2 } from '@upms/shared/dist/common/dto';
+import { UpdateProjectDtoV2 } from '@upms/shared';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';

@@ -10,9 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { CreateSchoolDtoV2 } from '@upms/shared';
-import { LoginRequestDto } from '@upms/shared/dist/auth';
-import { UpdateChallengerDtoV2 } from '@upms/shared/dist/common';
+import { LoginRequestDto, UpdateChallengerDtoV2 } from '@upms/shared';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';

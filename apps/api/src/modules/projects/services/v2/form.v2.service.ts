@@ -4,12 +4,12 @@ import {
   ApplicationFormEntityResponseDto,
   ApplicationFormWithQuestionsEntityResponseDto,
   CreateApplicationFormDtoV2,
+  CreateApplicationFormWithQuestionsDtoV2,
   CreateFormQuestionDtoV2,
   FormQuestionEntityResponseDto,
+  UpdateApplicationFormDtoV2,
   UpdateFormQuestionDtoV2,
 } from '@upms/shared';
-import { CreateApplicationFormWithQuestionsDtoV2 } from '@upms/shared/dist/common';
-import { UpdateApplicationFormDtoV2 } from '@upms/shared/dist/common/dto';
 
 import { PostgreSQLPrismaService } from '@modules/prisma/services/postgresql.prisma.service';
 

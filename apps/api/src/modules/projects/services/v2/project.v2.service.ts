@@ -2,19 +2,16 @@ import { Injectable } from '@nestjs/common';
 
 import {
   CreateProjectDtoV2,
+  CreateProjectMemberDtoV2,
   CreateProjectToDtoV2,
   CreateProjectWithToRequestDtoV2,
   ProjectEntityResponseDto,
+  ProjectMemberEntityResponseDto,
   ProjectToEntityResponseDto,
   ProjectWithToAndMemberAndFormResponseDto,
   ProjectWithToAndMemberResponseDto,
-} from '@upms/shared';
-import { ProjectWithToResponseDto } from '@upms/shared/dist/common';
-import {
-  CreateProjectMemberDtoV2,
-  ProjectMemberEntityResponseDto,
   UpdateProjectDtoV2,
-} from '@upms/shared/dist/common/dto';
+} from '@upms/shared';
 
 import { PostgreSQLPrismaService } from '@modules/prisma/services/postgresql.prisma.service';
 

@@ -12,8 +12,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiProperty, ApiTags } from '@nestjs/swagger';
 
-import { CreateSchoolDtoV2 } from '@upms/shared';
-import { CreateSchoolBulkDtoV2 } from '@upms/shared/dist/common';
+import { CreateSchoolBulkDtoV2, CreateSchoolDtoV2 } from '@upms/shared';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { API_TAGS } from '@common/constants/api-tags.constants';
